@@ -1,0 +1,145 @@
+/* ==========================================================
+   VARIABLES GLOBALES Y SEPARACIÓN DE TIPOGRAFÍAS
+   ========================================================== */
+:root {
+  --header-height: 60px;
+  --sidebar-width: 260px;
+  --right-panel-width: 240px;
+  --max-grid-width: 1600px;
+  --font-size: 16px;
+  
+  /* EL MURO DE CONTENCIÓN */
+  --ui-font: system-ui, -apple-system, sans-serif; /* Siempre fija para la interfaz */
+  --doc-font: system-ui, -apple-system, sans-serif; /* Dinámica para la lectura */
+  --doc-line-height: 1.6;
+}
+
+/* ==========================================================
+   1. ESTILO MODERNO (Azules corporativos)
+   ========================================================== */
+html[data-estilo="moderno"] {
+  --doc-font: system-ui, -apple-system, sans-serif;
+  --doc-line-height: 1.6;
+}
+html[data-estilo="moderno"][data-modo="claro"] {
+  --bg-color: #ffffff;
+  --text-color: #1e293b;
+  --border-color: #cbd5e1;
+  --header-bg: #f8fafc;
+}
+html[data-estilo="moderno"][data-modo="oscuro"] {
+  --bg-color: #0f172a;
+  --text-color: #f1f5f9;
+  --border-color: #334155;
+  --header-bg: #1e293b;
+}
+
+/* ==========================================================
+   2. ESTILO ACADÉMICO (Crema/Marrón sepia)
+   ========================================================== */
+html[data-estilo="academico"] {
+  --doc-font: "Times New Roman", Times, serif;
+  --doc-line-height: 1.8;
+}
+html[data-estilo="academico"][data-modo="claro"] {
+  --bg-color: #fdfbf7; 
+  --text-color: #2c221e; 
+  --border-color: #e7e0d3;
+  --header-bg: #f4efdf;
+}
+html[data-estilo="academico"][data-modo="oscuro"] {
+  --bg-color: #1c1815; 
+  --text-color: #f3efe6; 
+  --border-color: #38302b;
+  --header-bg: #26211d;
+}
+
+/* ==========================================================
+   3. ESTILO MINIMALISTA (Blanco y negro puro)
+   ========================================================== */
+html[data-estilo="minimalista"] {
+  --doc-font: "Courier New", Courier, monospace;
+  --doc-line-height: 1.5;
+}
+html[data-estilo="minimalista"][data-modo="claro"] {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --border-color: #d4d4d4;
+  --header-bg: #fafafa;
+}
+html[data-estilo="minimalista"][data-modo="oscuro"] {
+  --bg-color: #000000; 
+  --text-color: #ffffff; 
+  --border-color: #262626;
+  --header-bg: #0a0a0a;
+}
+
+/* ==========================================================
+   APLICACIÓN ESTRUCTURAL ESTRICTA
+   ========================================================== */
+/* 1. Body y toda la Interfaz Externa (Header, Sidebars) */
+body {
+  margin: 0;
+  background-color: var(--bg-color) !important;
+  color: var(--text-color) !important;
+  font-family: var(--ui-font) !important; /* BLOQUEADO AL UI FONT */
+  font-size: var(--font-size);
+  height: 100vh;
+  overflow: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* 2. Área exclusiva del documento Markdown (Aislamiento Estricto) */
+.main-content {
+  font-family: var(--doc-font);
+}
+
+/* Aplicamos estilos de lectura SOLO si no están dentro de un componente web (como mermaid-viewer) */
+.main-content :where(p, li, h1, h2, h3, blockquote):not(.mermaid-native *) {
+  line-height: var(--doc-line-height);
+}
+
+/* Enlaces generales dentro del contenido Markdown */
+.main-content article a:not(.mermaid-native *) {
+  color: #a78bfa !important; /* Morado claro legible */
+  text-decoration: none;
+  border-bottom: 1.5px solid rgba(167, 139, 250, 0.4);
+  font-weight: 500;
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  padding: 0 2px;
+  border-radius: 3px;
+}
+
+/* Efecto hover */
+.main-content article a:not(.mermaid-native *):hover {
+  color: #c4b5fd !important;
+  background-color: rgba(139, 92, 246, 0.15);
+  border-bottom-color: #8b5cf6;
+}
+
+/* En modo claro: tono morado con mejor contraste */
+html[data-modo="claro"] .main-content article a:not(.mermaid-native *) {
+  color: #7c3aed !important;
+  border-bottom-color: rgba(124, 58, 237, 0.4);
+}
+
+html[data-modo="claro"] .main-content article a:not(.mermaid-native *):hover {
+  color: #6d28d9 !important;
+  background-color: rgba(124, 58, 237, 0.08);
+  border-bottom-color: #7c3aed;
+}
+
+/* --- TAMAÑOS DE TEXTO --- */
+html[data-texto="pequeno"] { --font-size: 14px; }
+html[data-texto="estandar"] { --font-size: 16px; }
+html[data-texto="grande"] { --font-size: 18px; }
+
+/* --- ANCHURAS DE LECTURA --- */
+html[data-ancho="ancho"] { 
+  --content-max-width: 1400px; 
+  --content-padding: 2rem 4rem; 
+}
+html[data-ancho="normal"] { 
+  --content-max-width: 800px;  
+  --content-padding: 2rem 3rem; 
+}

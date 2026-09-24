@@ -1,0 +1,133 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import GraphModal from '../../components/GraphModal.astro';
+import FolderView from '../../components/FolderView.astro';
+import { formatName, generateDocPaths } from '../../utils/fileTree';
+
+export async function getStaticPaths() {
+  const allDocs = await getCollection('docs');
+  return generateDocPaths(allDocs);
+}
+
+const props = Astro.props;
+let Content: any;
+let headings: any[] = [];
+let breadcrumbs: string[] = [];
+let title = "";
+let frontmatterConExtra = {};
+let normalizedDocId = "";
+
+if (props.type === 'file') {
+  const rendered = await render(props.doc);
+  Content = rendered.Content;
+  headings = rendered.headings;
+  normalizedDocId = props.doc.id.replace(/\\/g, '/');
+  breadcrumbs = normalizedDocId.split('/').slice(0, -1);
+  const words = props.doc.body ? props.doc.body.split(/\s+/).length : 0;
+  const readingTime = Math.max(1, Math.ceil(words / 200));
+  frontmatterConExtra = { ...props.doc.data, readingTime };
+  title = props.doc.data.title;
+} else {
+  normalizedDocId = props.folderPath;
+  breadcrumbs = props.folderPath === 'explorar' ? [] : normalizedDocId.split('/').slice(0, -1);
+  title = props.folderPath === 'explorar' ? 'Directorio Principal' : `Carpeta: ${formatName(props.folderName)}`;
+  frontmatterConExtra = { title, theme: 'moderno' };
+}
+
+let linkVolver = "/";
+let textoVolver = "Inicio";
+if (props.type === 'folder' && props.folderPath === 'explorar') {
+  linkVolver = "/";
+  textoVolver = "Inicio";
+} else if (breadcrumbs.length > 0) {
+  linkVolver = `/docs/${breadcrumbs.join('/')}`;
+  textoVolver = formatName(breadcrumbs[breadcrumbs.length - 1]);
+} else {
+  linkVolver = "/docs/explorar";
+  textoVolver = "Directorio Principal";
+}
+---
+
+<Base title={title} headings={headings} frontmatter={frontmatterConExtra}>
+  <div class="doc-container">
+    {props.type === 'file' ? (
+      <div id="document-view">
+        <article class="markdown-body">
+          <Content />
+        </article>
+        <hr class="nav-divider" />
+        
+        <div class="doc-nav">
+          {props.prev ? (
+            <a href={`/docs/${props.prev.id.replace(/\\/g, '/')}`} class="nav-btn prev">
+              <span class="nav-label">&larr; Anterior</span>
+              <span class="nav-title">{props.prev.data.title}</span>
+            </a>
+          ) : (
+            <div class="nav-btn disabled prev">
+              <span class="nav-label">&larr; Anterior</span>
+              <span class="nav-title">Inicio de sección</span>
+            </div>
+          )}
+          {props.next ? (
+            <a href={`/docs/${props.next.id.replace(/\\/g, '/')}`} class="nav-btn next">
+              <span class="nav-label">Siguiente &rarr;</span>
+              <span class="nav-title">{props.next.data.title}</span>
+            </a>
+          ) : (
+            <div class="nav-btn disabled next">
+              <span class="nav-label">Siguiente &rarr;</span>
+              <span class="nav-title">Fin de sección</span>
+            </div>
+          )}
+        </div>
+      </div>
+    ) : (
+      <FolderView 
+        linkVolver={linkVolver}
+        textoVolver={textoVolver}
+        folderPath={props.folderPath}
+        folderName={props.folderName}
+        subfolders={props.subfolders}
+        directFiles={props.directFiles}
+      />
+    )}
+  </div>
+  <GraphModal />
+</Base>
+
+<style>
+  .doc-container {
+    width: 100%;
+  }
+  .nav-divider { 
+    margin: 4rem 0 2rem 0; 
+    border: none; 
+    border-top: 1px solid var(--border-color); 
+    opacity: 0.5; 
+  }
+  .doc-nav { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 1rem; 
+    margin-bottom: 2rem; 
+  }
+  .nav-btn { 
+    display: flex; 
+    flex-direction: column; 
+    padding: 1rem 1.5rem; 
+    border: 1px solid var(--border-color); 
+    border-radius: 8px; 
+    text-decoration: none; 
+    transition: all 0.2s ease; 
+    background: rgba(0,0,0,0.02); 
+    overflow: hidden; 
+  }
+  .nav-btn.next { align-items: flex-end; text-align: right; }
+  .nav-btn.prev { align-items: flex-start; text-align: left; }
+  a.nav-btn:hover { border-color: var(--text-color); background: var(--bg-color); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+  .nav-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.6; margin-bottom: 0.3rem; }
+  .nav-title { font-size: 1.1rem; font-weight: 600; color: var(--text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
+  .nav-btn.disabled { opacity: 0.4; cursor: not-allowed; background: transparent; }
+</style>

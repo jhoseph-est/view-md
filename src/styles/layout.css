@@ -1,0 +1,288 @@
+* { 
+  box-sizing: border-box;
+  scrollbar-width: thin; 
+  scrollbar-color: rgba(150, 150, 150, 0.3) transparent; 
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { 
+  background: rgba(150, 150, 150, 0.3); 
+  border-radius: 10px; 
+}
+
+html, body {
+   margin: 0;
+   padding: 0;
+   width: 100vw;
+   height: 100vh;
+   overflow: hidden;
+   background-color: var(--bg-color) !important;
+   color: var(--text-color) !important;
+   font-family: var(--ui-font) !important;
+   font-size: var(--font-size);
+}
+
+body {
+   display: flex;
+   flex-direction: column;
+}
+
+/* ==========================================================
+   REJILLA PRINCIPAL TRIPANEL (Obsidian Grid Engine)
+   Columna 1: 48px fija (Barra de Actividad)
+   Columna 2: 260px (Panel Izquierdo) o 0px si está cerrado
+   Columna 3: 1fr (Área de lectura central autoajustable)
+   Columna 4: 260px (Panel Derecho) o 0px si está cerrado
+   ========================================================== */
+.layout-grid {
+   display: grid;
+   grid-template-columns: 48px 260px minmax(0, 1fr) 260px;
+   width: 100vw;
+   height: 100vh;
+   overflow: hidden;
+   transition: grid-template-columns 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Estados de colapso independientes */
+.layout-grid.no-left-panel {
+   grid-template-columns: 48px 0px minmax(0, 1fr) 260px;
+}
+
+.layout-grid.no-right-panel {
+   grid-template-columns: 48px 260px minmax(0, 1fr) 0px;
+}
+
+.layout-grid.no-left-panel.no-right-panel {
+   grid-template-columns: 48px 0px minmax(0, 1fr) 0px;
+}
+
+/* Barra de Actividad Izquierda (48px) */
+.activity-bar {
+  width: 48px;
+  height: 100vh;
+  background: var(--header-bg);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  z-index: 20;
+}
+
+.activity-top, .activity-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  width: 100%;
+  align-items: center;
+}
+
+.act-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-color);
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.6;
+  transition: all 0.15s ease;
+}
+
+.act-btn:hover {
+  opacity: 1;
+  background: rgba(139, 92, 246, 0.15);
+  color: #8b5cf6;
+}
+
+.act-btn.active {
+  opacity: 1;
+  background: rgba(139, 92, 246, 0.2);
+  color: #8b5cf6;
+  border-left: 2px solid #8b5cf6;
+  border-radius: 0 6px 6px 0;
+}
+
+/* Panel Izquierdo Desplegable (260px) */
+.left-sidebar-panel {
+  height: 100vh;
+  overflow: hidden;
+  background: var(--header-bg);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.layout-grid.no-left-panel .left-sidebar-panel {
+  display: none !important;
+}
+
+/* Panel Derecho Desplegable (260px) */
+.right-sidebar-panel {
+  height: 100vh;
+  overflow: hidden;
+  background: var(--header-bg);
+  border-left: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.layout-grid.no-right-panel .right-sidebar-panel {
+  display: none !important;
+}
+
+/* Cabeceras de paneles */
+.panel-header {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #8b5cf6;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.75rem 1rem;
+}
+
+/* Distribución 2/3 (Índice) y 1/3 (Metadatos) en el panel derecho */
+.right-section {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.right-section.toc-section {
+  flex: 2;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.right-section.meta-section {
+  flex: 1;
+}
+
+.right-section.fill-all {
+  flex: 1 !important;
+  border-bottom: none !important;
+}
+
+/* Área central de lectura */
+.main-content {
+   padding: 3rem 4rem;
+   height: 100vh;
+   overflow-y: auto;
+   overflow-x: hidden;
+   scroll-behavior: smooth;
+   scroll-padding-top: 2rem;
+   background-color: var(--bg-color);
+   contain: layout style;
+}
+
+.content-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.main-content h1[id], 
+.main-content h2[id], 
+.main-content h3[id], 
+.main-content h4[id] {
+    scroll-margin-top: 2rem;
+}
+
+.markdown-body .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.55rem 0;
+}
+
+/* Pagefind */
+:root {
+  --pagefind-ui-scale: 0.85;
+  --pagefind-ui-primary: #8b5cf6;
+  --pagefind-ui-text: var(--text-color);
+  --pagefind-ui-background: var(--bg-color);
+  --pagefind-ui-border: var(--border-color);
+  --pagefind-ui-tag: var(--header-bg);
+  --pagefind-ui-border-radius: 6px;
+}
+.pagefind-ui__search-input {
+  background-color: var(--bg-color) !important;
+  color: var(--text-color) !important;
+}
+
+/* ==========================================================
+   SOPORTE PARA IMPRESIÓN OSCURA TOTAL (PDF DARK MODE)
+   ========================================================== */
+@media print {
+  @page {
+    background-color: #0f172a !important;
+    margin: 1.5cm;
+  }
+
+  html, body {
+    background-color: #0f172a !important;
+    color: #f1f5f9 !important;
+    height: auto !important;
+    overflow: visible !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .activity-bar,
+  .left-sidebar-panel,
+  .right-sidebar-panel,
+  .nav-divider,
+  .doc-nav {
+    display: none !important;
+  }
+
+  .layout-grid {
+    display: block !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  .main-content {
+    padding: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+    background: transparent !important;
+  }
+
+  .content-wrapper {
+    max-width: 100% !important;
+  }
+
+  .markdown-body {
+    color: #f1f5f9 !important;
+    background: transparent !important;
+  }
+
+  .markdown-body :where(h1, h2, h3, h4, p, li, span, code) {
+    color: #f1f5f9 !important;
+  }
+
+  .markdown-body pre {
+    background-color: #1e293b !important;
+    border: 1px solid #334155 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
+
+@media (max-width: 1100px) {
+  .layout-grid { grid-template-columns: 48px 0px minmax(0, 1fr) 0px; }
+  .left-sidebar-panel, .right-sidebar-panel { display: none !important; }
+  .main-content { padding: 1.5rem 1rem; }
+}

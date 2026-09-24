@@ -1,0 +1,272 @@
+---
+import '../styles/base.css';
+import LeftSidebar from '../components/LeftSidebar.astro';
+import RightSidebar from '../components/RightSidebar.astro';
+import { ClientRouter } from 'astro:transitions';
+import GlobalModal from '../components/GlobalModal.astro';
+
+const {
+  title,
+  headings = [],
+  frontmatter = {},
+  isLanding = false
+} = Astro.props;
+
+const estiloDoc = frontmatter.theme || 'moderno';
+---
+
+<!DOCTYPE html>
+<html lang="es" data-estilo={estiloDoc}>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{title} | Repositorio Personal</title>
+    <ClientRouter />
+    <link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
+    <script src="/pagefind/pagefind-ui.js" is:inline></script>
+    <script is:inline>
+      (function () {
+        const html = document.documentElement;
+        const body = document.body;
+        const modo = localStorage.getItem('pref-modo') || 'oscuro';
+        const texto = localStorage.getItem('pref-texto') || 'estandar';
+        const ancho = localStorage.getItem('pref-ancho') || 'normal';
+
+        html.setAttribute('data-modo', modo);
+        html.setAttribute('data-texto', texto);
+        html.setAttribute('data-ancho', ancho);
+        if (body) body.setAttribute('data-modo', modo);
+
+        document.addEventListener('astro:before-swap', (ev) => {
+          const m = localStorage.getItem('pref-modo') || 'oscuro';
+          const t = localStorage.getItem('pref-texto') || 'estandar';
+          const a = localStorage.getItem('pref-ancho') || 'normal';
+          const nuevoEstilo = ev.newDocument.documentElement.getAttribute('data-estilo') || 'moderno';
+
+          ev.newDocument.documentElement.setAttribute('data-modo', m);
+          ev.newDocument.documentElement.setAttribute('data-estilo', nuevoEstilo);
+          ev.newDocument.documentElement.setAttribute('data-texto', t);
+          ev.newDocument.documentElement.setAttribute('data-ancho', a);
+          if (ev.newDocument.body) ev.newDocument.body.setAttribute('data-modo', m);
+        });
+      })();
+    </script>
+    <link 
+      rel="stylesheet" 
+      href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" 
+      crossorigin="anonymous" 
+    />
+  </head>
+  <body>
+    <div class={`layout-grid ${isLanding ? 'no-left-panel no-right-panel' : ''}`} id="main-grid">
+       <!-- PANEL IZQUIERDO Y BARRA DE ACTIVIDAD -->
+       <LeftSidebar />
+
+       <!-- ÁREA CENTRAL DE LECTURA (Autoexpandible) -->
+       <main class="main-content" data-pagefind-ignore id="main-scroll-container">
+         <div class="content-wrapper">
+           <slot />
+         </div>
+       </main>
+
+       <!-- PANEL DERECHO (ÍNDICE 2/3 Y METADATOS 1/3) -->
+       <RightSidebar headings={headings} frontmatter={frontmatter} />
+    </div>
+     
+    <GlobalModal />
+
+    <script>
+      declare global {
+        interface Window {
+          PagefindUI: any;
+        }
+      }
+
+      function initAppEngine() {
+        const grid = document.getElementById('main-grid');
+        if (!grid) return;
+
+        // Elementos de la barra izquierda
+        const actCollapse = document.getElementById('act-collapse');
+        const actExplorer = document.getElementById('act-explorer');
+        const actSearch = document.getElementById('act-search');
+        const actGraph = document.getElementById('act-graph');
+        const actToc = document.getElementById('act-toc');
+        const actMeta = document.getElementById('act-meta');
+        const actPrint = document.getElementById('act-print');
+        const actSettings = document.getElementById('act-settings');
+
+        // Paneles y secciones
+        const leftPanes = document.querySelectorAll('.l-pane');
+        const leftTitle = document.getElementById('left-panel-title');
+        const secToc = document.getElementById('sec-toc');
+        const secMeta = document.getElementById('sec-meta');
+
+        // Variables de estado del panel derecho
+        let showToc = true;
+        let showMeta = true;
+
+        function updateRightPanel() {
+          if (!secToc || !secMeta) return;
+
+          if (showToc && showMeta) {
+            grid.classList.remove('no-right-panel');
+            secToc.style.display = 'flex';
+            secMeta.style.display = 'flex';
+            secToc.classList.remove('fill-all');
+            secMeta.classList.remove('fill-all');
+          } else if (showToc && !showMeta) {
+            grid.classList.remove('no-right-panel');
+            secToc.style.display = 'flex';
+            secMeta.style.display = 'none';
+            secToc.classList.add('fill-all');
+          } else if (!showToc && showMeta) {
+            grid.classList.remove('no-right-panel');
+            secToc.style.display = 'none';
+            secMeta.style.display = 'flex';
+            secMeta.classList.add('fill-all');
+          } else {
+            // Ninguno activo: colapso total hacia la derecha, main ocupa el 100%
+            grid.classList.add('no-right-panel');
+          }
+
+          actToc?.classList.toggle('active', showToc);
+          actMeta?.classList.toggle('active', showMeta);
+        }
+
+        // Control de vistas en el Panel Izquierdo
+        function openLeftPane(paneId: string, titleText: string, activeBtn: HTMLElement | null) {
+          const isCurrentlyOpen = !grid.classList.contains('no-left-panel');
+          const currentPane = document.getElementById(paneId);
+          const isSamePaneActive = currentPane?.classList.contains('active');
+
+          if (isCurrentlyOpen && isSamePaneActive) {
+            grid.classList.add('no-left-panel');
+            activeBtn?.classList.remove('active');
+            return;
+          }
+
+          grid.classList.remove('no-left-panel');
+          leftPanes.forEach(p => p.classList.remove('active'));
+          [actExplorer, actSearch, actSettings].forEach(b => b?.classList.remove('active'));
+
+          currentPane?.classList.add('active');
+          activeBtn?.classList.add('active');
+          if (leftTitle) leftTitle.textContent = titleText;
+
+          // Montar buscador Pagefind si se abre la pestaña de búsqueda
+          if (paneId === 'pane-search') {
+            const container = document.getElementById('inline-pagefind-container');
+            if (container && container.innerHTML.trim() === '') {
+              if (window.PagefindUI) {
+                new window.PagefindUI({ element: "#inline-pagefind-container", showSubResults: true });
+              }
+            }
+            setTimeout(() => {
+              container?.querySelector('input')?.focus();
+            }, 80);
+          }
+        }
+
+        // 1. Botón Colapsar General
+        actCollapse?.addEventListener('click', () => {
+          const anyOpen = !grid.classList.contains('no-left-panel') || !grid.classList.contains('no-right-panel');
+          if (anyOpen) {
+            grid.classList.add('no-left-panel');
+            grid.classList.add('no-right-panel');
+            showToc = false;
+            showMeta = false;
+            updateRightPanel();
+            [actExplorer, actSearch, actSettings].forEach(b => b?.classList.remove('active'));
+          } else {
+            grid.classList.remove('no-left-panel');
+            showToc = true;
+            showMeta = true;
+            updateRightPanel();
+            openLeftPane('pane-explorer', 'EXPLORADOR', actExplorer);
+          }
+        });
+
+        // 2, 3, 8: Paneles Izquierdos
+        actExplorer?.addEventListener('click', () => openLeftPane('pane-explorer', 'EXPLORADOR', actExplorer));
+        actSearch?.addEventListener('click', () => openLeftPane('pane-search', 'BUSCAR', actSearch));
+        actSettings?.addEventListener('click', () => openLeftPane('pane-settings', 'AJUSTES', actSettings));
+
+        // 4. Grafo flotante
+        actGraph?.addEventListener('click', () => {
+          document.getElementById('btn-toggle-graph')?.click();
+        });
+
+        // 5 & 6: Alternadores independientes de Índice y Metadatos
+        actToc?.addEventListener('click', () => {
+          showToc = !showToc;
+          updateRightPanel();
+        });
+
+        actMeta?.addEventListener('click', () => {
+          showMeta = !showMeta;
+          updateRightPanel();
+        });
+
+        // 7. Impresión con fondo oscuro forzado
+        actPrint?.addEventListener('click', () => {
+          window.print();
+        });
+
+        // Configuración de estilos en tiempo real
+        document.querySelectorAll('[data-modo]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const modo = (btn as HTMLElement).dataset.modo;
+            if (modo) {
+              localStorage.setItem('pref-modo', modo);
+              document.documentElement.setAttribute('data-modo', modo);
+              document.body.setAttribute('data-modo', modo);
+            }
+          });
+        });
+
+        document.querySelectorAll('[data-estilo]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const estilo = (btn as HTMLElement).dataset.estilo;
+            if (estilo) {
+              localStorage.setItem('pref-estilo', estilo);
+              document.documentElement.setAttribute('data-estilo', estilo);
+            }
+          });
+        });
+
+        // Atajos de teclado (Ctrl+K para buscar, Ctrl+B para colapsar)
+        document.addEventListener('keydown', (e) => {
+          if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+            e.preventDefault();
+            openLeftPane('pane-search', 'BUSCAR', actSearch);
+          }
+          if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
+            e.preventDefault();
+            actCollapse?.click();
+          }
+        });
+
+        // Anclajes con KaTeX
+        document.addEventListener('click', (e) => {
+          const target = e.target as HTMLElement;
+          const link = target.closest('a');
+          if (link && link.hash && link.pathname === window.location.pathname) {
+            const targetEl = document.getElementById(link.hash.slice(1));
+            const mainCont = document.querySelector('.main-content');
+            if (targetEl && mainCont) {
+              e.preventDefault();
+              history.pushState(null, '', link.hash);
+              const top = targetEl.getBoundingClientRect().top - mainCont.getBoundingClientRect().top + mainCont.scrollTop - 20;
+              mainCont.scrollTo({ top, behavior: 'smooth' });
+            }
+          }
+        });
+
+        updateRightPanel();
+      }
+
+      document.addEventListener('astro:page-load', initAppEngine);
+    </script>
+  </body>
+</html>

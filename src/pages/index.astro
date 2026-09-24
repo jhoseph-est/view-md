@@ -1,0 +1,58 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Inicio" isLanding={true}>
+  <div class="hero-section">
+    <span class="hero-icon">🪴</span>
+    <h1>Mi Jardín Digital</h1>
+    <p>El núcleo centralizado de apuntes universitarios y documentación personal.</p>
+         
+    <div class="hero-buttons">
+      <a href="/docs/explorar" class="btn-primary">📁 Explorar Directorio</a>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .hero-section {
+    text-align: center;
+    padding: 6rem 1rem 4rem 1rem;
+  }
+  .hero-icon {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 1rem;
+  }
+  .hero-section h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+  }
+  .hero-section p {
+    font-size: 1.2rem;
+    opacity: 0.7;
+    max-width: 600px;
+    margin: 0 auto 2.5rem auto;
+    line-height: 1.6;
+  }
+  .hero-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: #8b5cf6;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+  }
+</style>
