@@ -1,10 +1,13 @@
 ---
+// src/layouts/Base.astro
 import '../styles/base.css';
 import ActivityBar from '../components/ActivityBar.astro';
 import LeftSidebar from '../components/LeftSidebar.astro';
 import RightSidebar from '../components/RightSidebar.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { ClientRouter } from 'astro:transitions';
 import GlobalModal from '../components/GlobalModal.astro';
+import GraphModal from '../components/GraphModal.astro';
 
 const {
   title,
@@ -36,7 +39,6 @@ const estiloDoc = frontmatter.theme || 'moderno';
         html.setAttribute('data-texto', texto);
         html.setAttribute('data-ancho', ancho);
 
-        // Estado inicial de paneles
         const leftOpen = localStorage.getItem('wiki-left-open') === 'true';
         const showToc = localStorage.getItem('wiki-show-toc') === 'true';
         const showMeta = localStorage.getItem('wiki-show-meta') === 'true';
@@ -88,8 +90,10 @@ const estiloDoc = frontmatter.theme || 'moderno';
        <ActivityBar />
        <LeftSidebar />
 
+       <!-- ÁREA CENTRAL DE LECTURA -->
        <main class="main-content" data-pagefind-ignore id="main-scroll-container">
          <div class="content-wrapper">
+           {!isLanding && <Breadcrumbs title={title} />}
            <slot />
          </div>
        </main>
@@ -98,6 +102,7 @@ const estiloDoc = frontmatter.theme || 'moderno';
     </div>
      
     <GlobalModal />
+    <GraphModal />
 
     <script>
       declare global {
@@ -108,6 +113,7 @@ const estiloDoc = frontmatter.theme || 'moderno';
 
       function setupLayoutEngine() {
         const root = document.documentElement;
+        const mainGrid = document.getElementById('main-grid');
 
         let isLeftOpen = localStorage.getItem('wiki-left-open') === 'true';
         let showToc = localStorage.getItem('wiki-show-toc') === 'true';
@@ -124,10 +130,10 @@ const estiloDoc = frontmatter.theme || 'moderno';
         const actExplorer = document.getElementById('act-explorer');
         const actSearch = document.getElementById('act-search');
         const actSettings = document.getElementById('act-settings');
+        const actPrint = document.getElementById('act-print');
         const leftTitle = document.getElementById('left-panel-title');
 
         function syncUI(save = true) {
-          // 1. Clases y atributos raíz en HTML (Controlan visualmente todo por CSS puro)
           root.classList.toggle('no-left-panel', !isLeftOpen);
           root.classList.toggle('no-toc', !showToc);
           root.classList.toggle('no-meta', !showMeta);
@@ -146,11 +152,9 @@ const estiloDoc = frontmatter.theme || 'moderno';
             root.removeAttribute('data-active-pane');
           }
 
-          // 2. Botón Maestro
           const anyActive = isLeftOpen || showToc || showMeta;
           if (actCollapse) actCollapse.classList.toggle('active', anyActive);
 
-          // 3. Persistencia
           if (save) {
             localStorage.setItem('wiki-left-open', isLeftOpen.toString());
             localStorage.setItem('wiki-show-toc', showToc.toString());
@@ -249,10 +253,50 @@ const estiloDoc = frontmatter.theme || 'moderno';
           };
         }
 
+        // Impresión / Exportar PDF
+        if (actPrint) {
+          actPrint.onclick = () => {
+            window.print();
+          };
+        }
+
+        // Modo Zen (Pantalla Completa API + Ocultamiento total)
+        function toggleZenMode() {
+          const isZen = mainGrid?.classList.toggle('zen-active');
+          if (isZen) {
+            if (!document.fullscreenElement) {
+              document.documentElement.requestFullscreen().catch(() => {});
+            }
+          } else {
+            if (document.fullscreenElement) {
+              document.exitFullscreen().catch(() => {});
+            }
+          }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+          if (!document.fullscreenElement) {
+            mainGrid?.classList.remove('zen-active');
+          }
+        });
+
+        // Atajos de teclado: Ctrl+B (Maestro), Alt+Z (Modo Zen), Ctrl+K (Buscador)
         document.addEventListener('keydown', (e) => {
           if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
             e.preventDefault();
             actCollapse?.click();
+          } else if (e.altKey && e.key.toLowerCase() === 'z') {
+            e.preventDefault();
+            toggleZenMode();
+          } else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+            e.preventDefault();
+            if (!isLeftOpen || activePane !== 'pane-search') {
+              isLeftOpen = true;
+              activePane = 'pane-search';
+              syncUI();
+            } else {
+              document.querySelector<HTMLInputElement>('#inline-pagefind-container input')?.focus();
+            }
           }
         });
 

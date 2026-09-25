@@ -1,7 +1,6 @@
 ---
 // src/components/GraphModal.astro
 ---
-<!-- Ya no necesitamos duplicar el HTML del modal aquí -->
 
 <script>
   import ForceGraph from 'force-graph';
@@ -29,7 +28,7 @@
   function destroyGraph(container?: HTMLElement | null) {
     if (Graph) {
       // @ts-ignore
-      Graph._destructor && Graph._destructor();
+      if (typeof Graph._destructor === 'function') Graph._destructor();
       Graph = null;
     }
     if (resizeObserver) {
@@ -42,21 +41,23 @@
   }
 
   function setupGraphModal() {
-    const btnToggleGraph = document.getElementById('btn-toggle-graph');
+    // Escucha el botón con el ID real de la ActivityBar (#act-graph)
+    const btnToggleGraph = document.getElementById('act-graph');
     if (!btnToggleGraph) return;
 
     let isFetching = false;
 
     btnToggleGraph.onclick = () => {
-      // 1. Creamos dinámicamente el contenedor interno para el grafo
+      // 1. Contenedor del lienzo del grafo
       const graphContainer = document.createElement('div');
       graphContainer.id = 'graph-container';
       graphContainer.style.width = '100%';
       graphContainer.style.height = '100%';
+      graphContainer.style.minHeight = '480px';
       graphContainer.style.cursor = 'grab';
       graphContainer.style.position = 'relative';
 
-      // 2. Disparamos el evento global para abrir el modal unificado
+      // 2. Disparar el evento global para abrir GlobalModal
       window.dispatchEvent(new CustomEvent('open-global-modal', {
         detail: {
           title: 'Red de Conocimiento',
@@ -65,6 +66,14 @@
         }
       }));
 
+      // Listener para limpiar cuando se cierre el modal
+      const globalModal = document.getElementById('global-modal');
+      const closeHandler = () => {
+        destroyGraph(graphContainer);
+        window.removeEventListener('close-global-modal', closeHandler);
+      };
+      window.addEventListener('close-global-modal', closeHandler);
+
       if (Graph || isFetching) return;
       isFetching = true;
 
@@ -72,8 +81,10 @@
         .then((res) => res.json())
         .then((data) => {
           isFetching = false;
-          const globalModal = document.getElementById('global-modal');
-          if (!globalModal?.classList.contains('is-active')) return;
+          if (!globalModal || globalModal.getAttribute('aria-hidden') === 'true') {
+            destroyGraph(graphContainer);
+            return;
+          }
 
           const isDark = document.documentElement.getAttribute('data-modo') === 'oscuro';
           const computedBg = window.getComputedStyle(document.body).backgroundColor;
@@ -96,8 +107,8 @@
               ctx.fillStyle = n.color || '#8b5cf6';
               ctx.fill();
 
-              if (globalScale >= 1.2) {
-                const fontSize = 12 / globalScale;
+              if (globalScale >= 1.1) {
+                const fontSize = 11 / globalScale;
                 ctx.font = `${fontSize}px system-ui, sans-serif`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'top';
@@ -108,18 +119,17 @@
             .onNodeClick((node: unknown) => {
               const n = node as GraphNodeObject;
               if (n && n.id) {
-                // Cerramos el modal limpiando el estado
-                document.getElementById('global-modal')?.classList.remove('is-active');
+                window.dispatchEvent(new CustomEvent('close-global-modal'));
                 destroyGraph(graphContainer);
-                document.body.style.overflow = '';
                 navigate(n.id);
               }
             });
 
           setTimeout(() => {
             if (graphContainer && Graph) {
-              Graph.width(graphContainer.clientWidth);
-              Graph.height(graphContainer.clientHeight);
+              const rect = graphContainer.getBoundingClientRect();
+              Graph.width(rect.width || 600);
+              Graph.height(rect.height || 480);
               Graph.zoomToFit(400, 40);
 
               resizeObserver = new ResizeObserver(() => {
@@ -130,7 +140,7 @@
               });
               resizeObserver.observe(graphContainer);
             }
-          }, 50);
+          }, 80);
         })
         .catch(() => { 
           isFetching = false; 

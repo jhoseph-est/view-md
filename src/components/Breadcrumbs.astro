@@ -1,0 +1,107 @@
+---
+// src/components/Breadcrumbs.astro
+import { formatName } from '../utils/fileTree';
+
+interface Props {
+  title?: string;
+}
+
+interface CrumbItem {
+  name: string;
+  url: string;
+  isLast: boolean;
+}
+
+const { title = 'Documento' } = Astro.props;
+const pathname = Astro.url.pathname.replace(/^\/|\/$/g, '');
+const segments: string[] = pathname ? pathname.split('/') : [];
+
+// Omitimos el prefijo 'docs' si existe en la ruta
+const breadcrumbSegments: string[] = segments[0] === 'docs' ? segments.slice(1) : segments;
+
+let accumulatedPath = '/docs';
+const crumbs: CrumbItem[] = breadcrumbSegments.map((segment: string, index: number): CrumbItem => {
+  accumulatedPath += `/${segment}`;
+  const isLast = index === breadcrumbSegments.length - 1;
+  return {
+    name: isLast ? title : formatName(segment),
+    url: accumulatedPath,
+    isLast
+  };
+});
+---
+
+<nav class="breadcrumbs" aria-label="Migas de pan">
+  <a href="/" class="crumb-link home-crumb" title="Inicio del Jardín">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+      <polyline points="9 22 9 12 15 12 15 22"/>
+    </svg>
+    <span>Home</span>
+  </a>
+
+  {crumbs.map((crumb: CrumbItem) => (
+    <span class="crumb-item">
+      <span class="crumb-sep">›</span>
+      {crumb.isLast ? (
+        <span class="crumb-current" aria-current="page">{crumb.name}</span>
+      ) : (
+        <a href={crumb.url} class="crumb-link">{crumb.name}</a>
+      )}
+    </span>
+  ))}
+</nav>
+
+<style>
+  .breadcrumbs {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    font-size: 0.78rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .crumb-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .crumb-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--text-color);
+    opacity: 0.65;
+    text-decoration: none;
+    transition: opacity 0.15s, color 0.15s;
+    border-radius: 4px;
+    padding: 2px 4px;
+  }
+
+  .crumb-link:hover {
+    opacity: 1;
+    color: #8b5cf6;
+    background: rgba(139, 92, 246, 0.1);
+  }
+
+  .crumb-sep {
+    opacity: 0.35;
+    user-select: none;
+    font-size: 0.85rem;
+  }
+
+  .crumb-current {
+    font-weight: 600;
+    color: var(--text-color);
+    opacity: 0.9;
+    padding: 2px 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 280px;
+  }
+</style>

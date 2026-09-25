@@ -1,7 +1,7 @@
 ---
 // src/components/GlobalModal.astro
 ---
-<div id="global-modal" class="global-modal-overlay">
+<div id="global-modal" class="global-modal-overlay" aria-hidden="true" role="dialog" aria-modal="true">
   <div class="global-modal-content">
     <div class="global-modal-header">
       <div>
@@ -17,6 +17,81 @@
     </div>
   </div>
 </div>
+
+<script>
+  function setupGlobalModal() {
+    const modal = document.getElementById('global-modal');
+    const titleEl = document.getElementById('global-modal-title');
+    const subtitleEl = document.getElementById('global-modal-subtitle');
+    const bodyEl = document.getElementById('global-modal-body');
+    const closeBtn = document.getElementById('global-modal-close');
+
+    if (!modal || !bodyEl) return;
+
+    function closeModal() {
+      if (!modal?.classList.contains('is-active')) return;
+      modal.classList.remove('is-active');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      window.dispatchEvent(new CustomEvent('close-global-modal'));
+    }
+
+    // Escuchar apertura desde GraphModal u otros emisores
+    window.addEventListener('open-global-modal', (e: Event) => {
+      const customEvent = e as CustomEvent<{
+        title?: string;
+        subtitle?: string;
+        contentHTML?: HTMLElement | string;
+      }>;
+
+      const detail = customEvent.detail;
+      if (!detail) return;
+
+      if (titleEl) titleEl.textContent = detail.title || '';
+      if (subtitleEl) subtitleEl.textContent = detail.subtitle || '';
+
+      bodyEl.innerHTML = '';
+      if (detail.contentHTML) {
+        if (typeof detail.contentHTML === 'string') {
+          bodyEl.innerHTML = detail.contentHTML;
+        } else if (detail.contentHTML instanceof HTMLElement) {
+          bodyEl.appendChild(detail.contentHTML);
+        }
+      }
+
+      modal.classList.add('is-active');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    });
+
+    // Escuchar cierre explícito
+    window.addEventListener('close-global-modal', () => {
+      modal.classList.remove('is-active');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    });
+
+    if (closeBtn) {
+      closeBtn.onclick = closeModal;
+    }
+
+    // Cerrar al hacer clic en el fondo oscuro
+    modal.onclick = (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    };
+
+    // Cerrar con Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('is-active')) {
+        closeModal();
+      }
+    });
+  }
+
+  document.addEventListener('astro:page-load', setupGlobalModal);
+</script>
 
 <style>
   .global-modal-overlay {
@@ -39,8 +114,9 @@
   }
 
   .global-modal-content {
-    width: 95vw;
-    height: 90vh;
+    width: 92vw;
+    height: 86vh;
+    max-width: 1200px;
     background-color: var(--bg-color);
     color: var(--text-color);
     border: 1px solid var(--border-color);
@@ -85,7 +161,7 @@
     flex-grow: 1;
     width: 100%;
     height: 100%;
-    overflow: auto;
+    overflow: hidden;
     position: relative;
     box-sizing: border-box;
     background-color: var(--bg-color);
