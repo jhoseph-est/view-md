@@ -27,28 +27,21 @@ const estiloDoc = frontmatter.theme || 'moderno';
     <script is:inline>
       (function () {
         const html = document.documentElement;
-        const body = document.body;
+        
         const modo = localStorage.getItem('pref-modo') || 'oscuro';
         const texto = localStorage.getItem('pref-texto') || 'estandar';
         const ancho = localStorage.getItem('pref-ancho') || 'normal';
-
         html.setAttribute('data-modo', modo);
         html.setAttribute('data-texto', texto);
         html.setAttribute('data-ancho', ancho);
-        if (body) body.setAttribute('data-modo', modo);
 
-        document.addEventListener('astro:before-swap', (ev) => {
-          const m = localStorage.getItem('pref-modo') || 'oscuro';
-          const t = localStorage.getItem('pref-texto') || 'estandar';
-          const a = localStorage.getItem('pref-ancho') || 'normal';
-          const nuevoEstilo = ev.newDocument.documentElement.getAttribute('data-estilo') || 'moderno';
+        // Lectura síncrona instantánea para evitar parpadeos en los paneles
+        const leftOpen = localStorage.getItem('wiki-left-open') !== 'false';
+        const showToc = localStorage.getItem('wiki-show-toc') !== 'false';
+        const showMeta = localStorage.getItem('wiki-show-meta') !== 'false';
 
-          ev.newDocument.documentElement.setAttribute('data-modo', m);
-          ev.newDocument.documentElement.setAttribute('data-estilo', nuevoEstilo);
-          ev.newDocument.documentElement.setAttribute('data-texto', t);
-          ev.newDocument.documentElement.setAttribute('data-ancho', a);
-          if (ev.newDocument.body) ev.newDocument.body.setAttribute('data-modo', m);
-        });
+        if (!leftOpen) html.classList.add('no-left-panel');
+        if (!showToc && !showMeta) html.classList.add('no-right-panel');
       })();
     </script>
     <link 
@@ -62,7 +55,7 @@ const estiloDoc = frontmatter.theme || 'moderno';
        <!-- PANEL IZQUIERDO Y BARRA DE ACTIVIDAD -->
        <LeftSidebar />
 
-       <!-- ÁREA CENTRAL DE LECTURA (Autoexpandible) -->
+       <!-- ÁREA CENTRAL DE LECTURA -->
        <main class="main-content" data-pagefind-ignore id="main-scroll-container">
          <div class="content-wrapper">
            <slot />
@@ -82,191 +75,225 @@ const estiloDoc = frontmatter.theme || 'moderno';
         }
       }
 
-      function initAppEngine() {
+      function setupLayoutEngine() {
         const grid = document.getElementById('main-grid');
         if (!grid) return;
 
-        // Elementos de la barra izquierda
+        let isLeftOpen = localStorage.getItem('wiki-left-open') !== 'false';
+        let showToc = localStorage.getItem('wiki-show-toc') !== 'false';
+        let showMeta = localStorage.getItem('wiki-show-meta') !== 'false';
+        let memoryActivePane = localStorage.getItem('wiki-active-pane') || 'pane-explorer';
+
+        const secToc = document.getElementById('sec-toc');
+        const secMeta = document.getElementById('sec-meta');
+        const actToc = document.getElementById('act-toc');
+        const actMeta = document.getElementById('act-meta');
         const actCollapse = document.getElementById('act-collapse');
         const actExplorer = document.getElementById('act-explorer');
         const actSearch = document.getElementById('act-search');
-        const actGraph = document.getElementById('act-graph');
-        const actToc = document.getElementById('act-toc');
-        const actMeta = document.getElementById('act-meta');
-        const actPrint = document.getElementById('act-print');
         const actSettings = document.getElementById('act-settings');
-
-        // Paneles y secciones
-        const leftPanes = document.querySelectorAll('.l-pane');
         const leftTitle = document.getElementById('left-panel-title');
-        const secToc = document.getElementById('sec-toc');
-        const secMeta = document.getElementById('sec-meta');
+        const leftPanes = document.querySelectorAll('.l-pane');
 
-        // Variables de estado del panel derecho
-        let showToc = true;
-        let showMeta = true;
+        if (isLeftOpen) {
+          grid.classList.remove('no-left-panel');
+          document.documentElement.classList.remove('no-left-panel');
+          activatePaneSilently(memoryActivePane);
+        } else {
+          grid.classList.add('no-left-panel');
+          document.documentElement.classList.add('no-left-panel');
+          if (actExplorer) actExplorer.classList.remove('active');
+          if (actSearch) actSearch.classList.remove('active');
+          if (actSettings) actSettings.classList.remove('active');
+        }
 
-        function updateRightPanel() {
-          if (!secToc || !secMeta) return;
+        updateRightPanel(false);
+
+        function syncCollapseButtonState() {
+          if (!grid) return;
+          const leftOpen = !grid.classList.contains('no-left-panel');
+          const rightClosed = grid.classList.contains('no-right-panel');
+          if (actCollapse) {
+            actCollapse.classList.toggle('active', leftOpen || !rightClosed);
+          }
+        }
+
+        function updateRightPanel(save = true) {
+          if (!secToc || !secMeta || !grid) return;
 
           if (showToc && showMeta) {
             grid.classList.remove('no-right-panel');
+            document.documentElement.classList.remove('no-right-panel');
             secToc.style.display = 'flex';
             secMeta.style.display = 'flex';
             secToc.classList.remove('fill-all');
             secMeta.classList.remove('fill-all');
           } else if (showToc && !showMeta) {
             grid.classList.remove('no-right-panel');
+            document.documentElement.classList.remove('no-right-panel');
             secToc.style.display = 'flex';
             secMeta.style.display = 'none';
             secToc.classList.add('fill-all');
           } else if (!showToc && showMeta) {
             grid.classList.remove('no-right-panel');
+            document.documentElement.classList.remove('no-right-panel');
             secToc.style.display = 'none';
             secMeta.style.display = 'flex';
             secMeta.classList.add('fill-all');
           } else {
-            // Ninguno activo: colapso total hacia la derecha, main ocupa el 100%
             grid.classList.add('no-right-panel');
+            document.documentElement.classList.add('no-right-panel');
           }
 
-          actToc?.classList.toggle('active', showToc);
-          actMeta?.classList.toggle('active', showMeta);
+          const isRightClosed = grid.classList.contains('no-right-panel');
+          if (actToc) actToc.classList.toggle('active', !isRightClosed && showToc);
+          if (actMeta) actMeta.classList.toggle('active', !isRightClosed && showMeta);
+
+          if (save) {
+            localStorage.setItem('wiki-show-toc', showToc.toString());
+            localStorage.setItem('wiki-show-meta', showMeta.toString());
+          }
+          syncCollapseButtonState();
         }
 
-        // Control de vistas en el Panel Izquierdo
-        function openLeftPane(paneId: string, titleText: string, activeBtn: HTMLElement | null) {
-          const isCurrentlyOpen = !grid.classList.contains('no-left-panel');
-          const currentPane = document.getElementById(paneId);
-          const isSamePaneActive = currentPane?.classList.contains('active');
-
-          if (isCurrentlyOpen && isSamePaneActive) {
-            grid.classList.add('no-left-panel');
-            activeBtn?.classList.remove('active');
-            return;
-          }
-
-          grid.classList.remove('no-left-panel');
+        function activatePaneSilently(paneId: string) {
           leftPanes.forEach(p => p.classList.remove('active'));
-          [actExplorer, actSearch, actSettings].forEach(b => b?.classList.remove('active'));
+          if (actExplorer) actExplorer.classList.remove('active');
+          if (actSearch) actSearch.classList.remove('active');
+          if (actSettings) actSettings.classList.remove('active');
 
-          currentPane?.classList.add('active');
-          activeBtn?.classList.add('active');
-          if (leftTitle) leftTitle.textContent = titleText;
+          const target = document.getElementById(paneId);
+          target?.classList.add('active');
 
-          // Montar buscador Pagefind si se abre la pestaña de búsqueda
-          if (paneId === 'pane-search') {
-            const container = document.getElementById('inline-pagefind-container');
-            if (container && container.innerHTML.trim() === '') {
-              if (window.PagefindUI) {
-                new window.PagefindUI({ element: "#inline-pagefind-container", showSubResults: true });
-              }
-            }
-            setTimeout(() => {
-              container?.querySelector('input')?.focus();
-            }, 80);
+          if (paneId === 'pane-explorer') {
+            if (actExplorer) actExplorer.classList.add('active');
+            if (leftTitle) leftTitle.textContent = 'EXPLORADOR';
+          } else if (paneId === 'pane-search') {
+            if (actSearch) actSearch.classList.add('active');
+            if (leftTitle) leftTitle.textContent = 'BUSCAR';
+            initPagefind();
+          } else if (paneId === 'pane-settings') {
+            if (actSettings) actSettings.classList.add('active');
+            if (leftTitle) leftTitle.textContent = 'AJUSTES';
           }
         }
 
-        // 1. Botón Colapsar General
-        actCollapse?.addEventListener('click', () => {
-          const anyOpen = !grid.classList.contains('no-left-panel') || !grid.classList.contains('no-right-panel');
-          if (anyOpen) {
+        function openLeftPane(paneId: string, btn: HTMLElement | null) {
+          if (!grid) return;
+          const isClosed = grid.classList.contains('no-left-panel');
+          const isCurrent = document.getElementById(paneId)?.classList.contains('active');
+
+          if (!isClosed && isCurrent) {
             grid.classList.add('no-left-panel');
-            grid.classList.add('no-right-panel');
-            showToc = false;
-            showMeta = false;
-            updateRightPanel();
-            [actExplorer, actSearch, actSettings].forEach(b => b?.classList.remove('active'));
+            document.documentElement.classList.add('no-left-panel');
+            if (btn) btn.classList.remove('active');
+            localStorage.setItem('wiki-left-open', 'false');
           } else {
             grid.classList.remove('no-left-panel');
-            showToc = true;
-            showMeta = true;
+            document.documentElement.classList.remove('no-left-panel');
+            activatePaneSilently(paneId);
+            localStorage.setItem('wiki-left-open', 'true');
+            localStorage.setItem('wiki-active-pane', paneId);
+          }
+          syncCollapseButtonState();
+        }
+
+        function initPagefind() {
+          const container = document.getElementById('inline-pagefind-container');
+          if (container && container.innerHTML.trim() === '') {
+            if (window.PagefindUI) {
+              new window.PagefindUI({ element: "#inline-pagefind-container", showSubResults: true });
+            }
+          }
+          setTimeout(() => container?.querySelector('input')?.focus(), 80);
+        }
+
+        // Colapso Maestro guardando estado exacto
+        if (actCollapse) {
+          actCollapse.onclick = () => {
+            if (!grid) return;
+            const leftOpen = !grid.classList.contains('no-left-panel');
+            const rightClosed = grid.classList.contains('no-right-panel');
+            const anyOpen = leftOpen || !rightClosed;
+
+            if (anyOpen) {
+              grid.classList.add('no-left-panel', 'no-right-panel');
+              document.documentElement.classList.add('no-left-panel', 'no-right-panel');
+              localStorage.setItem('wiki-left-open', 'false');
+              localStorage.setItem('wiki-show-toc', 'false');
+              localStorage.setItem('wiki-show-meta', 'false');
+              
+              if (actExplorer) actExplorer.classList.remove('active');
+              if (actSearch) actSearch.classList.remove('active');
+              if (actSettings) actSettings.classList.remove('active');
+              if (actToc) actToc.classList.remove('active');
+              if (actMeta) actMeta.classList.remove('active');
+              if (actCollapse) actCollapse.classList.remove('active');
+            } else {
+              grid.classList.remove('no-left-panel', 'no-right-panel');
+              document.documentElement.classList.remove('no-left-panel', 'no-right-panel');
+              localStorage.setItem('wiki-left-open', 'true');
+              localStorage.setItem('wiki-show-toc', 'true');
+              localStorage.setItem('wiki-show-meta', 'true');
+              showToc = true;
+              showMeta = true;
+              openLeftPane(memoryActivePane, actExplorer);
+              updateRightPanel();
+            }
+          };
+        }
+
+        if (actExplorer) actExplorer.onclick = () => openLeftPane('pane-explorer', actExplorer);
+        if (actSearch) actSearch.onclick = () => { openLeftPane('pane-search', actSearch); initPagefind(); };
+        if (actSettings) actSettings.onclick = () => openLeftPane('pane-settings', actSettings);
+
+        if (actToc) {
+          actToc.onclick = () => {
+            if (!grid) return;
+            const rightClosed = grid.classList.contains('no-right-panel');
+            if (rightClosed) {
+              grid.classList.remove('no-right-panel');
+              document.documentElement.classList.remove('no-right-panel');
+              showToc = true;
+            } else {
+              showToc = !showToc;
+              if (!showToc && !showMeta) {
+                grid.classList.add('no-right-panel');
+                document.documentElement.classList.add('no-right-panel');
+              }
+            }
             updateRightPanel();
-            openLeftPane('pane-explorer', 'EXPLORADOR', actExplorer);
-          }
-        });
+          };
+        }
 
-        // 2, 3, 8: Paneles Izquierdos
-        actExplorer?.addEventListener('click', () => openLeftPane('pane-explorer', 'EXPLORADOR', actExplorer));
-        actSearch?.addEventListener('click', () => openLeftPane('pane-search', 'BUSCAR', actSearch));
-        actSettings?.addEventListener('click', () => openLeftPane('pane-settings', 'AJUSTES', actSettings));
-
-        // 4. Grafo flotante
-        actGraph?.addEventListener('click', () => {
-          document.getElementById('btn-toggle-graph')?.click();
-        });
-
-        // 5 & 6: Alternadores independientes de Índice y Metadatos
-        actToc?.addEventListener('click', () => {
-          showToc = !showToc;
-          updateRightPanel();
-        });
-
-        actMeta?.addEventListener('click', () => {
-          showMeta = !showMeta;
-          updateRightPanel();
-        });
-
-        // 7. Impresión con fondo oscuro forzado
-        actPrint?.addEventListener('click', () => {
-          window.print();
-        });
-
-        // Configuración de estilos en tiempo real
-        document.querySelectorAll('[data-modo]').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const modo = (btn as HTMLElement).dataset.modo;
-            if (modo) {
-              localStorage.setItem('pref-modo', modo);
-              document.documentElement.setAttribute('data-modo', modo);
-              document.body.setAttribute('data-modo', modo);
+        if (actMeta) {
+          actMeta.onclick = () => {
+            if (!grid) return;
+            const rightClosed = grid.classList.contains('no-right-panel');
+            if (rightClosed) {
+              grid.classList.remove('no-right-panel');
+              document.documentElement.classList.remove('no-right-panel');
+              showMeta = true;
+            } else {
+              showMeta = !showMeta;
+              if (!showToc && !showMeta) {
+                grid.classList.add('no-right-panel');
+                document.documentElement.classList.add('no-right-panel');
+              }
             }
-          });
-        });
+            updateRightPanel();
+          };
+        }
 
-        document.querySelectorAll('[data-estilo]').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const estilo = (btn as HTMLElement).dataset.estilo;
-            if (estilo) {
-              localStorage.setItem('pref-estilo', estilo);
-              document.documentElement.setAttribute('data-estilo', estilo);
-            }
-          });
-        });
-
-        // Atajos de teclado (Ctrl+K para buscar, Ctrl+B para colapsar)
         document.addEventListener('keydown', (e) => {
-          if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
-            e.preventDefault();
-            openLeftPane('pane-search', 'BUSCAR', actSearch);
-          }
           if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
             e.preventDefault();
             actCollapse?.click();
           }
         });
-
-        // Anclajes con KaTeX
-        document.addEventListener('click', (e) => {
-          const target = e.target as HTMLElement;
-          const link = target.closest('a');
-          if (link && link.hash && link.pathname === window.location.pathname) {
-            const targetEl = document.getElementById(link.hash.slice(1));
-            const mainCont = document.querySelector('.main-content');
-            if (targetEl && mainCont) {
-              e.preventDefault();
-              history.pushState(null, '', link.hash);
-              const top = targetEl.getBoundingClientRect().top - mainCont.getBoundingClientRect().top + mainCont.scrollTop - 20;
-              mainCont.scrollTo({ top, behavior: 'smooth' });
-            }
-          }
-        });
-
-        updateRightPanel();
       }
 
-      document.addEventListener('astro:page-load', initAppEngine);
+      document.addEventListener('astro:page-load', setupLayoutEngine);
     </script>
   </body>
 </html>

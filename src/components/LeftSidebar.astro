@@ -37,10 +37,12 @@ docs.forEach((doc: CollectionEntry<'docs'>) => {
   current[fileName] = { type: 'file', doc, url: `/docs/${normalizedId}` };
 });
 
+const currentPath = Astro.url.pathname;
+
 const folderSvg = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>`;
 const fileSvg = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>`;
 
-function buildExplorerHTML(treeNode: Record<string, TreeNode>): string {
+function buildExplorerHTML(treeNode: Record<string, TreeNode>, parentPath = ''): string {
   let html = '';
   const keys = Object.keys(treeNode).sort((a, b) => {
     const aIsFolder = treeNode[a].type === 'folder';
@@ -52,23 +54,25 @@ function buildExplorerHTML(treeNode: Record<string, TreeNode>): string {
 
   keys.forEach((key) => {
     const node = treeNode[key];
+    const nodePath = parentPath ? `${parentPath}/${key}` : key;
     if (node.type === 'folder') {
       html += `
         <li>
-          <details class="folder" open>
+          <details class="folder" data-folder-path="${nodePath}">
             <summary class="nav-item folder-summary" title="${formatName(key)}">
               <span class="chevron">›</span>
               <span class="nav-icon folder-icon">${folderSvg}</span>
               <span class="text-truncate">${formatName(key)}</span>
             </summary>
-            <ul class="nav-nested">${buildExplorerHTML(node.children)}</ul>
+            <ul class="nav-nested">${buildExplorerHTML(node.children, nodePath)}</ul>
           </details>
         </li>
       `;
     } else {
+      const isCurrent = node.url === currentPath ? 'style="background: rgba(139, 92, 246, 0.2); color: #8b5cf6; font-weight: 600;"' : '';
       html += `
         <li>
-          <a href="${node.url}" class="nav-item file-item" title="${node.doc.data.title}">
+          <a href="${node.url}" class="nav-item file-item" title="${node.doc.data.title}" ${isCurrent}>
             <span class="file-spacer"></span>
             <span class="nav-icon file-icon">${fileSvg}</span>
             <span class="text-truncate">${node.doc.data.title}</span>
@@ -82,41 +86,34 @@ function buildExplorerHTML(treeNode: Record<string, TreeNode>): string {
 const explorerHTML = buildExplorerHTML(fileTree);
 ---
 
-<!-- BARRA DE ACTIVIDAD IZQUIERDA (8 BOTONES) -->
 <nav class="activity-bar" id="activity-bar" aria-label="Barra de Actividad">
   <div class="activity-top">
-    <!-- 1. Colapsar ambos paneles -->
     <button class="act-btn" id="act-collapse" title="Alternar Paneles (Ctrl+B)">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/>
       </svg>
     </button>
-    <!-- 2. Explorador -->
     <button class="act-btn active" id="act-explorer" data-left-pane="pane-explorer" title="Explorador de Archivos">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/>
       </svg>
     </button>
-    <!-- 3. Buscar -->
     <button class="act-btn" id="act-search" data-left-pane="pane-search" title="Buscar en Documentos (Ctrl+K)">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
       </svg>
     </button>
-    <!-- 4. Grafo flotante -->
     <button class="act-btn" id="act-graph" title="Vista de Grafo">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
         <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
       </svg>
     </button>
-    <!-- 5. Índice (Panel Derecho) -->
     <button class="act-btn active" id="act-toc" title="Alternar Índice">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="21" x2="3" y1="6" y2="6"/><line x1="15" x2="3" y1="12" y2="12"/><line x1="17" x2="3" y1="18" y2="18"/>
       </svg>
     </button>
-    <!-- 6. Metadatos (Panel Derecho) -->
     <button class="act-btn active" id="act-meta" title="Alternar Metadatos">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
@@ -125,13 +122,11 @@ const explorerHTML = buildExplorerHTML(fileTree);
   </div>
 
   <div class="activity-bottom">
-    <!-- 7. Imprimir PDF Oscuro -->
     <button class="act-btn" id="act-print" title="Exportar PDF (Modo Oscuro)">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/>
       </svg>
     </button>
-    <!-- 8. Configuración -->
     <button class="act-btn" id="act-settings" data-left-pane="pane-settings" title="Configuración de Estilos">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>
@@ -140,21 +135,15 @@ const explorerHTML = buildExplorerHTML(fileTree);
   </div>
 </nav>
 
-<!-- PANEL IZQUIERDO DESPLEGABLE -->
 <aside class="left-sidebar-panel" id="left-panel">
   <div class="panel-header" id="left-panel-title">EXPLORADOR</div>
   <div class="panel-body">
-    <!-- Vista 1: Explorador -->
     <div id="pane-explorer" class="l-pane active">
       <ul class="nav-tree" set:html={explorerHTML}></ul>
     </div>
-
-    <!-- Vista 2: Buscador Integrado en Panel -->
     <div id="pane-search" class="l-pane">
       <div id="inline-pagefind-container"></div>
     </div>
-
-    <!-- Vista 3: Ajustes -->
     <div id="pane-settings" class="l-pane">
       <div class="setting-group">
         <label>MODO DE COLOR</label>
@@ -174,6 +163,46 @@ const explorerHTML = buildExplorerHTML(fileTree);
     </div>
   </div>
 </aside>
+
+<script>
+  function setupFolderPersistence() {
+    const folders = document.querySelectorAll<HTMLDetailsElement>('details.folder');
+    if (!folders.length) return;
+
+    let openFolders: string[] = [];
+    try {
+      openFolders = JSON.parse(localStorage.getItem('wiki-open-folders') || '[]');
+    } catch {
+      openFolders = [];
+    }
+
+    folders.forEach((details) => {
+      const path = details.dataset.folderPath;
+      if (path && openFolders.includes(path)) {
+        details.open = true;
+      }
+
+      details.addEventListener('toggle', () => {
+        if (!path) return;
+        let current: string[] = [];
+        try {
+          current = JSON.parse(localStorage.getItem('wiki-open-folders') || '[]');
+        } catch {
+          current = [];
+        }
+
+        if (details.open) {
+          if (!current.includes(path)) current.push(path);
+        } else {
+          current = current.filter((p) => p !== path);
+        }
+        localStorage.setItem('wiki-open-folders', JSON.stringify(current));
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', setupFolderPersistence);
+</script>
 
 <style>
   .l-pane { display: none; }
