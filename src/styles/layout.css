@@ -61,6 +61,7 @@ body {
 .activity-bar {
   position: absolute;
   top: 0;
+  bottom: 0;
   left: 0;
   width: 48px;
   height: 100vh;
@@ -73,6 +74,7 @@ body {
   padding: 0.5rem 0;
   z-index: 50;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .activity-top, .activity-bottom {
@@ -116,6 +118,7 @@ body {
 .left-sidebar-panel {
   position: absolute;
   top: 0;
+  bottom: 0;
   left: 48px;
   width: 260px;
   height: 100vh;
@@ -125,6 +128,7 @@ body {
   z-index: 40;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
   transform: translateX(0);
   opacity: 1;
@@ -138,9 +142,8 @@ html.no-left-panel .left-sidebar-panel {
 
 .l-pane {
   display: none;
-  flex: 1;
-  overflow-y: auto;
   flex-direction: column;
+  width: 100%;
 }
 
 .l-pane.active {
@@ -160,8 +163,11 @@ html.no-left-panel .left-sidebar-panel {
 
 .panel-body {
   flex: 1;
+  min-height: 0; /* Permite scroll vertical completo */
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 0.75rem 1rem;
+  box-sizing: border-box;
 }
 
 /* 3. PANELES DERECHOS INDEPENDIENTES (TOC y Metadatos) */
