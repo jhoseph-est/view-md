@@ -36,12 +36,18 @@ const estiloDoc = frontmatter.theme || 'moderno';
         html.setAttribute('data-texto', texto);
         html.setAttribute('data-ancho', ancho);
 
-        // Por defecto: todo cerrado (false)
+        // Estado inicial de paneles
         const leftOpen = localStorage.getItem('wiki-left-open') === 'true';
         const showToc = localStorage.getItem('wiki-show-toc') === 'true';
         const showMeta = localStorage.getItem('wiki-show-meta') === 'true';
+        const activePane = localStorage.getItem('wiki-active-pane') || 'pane-explorer';
 
-        if (!leftOpen) html.classList.add('no-left-panel');
+        if (!leftOpen) {
+          html.classList.add('no-left-panel');
+        } else {
+          html.setAttribute('data-active-pane', activePane);
+        }
+
         if (!showToc) html.classList.add('no-toc');
         if (!showMeta) html.classList.add('no-meta');
 
@@ -59,7 +65,13 @@ const estiloDoc = frontmatter.theme || 'moderno';
           const lOpen = localStorage.getItem('wiki-left-open') === 'true';
           const sToc = localStorage.getItem('wiki-show-toc') === 'true';
           const sMeta = localStorage.getItem('wiki-show-meta') === 'true';
-          if (!lOpen) ev.newDocument.documentElement.classList.add('no-left-panel');
+          const aPane = localStorage.getItem('wiki-active-pane') || 'pane-explorer';
+
+          if (!lOpen) {
+            ev.newDocument.documentElement.classList.add('no-left-panel');
+          } else {
+            ev.newDocument.documentElement.setAttribute('data-active-pane', aPane);
+          }
           if (!sToc) ev.newDocument.documentElement.classList.add('no-toc');
           if (!sMeta) ev.newDocument.documentElement.classList.add('no-meta');
         });
@@ -71,22 +83,17 @@ const estiloDoc = frontmatter.theme || 'moderno';
       crossorigin="anonymous" 
     />
   </head>
-<body>
+  <body>
     <div class={`layout-grid ${isLanding ? 'no-left-panel no-toc no-meta' : ''}`} id="main-grid">
-       <!-- 1. BARRA DE ACTIVIDAD (48px persistente) -->
        <ActivityBar />
-
-       <!-- 2. PANEL IZQUIERDO (260px persistente) -->
        <LeftSidebar />
 
-       <!-- 3. ÁREA CENTRAL DE LECTURA (Centrada absoluto a 100vw) -->
        <main class="main-content" data-pagefind-ignore id="main-scroll-container">
          <div class="content-wrapper">
            <slot />
          </div>
        </main>
 
-       <!-- 4. PANELES DERECHOS INDEPENDIENTES (TOC 2/3 y METADATOS 1/3) -->
        <RightSidebar headings={headings} frontmatter={frontmatter} />
     </div>
      
@@ -118,46 +125,32 @@ const estiloDoc = frontmatter.theme || 'moderno';
         const actSearch = document.getElementById('act-search');
         const actSettings = document.getElementById('act-settings');
         const leftTitle = document.getElementById('left-panel-title');
-        const leftPanes = document.querySelectorAll('.l-pane');
 
         function syncUI(save = true) {
-          // 1. Clases en html para visibilidad por CSS
+          // 1. Clases y atributos raíz en HTML (Controlan visualmente todo por CSS puro)
           root.classList.toggle('no-left-panel', !isLeftOpen);
           root.classList.toggle('no-toc', !showToc);
           root.classList.toggle('no-meta', !showMeta);
 
-          // 2. Botones de actividad derechos
-          if (actToc) actToc.classList.toggle('active', showToc);
-          if (actMeta) actMeta.classList.toggle('active', showMeta);
-
-          // 3. Panel izquierdo y pestañas
-          leftPanes.forEach((p) => p.classList.remove('active'));
-          if (actExplorer) actExplorer.classList.remove('active');
-          if (actSearch) actSearch.classList.remove('active');
-          if (actSettings) actSettings.classList.remove('active');
-
           if (isLeftOpen) {
-            const pane = document.getElementById(activePane);
-            if (pane) pane.classList.add('active');
-
-            if (activePane === 'pane-explorer') {
-              if (actExplorer) actExplorer.classList.add('active');
-              if (leftTitle) leftTitle.textContent = 'EXPLORADOR';
-            } else if (activePane === 'pane-search') {
-              if (actSearch) actSearch.classList.add('active');
-              if (leftTitle) leftTitle.textContent = 'BUSCAR';
-              initSearch();
-            } else if (activePane === 'pane-settings') {
-              if (actSettings) actSettings.classList.add('active');
-              if (leftTitle) leftTitle.textContent = 'AJUSTES';
+            root.setAttribute('data-active-pane', activePane);
+            if (leftTitle) {
+              if (activePane === 'pane-explorer') leftTitle.textContent = 'EXPLORADOR';
+              if (activePane === 'pane-search') {
+                leftTitle.textContent = 'BUSCAR';
+                initSearch();
+              }
+              if (activePane === 'pane-settings') leftTitle.textContent = 'AJUSTES';
             }
+          } else {
+            root.removeAttribute('data-active-pane');
           }
 
-          // 4. Botón Maestro
+          // 2. Botón Maestro
           const anyActive = isLeftOpen || showToc || showMeta;
           if (actCollapse) actCollapse.classList.toggle('active', anyActive);
 
-          // 5. Persistencia
+          // 3. Persistencia
           if (save) {
             localStorage.setItem('wiki-left-open', isLeftOpen.toString());
             localStorage.setItem('wiki-show-toc', showToc.toString());
@@ -204,7 +197,7 @@ const estiloDoc = frontmatter.theme || 'moderno';
           };
         }
 
-        // Pestañas izquierdas
+        // Pestañas Izquierdas
         if (actExplorer) {
           actExplorer.onclick = () => {
             if (isLeftOpen && activePane === 'pane-explorer') {

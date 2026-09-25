@@ -50,7 +50,7 @@ body {
   background-color: var(--bg-color);
 }
 
-/* Modo Zen: Oculta barras */
+/* Modo Zen */
 .layout-grid.zen-active .activity-bar,
 .layout-grid.zen-active .left-sidebar-panel,
 .layout-grid.zen-active .independent-panel {
@@ -106,6 +106,12 @@ body {
   color: #8b5cf6;
 }
 
+/* Iluminación instantánea de botones gobernada por el HTML raíz */
+html:not(.no-left-panel)[data-active-pane="pane-explorer"] #act-explorer,
+html:not(.no-left-panel)[data-active-pane="pane-search"] #act-search,
+html:not(.no-left-panel)[data-active-pane="pane-settings"] #act-settings,
+html:not(.no-toc) #act-toc,
+html:not(.no-meta) #act-meta,
 .act-btn.active {
   opacity: 1;
   background: rgba(139, 92, 246, 0.2);
@@ -140,16 +146,6 @@ html.no-left-panel .left-sidebar-panel {
   pointer-events: none;
 }
 
-.l-pane {
-  display: none;
-  flex-direction: column;
-  width: 100%;
-}
-
-.l-pane.active {
-  display: flex;
-}
-
 .panel-header {
   padding: 0.75rem 1rem;
   border-bottom: 1px solid var(--border-color);
@@ -163,11 +159,25 @@ html.no-left-panel .left-sidebar-panel {
 
 .panel-body {
   flex: 1;
-  min-height: 0; /* Permite scroll vertical completo */
+  min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
   padding: 0.75rem 1rem;
   box-sizing: border-box;
+}
+
+/* Activación de paneles según el atributo raíz */
+.l-pane {
+  display: none;
+  flex-direction: column;
+  width: 100%;
+}
+
+html[data-active-pane="pane-explorer"] #pane-explorer,
+html[data-active-pane="pane-search"] #pane-search,
+html[data-active-pane="pane-settings"] #pane-settings,
+.l-pane.active {
+  display: flex;
 }
 
 /* 3. PANELES DERECHOS INDEPENDIENTES (TOC y Metadatos) */
@@ -198,7 +208,6 @@ html.no-left-panel .left-sidebar-panel {
   height: 33.334vh;
 }
 
-/* Ocultamiento individual mediante clases en HTML */
 html.no-toc #sec-toc {
   transform: translateX(100%);
   opacity: 0;
