@@ -38,7 +38,7 @@ docs.forEach((doc: CollectionEntry<'docs'>) => {
   current[fileName] = { type: 'file', doc, url: `/docs/${normalizedId}` };
 });
 
-const currentPath = Astro.url.pathname;
+const currentPath = decodeURIComponent(Astro.url.pathname).replace(/\/$/, '');
 
 const folderSvg = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>`;
 const fileSvg = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>`;
@@ -70,10 +70,13 @@ function buildExplorerHTML(treeNode: Record<string, TreeNode>, parentPath = ''):
         </li>
       `;
     } else {
-      const isCurrent = node.url === currentPath ? 'style="background: rgba(139, 92, 246, 0.2); color: #8b5cf6; font-weight: 600;"' : '';
+      const decodedNodeUrl = decodeURIComponent(node.url).replace(/\/$/, '');
+      const isCurrent = decodedNodeUrl === currentPath;
+      const currentClass = isCurrent ? 'is-active-file' : '';
+      
       html += `
         <li>
-          <a href="${node.url}" class="nav-item file-item" data-url="${node.url}" title="${node.doc.data.title}" ${isCurrent}>
+          <a href="${node.url}" class="nav-item file-item ${currentClass}" data-url="${node.url}" title="${node.doc.data.title}">
             <span class="file-spacer"></span>
             <span class="nav-icon file-icon">${fileSvg}</span>
             <span class="text-truncate">${node.doc.data.title}</span>
@@ -134,8 +137,9 @@ const explorerHTML = buildExplorerHTML(fileTree);
 <script>
   function setupTreeState() {
     const folders = document.querySelectorAll<HTMLDetailsElement>('details.folder');
-    if (!folders.length) return;
+    const panelBody = document.getElementById('left-panel-body');
 
+    // 1. Restaurar carpetas abiertas desde localStorage
     let openFolders: string[] = [];
     try {
       openFolders = JSON.parse(localStorage.getItem('wiki-open-folders') || '[]');
@@ -167,18 +171,46 @@ const explorerHTML = buildExplorerHTML(fileTree);
       });
     });
 
-    const currentPath = window.location.pathname;
+    // 2. Normalización de URL decodificada (soporta tildes, caracteres especiales y quita hashes)
+    const rawPath = window.location.pathname.replace(/\/$/, '');
+    const currentDecoded = decodeURIComponent(rawPath);
+
+    let activeLink: HTMLAnchorElement | null = null;
+
     document.querySelectorAll<HTMLAnchorElement>('.file-item').forEach(link => {
-      if (link.getAttribute('href') === currentPath) {
-        link.style.background = 'rgba(139, 92, 246, 0.2)';
-        link.style.color = '#8b5cf6';
-        link.style.fontWeight = '600';
+      const linkHref = link.getAttribute('href') || '';
+      const linkPath = decodeURIComponent(linkHref.split('#')[0].split('?')[0]).replace(/\/$/, '');
+
+      if (linkPath === currentDecoded) {
+        link.classList.add('is-active-file');
+        activeLink = link;
+
+        // Auto-abrir las carpetas contenedoras del archivo activo
+        let parent = link.closest('details.folder') as HTMLDetailsElement | null;
+        while (parent) {
+          parent.open = true;
+          parent = parent.parentElement?.closest('details.folder') as HTMLDetailsElement | null;
+        }
       } else {
-        link.style.background = '';
-        link.style.color = '';
-        link.style.fontWeight = '';
+        link.classList.remove('is-active-file');
       }
     });
+
+    // 3. Manejo estable del scroll: restaurar la posición previa o enfocar el archivo activo
+    if (panelBody) {
+      const savedScroll = sessionStorage.getItem('wiki-explorer-scroll');
+      if (savedScroll !== null) {
+        panelBody.scrollTop = parseInt(savedScroll, 10);
+      } else if (activeLink) {
+        // Si es la primera vez que entra, posicionar suavemente si queda fuera del viewport
+        (activeLink as HTMLElement).scrollIntoView({ block: 'nearest', behavior: 'auto' });
+      }
+
+      // Guardar continuamente la posición al scrollear
+      panelBody.onscroll = () => {
+        sessionStorage.setItem('wiki-explorer-scroll', panelBody.scrollTop.toString());
+      };
+    }
   }
 
   function setupAppearanceSettings() {
@@ -196,7 +228,6 @@ const explorerHTML = buildExplorerHTML(fileTree);
       if (!select) return;
 
       if (attr === 'data-estilo' && temaForzado) {
-        // El documento fuerza su propio estilo por frontmatter
         select.value = temaForzado;
         select.disabled = true;
         select.title = `Estilo fijado por el apunte (${temaForzado})`;
@@ -250,6 +281,14 @@ const explorerHTML = buildExplorerHTML(fileTree);
     transition: background 0.15s ease;
   }
   :global(.nav-item:hover) { background: rgba(139, 92, 246, 0.12); color: #8b5cf6; }
+
+  /* Clase activa garantizada para cualquier archivo seleccionado */
+  :global(.file-item.is-active-file) {
+    background: rgba(139, 92, 246, 0.2) !important;
+    color: #8b5cf6 !important;
+    font-weight: 600 !important;
+  }
+
   :global(.text-truncate) { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
   :global(.chevron) { width: 14px; font-size: 1rem; opacity: 0.5; margin-right: 0.3rem; transition: transform 0.2s; display: inline-flex; align-items: center; justify-content: center; }
   :global(.folder[open] > summary .chevron) { transform: rotate(90deg); color: #8b5cf6; opacity: 1; }
