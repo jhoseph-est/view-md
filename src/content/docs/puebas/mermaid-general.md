@@ -283,7 +283,7 @@ gantt
 
 
 ```mermaid
-%%width: 1000%%
+%%width: 1500%%
 %%layout: pan-x %%
 gantt
     title Sprint Corto

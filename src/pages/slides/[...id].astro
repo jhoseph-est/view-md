@@ -32,7 +32,9 @@ const contentBody = doc.body || '';
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Presentación: {doc.data.title}</title>
-  <style>
+  
+  <!-- Usamos is:global para que los divs creados en JS reciban los estilos -->
+  <style is:global>
     html, body {
       width: 100%;
       height: 100%;
@@ -67,34 +69,50 @@ const contentBody = doc.body || '';
       overflow-y: auto !important; 
       padding: 20px; 
     }
-    
-    /* Contenedor SIEMPRE centrado absoluto horizontal y vertical */
-    .reveal .slide-mermaid-container {
-      display: flex !important;
-      flex-direction: column !important;
-      justify-content: center !important;
-      align-items: center !important;
-      width: 100% !important;
-      margin: 1.5rem auto !important;
-      background: transparent;
-      padding: 0.5rem;
-      box-sizing: border-box;
-    }
-    .reveal .slide-mermaid-container svg {
+
+    /* ==============================================================
+       DIV CONTENEDOR CON SCROLL NATIVO (HORIZONTAL Y VERTICAL)
+       ============================================================== */
+    .reveal .slide-mermaid-scroll-box {
       display: block !important;
-      margin: 0 auto !important;
-      height: auto;
+      width: 880px !important;
+      max-width: 90vw !important;
+      max-height: 55vh !important;
+      margin: 1.5rem auto !important;
+      padding: 1.25rem !important;
+      background: #141416 !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+      border-radius: 12px !important;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6) !important;
+      overflow-x: auto !important;
+      overflow-y: auto !important;
+      box-sizing: border-box !important;
+      text-align: center !important;
+      scrollbar-width: thin !important;
+      scrollbar-color: #8b5cf6 rgba(255, 255, 255, 0.08) !important;
+      pointer-events: auto !important;
     }
 
-    /* Scroll horizontal si el diagrama excede la pantalla */
-    .reveal .slide-mermaid-container.has-pan-x {
-      overflow-x: auto !important;
-      max-width: 90vw !important;
-      justify-content: flex-start !important;
+    /* Barras de scroll personalizadas */
+    .reveal .slide-mermaid-scroll-box::-webkit-scrollbar {
+      width: 8px !important;
+      height: 8px !important;
+      display: block !important;
     }
-    .reveal .slide-mermaid-container.has-pan-y {
-      overflow-y: auto !important;
-      max-height: 60vh !important;
+    .reveal .slide-mermaid-scroll-box::-webkit-scrollbar-thumb {
+      background: #8b5cf6 !important;
+      border-radius: 4px !important;
+    }
+    .reveal .slide-mermaid-scroll-box::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05) !important;
+    }
+
+    /* El SVG se despliega en su tamaño natural dentro del div */
+    .reveal .slide-mermaid-scroll-box svg {
+      display: inline-block !important;
+      margin: 0 auto !important;
+      max-width: none !important; /* Vital para que no se comprima ni se corte */
+      height: auto !important;
     }
 
     .btn-exit {
@@ -120,6 +138,35 @@ const contentBody = doc.body || '';
     .btn-exit:hover { 
       background: #ef4444; 
       border-color: #ef4444; 
+    }
+    /* ==============================================================
+       AJUSTE TIPOGRÁFICO DE MERMAID (EVITAR TEXTO RECORTADO)
+       ============================================================== */
+    .reveal .slide-mermaid-scroll-box foreignObject {
+      overflow: visible !important;
+    }
+
+    .reveal .slide-mermaid-scroll-box foreignObject p,
+    .reveal .slide-mermaid-scroll-box foreignObject div,
+    .reveal .slide-mermaid-scroll-box foreignObject span {
+      margin: 0 !important;
+      padding: 0 !important;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+      font-size: 13px !important;
+      line-height: 1.35 !important;
+      color: #f8fafc !important;
+      white-space: pre !important; /* Mantiene la alineación sin saltos bruscos */
+    }
+
+    /* Textos nativos SVG (diagramas que no usan foreignObject) */
+    .reveal .slide-mermaid-scroll-box text,
+    .reveal .slide-mermaid-scroll-box .nodeLabel,
+    .reveal .slide-mermaid-scroll-box .label,
+    .reveal .slide-mermaid-scroll-box .edgeLabel {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+      font-size: 13px !important;
+      line-height: normal !important;
+      fill: #f8fafc !important;
     }
   </style>
 </head>
@@ -159,12 +206,13 @@ const contentBody = doc.body || '';
         center: true,
         hash: true,
         transition: 'slide',
+        mouseWheel: false,
         plugins: [ Markdown, Highlight, RevealMath.MathJax3, Notes ]
       });
 
       let mermaidInstance: any = null;
 
-      async function processSlideMermaid() {
+      async function renderAllMermaids() {
         const codeElements = Array.from(document.querySelectorAll('.reveal pre code'));
         
         const mermaidKeywords = [
@@ -206,26 +254,14 @@ const contentBody = doc.body || '';
 
         for (const [idx, codeEl] of targets.entries()) {
           const pre = codeEl.closest('pre');
-          if (!pre || pre.dataset.mermaidProcessed === 'true') continue;
+          if (!pre || pre.dataset.mermaidDone === 'true') continue;
 
-          pre.dataset.mermaidProcessed = 'true';
+          pre.dataset.mermaidDone = 'true';
 
           const code = (codeEl.textContent || '').trim();
 
-          const layoutMatch = code.match(/%%layout:\s*(fit|pan-x|pan-y)\s*%%/i);
           const widthMatch = code.match(/%%width:\s*(\d+(?:px|%)?)\s*%%/i);
-          const maxWidthMatch = code.match(/%%max-width:\s*(\d+(?:px|%)?)\s*%%/i);
           const heightMatch = code.match(/%%height:\s*(\d+(?:px|%)?)\s*%%/i);
-
-          const parseUnit = (val: string | null) => {
-            if (!val) return null;
-            return val.endsWith('%') || val.endsWith('px') ? val : `${val}px`;
-          };
-
-          const parsedLayout = layoutMatch ? layoutMatch[1].toLowerCase() : 'fit';
-          const parsedWidth = parseUnit(widthMatch ? widthMatch[1] : null);
-          const parsedMaxWidth = parseUnit(maxWidthMatch ? maxWidthMatch[1] : null);
-          const parsedHeight = parseUnit(heightMatch ? heightMatch[1] : null);
 
           let cleanCode = code
             .replace(/%%layout:.*?%%/gi, '')
@@ -246,37 +282,37 @@ const contentBody = doc.body || '';
 
           try {
             const { svg } = await mermaidInstance.render(renderId, cleanCode);
-            const container = document.createElement('div');
-            container.className = `slide-mermaid-container layout-${parsedLayout}`;
-            if (parsedLayout === 'pan-x') container.classList.add('has-pan-x');
-            if (parsedLayout === 'pan-y') container.classList.add('has-pan-y');
             
-            container.innerHTML = svg;
+            // DIV ÚNICO CON SCROLL
+            const scrollBox = document.createElement('div');
+            scrollBox.className = 'slide-mermaid-scroll-box';
+            scrollBox.innerHTML = svg;
 
-            const svgEl = container.querySelector('svg');
+            // Bloquear que el scroll cambie de slide
+            scrollBox.addEventListener('wheel', (e: WheelEvent) => {
+              e.stopPropagation();
+            }, { passive: true });
+
+            scrollBox.addEventListener('touchmove', (e: TouchEvent) => {
+              e.stopPropagation();
+            }, { passive: true });
+
+            const svgEl = scrollBox.querySelector('svg');
             if (svgEl) {
-              // El contenedor siempre se queda al 100% para centrar, el ancho solo se aplica al SVG
-              if (parsedWidth) {
-                svgEl.style.setProperty('width', parsedWidth, 'important');
+              if (widthMatch) {
+                const w = widthMatch[1].endsWith('%') || widthMatch[1].endsWith('px') ? widthMatch[1] : `${widthMatch[1]}px`;
+                svgEl.style.width = w;
               }
-              if (parsedMaxWidth) {
-                svgEl.style.setProperty('max-width', parsedMaxWidth, 'important');
-              } else if (!parsedWidth) {
-                svgEl.style.setProperty('max-width', '85vw', 'important');
-              }
-              
-              if (parsedHeight) {
-                svgEl.style.setProperty('height', parsedHeight, 'important');
-                svgEl.style.setProperty('max-height', parsedHeight, 'important');
-              } else {
-                svgEl.style.setProperty('max-height', '58vh', 'important');
+              if (heightMatch) {
+                const h = heightMatch[1].endsWith('%') || heightMatch[1].endsWith('px') ? heightMatch[1] : `${heightMatch[1]}px`;
+                svgEl.style.height = h;
               }
             }
 
-            pre.replaceWith(container);
+            pre.replaceWith(scrollBox);
           } catch (err) {
             console.error('Error renderizando Mermaid en slide:', err);
-            pre.dataset.mermaidProcessed = 'false';
+            pre.dataset.mermaidDone = 'false';
           }
         }
 
@@ -284,11 +320,11 @@ const contentBody = doc.body || '';
       }
 
       deck.on('ready', () => {
-        setTimeout(processSlideMermaid, 50);
+        setTimeout(renderAllMermaids, 100);
       });
 
       deck.on('slidechanged', () => {
-        processSlideMermaid();
+        renderAllMermaids();
       });
 
       deck.initialize();
