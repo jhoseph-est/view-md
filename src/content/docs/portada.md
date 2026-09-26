@@ -4,7 +4,6 @@ date: 2026-09-03
 author: "Admin"
 tags: ["guia", "markdown", "mdx", "tutorial"]
 orden: 1
-theme: "academico"
 ---
 
 # Guía de Escritura: Markdown y MDX 📖

@@ -183,6 +183,7 @@ const explorerHTML = buildExplorerHTML(fileTree);
 
   function setupAppearanceSettings() {
     const html = document.documentElement;
+    const temaForzado = html.getAttribute('data-tema-doc');
 
     const configKeys = [
       { id: 'pref-select-modo', storage: 'pref-modo', attr: 'data-modo', fallback: 'oscuro' },
@@ -194,9 +195,23 @@ const explorerHTML = buildExplorerHTML(fileTree);
       const select = document.getElementById(id) as HTMLSelectElement | null;
       if (!select) return;
 
-      const currentValue = localStorage.getItem(storage) || html.getAttribute(attr) || fallback;
-      select.value = currentValue;
-      html.setAttribute(attr, currentValue);
+      if (attr === 'data-estilo' && temaForzado) {
+        // El documento fuerza su propio estilo por frontmatter
+        select.value = temaForzado;
+        select.disabled = true;
+        select.title = `Estilo fijado por el apunte (${temaForzado})`;
+        select.style.opacity = '0.55';
+        html.setAttribute('data-estilo', temaForzado);
+      } else {
+        if (attr === 'data-estilo') {
+          select.disabled = false;
+          select.title = '';
+          select.style.opacity = '1';
+        }
+        const currentValue = localStorage.getItem(storage) || html.getAttribute(attr) || fallback;
+        select.value = currentValue;
+        html.setAttribute(attr, currentValue);
+      }
 
       select.onchange = (e) => {
         const target = e.target as HTMLSelectElement;
