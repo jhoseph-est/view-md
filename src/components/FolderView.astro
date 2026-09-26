@@ -4,8 +4,8 @@ import { formatName } from '../utils/fileTree';
 
 const { linkVolver, textoVolver, folderPath, folderName, subfolders, directFiles } = Astro.props;
 ---
-<div class="folder-view">
-  <a href={linkVolver} class="back-link">
+<div class="folder-view" id="folder-view-container">
+  <a href={linkVolver} class="back-link" id="back-link-btn">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
     Volver a <span>{textoVolver}</span>
   </a>
@@ -14,16 +14,16 @@ const { linkVolver, textoVolver, folderPath, folderName, subfolders, directFiles
     <span class="folder-icon-large">
       <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>
     </span>
-    <h1>{folderPath === 'explorar' ? 'Directorio Principal' : formatName(folderName)}</h1>
+    <h1 id="folder-title-text">{folderPath === 'explorar' ? 'Directorio Principal' : formatName(folderName)}</h1>
   </div>
          
-  <p class="folder-desc">Explora los documentos y secciones dentro de esta carpeta.</p>
+  <p class="folder-desc" id="folder-desc-text">Explora los documentos y secciones dentro de esta carpeta.</p>
          
-  <div class="folder-grid">
+  <div class="folder-grid" id="folder-items-grid">
     {subfolders.map((sub: string) => {
       const folderSlug = sub.split('/').pop() || '';
       return (
-        <a href={`/docs/${sub}`} class="folder-card">
+        <a href={`/docs/${sub}`} class="folder-card folder-node" data-name={folderSlug.toLowerCase()}>
           <span class="icon folder-svg">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>
           </span>
@@ -33,7 +33,13 @@ const { linkVolver, textoVolver, folderPath, folderName, subfolders, directFiles
     })}
 
     {directFiles.map((file: any) => (
-      <a href={`/docs/${file.id.replace(/\\/g, '/')}`} class="folder-card">
+      <a 
+        href={`/docs/${file.id.replace(/\\/g, '/')}`} 
+        class="folder-card file-node" 
+        data-title={file.data.title?.toLowerCase() || ''}
+        data-author={file.data.author?.toLowerCase() || ''}
+        data-tags={JSON.stringify(file.data.tags || []).toLowerCase()}
+      >
         <span class="icon file-svg">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
         </span>
@@ -41,7 +47,95 @@ const { linkVolver, textoVolver, folderPath, folderName, subfolders, directFiles
       </a>
     ))}
   </div>
+
+  <p id="no-results-msg" class="no-results" style="display: none;">No se encontraron documentos coincidentes con la búsqueda.</p>
 </div>
+
+<script>
+  function applyQueryFilter() {
+    const params = new URLSearchParams(window.location.search);
+    const searchQuery = params.get('search');
+    
+    if (!searchQuery) return;
+
+    const titleEl = document.getElementById('folder-title-text');
+    const descEl = document.getElementById('folder-desc-text');
+    const fileNodes = document.querySelectorAll<HTMLElement>('.file-node');
+    const folderNodes = document.querySelectorAll<HTMLElement>('.folder-node');
+    const noResultsMsg = document.getElementById('no-results-msg');
+
+    if (titleEl) titleEl.textContent = `Resultados para: "${searchQuery}"`;
+    if (descEl) descEl.textContent = `Filtrado activo en el directorio actual.`;
+
+    const query = searchQuery.toLowerCase().trim();
+    let visibleCount = 0;
+
+    // Si es un filtro por tag (ej. #guia o %23guia)
+    if (query.startsWith('#')) {
+      const tagToFind = query.replace('#', '');
+      // Ocultar carpetas al buscar por tags específicos
+      folderNodes.forEach(f => f.style.display = 'none');
+
+      fileNodes.forEach(file => {
+        try {
+          const tags: string[] = JSON.parse(file.dataset.tags || '[]');
+          const match = tags.some(t => t.toLowerCase().includes(tagToFind));
+          if (match) {
+            file.style.display = 'flex';
+            visibleCount++;
+          } else {
+            file.style.display = 'none';
+          }
+        } catch {
+          file.style.display = 'none';
+        }
+      });
+    } 
+    // Si es un filtro por autor (ej. @admin)
+    else if (query.startsWith('@')) {
+      const authorToFind = query.replace('@', '');
+      folderNodes.forEach(f => f.style.display = 'none');
+
+      fileNodes.forEach(file => {
+        const author = file.dataset.author || '';
+        if (author.includes(authorToFind)) {
+          file.style.display = 'flex';
+          visibleCount++;
+        } else {
+          file.style.display = 'none';
+        }
+      });
+    } 
+    // Búsqueda general de texto
+    else {
+      folderNodes.forEach(f => {
+        const name = f.dataset.name || '';
+        if (name.includes(query)) {
+          f.style.display = 'flex';
+          visibleCount++;
+        } else {
+          f.style.display = 'none';
+        }
+      });
+
+      fileNodes.forEach(file => {
+        const title = file.dataset.title || '';
+        if (title.includes(query)) {
+          file.style.display = 'flex';
+          visibleCount++;
+        } else {
+          file.style.display = 'none';
+        }
+      });
+    }
+
+    if (noResultsMsg) {
+      noResultsMsg.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+  }
+
+  document.addEventListener('astro:page-load', applyQueryFilter);
+</script>
 
 <style>
   .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-color); opacity: 0.7; text-decoration: none; font-size: 0.9rem; font-weight: 600; margin-bottom: 1.5rem; padding: 0.4rem 0.8rem; border-radius: 6px; background: rgba(0,0,0,0.03); border: 1px solid var(--border-color); transition: all 0.2s ease; }
@@ -55,4 +149,5 @@ const { linkVolver, textoVolver, folderPath, folderName, subfolders, directFiles
   .folder-card .icon { display: flex; align-items: center; color: #8b5cf6; }
   .folder-card:hover { transform: translateY(-2px); border-color: #8b5cf6; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
   .folder-card .name { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .no-results { font-size: 1rem; opacity: 0.6; font-style: italic; margin-top: 2rem; text-align: center; width: 100%; }
 </style>

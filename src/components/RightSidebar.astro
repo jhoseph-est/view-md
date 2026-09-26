@@ -1,5 +1,7 @@
 ---
 // src/components/RightSidebar.astro
+import { getCollection, type CollectionEntry } from 'astro:content';
+
 interface Heading {
   depth: number;
   slug: string;
@@ -16,6 +18,64 @@ interface Props {
 }
 
 const { headings = [], frontmatter = {} } = Astro.props;
+
+// Obtener todos los documentos
+const allDocs = await getCollection('docs');
+const currentPath = decodeURIComponent(Astro.url.pathname).replace(/\/$/, '');
+
+// Encontrar el documento actual dentro de la colección para leer su cuerpo (body)
+const currentDoc = allDocs.find((doc: CollectionEntry<'docs'>) => {
+  const docPath = `/docs/${doc.id.replace(/\\/g, '/')}`;
+  return docPath === currentPath;
+});
+
+const docBody = currentDoc?.body || '';
+
+// 1. Enlaces Salientes (Outlinks): Extraídos automáticamente del texto Markdown actual
+const outlinks: { title: string; url: string }[] = [];
+const seenOutlinks = new Set<string>();
+
+if (docBody) {
+  const mdLinkRegex = /\[.*?\]\((\/docs\/[^)#]+)(?:#[^)]+)?\)/g;
+  const wikiLinkRegex = /\[\[([a-zA-Z0-9_\-\/]+)(?:\#.*?)?(?:\Vert{}.*?)?\]\]/g;
+
+  let match: RegExpExecArray | null;
+  while ((match = mdLinkRegex.exec(docBody)) !== null) {
+    const targetUrl = match[1].replace(/\/$/, '');
+    if (targetUrl !== currentPath && !seenOutlinks.has(targetUrl)) {
+      const targetDoc = allDocs.find((d: CollectionEntry<'docs'>) => `/docs/${d.id.replace(/\\/g, '/')}` === targetUrl);
+      if (targetDoc) {
+        seenOutlinks.add(targetUrl);
+        outlinks.push({ title: targetDoc.data.title, url: targetUrl });
+      }
+    }
+  }
+
+  while ((match = wikiLinkRegex.exec(docBody)) !== null) {
+    const targetUrl = `/docs/${match[1].replace(/\\/g, '/')}`.replace(/\/$/, '');
+    if (targetUrl !== currentPath && !seenOutlinks.has(targetUrl)) {
+      const targetDoc = allDocs.find((d: CollectionEntry<'docs'>) => `/docs/${d.id.replace(/\\/g, '/')}` === targetUrl);
+      if (targetDoc) {
+        seenOutlinks.add(targetUrl);
+        outlinks.push({ title: targetDoc.data.title, url: targetUrl });
+      }
+    }
+  }
+}
+
+// 2. Backlinks automáticos (documentos que enlazan hacia este apunte)
+const backlinks: { title: string; url: string }[] = [];
+allDocs.forEach((doc: CollectionEntry<'docs'>) => {
+  const docPath = `/docs/${doc.id.replace(/\\/g, '/')}`;
+  if (docPath !== currentPath && doc.body) {
+    if (doc.body.includes(currentPath) || (frontmatter.title && doc.body.includes(frontmatter.title))) {
+      backlinks.push({
+        title: doc.data.title,
+        url: docPath
+      });
+    }
+  }
+});
 
 function buildToc(flatHeadings: Heading[]): TocItem[] {
   const toc: TocItem[] = [];
@@ -77,31 +137,60 @@ const tocTree = buildToc(headings);
 <!-- 2. BLOQUE INDEPENDIENTE: METADATOS (1/3 INFERIOR) -->
 <aside class="independent-panel bottom-meta" id="sec-meta" aria-label="Metadatos">
   <div class="panel-header">METADATOS</div>
-  <div class="panel-body">
+  <div class="panel-body meta-scroll-area">
     <div class="meta-row">
       <span class="meta-k">Fecha:</span>
       <span class="meta-v">{frontmatter.date ? new Date(frontmatter.date).toLocaleDateString() : '—'}</span>
     </div>
+    
     {frontmatter.author && (
       <div class="meta-row">
         <span class="meta-k">Autor:</span>
-        <span class="meta-v">{frontmatter.author}</span>
+        <a href={`/docs/explorar?search=@${frontmatter.author}`} class="meta-v meta-link" title={`Ver más de ${frontmatter.author}`}>
+          {frontmatter.author}
+        </a>
       </div>
     )}
+
     {frontmatter.readingTime && (
       <div class="meta-row">
         <span class="meta-k">Lectura:</span>
         <span class="meta-v">{frontmatter.readingTime} min</span>
       </div>
     )}
+
     {frontmatter.tags && frontmatter.tags.length > 0 && (
       <div class="meta-row tags-row">
         <span class="meta-k">Tags:</span>
         <div class="meta-tags">
           {frontmatter.tags.map((t: string) => (
-            <span class="tag-pill">#{t}</span>
+            <a href={`/docs/explorar?search=%23${t}`} class="tag-pill" title={`Filtrar por #${t}`}>
+              #{t}
+            </a>
           ))}
         </div>
+      </div>
+    )}
+
+    {outlinks.length > 0 && (
+      <div class="meta-block">
+        <span class="meta-k">Enlaces Salientes:</span>
+        <ul class="meta-link-list">
+          {outlinks.map(link => (
+            <li><a href={link.url} class="doc-link-item" title={link.title}>➡️ {link.title}</a></li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {backlinks.length > 0 && (
+      <div class="meta-block">
+        <span class="meta-k">Backlinks:</span>
+        <ul class="meta-link-list">
+          {backlinks.map(bl => (
+            <li><a href={bl.url} class="doc-link-item" title={bl.title}>🔗 {bl.title}</a></li>
+          ))}
+        </ul>
       </div>
     )}
   </div>
@@ -114,7 +203,6 @@ const tocTree = buildToc(headings);
     const tocLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.r-toc-item'));
     if (!scrollContainer || !tocLinks.length) return;
 
-    // Relacionar cada enlace con su elemento de encabezado real
     const headingPairs = tocLinks
       .map((link) => {
         const slug = link.getAttribute('data-slug');
@@ -136,7 +224,6 @@ const tocTree = buildToc(headings);
       item.link.classList.add('active-heading');
       activeLink = item.link;
 
-      // Auto-centrado dentro del panel lateral de índice
       if (tocContainer) {
         const linkTop = item.link.offsetTop;
         const containerScroll = tocContainer.scrollTop;
@@ -146,7 +233,6 @@ const tocTree = buildToc(headings);
         }
       }
 
-      // Actualizar la URL sin saltos ni recargas
       if (updateHash && !isProgrammaticScroll) {
         const newHash = `#${item.slug}`;
         if (window.location.hash !== newHash) {
@@ -162,36 +248,30 @@ const tocTree = buildToc(headings);
       const scrollHeight = scrollContainer.scrollHeight;
       const clientHeight = scrollContainer.clientHeight;
 
-      // 1. Caso límite: Fin total de la página (dentro de los últimos 15px)
       if (scrollTop + clientHeight >= scrollHeight - 15) {
         setActive(headingPairs[headingPairs.length - 1], true);
         return;
       }
 
-      // 2. Línea focal de lectura: 100px desde el borde superior
       const FOCAL_OFFSET = 100;
       let selected = headingPairs[0];
 
       for (let i = 0; i < headingPairs.length; i++) {
-        // Distancia relativa calculada respecto al área desplazable
         const distance = headingPairs[i].target.offsetTop - scrollTop;
         if (distance <= FOCAL_OFFSET) {
           selected = headingPairs[i];
         } else {
-          break; // Los siguientes están más abajo
+          break;
         }
       }
 
       setActive(selected, true);
     }
 
-    // Scroll manual del usuario
     let ticking = false;
     scrollContainer.addEventListener('scroll', () => {
-      // Si estamos en un salto por clic, no procesamos la "ola"
       if (isProgrammaticScroll) {
         window.clearTimeout(scrollEndTimer);
-        // Cuando las ruedas del scroll realmente se detengan, liberamos el bloqueo
         scrollEndTimer = window.setTimeout(() => {
           isProgrammaticScroll = false;
         }, 120);
@@ -207,36 +287,26 @@ const tocTree = buildToc(headings);
       }
     }, { passive: true });
 
-    // Clic en el TOC: Apuntado directo sin calcular los pasos intermedios
     headingPairs.forEach((item) => {
       item.link.addEventListener('click', (e) => {
-        e.preventDefault(); // Evitamos el salto abrupto por defecto del navegador
-
-        // Bloqueamos el cálculo de scroll para que no haga la "ola" intermedia
+        e.preventDefault();
         isProgrammaticScroll = true;
         window.clearTimeout(scrollEndTimer);
-
-        // Iluminamos inmediatamente el ítem seleccionado
         setActive(item, false);
-
-        // Actualizamos la URL al instante
         history.replaceState(null, '', `#${item.slug}`);
 
-        // Realizamos el desplazamiento suave directo al destino
-        const targetTop = item.target.offsetTop - 30; // compensación de margen superior
+        const targetTop = item.target.offsetTop - 30;
         scrollContainer.scrollTo({
           top: targetTop,
           behavior: 'smooth'
         });
 
-        // Esperamos a que termine el desplazamiento antes de volver a escuchar el scroll manual
         scrollEndTimer = window.setTimeout(() => {
           isProgrammaticScroll = false;
         }, 600);
       });
     });
 
-    // Evaluación inicial al entrar o cambiar de página
     calculateActiveHeading();
   }
 
@@ -298,6 +368,12 @@ const tocTree = buildToc(headings);
     padding: 0.75rem 1rem;
   }
 
+  .meta-scroll-area {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
   .r-toc-list, .r-toc-nested { list-style: none !important; padding: 0 !important; margin: 0 !important; }
   .r-toc-nested { margin-left: 0.6rem !important; border-left: 1px solid var(--border-color); padding-left: 0.3rem !important; }
   
@@ -320,7 +396,6 @@ const tocTree = buildToc(headings);
     color: #8b5cf6;
   }
 
-  /* Estilo activo del encabezado actual según el scroll */
   .r-toc-item.active-heading {
     opacity: 1;
     background: rgba(139, 92, 246, 0.18);
@@ -331,11 +406,29 @@ const tocTree = buildToc(headings);
   .toc-hash { color: #8b5cf6; font-size: 0.75rem; font-weight: bold; }
   .text-truncate { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
 
-  .meta-row { display: flex; justify-content: space-between; font-size: 0.78rem; margin-bottom: 0.4rem; }
+  .meta-row { display: flex; justify-content: space-between; font-size: 0.78rem; align-items: center; }
   .meta-k { opacity: 0.6; font-weight: 500; }
-  .meta-v { font-weight: 600; }
-  .tags-row { flex-direction: column; gap: 0.25rem; margin-top: 0.5rem; }
+  .meta-v { font-weight: 600; color: var(--text-color); }
+  .meta-link { color: #a78bfa; text-decoration: none; }
+  .meta-link:hover { text-decoration: underline; }
+
+  .tags-row { flex-direction: column; align-items: flex-start; gap: 0.2rem; }
   .meta-tags { display: flex; flex-wrap: wrap; gap: 4px; }
-  .tag-pill { background: rgba(139, 92, 246, 0.12); color: #8b5cf6; padding: 1px 5px; border-radius: 4px; font-size: 0.7rem; }
+  .tag-pill { 
+    background: rgba(139, 92, 246, 0.12); 
+    color: #8b5cf6; 
+    padding: 1px 6px; 
+    border-radius: 4px; 
+    font-size: 0.7rem; 
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+  .tag-pill:hover { background: rgba(139, 92, 246, 0.25); }
+
+  .meta-block { display: flex; flex-direction: column; gap: 0.2rem; margin-top: 0.25rem; font-size: 0.78rem; }
+  .meta-link-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.15rem; }
+  .doc-link-item { color: #a78bfa; text-decoration: none; font-size: 0.78rem; display: block; opacity: 0.85; transition: opacity 0.15s; }
+  .doc-link-item:hover { opacity: 1; text-decoration: underline; }
+
   .empty-note { font-size: 0.75rem; opacity: 0.5; font-style: italic; margin: 0; }
 </style>
