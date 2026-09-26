@@ -17,10 +17,11 @@ const {
 } = Astro.props;
 
 const estiloDoc = frontmatter.theme || 'moderno';
+const hasSlides = frontmatter.slides === true ? 'true' : 'false';
 ---
 
 <!DOCTYPE html>
-<html lang="es" data-estilo={estiloDoc}>
+<html lang="es" data-estilo={estiloDoc} data-has-slides={hasSlides}>
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -58,11 +59,13 @@ const estiloDoc = frontmatter.theme || 'moderno';
           const t = localStorage.getItem('pref-texto') || 'estandar';
           const a = localStorage.getItem('pref-ancho') || 'normal';
           const nuevoEstilo = ev.newDocument.documentElement.getAttribute('data-estilo') || 'moderno';
+          const incomingSlides = ev.newDocument.documentElement.getAttribute('data-has-slides') || 'false';
           
           ev.newDocument.documentElement.setAttribute('data-modo', m);
           ev.newDocument.documentElement.setAttribute('data-estilo', nuevoEstilo);
           ev.newDocument.documentElement.setAttribute('data-texto', t);
           ev.newDocument.documentElement.setAttribute('data-ancho', a);
+          ev.newDocument.documentElement.setAttribute('data-has-slides', incomingSlides);
           
           const lOpen = localStorage.getItem('wiki-left-open') === 'true';
           const sToc = localStorage.getItem('wiki-show-toc') === 'true';
@@ -132,6 +135,13 @@ const estiloDoc = frontmatter.theme || 'moderno';
         const actSettings = document.getElementById('act-settings');
         const actPrint = document.getElementById('act-print');
         const leftTitle = document.getElementById('left-panel-title');
+
+        // Sincronizar el enlace dinámico de las diapositivas con la ruta actual
+        const actSlides = document.getElementById('act-slides') as HTMLAnchorElement | null;
+        if (actSlides) {
+          const currentDocPath = window.location.pathname.replace(/^\/docs\/?/, '').replace(/\/$/, '');
+          actSlides.href = `/slides/${currentDocPath}`;
+        }
 
         function syncUI(save = true) {
           root.classList.toggle('no-left-panel', !isLeftOpen);
@@ -260,7 +270,7 @@ const estiloDoc = frontmatter.theme || 'moderno';
           };
         }
 
-        // Modo Zen (Pantalla Completa API + Ocultamiento total)
+        // Modo Zen (Pantalla Completa API)
         function toggleZenMode() {
           const isZen = mainGrid?.classList.toggle('zen-active');
           if (isZen) {
