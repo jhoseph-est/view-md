@@ -128,6 +128,70 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
     <GlobalModal />
     <GraphModal />
 
+    <!-- ==========================================================
+       BARRA DE NAVEGACIÓN INFERIOR (MÓVIL < 768px)
+       ========================================================== -->
+    <nav class="mobile-bottom-bar" id="mobile-bottom-bar" aria-label="Navegación Móvil">
+      <button class="m-btn active" data-drawer="m-drawer-explorer" title="Explorador">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>
+        <span>Explorar</span>
+      </button>
+      <button class="m-btn" data-drawer="m-drawer-search" title="Buscar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <span>Buscar</span>
+      </button>
+      <button class="m-btn" data-drawer="m-drawer-toc" title="Índice">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="21" x2="3" y1="6" y2="6"/><line x1="15" x2="3" y1="12" y2="12"/><line x1="17" x2="3" y1="18" y2="18"/></svg>
+        <span>Índice</span>
+      </button>
+      <button class="m-btn" data-drawer="m-drawer-meta" title="Metadatos">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        <span>Meta</span>
+      </button>
+      <button class="m-btn" data-drawer="m-drawer-settings" title="Ajustes">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+        <span>Ajustes</span>
+      </button>
+      <button class="m-btn" id="m-act-zen" title="Modo Zen">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" x2="14" y1="3" y2="10"/><line x1="3" x2="10" y1="21" y2="14"/></svg>
+        <span>Zen</span>
+      </button>
+    </nav>
+
+    <!-- Fondo oscuro -->
+    <div class="mobile-drawer-backdrop" id="mobile-backdrop"></div>
+
+    <!-- CAJONES MÓVILES -->
+    <div class="mobile-drawer" id="m-drawer-explorer">
+      <div class="drawer-handle"></div>
+      <div class="drawer-header"><h3>Explorador de Archivos</h3></div>
+      <div class="drawer-body" id="mobile-explorer-content"></div>
+    </div>
+
+    <div class="mobile-drawer" id="m-drawer-search">
+      <div class="drawer-handle"></div>
+      <div class="drawer-header"><h3>Buscar en el Repositorio</h3></div>
+      <div class="drawer-body" id="mobile-search-content"></div>
+    </div>
+
+    <div class="mobile-drawer" id="m-drawer-toc">
+      <div class="drawer-handle"></div>
+      <div class="drawer-header"><h3>Índice del Documento</h3></div>
+      <div class="drawer-body" id="mobile-toc-content"></div>
+    </div>
+
+    <div class="mobile-drawer" id="m-drawer-meta">
+      <div class="drawer-handle"></div>
+      <div class="drawer-header"><h3>Metadatos</h3></div>
+      <div class="drawer-body" id="mobile-meta-content"></div>
+    </div>
+
+    <div class="mobile-drawer" id="m-drawer-settings">
+      <div class="drawer-handle"></div>
+      <div class="drawer-header"><h3>Configuración de Apariencia</h3></div>
+      <div class="drawer-body" id="mobile-settings-content"></div>
+    </div>
+  
 <script>
   import { renderMermaid } from '../utils/mermaidViewer';
   import { renderCallouts } from '../utils/callouts';
@@ -170,6 +234,95 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
       const currentDocPath = window.location.pathname.replace(/^\/docs\/?/, '').replace(/\/$/, '');
       actSlides.href = `/slides/${currentDocPath}`;
     }
+
+    // ==========================================
+    // GESTIÓN DE CAJONES Y NAVEGACIÓN MÓVIL (VISTA DIRECTA)
+    // ==========================================
+    const mButtons = document.querySelectorAll('.m-btn[data-drawer]');
+    const drawers = document.querySelectorAll('.mobile-drawer');
+    const backdrop = document.getElementById('mobile-backdrop');
+    const mActZen = document.getElementById('m-act-zen');
+
+    if (mActZen) {
+      mActZen.onclick = toggleZenMode;
+    }
+
+    // 1. Explorador Móvil
+    const desktopExplorer = document.getElementById('pane-explorer');
+    const mobileExplorerTarget = document.getElementById('mobile-explorer-content');
+    if (desktopExplorer && mobileExplorerTarget && mobileExplorerTarget.innerHTML.trim() === '') {
+      const clone = desktopExplorer.cloneNode(true) as HTMLElement;
+      clone.style.display = 'flex';
+      mobileExplorerTarget.appendChild(clone);
+    }
+
+    // 2. Buscador Móvil
+    const mobileSearchTarget = document.getElementById('mobile-search-content');
+    if (mobileSearchTarget && mobileSearchTarget.innerHTML.trim() === '') {
+      mobileSearchTarget.innerHTML = `<div style="padding: 0.5rem 0;" id="mobile-pagefind-container"></div>`;
+      if (window.PagefindUI) {
+        new window.PagefindUI({ element: "#mobile-pagefind-container", showSubResults: true });
+      }
+    }
+
+    // 3. Índice Móvil (TOC)
+    const mobileTocTarget = document.getElementById('mobile-toc-content');
+    const desktopTocBody = document.getElementById('toc-body') || document.querySelector('.toc-body');
+    if (mobileTocTarget && mobileTocTarget.innerHTML.trim() === '') {
+      if (desktopTocBody && desktopTocBody.innerHTML.trim() !== '') {
+        const clone = desktopTocBody.cloneNode(true) as HTMLElement;
+        mobileTocTarget.appendChild(clone);
+      } else {
+        mobileTocTarget.innerHTML = `<p class="empty-note">Esta página no contiene índice de encabezados.</p>`;
+      }
+    }
+
+    // 4. Metadatos Móvil
+    const mobileMetaTarget = document.getElementById('mobile-meta-content');
+    const desktopMetaBody = document.querySelector('.bottom-meta .panel-body') || document.querySelector('.meta-body');
+    if (mobileMetaTarget && mobileMetaTarget.innerHTML.trim() === '') {
+      if (desktopMetaBody && desktopMetaBody.innerHTML.trim() !== '') {
+        const clone = desktopMetaBody.cloneNode(true) as HTMLElement;
+        mobileMetaTarget.appendChild(clone);
+      } else {
+        mobileMetaTarget.innerHTML = `<p class="empty-note">No hay metadatos disponibles para esta vista.</p>`;
+      }
+    }
+
+    // 5. Ajustes Móvil (Movimiento real de nodos para preservar interactividad)
+    const mobileSettingsTarget = document.getElementById('mobile-settings-content');
+    const desktopSettings = document.getElementById('pane-settings');
+    if (mobileSettingsTarget && desktopSettings && mobileSettingsTarget.innerHTML.trim() === '') {
+      while (desktopSettings.firstChild) {
+        mobileSettingsTarget.appendChild(desktopSettings.firstChild);
+      }
+      desktopSettings.style.display = 'none';
+    }
+
+    function closeAllDrawers() {
+      drawers.forEach(d => d.classList.remove('open'));
+      backdrop?.classList.remove('active');
+      mButtons.forEach(b => b.classList.remove('active'));
+    }
+
+    mButtons.forEach(node => {
+      const btn = node as HTMLElement;
+      btn.onclick = () => {
+        const drawerId = btn.getAttribute('data-drawer');
+        const targetDrawer = drawerId ? document.getElementById(drawerId) : null;
+        const isOpen = targetDrawer?.classList.contains('open');
+
+        closeAllDrawers();
+
+        if (!isOpen && targetDrawer) {
+          targetDrawer.classList.add('open');
+          backdrop?.classList.add('active');
+          btn.classList.add('active');
+        }
+      };
+    });
+
+    backdrop?.addEventListener('click', closeAllDrawers);
 
     function syncUI(save = true) {
       root.classList.toggle('no-left-panel', !isLeftOpen);
@@ -314,6 +467,39 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
     syncUI(false);
   }
 
+  // Delegación de eventos global para garantizar control total de ajustes en Móvil y PC
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    const settingBtn = target.closest('button[data-estilo], button[data-modo], button[data-texto], button[data-ancho], .theme-btn, .mode-btn, .text-btn');
+    if (!settingBtn) return;
+
+    const estilo = settingBtn.getAttribute('data-estilo');
+    const modo = settingBtn.getAttribute('data-modo');
+    const texto = settingBtn.getAttribute('data-texto');
+    const ancho = settingBtn.getAttribute('data-ancho');
+
+    const html = document.documentElement;
+
+    if (estilo) {
+      html.setAttribute('data-estilo', estilo);
+      localStorage.setItem('pref-estilo', estilo);
+      window.dispatchEvent(new Event('theme-changed'));
+    }
+    if (modo) {
+      html.setAttribute('data-modo', modo);
+      localStorage.setItem('pref-modo', modo);
+      window.dispatchEvent(new Event('theme-changed'));
+    }
+    if (texto) {
+      html.setAttribute('data-texto', texto);
+      localStorage.setItem('pref-texto', texto);
+    }
+    if (ancho) {
+      html.setAttribute('data-ancho', ancho);
+      localStorage.setItem('pref-ancho', ancho);
+    }
+  });
+
   document.addEventListener('keydown', (e) => {
     const actCollapse = document.getElementById('act-collapse');
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
@@ -334,7 +520,6 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
     renderMermaid(true);
   });
 
-  // Escuchar tanto la carga inicial como las transiciones y retrocesos del historial
   document.addEventListener('astro:page-load', initializeApp);
   document.addEventListener('astro:after-swap', initializeApp);
 </script>
