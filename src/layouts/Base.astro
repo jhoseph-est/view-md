@@ -129,7 +129,6 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
     <GraphModal />
 
 <script>
-  // 1. Importaciones de los módulos del cliente
   import { renderMermaid } from '../utils/mermaidViewer';
   import { renderCallouts } from '../utils/callouts';
 
@@ -139,9 +138,7 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
     }
   }
 
-  // 2. Función maestra que inicializa toda la interfaz y componentes en cada navegación
   function initializeApp() {
-    // Renderizar componentes de contenido (Callouts y Diagramas Mermaid) de forma única y segura
     renderCallouts();
     renderMermaid(false);
 
@@ -214,7 +211,6 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
       setTimeout(() => container?.querySelector('input')?.focus(), 80);
     }
 
-    // Colapso Maestro (Ctrl+B)
     if (actCollapse) {
       actCollapse.onclick = () => {
         const anyActive = isLeftOpen || showToc || showMeta;
@@ -242,7 +238,6 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
       };
     }
 
-    // Reconciliación del Modo Zen tras navegación interna
     if (document.fullscreenElement && mainGrid) {
       mainGrid.classList.add('zen-active');
     }
@@ -257,10 +252,7 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
       }
     }
 
-    if (actZen) {
-      actZen.onclick = toggleZenMode;
-    }
-
+    if (actZen) actZen.onclick = toggleZenMode;
     if (btnExitZen) {
       btnExitZen.onclick = () => {
         if (document.fullscreenElement) {
@@ -279,7 +271,6 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
       }
     });
 
-    // Pestañas Izquierdas
     if (actExplorer) {
       actExplorer.onclick = () => {
         if (isLeftOpen && activePane === 'pane-explorer') {
@@ -316,32 +307,13 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
       };
     }
 
-    // Paneles derechos independientes
-    if (actToc) {
-      actToc.onclick = () => {
-        showToc = !showToc;
-        syncUI();
-      };
-    }
-
-    if (actMeta) {
-      actMeta.onclick = () => {
-        showMeta = !showMeta;
-        syncUI();
-      };
-    }
-
-    // Impresión / Exportar PDF
-    if (actPrint) {
-      actPrint.onclick = () => {
-        window.print();
-      };
-    }
+    if (actToc) actToc.onclick = () => { showToc = !showToc; syncUI(); };
+    if (actMeta) actMeta.onclick = () => { showMeta = !showMeta; syncUI(); };
+    if (actPrint) actPrint.onclick = () => { window.print(); };
 
     syncUI(false);
   }
 
-  // Atajos de teclado globales (registrados una sola vez)
   document.addEventListener('keydown', (e) => {
     const actCollapse = document.getElementById('act-collapse');
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
@@ -358,13 +330,13 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
     }
   });
 
-  // Re-renderizar diagramas Mermaid al alternar entre modo Claro y Oscuro
   window.addEventListener('theme-changed', () => {
     renderMermaid(true);
   });
 
-  // Ejecutar todo de forma limpia en cada cambio de página de Astro
+  // Escuchar tanto la carga inicial como las transiciones y retrocesos del historial
   document.addEventListener('astro:page-load', initializeApp);
+  document.addEventListener('astro:after-swap', initializeApp);
 </script>
   </body>
 </html>

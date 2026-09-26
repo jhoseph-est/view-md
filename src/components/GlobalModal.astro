@@ -19,25 +19,19 @@
 </div>
 
 <script>
-  function setupGlobalModal() {
-    const modal = document.getElementById('global-modal');
-    const titleEl = document.getElementById('global-modal-title');
-    const subtitleEl = document.getElementById('global-modal-subtitle');
-    const bodyEl = document.getElementById('global-modal-body');
-    const closeBtn = document.getElementById('global-modal-close');
+  // Evitar que los escuchadores globales se dupliquen con las transiciones de Astro
+  if (!(window as any).__globalModalInitialized) {
+    (window as any).__globalModalInitialized = true;
 
-    if (!modal || !bodyEl) return;
-
-    function closeModal() {
-      if (!modal?.classList.contains('is-active')) return;
-      modal.classList.remove('is-active');
-      modal.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
-      window.dispatchEvent(new CustomEvent('close-global-modal'));
-    }
-
-    // Escuchar apertura desde GraphModal u otros emisores
+    // Escuchar apertura globalmente una sola vez
     window.addEventListener('open-global-modal', (e: Event) => {
+      const modal = document.getElementById('global-modal');
+      const titleEl = document.getElementById('global-modal-title');
+      const subtitleEl = document.getElementById('global-modal-subtitle');
+      const bodyEl = document.getElementById('global-modal-body');
+
+      if (!modal || !bodyEl) return;
+
       const customEvent = e as CustomEvent<{
         title?: string;
         subtitle?: string;
@@ -64,33 +58,49 @@
       document.body.style.overflow = 'hidden';
     });
 
-    // Escuchar cierre explícito
+    // Escuchar cierre globalmente una sola vez
     window.addEventListener('close-global-modal', () => {
+      const modal = document.getElementById('global-modal');
+      if (!modal) return;
       modal.classList.remove('is-active');
       modal.setAttribute('aria-hidden', 'true');
       document.body.style.overflow = '';
     });
+  }
+
+  // Interacciones locales que se refrescan en cada navegación de Astro
+  function setupGlobalModalInteractions() {
+    const modal = document.getElementById('global-modal');
+    const closeBtn = document.getElementById('global-modal-close');
+
+    if (!modal) return;
 
     if (closeBtn) {
-      closeBtn.onclick = closeModal;
+      closeBtn.onclick = () => {
+        window.dispatchEvent(new CustomEvent('close-global-modal'));
+      };
     }
 
     // Cerrar al hacer clic en el fondo oscuro
     modal.onclick = (e) => {
       if (e.target === modal) {
-        closeModal();
+        window.dispatchEvent(new CustomEvent('close-global-modal'));
       }
     };
 
-    // Cerrar con Escape
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && modal.classList.contains('is-active')) {
-        closeModal();
-      }
-    });
+    // Cerrar con Escape (asegurando un solo listener global de teclado)
+    if (!(window as any).__escapeListenerInitialized) {
+      (window as any).__escapeListenerInitialized = true;
+      document.addEventListener('keydown', (e) => {
+        const activeModal = document.getElementById('global-modal');
+        if (e.key === 'Escape' && activeModal?.classList.contains('is-active')) {
+          window.dispatchEvent(new CustomEvent('close-global-modal'));
+        }
+      });
+    }
   }
 
-  document.addEventListener('astro:page-load', setupGlobalModal);
+  document.addEventListener('astro:page-load', setupGlobalModalInteractions);
 </script>
 
 <style>

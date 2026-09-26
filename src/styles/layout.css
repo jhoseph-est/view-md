@@ -290,8 +290,11 @@ html.no-meta #sec-meta {
   z-index: 10;
   padding: 2.5rem 0;
   box-sizing: border-box;
+  scrollbar-width: none !important;
 }
-
+.main-content::-webkit-scrollbar {
+    display: none !important;
+}
 .content-wrapper {
   width: 100%;
   max-width: 820px;
