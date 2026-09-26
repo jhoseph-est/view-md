@@ -521,6 +521,98 @@ html[data-estilo="minimalista"][data-modo="claro"] .reveal audio:hover {
 }
 
 /* ==========================================================
+   REPRODUCTOR DE VIDEO NATIVO (ADAPTADO A TEMAS Y SLIDES)
+   ========================================================== */
+
+/* 1. Base del contenedor de video */
+.main-content video,
+.reveal video {
+  display: block !important;
+  width: 100% !important;
+  max-width: 720px !important;
+  max-height: 52vh !important;
+  margin: 1.75rem auto !important;
+  background-color: #000000 !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--radius-md, 10px) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25) !important;
+  outline: none !important;
+  object-fit: contain !important;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+/* 2. Sincronización de controles nativos (Play, volumen, tiempo) */
+html[data-modo="oscuro"] .main-content video,
+html[data-modo="oscuro"] .reveal video {
+  color-scheme: dark !important;
+}
+
+html[data-modo="claro"] .main-content video,
+html[data-modo="claro"] .reveal video {
+  color-scheme: light !important;
+}
+
+/* 3. Acentos de color y sombras por tema */
+
+/* --- A) MODERNO (Acento Violeta) --- */
+html[data-estilo="moderno"] .main-content video,
+html[data-estilo="moderno"] .reveal video {
+  accent-color: #8b5cf6 !important;
+}
+html[data-estilo="moderno"] .main-content video:hover,
+html[data-estilo="moderno"] .reveal video:hover {
+  border-color: #8b5cf6 !important;
+  box-shadow: 0 10px 30px rgba(139, 92, 246, 0.25) !important;
+}
+
+/* --- B) ACADÉMICO (Tonos Sepia / Clásico) --- */
+html[data-estilo="academico"] .main-content video,
+html[data-estilo="academico"] .reveal video {
+  border-radius: var(--radius-sm, 6px) !important;
+}
+html[data-estilo="academico"][data-modo="oscuro"] .main-content video,
+html[data-estilo="academico"][data-modo="oscuro"] .reveal video {
+  accent-color: #d97706 !important;
+}
+html[data-estilo="academico"][data-modo="oscuro"] .main-content video:hover,
+html[data-estilo="academico"][data-modo="oscuro"] .reveal video:hover {
+  border-color: #d97706 !important;
+  box-shadow: 0 10px 30px rgba(217, 119, 6, 0.22) !important;
+}
+html[data-estilo="academico"][data-modo="claro"] .main-content video,
+html[data-estilo="academico"][data-modo="claro"] .reveal video {
+  accent-color: #78350f !important;
+}
+html[data-estilo="academico"][data-modo="claro"] .main-content video:hover,
+html[data-estilo="academico"][data-modo="claro"] .reveal video:hover {
+  border-color: #78350f !important;
+  box-shadow: 0 8px 24px rgba(120, 53, 15, 0.18) !important;
+}
+
+/* --- C) MINIMALISTA (Plano y Angular) --- */
+html[data-estilo="minimalista"] .main-content video,
+html[data-estilo="minimalista"] .reveal video {
+  border-radius: 0px !important;
+  box-shadow: none !important;
+}
+html[data-estilo="minimalista"][data-modo="oscuro"] .main-content video,
+html[data-estilo="minimalista"][data-modo="oscuro"] .reveal video {
+  accent-color: #ffffff !important;
+}
+html[data-estilo="minimalista"][data-modo="oscuro"] .main-content video:hover,
+html[data-estilo="minimalista"][data-modo="oscuro"] .reveal video:hover {
+  border-color: #ffffff !important;
+}
+html[data-estilo="minimalista"][data-modo="claro"] .main-content video,
+html[data-estilo="minimalista"][data-modo="claro"] .reveal video {
+  accent-color: #000000 !important;
+}
+html[data-estilo="minimalista"][data-modo="claro"] .main-content video:hover,
+html[data-estilo="minimalista"][data-modo="claro"] .reveal video:hover {
+  border-color: #000000 !important;
+}
+
+/* ==========================================================
    CONTENEDOR DE IMÁGENES CON BOTÓN COPIAR (ESTILO VS CODE)
    ========================================================== */
 .img-interactive-wrapper {
