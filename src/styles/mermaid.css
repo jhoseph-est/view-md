@@ -1,0 +1,255 @@
+/* ==========================================================
+   AISLAMIENTO DE MERMAID Y ADAPTABILIDAD DE TEMAS
+   ========================================================== */
+.main-content .mermaid-wrapper svg,
+.global-modal-body svg {
+  line-height: normal;
+  background-color: transparent !important;
+}
+
+.main-content .mermaid-wrapper .label, 
+.main-content .mermaid-wrapper .nodeLabel, 
+.main-content .mermaid-wrapper .entityLabel, 
+.main-content .mermaid-wrapper .edgeLabel, 
+.main-content .mermaid-wrapper .relationshipLabel,
+.global-modal-body .label,
+.global-modal-body .nodeLabel,
+.global-modal-body .entityLabel,
+.global-modal-body .edgeLabel,
+.global-modal-body .relationshipLabel {
+  line-height: normal;
+  font-family: var(--ui-font);
+  font-size: var(--mermaid-font-size, 14px);
+  fill: var(--text-color) !important;
+  color: var(--text-color) !important;
+}
+
+.main-content .mermaid-wrapper foreignObject,
+.global-modal-body foreignObject {
+  overflow: visible;
+}
+
+.main-content .mermaid-wrapper foreignObject p,
+.global-modal-body foreignObject p {
+  margin: 0;
+  color: var(--text-color) !important;
+  font-family: var(--ui-font);
+  font-size: var(--mermaid-font-size, 14px);
+  line-height: normal;
+}
+
+/* ==========================================================
+   COLORES DINÁMICOS UNIFICADOS (Vínculo directo con Temas y Modos)
+   ========================================================== */
+.main-content .mermaid-wrapper .node rect,
+.main-content .mermaid-wrapper .node polygon,
+.main-content .mermaid-wrapper .node circle,
+.main-content .mermaid-wrapper .cluster rect,
+.global-modal-body .node rect,
+.global-modal-body .node polygon,
+.global-modal-body .node circle,
+.global-modal-body .cluster rect {
+  fill: var(--header-bg) !important;
+  stroke: var(--border-color) !important;
+  stroke-width: 1.5px !important;
+}
+
+.main-content .mermaid-wrapper .nodeLabel,
+.main-content .mermaid-wrapper foreignObject p,
+.global-modal-body .nodeLabel,
+.global-modal-body foreignObject p {
+  color: var(--text-color) !important;
+  fill: var(--text-color) !important;
+}
+
+/* Conexiones / Flechas unificadas al borde del tema */
+.main-content .mermaid-wrapper .edgePath path,
+.global-modal-body .edgePath path {
+  stroke: var(--border-color) !important;
+  stroke-width: 2px !important;
+}
+
+.main-content .mermaid-wrapper .arrowheadPath,
+.global-modal-body .arrowheadPath {
+  fill: var(--border-color) !important;
+}
+
+/* Corrección de textos de Gantt */
+.main-content .mermaid-wrapper .taskTextOutsideRight,
+.main-content .mermaid-wrapper .taskTextOutsideLeft,
+.global-modal-body .taskTextOutsideRight,
+.global-modal-body .taskTextOutsideLeft {
+  fill: var(--text-color) !important;
+  font-weight: 600 !important;
+  font-size: 11px !important;
+}
+
+/* ==========================================================
+   VISOR INTERACTIVO Y BARRA FLOTANTE
+   ========================================================== */
+.mermaid-wrapper {
+  position: relative;
+  width: 100%;
+  margin: 2rem 0;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: var(--bg-color);
+  overflow: hidden;
+}
+
+.mermaid-toolbar {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  gap: 0.35rem;
+  z-index: 10;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  transform: translateY(-4px);
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 0.25rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.mermaid-wrapper:hover .mermaid-toolbar {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.mermaid-tool-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  padding: 0.25rem 0.45rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-family: var(--ui-font);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.mermaid-tool-btn:hover {
+  background-color: rgba(139, 92, 246, 0.15);
+  color: #8b5cf6;
+}
+
+/* ==========================================================
+   MODOS DE LAYOUT (fit, pan-x, pan-y) EN VISTA NORMAL
+   ========================================================== */
+.mermaid-viewport {
+  width: 100%;
+  padding: 1.5rem 1rem;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.mermaid-viewport svg {
+  display: block !important;
+  margin: 0 auto !important;
+  height: auto;
+  transition: transform 0.2s ease;
+}
+
+.mermaid-wrapper.layout-fit .mermaid-viewport {
+  overflow: hidden;
+}
+.mermaid-wrapper.layout-fit .mermaid-viewport svg {
+  max-width: 100% !important;
+  width: auto !important;
+}
+
+.mermaid-wrapper.layout-pan-x .mermaid-viewport {
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  display: flex;
+  justify-content: center;
+}
+.mermaid-wrapper.layout-pan-x .mermaid-viewport svg {
+  max-width: none !important;
+  flex-shrink: 0;
+  margin: 0 auto !important;
+}
+
+.mermaid-wrapper.layout-pan-y .mermaid-viewport {
+  max-height: var(--mermaid-viewport-height, 500px);
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+.mermaid-wrapper.layout-pan-y .mermaid-viewport svg {
+  max-width: 100% !important;
+  width: auto !important;
+  height: auto !important;
+  margin: 0 auto !important;
+}
+
+/* ==========================================================
+   MODOS DE VISUALIZACIÓN DENTRO DEL MODAL GLOBAL
+   ========================================================== */
+.modal-layout-fit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+.modal-layout-fit svg {
+  max-width: 100% !important;
+  max-height: 100% !important;
+  width: auto !important;
+  height: auto !important;
+  margin: auto !important;
+}
+
+.modal-layout-pan-x {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  padding: 1rem 2rem 2.5rem 2rem !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+.modal-layout-pan-x svg {
+  height: calc(85vh - 5rem) !important;
+  min-height: calc(85vh - 5rem) !important;
+  width: auto !important;
+  min-width: max-content !important;
+  max-width: none !important;
+  flex-shrink: 0 !important;
+  margin: 0 auto !important;
+}
+
+.modal-layout-pan-y {
+  display: block !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding: 2rem 1.5rem 3rem 1.5rem !important;
+  box-sizing: border-box !important;
+  text-align: center !important;
+  width: 100%;
+  height: 100%;
+}
+.modal-layout-pan-y svg {
+  display: block !important;
+  width: auto !important;
+  max-width: 85vw !important;
+  min-height: min-content !important;
+  height: auto !important;
+  max-height: none !important;
+  margin: 0 auto !important;
+}

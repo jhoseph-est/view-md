@@ -80,13 +80,18 @@ function buildWrapperStructure(innerContent: string): HTMLElement {
 function attachMermaidControls(wrapper: HTMLElement, code: string) {
   const svg = wrapper.querySelector('svg') as SVGElement | null;
   const viewport = wrapper.querySelector('.mermaid-viewport') as HTMLElement | null;
+  
   if (viewport) {
+    // CAMBIO AQUÍ: Permitir que el scroll de la rueda suba o baje la página principal con normalidad
     viewport.addEventListener('wheel', (e) => {
-      e.stopPropagation();
-      if (viewport.scrollHeight <= viewport.clientHeight && viewport.scrollWidth <= viewport.clientWidth) {
-        e.preventDefault();
+      // Si el diagrama no tiene zoom activo (escala 1), dejamos que la rueda mueva la página web
+      if (currentScale === 1) {
+        return; // No detenemos el evento, permitiendo el scroll general de la ventana
       }
-    }, { passive: false });
+      // Si el usuario hizo zoom, permitimos interactuar con el diagrama
+      e.stopPropagation();
+    }, { passive: true });
+
     viewport.addEventListener('touchmove', (e) => {
       e.stopPropagation();
     }, { passive: true });
