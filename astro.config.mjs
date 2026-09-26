@@ -1,5 +1,4 @@
 import { defineConfig } from 'astro/config';
-import { unified } from '@astrojs/markdown-remark';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import mdx from '@astrojs/mdx';
@@ -32,35 +31,30 @@ export default defineConfig({
     },
   },
   markdown: {
-    processor: unified({
-      remarkPlugins: [
-        remarkMath,
-        remarkObsidianCallout,
-        [
-          remarkWikiLink,
-          {
-            pathFormat: 'absolute',
-            hrefTemplate: (permalink) => `/docs/${permalink}`,
-          },
-        ],
-      ],
-      rehypePlugins: [
-        [
-          rehypeKatex,
-          {
-            strict: false,
-          },
-        ],
-      ],
-    }),
+    syntaxHighlight: 'shiki',
     shikiConfig: {
-      themes: {
-        light: 'github-light',
-        dark: 'material-theme-palenight', // Palenight Theme oficial de Shiki
-      },
-      defaultColor: false,
+      theme: 'material-theme-palenight', // Tema Palenight
       wrap: true,
     },
+    remarkPlugins: [
+      remarkMath,
+      remarkObsidianCallout,
+      [
+        remarkWikiLink,
+        {
+          pathFormat: 'absolute',
+          hrefTemplate: (permalink) => `/docs/${permalink}`,
+        },
+      ],
+    ],
+    rehypePlugins: [
+      [
+        rehypeKatex,
+        {
+          strict: false,
+        },
+      ],
+    ],
   },
   integrations: [mdx()],
 });

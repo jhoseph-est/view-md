@@ -16,7 +16,6 @@ const {
   isLanding = false
 } = Astro.props;
 
-// Prioridad absoluta al YAML si define theme
 const temaDoc = frontmatter.theme || '';
 const hasSlides = frontmatter.slides === true ? 'true' : 'false';
 ---
@@ -350,12 +349,13 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
         const curEstilo = root.getAttribute('data-estilo') || 'moderno';
         const curTexto = root.getAttribute('data-texto') || 'estandar';
         
-        const selModo = mobileSettingsTarget.querySelector('#theme-selector') as HTMLSelectElement | null;
-        if (selModo) selModo.value = curModo;
-        const selEstilo = mobileSettingsTarget.querySelector('#font-style-selector') as HTMLSelectElement | null;
-        if (selEstilo) selEstilo.value = curEstilo;
-        const selTexto = mobileSettingsTarget.querySelector('#font-size-selector') as HTMLSelectElement | null;
-        if (selTexto) selTexto.value = curTexto;
+        mobileSettingsTarget.querySelectorAll('select').forEach((sel) => {
+          const selectEl = sel as HTMLSelectElement;
+          const id = selectEl.id.toLowerCase();
+          if (id.includes('theme') || id.includes('modo')) selectEl.value = curModo;
+          if (id.includes('style') || id.includes('estilo')) selectEl.value = curEstilo;
+          if (id.includes('size') || id.includes('texto')) selectEl.value = curTexto;
+        });
       }
 
       function closeAllDrawers() {
@@ -526,59 +526,40 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
       syncUI(false);
     }
 
-    // Delegación de eventos para controles select
+    // Delegación de eventos global para selectores (PC y Móvil)
     document.addEventListener('change', (e) => {
       const target = e.target as HTMLElement;
-      const html = document.documentElement;
+      if (!(target instanceof HTMLSelectElement)) return;
 
-      if (target.matches('#theme-selector, [data-setting="modo"]')) {
-        const val = (target as HTMLSelectElement).value;
+      const html = document.documentElement;
+      const val = target.value;
+      const id = target.id.toLowerCase();
+
+      if (id.includes('theme') || id.includes('modo')) {
         html.setAttribute('data-modo', val);
         localStorage.setItem('pref-modo', val);
         window.dispatchEvent(new Event('theme-changed'));
-      } else if (target.matches('#font-style-selector, [data-setting="estilo"]')) {
-        const val = (target as HTMLSelectElement).value;
+      } else if (id.includes('style') || id.includes('estilo')) {
         html.setAttribute('data-estilo', val);
         localStorage.setItem('pref-estilo', val);
         window.dispatchEvent(new Event('theme-changed'));
-      } else if (target.matches('#font-size-selector, [data-setting="texto"]')) {
-        const val = (target as HTMLSelectElement).value;
+      } else if (id.includes('size') || id.includes('texto')) {
         html.setAttribute('data-texto', val);
         localStorage.setItem('pref-texto', val);
       }
-    });
 
-    // Delegación de eventos para botones
-    document.addEventListener('click', (e) => {
-      const target = e.target as HTMLElement;
-      const settingBtn = target.closest('button[data-estilo], button[data-modo], button[data-texto], button[data-ancho]');
-      if (!settingBtn) return;
-
-      const estilo = settingBtn.getAttribute('data-estilo');
-      const modo = settingBtn.getAttribute('data-modo');
-      const texto = settingBtn.getAttribute('data-texto');
-      const ancho = settingBtn.getAttribute('data-ancho');
-
-      const html = document.documentElement;
-
-      if (estilo) {
-        html.setAttribute('data-estilo', estilo);
-        localStorage.setItem('pref-estilo', estilo);
-        window.dispatchEvent(new Event('theme-changed'));
-      }
-      if (modo) {
-        html.setAttribute('data-modo', modo);
-        localStorage.setItem('pref-modo', modo);
-        window.dispatchEvent(new Event('theme-changed'));
-      }
-      if (texto) {
-        html.setAttribute('data-texto', texto);
-        localStorage.setItem('pref-texto', texto);
-      }
-      if (ancho) {
-        html.setAttribute('data-ancho', ancho);
-        localStorage.setItem('pref-ancho', ancho);
-      }
+      // Sincronizar todos los selectores duplicados en el DOM
+      document.querySelectorAll('select').forEach((sel) => {
+        const other = sel as HTMLSelectElement;
+        if (other !== target) {
+          const otherId = other.id.toLowerCase();
+          if ((id.includes('theme') && otherId.includes('theme')) ||
+              (id.includes('style') && otherId.includes('style')) ||
+              (id.includes('size') && otherId.includes('size'))) {
+            other.value = val;
+          }
+        }
+      });
     });
 
     document.addEventListener('keydown', (e) => {

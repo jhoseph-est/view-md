@@ -82,26 +82,25 @@ body {
   margin: 0;
   background-color: var(--bg-color) !important;
   color: var(--text-color) !important;
-  font-family: var(--ui-font) !important; /* BLOQUEADO AL UI FONT */
+  font-family: var(--ui-font) !important;
   font-size: var(--font-size);
   height: 100vh;
   overflow: hidden;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* 2. Área exclusiva del documento Markdown (Aislamiento Estricto) */
+/* 2. Área de lectura Markdown */
 .main-content {
   font-family: var(--doc-font);
 }
 
-/* Aplicamos estilos de lectura SOLO si no están dentro de un componente web (como mermaid-viewer) */
-.main-content :where(p, li, h1, h2, h3, blockquote):not(.mermaid-native *) {
+.main-content :where(p, li, h1, h2, h3, blockquote):not(.mermaid-native *):not(pre *) {
   line-height: var(--doc-line-height);
 }
 
 /* Enlaces generales dentro del contenido Markdown */
-.main-content article a:not(.mermaid-native *) {
-  color: #a78bfa !important; /* Morado claro legible */
+.main-content article a:not(.mermaid-native *):not(pre *) {
+  color: #a78bfa !important;
   text-decoration: none;
   border-bottom: 1.5px solid rgba(167, 139, 250, 0.4);
   font-weight: 500;
@@ -110,20 +109,18 @@ body {
   border-radius: 3px;
 }
 
-/* Efecto hover */
-.main-content article a:not(.mermaid-native *):hover {
+.main-content article a:not(.mermaid-native *):not(pre *):hover {
   color: #c4b5fd !important;
   background-color: rgba(139, 92, 246, 0.15);
   border-bottom-color: #8b5cf6;
 }
 
-/* En modo claro: tono morado con mejor contraste */
-html[data-modo="claro"] .main-content article a:not(.mermaid-native *) {
+html[data-modo="claro"] .main-content article a:not(.mermaid-native *):not(pre *) {
   color: #7c3aed !important;
   border-bottom-color: rgba(124, 58, 237, 0.4);
 }
 
-html[data-modo="claro"] .main-content article a:not(.mermaid-native *):hover {
+html[data-modo="claro"] .main-content article a:not(.mermaid-native *):not(pre *):hover {
   color: #6d28d9 !important;
   background-color: rgba(124, 58, 237, 0.08);
   border-bottom-color: #7c3aed;
