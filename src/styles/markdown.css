@@ -362,12 +362,33 @@ html[data-modo="oscuro"] .callout-cite {
   border-radius: 0 !important;
   background: transparent !important;
   overflow-x: auto;
+  tab-size: 4;
+  -moz-tab-size: 4;
 }
 
 .main-content pre code {
   font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
   font-size: 0.85rem;
   line-height: 1.6;
+  white-space: pre-wrap !important;       /* Permite el quiebre de línea */
+  word-break: break-word !important;      /* Corta palabras largas */
+  overflow-wrap: anywhere !important;
+  display: block;
+}
+
+/* Tabulación visual para las líneas envueltas (hanging indent) */
+.main-content pre code .line {
+  display: inline-block;
+  width: 100%;
+  padding-left: 2rem;                    /* Espacio de la sangría cuando la línea se dobla */
+  text-indent: -2rem;                    /* Regresa la primera línea a su posición original */
+  box-sizing: border-box;
+}
+
+/* Si tu Shiki no usa .line, aplicamos sangría secundaria a cualquier corte continuo */
+.main-content pre code:not(:has(.line)) {
+  padding-left: 1.5rem;
+  text-indent: -1.5rem;
 }
 
 /* Se permite que los span hereden los colores inline inyectados por Shiki */

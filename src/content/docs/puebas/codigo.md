@@ -60,6 +60,15 @@ theme: "academico" # Opcional: moderno, minimalista, academico, oscuro
 ---
 ```
 
+```python
+if 116 >= edad >= 18:
+    print(f"eres mayor de edad y tienes {edad} años dadgylwvujfclsvyugj wbeadscyvlugaj ebrfdvzcvyulg jerbfahcdsyluvtg ejrhadbcsyivulgj berfacdby vulg jedbrhñcbsx iygvduglj eb.rdfbcs xiyñvdhj b.erfdcbxgbyvulgd jberfdcjb xigyvcdlghj erbfdbcjux gypvuclgerj hfbdcu gyipvhjr e")
+elif 18 >= edad >= 0:
+    print(f"eres menor de edad y tienes {edad} años")
+else :
+    print("tu edad es invalida")
+```
+
 ---
 
 ## 3. Fórmulas Matemáticas con KaTeX

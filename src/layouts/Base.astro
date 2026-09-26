@@ -188,7 +188,7 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
       <div class="drawer-body" id="mobile-settings-content"></div>
     </div>
   
-  <script>
+<script>
     import { renderMermaid } from '../utils/mermaidViewer';
     import { renderCallouts } from '../utils/callouts';
 
@@ -209,7 +209,15 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
 
       // 2. Inyección de contenedor estilo VS Code preservando los tokens de Shiki
       document.querySelectorAll<HTMLElement>('.main-content pre').forEach((pre) => {
-        if (pre.closest('.code-block-wrapper')) return;
+        // EXCEPCIÓN MERMAID: No envolver si es bloque Mermaid o si ya está envuelto
+        if (
+          pre.closest('.code-block-wrapper') ||
+          pre.dataset.language === 'mermaid' ||
+          pre.querySelector('code.language-mermaid') ||
+          pre.classList.contains('mermaid')
+        ) {
+          return;
+        }
 
         const codeEl = pre.querySelector('code');
         const langClass = Array.from(codeEl?.classList || []).find((c) => c.startsWith('language-'));
@@ -232,7 +240,6 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
         const btn = document.createElement('button');
         btn.className = 'copy-code-btn';
         btn.textContent = 'Copiar';
-
         btn.onclick = async () => {
           const rawCode = codeEl?.textContent || pre.textContent || '';
           await navigator.clipboard.writeText(rawCode.trim());
@@ -272,8 +279,8 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
       const actSettings = document.getElementById('act-settings');
       const actPrint = document.getElementById('act-print');
       const leftTitle = document.getElementById('left-panel-title');
-
       const actSlides = document.getElementById('act-slides') as HTMLAnchorElement | null;
+
       if (actSlides) {
         const currentDocPath = window.location.pathname.replace(/^\/docs\/?/, '').replace(/\/$/, '');
         actSlides.href = `/slides/${currentDocPath}`;
@@ -433,7 +440,6 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
             localStorage.setItem('wiki-mem-left', memLeft.toString());
             localStorage.setItem('wiki-mem-toc', memToc.toString());
             localStorage.setItem('wiki-mem-meta', memMeta.toString());
-
             isLeftOpen = false;
             showToc = false;
             showMeta = false;
