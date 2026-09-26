@@ -7,6 +7,7 @@ tags:
   - sistema
   - buscador
 theme: minimalista
+orden: 3
 ---
 
 # Cómo usar el Buscador Avanzado

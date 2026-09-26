@@ -4,6 +4,7 @@ date: 2026-09-23
 author: "Admin"
 tags: ["diagnostico", "sistema", "pruebas"]
 theme: "moderno"
+orden: 4
 ---
 
 # Archivo Maestro de Diagnóstico del Sistema

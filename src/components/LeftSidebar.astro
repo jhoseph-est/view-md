@@ -2,6 +2,7 @@
 // src/components/LeftSidebar.astro
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { formatName } from '../utils/fileTree';
+import { sortDocs } from '../utils/fileTree';
 
 const allDocs = await getCollection('docs');
 const docs = allDocs.filter((d: CollectionEntry<'docs'>) => d.data.draft !== true);
@@ -46,11 +47,27 @@ const fileSvg = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" str
 function buildExplorerHTML(treeNode: Record<string, TreeNode>, parentPath = ''): string {
   let html = '';
   const keys = Object.keys(treeNode).sort((a, b) => {
-    const aIsFolder = treeNode[a].type === 'folder';
-    const bIsFolder = treeNode[b].type === 'folder';
+    const nodeA = treeNode[a];
+    const nodeB = treeNode[b];
+
+    const aIsFolder = nodeA.type === 'folder';
+    const bIsFolder = nodeB.type === 'folder';
+
+    // 1. Las carpetas siempre van arriba de los archivos
     if (aIsFolder && !bIsFolder) return -1;
     if (!aIsFolder && bIsFolder) return 1;
-    return a.localeCompare(b);
+
+    // 2. Si ambas son carpetas, orden alfabético
+    if (aIsFolder && bIsFolder) {
+      return a.localeCompare(b, 'es', { numeric: true, sensitivity: 'base' });
+    }
+
+    // 3. Si ambos son archivos, usamos la función sortDocs (prioriza 'orden' y luego título alfabético)
+    if (nodeA.type === 'file' && nodeB.type === 'file') {
+      return sortDocs(nodeA.doc, nodeB.doc);
+    }
+
+    return 0;
   });
 
   keys.forEach((key) => {
