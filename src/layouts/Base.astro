@@ -16,12 +16,13 @@ const {
   isLanding = false
 } = Astro.props;
 
-const estiloDoc = frontmatter.theme || 'moderno';
+// Si el YAML define theme explícitamente, ese manda
+const temaDoc = frontmatter.theme || '';
 const hasSlides = frontmatter.slides === true ? 'true' : 'false';
 ---
 
 <!DOCTYPE html>
-<html lang="es" data-estilo={estiloDoc} data-has-slides={hasSlides}>
+<html lang="es" data-tema-doc={temaDoc} data-has-slides={hasSlides}>
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,8 +35,11 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
         const html = document.documentElement;
         
         const modo = localStorage.getItem('pref-modo') || 'oscuro';
-        const estilo = localStorage.getItem('pref-estilo') || html.getAttribute('data-estilo') || 'moderno';
         const texto = localStorage.getItem('pref-texto') || 'estandar';
+        
+        // Prioridad: YAML del documento > preferencia guardada > 'moderno'
+        const temaForzado = html.getAttribute('data-tema-doc');
+        const estilo = temaForzado || localStorage.getItem('pref-estilo') || 'moderno';
         
         html.setAttribute('data-modo', modo);
         html.setAttribute('data-estilo', estilo);
@@ -57,14 +61,17 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
 
         document.addEventListener('astro:before-swap', (ev) => {
           const m = localStorage.getItem('pref-modo') || 'oscuro';
-          const e = localStorage.getItem('pref-estilo') || ev.newDocument.documentElement.getAttribute('data-estilo') || 'moderno';
           const t = localStorage.getItem('pref-texto') || 'estandar';
-          const incomingSlides = ev.newDocument.documentElement.getAttribute('data-has-slides') || 'false';
           
-          ev.newDocument.documentElement.setAttribute('data-modo', m);
-          ev.newDocument.documentElement.setAttribute('data-estilo', e);
-          ev.newDocument.documentElement.setAttribute('data-texto', t);
-          ev.newDocument.documentElement.setAttribute('data-has-slides', incomingSlides);
+          const nuevoDoc = ev.newDocument.documentElement;
+          const nuevoTemaForzado = nuevoDoc.getAttribute('data-tema-doc');
+          const nuevoEstilo = nuevoTemaForzado || localStorage.getItem('pref-estilo') || 'moderno';
+          const incomingSlides = nuevoDoc.getAttribute('data-has-slides') || 'false';
+          
+          nuevoDoc.setAttribute('data-modo', m);
+          nuevoDoc.setAttribute('data-estilo', nuevoEstilo);
+          nuevoDoc.setAttribute('data-texto', t);
+          nuevoDoc.setAttribute('data-has-slides', incomingSlides);
           
           const lOpen = localStorage.getItem('wiki-left-open') === 'true';
           const sToc = localStorage.getItem('wiki-show-toc') === 'true';
@@ -72,12 +79,12 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
           const aPane = localStorage.getItem('wiki-active-pane') || 'pane-explorer';
 
           if (!lOpen) {
-            ev.newDocument.documentElement.classList.add('no-left-panel');
+            nuevoDoc.classList.add('no-left-panel');
           } else {
-            ev.newDocument.documentElement.setAttribute('data-active-pane', aPane);
+            nuevoDoc.setAttribute('data-active-pane', aPane);
           }
-          if (!sToc) ev.newDocument.documentElement.classList.add('no-toc');
-          if (!sMeta) ev.newDocument.documentElement.classList.add('no-meta');
+          if (!sToc) nuevoDoc.classList.add('no-toc');
+          if (!sMeta) nuevoDoc.classList.add('no-meta');
         });
       })();
     </script>
@@ -135,7 +142,6 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
         const actPrint = document.getElementById('act-print');
         const leftTitle = document.getElementById('left-panel-title');
 
-        // Sincronizar el enlace dinámico de las diapositivas con la ruta actual
         const actSlides = document.getElementById('act-slides') as HTMLAnchorElement | null;
         if (actSlides) {
           const currentDocPath = window.location.pathname.replace(/^\/docs\/?/, '').replace(/\/$/, '');
@@ -182,7 +188,6 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
           setTimeout(() => container?.querySelector('input')?.focus(), 80);
         }
 
-        // Colapso Maestro (Ctrl+B)
         if (actCollapse) {
           actCollapse.onclick = () => {
             const anyActive = isLeftOpen || showToc || showMeta;
@@ -210,7 +215,6 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
           };
         }
 
-        // Pestañas Izquierdas
         if (actExplorer) {
           actExplorer.onclick = () => {
             if (isLeftOpen && activePane === 'pane-explorer') {
@@ -247,7 +251,6 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
           };
         }
 
-        // Paneles derechos independientes
         if (actToc) {
           actToc.onclick = () => {
             showToc = !showToc;
@@ -262,14 +265,12 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
           };
         }
 
-        // Impresión / Exportar PDF
         if (actPrint) {
           actPrint.onclick = () => {
             window.print();
           };
         }
 
-        // Modo Zen (Pantalla Completa API)
         function toggleZenMode() {
           const isZen = mainGrid?.classList.toggle('zen-active');
           if (isZen) {
@@ -289,7 +290,6 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
           }
         });
 
-        // Atajos de teclado: Ctrl+B (Maestro), Alt+Z (Modo Zen), Ctrl+K (Buscador)
         document.addEventListener('keydown', (e) => {
           if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
             e.preventDefault();

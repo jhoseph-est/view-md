@@ -7,7 +7,7 @@ tags:
   - bienvenida
   - sistema
 orden: 1
-theme: moderno
+theme: "academico"
 ---
 
 # Bienvenido a tu Espacio Personal de Documentación 🚀
