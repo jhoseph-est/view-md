@@ -377,20 +377,11 @@ html.no-meta #sec-meta {
 }
 
 @media (max-width: 768px) {
-  /* 1. Liberamos la raíz en móviles para habilitar el pull-to-refresh nativo */
-  html, body {
-    height: auto !important;
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
-    overscroll-behavior-y: contain; /* Permite el gesto de recarga suave */
-  }
-
   .layout-grid {
     display: block !important;
     width: 100vw;
-    min-height: 100vh;
-    height: auto !important;
-    overflow: visible !important;
+    height: 100vh;
+    overflow: hidden;
   }
 
   .activity-bar,
@@ -399,14 +390,9 @@ html.no-meta #sec-meta {
     display: none !important;
   }
   
-  /* 2. El contenedor de lectura deja de ser una caja fija interna */
   .main-content {
-    position: static !important;
-    width: 100vw !important;
-    height: auto !important;
-    min-height: 100vh !important;
-    overflow: visible !important;
-    padding: 1.25rem 1rem 5.5rem 1rem !important; /* Espacio inferior para no tapar con la barra */
+    padding: 1.25rem 1rem 5rem 1rem !important;
+    height: 100vh;
   }
 
   .content-wrapper {
@@ -536,7 +522,6 @@ html.no-meta #sec-meta {
     display: none !important;
   }
 
-  
   html, body, .layout-grid {
     width: 100% !important;
     height: auto !important;
