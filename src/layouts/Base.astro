@@ -86,16 +86,23 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
           } else {
             nuevoDoc.setAttribute('data-active-pane', aPane);
           }
+
           if (!sToc) nuevoDoc.classList.add('no-toc');
           if (!sMeta) nuevoDoc.classList.add('no-meta');
         });
       })();
     </script>
-    <link 
-      rel="stylesheet" 
-      href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" 
-      crossorigin="anonymous" 
+    <!-- KaTeX cargado de forma no bloqueante para FCP rápido -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+      crossorigin="anonymous"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" crossorigin="anonymous" />
+    </noscript>
   </head>
   <body>
     <div class={`layout-grid ${isLanding ? 'no-left-panel no-toc no-meta' : ''}`} id="main-grid">
@@ -111,7 +118,6 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
            </svg>
            <span>Salir Zen (Esc)</span>
          </button>
-
          <div class="content-wrapper">
            {!isLanding && <Breadcrumbs title={title} />}
            <slot />
@@ -120,14 +126,12 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
 
        <RightSidebar headings={headings} frontmatter={frontmatter} />
     </div>
-     
+    
     <GlobalModal />
     <GraphModal />
 
-    <!-- ==========================================================
-       BARRA DE NAVEGACIÓN INFERIOR (MÓVIL < 768px)
-       ========================================================== -->
-    <nav class="mobile-bottom-bar" id="mobile-bottom-bar" aria-label="Navegación Móvil">
+    <!-- BARRA DE NAVEGACIÓN INFERIOR (MÓVIL < 768px) -->
+    <nav class="mobile-bottom-bar" id="mobile-bottom-bar" aria-label="Navegación móvil">
       <button class="m-btn active" data-drawer="m-drawer-explorer" title="Explorador">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>
         <span>Explorar</span>
@@ -163,31 +167,27 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
       <div class="drawer-header"><h3>Explorador de Archivos</h3></div>
       <div class="drawer-body" id="mobile-explorer-content"></div>
     </div>
-
     <div class="mobile-drawer" id="m-drawer-search">
       <div class="drawer-handle"></div>
       <div class="drawer-header"><h3>Buscar en el Repositorio</h3></div>
       <div class="drawer-body" id="mobile-search-content"></div>
     </div>
-
     <div class="mobile-drawer" id="m-drawer-toc">
       <div class="drawer-handle"></div>
       <div class="drawer-header"><h3>Índice del Documento</h3></div>
       <div class="drawer-body" id="mobile-toc-content"></div>
     </div>
-
     <div class="mobile-drawer" id="m-drawer-meta">
       <div class="drawer-handle"></div>
       <div class="drawer-header"><h3>Metadatos</h3></div>
       <div class="drawer-body" id="mobile-meta-content"></div>
     </div>
-
     <div class="mobile-drawer" id="m-drawer-settings">
       <div class="drawer-handle"></div>
       <div class="drawer-header"><h3>Configuración de Apariencia</h3></div>
       <div class="drawer-body" id="mobile-settings-content"></div>
     </div>
-  
+
   <script>
     import { renderMermaid } from '../utils/mermaidViewer';
     import { renderCallouts } from '../utils/callouts';
@@ -242,7 +242,7 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
         btn.onclick = async () => {
           const rawCode = codeEl?.textContent || pre.textContent || '';
           await navigator.clipboard.writeText(rawCode.trim());
-          btn.textContent = '¡Copiado!';
+          btn.textContent = '✓ Copiado!';
           btn.classList.add('copied');
           setTimeout(() => {
             btn.textContent = 'Copiar';
@@ -258,12 +258,10 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
 
       const root = document.documentElement;
       const mainGrid = document.getElementById('main-grid');
-
       let isLeftOpen = localStorage.getItem('wiki-left-open') === 'true';
       let showToc = localStorage.getItem('wiki-show-toc') === 'true';
       let showMeta = localStorage.getItem('wiki-show-meta') === 'true';
       let activePane = localStorage.getItem('wiki-active-pane') || 'pane-explorer';
-
       let memLeft = localStorage.getItem('wiki-mem-left') === 'true';
       let memToc = localStorage.getItem('wiki-mem-toc') === 'true';
       let memMeta = localStorage.getItem('wiki-mem-meta') === 'true';
@@ -278,8 +276,8 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
       const actSettings = document.getElementById('act-settings');
       const actPrint = document.getElementById('act-print');
       const leftTitle = document.getElementById('left-panel-title');
-      const actSlides = document.getElementById('act-slides') as HTMLAnchorElement | null;
 
+      const actSlides = document.getElementById('act-slides') as HTMLAnchorElement | null;
       if (actSlides) {
         const currentDocPath = window.location.pathname.replace(/^\/docs\/?/, '').replace(/\/$/, '');
         actSlides.href = `/slides/${currentDocPath}`;
@@ -307,12 +305,14 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
         mobileExplorerTarget.appendChild(clone);
       }
 
-      // 2. Buscador Móvil
-      const mobileSearchTarget = document.getElementById('mobile-search-content');
-      if (mobileSearchTarget && mobileSearchTarget.innerHTML.trim() === '') {
-        mobileSearchTarget.innerHTML = `<div style="padding: 0.5rem 0;" id="mobile-pagefind-container"></div>`;
-        if (window.PagefindUI) {
-          new window.PagefindUI({ element: "#mobile-pagefind-container", showSubResults: true });
+      // 2. Buscador Móvil (Montaje Lazy bajo demanda)
+      function initMobileSearch() {
+        const mobileSearchTarget = document.getElementById('mobile-search-content');
+        if (mobileSearchTarget && mobileSearchTarget.innerHTML.trim() === '') {
+          mobileSearchTarget.innerHTML = `<div style="padding: 0.5rem 0;" id="mobile-pagefind-container"></div>`;
+          if (window.PagefindUI) {
+            new window.PagefindUI({ element: "#mobile-pagefind-container", showSubResults: true });
+          }
         }
       }
 
@@ -342,16 +342,15 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
         }
       }
 
-      // 5. Ajustes Móvil (Marcando los selectores con un atributo único para evitar conflictos de ID)
+      // 5. Ajustes Móvil
       const mobileSettingsTarget = document.getElementById('mobile-settings-content');
       const desktopSettings = document.getElementById('pane-settings');
       if (mobileSettingsTarget && desktopSettings) {
         mobileSettingsTarget.innerHTML = '';
         const clone = desktopSettings.cloneNode(true) as HTMLElement;
         clone.style.display = 'flex';
-        // Limpiamos o modificamos IDs duplicados de los selects clonados y añadimos atributos de control
         clone.querySelectorAll('select').forEach((sel, idx) => {
-          sel.removeAttribute('id'); // Quitamos el ID duplicado para evitar conflictos en el DOM
+          sel.removeAttribute('id');
           if (idx === 0) sel.setAttribute('data-setting', 'modo');
           else if (idx === 1) sel.setAttribute('data-setting', 'estilo');
           else if (idx === 2) sel.setAttribute('data-setting', 'texto');
@@ -362,7 +361,6 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
         const curEstilo = root.getAttribute('data-estilo') || 'moderno';
         const curTexto = root.getAttribute('data-texto') || 'estandar';
         
-        // Asignamos también atributos data-setting en los selects de escritorio originales si no los tienen
         desktopSettings.querySelectorAll('select').forEach((sel, idx) => {
           if (idx === 0) sel.setAttribute('data-setting', 'modo');
           else if (idx === 1) sel.setAttribute('data-setting', 'estilo');
@@ -390,10 +388,11 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
           const drawerId = btn.getAttribute('data-drawer');
           const targetDrawer = drawerId ? document.getElementById(drawerId) : null;
           const isOpen = targetDrawer?.classList.contains('open');
-
           closeAllDrawers();
-
           if (!isOpen && targetDrawer) {
+            if (drawerId === 'm-drawer-search') {
+              initMobileSearch();
+            }
             targetDrawer.classList.add('open');
             backdrop?.classList.add('active');
             btn.classList.add('active');
@@ -547,7 +546,6 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
       syncUI(false);
     }
 
-    // Delegación de eventos global mejorada usando data-setting para evitar fallos de ID duplicados
     document.addEventListener('change', (e) => {
       const target = e.target as HTMLElement;
       if (!(target instanceof HTMLSelectElement)) return;
@@ -569,15 +567,14 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
         localStorage.setItem('pref-texto', val);
       }
 
-      // Sincronizar todos los selectores relacionados en el DOM (tanto en escritorio como en móvil)
       document.querySelectorAll('select').forEach((sel) => {
         const other = sel as HTMLSelectElement;
         if (other !== target) {
           const otherType = other.getAttribute('data-setting') || other.id.toLowerCase();
-          if (otherType === settingType || 
-             (settingType.includes('modo') && otherType.includes('modo')) ||
-             (settingType.includes('estilo') && otherType.includes('estilo')) ||
-             (settingType.includes('texto') && otherType.includes('texto'))) {
+          if (otherType === settingType ||
+              (settingType.includes('modo') && otherType.includes('modo')) ||
+              (settingType.includes('estilo') && otherType.includes('estilo')) ||
+              (settingType.includes('texto') && otherType.includes('texto'))) {
             other.value = val;
           }
         }

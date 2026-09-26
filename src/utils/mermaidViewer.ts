@@ -1,4 +1,5 @@
-import mermaid, { type MermaidConfig } from 'mermaid';
+// src/utils/mermaidViewer.ts
+import type { MermaidConfig } from 'mermaid';
 
 function getMermaidConfig(): MermaidConfig {
   const isDark = document.documentElement.getAttribute('data-modo') === 'oscuro';
@@ -80,15 +81,10 @@ function buildWrapperStructure(innerContent: string): HTMLElement {
 function attachMermaidControls(wrapper: HTMLElement, code: string) {
   const svg = wrapper.querySelector('svg') as SVGElement | null;
   const viewport = wrapper.querySelector('.mermaid-viewport') as HTMLElement | null;
-  
+
   if (viewport) {
-    // CAMBIO AQUÍ: Permitir que el scroll de la rueda suba o baje la página principal con normalidad
     viewport.addEventListener('wheel', (e) => {
-      // Si el diagrama no tiene zoom activo (escala 1), dejamos que la rueda mueva la página web
-      if (currentScale === 1) {
-        return; // No detenemos el evento, permitiendo el scroll general de la ventana
-      }
-      // Si el usuario hizo zoom, permitimos interactuar con el diagrama
+      if (currentScale === 1) return;
       e.stopPropagation();
     }, { passive: true });
 
@@ -96,6 +92,7 @@ function attachMermaidControls(wrapper: HTMLElement, code: string) {
       e.stopPropagation();
     }, { passive: true });
   }
+
   if (!svg || !viewport) return;
 
   let currentScale = 1;
@@ -156,7 +153,7 @@ function attachMermaidControls(wrapper: HTMLElement, code: string) {
     const btn = e.currentTarget as HTMLElement;
     await navigator.clipboard.writeText(code);
     const prevText = btn.textContent;
-    btn.textContent = '✓';
+    btn.textContent = '✓ Copiado';
     setTimeout(() => (btn.textContent = prevText), 1500);
   });
 
@@ -171,10 +168,8 @@ function attachMermaidControls(wrapper: HTMLElement, code: string) {
     URL.revokeObjectURL(url);
   });
 
-  // Integración limpia con el modal global unificado
   wrapper.querySelector('.btn-fullscreen-diagram')?.addEventListener('click', () => {
     const clonedSvg = svg.cloneNode(true) as SVGElement;
-    
     clonedSvg.style.transform = 'none';
     clonedSvg.removeAttribute('width');
     clonedSvg.removeAttribute('height');
@@ -184,7 +179,6 @@ function attachMermaidControls(wrapper: HTMLElement, code: string) {
     clonedSvg.style.removeProperty('min-width');
 
     const diagramLayout = wrapper.dataset.layout || 'fit';
-
     const modalBodyContainer = document.createElement('div');
     modalBodyContainer.className = `mermaid-modal-body modal-layout-${diagramLayout}`;
     modalBodyContainer.appendChild(clonedSvg);
@@ -207,7 +201,6 @@ export async function renderMermaid(forceReRender = false) {
   codeBlocks.forEach((preNode) => {
     const pre = preNode as HTMLElement;
     if (pre.dataset.mermaidRegistered === 'true') return;
-
     const codeEl = pre.querySelector('code');
     const rawCode = (codeEl?.textContent || pre.textContent || '').trim();
     if (!rawCode) return;
@@ -215,16 +208,20 @@ export async function renderMermaid(forceReRender = false) {
     const container = document.createElement('div');
     container.className = 'mermaid-native';
     container.dataset.sourceCode = rawCode;
-
     pre.after(container);
     pre.style.display = 'none';
     pre.dataset.mermaidRegistered = 'true';
   });
 
+  const containers = Array.from(document.querySelectorAll<HTMLElement>('.mermaid-native, .mermaid-wrapper'));
+
+  // GUARDA DE RENDIMIENTO: Si no hay diagramas en la página, no descargamos ni ejecutamos Mermaid
+  if (containers.length === 0) return;
+
+  // Importación dinámica: solo descarga los 2.5MB si realmente se van a procesar diagramas
+  const { default: mermaid } = await import('mermaid');
   mermaid.initialize(getMermaidConfig());
 
-  const containers = Array.from(document.querySelectorAll<HTMLElement>('.mermaid-native, .mermaid-wrapper'));
-  
   interface NodeItem {
     el: HTMLElement;
     layout: 'fit' | 'pan-x' | 'pan-y';
@@ -233,12 +230,12 @@ export async function renderMermaid(forceReRender = false) {
     height: string | null;
     rawCode: string;
   }
+
   const standardNodes: NodeItem[] = [];
 
   for (const [index, item] of containers.entries()) {
     const code = item.dataset.sourceCode;
     if (!code) continue;
-
     if (item.dataset.renderedMode && !forceReRender) continue;
 
     const layoutMatch = code.match(/%%layout:\s*(fit|pan-x|pan-y)\s*%%/i);
@@ -294,15 +291,14 @@ export async function renderMermaid(forceReRender = false) {
       tempDiv.className = 'mermaid-native';
       tempDiv.textContent = cleanCode;
       tempDiv.dataset.sourceCode = code;
-
       item.replaceWith(tempDiv);
-      standardNodes.push({ 
-        el: tempDiv, 
-        layout: parsedLayout, 
-        width: parsedWidth, 
-        maxWidth: parsedMaxWidth, 
-        height: parsedHeight, 
-        rawCode: code 
+      standardNodes.push({
+        el: tempDiv,
+        layout: parsedLayout,
+        width: parsedWidth,
+        maxWidth: parsedMaxWidth,
+        height: parsedHeight,
+        rawCode: code
       });
     }
   }
@@ -314,7 +310,6 @@ export async function renderMermaid(forceReRender = false) {
 
       standardNodes.forEach(({ el, layout, width, maxWidth, height, rawCode }) => {
         const svgEl = el.querySelector('svg') as SVGElement | null;
-        
         if (svgEl) {
           if (width) svgEl.style.setProperty('width', width, 'important');
           if (maxWidth) svgEl.style.setProperty('max-width', maxWidth, 'important');
@@ -324,7 +319,6 @@ export async function renderMermaid(forceReRender = false) {
         const wrapper = buildWrapperStructure(svgEl ? svgEl.outerHTML : '');
         wrapper.dataset.sourceCode = rawCode;
         wrapper.dataset.layout = layout;
-
         if (width || maxWidth || height) {
           wrapper.classList.add('has-custom-width');
         }

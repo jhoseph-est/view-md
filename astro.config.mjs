@@ -8,23 +8,16 @@ import remarkWikiLink from 'remark-wiki-link';
 export default defineConfig({
   output: 'static',
   vite: {
-    optimizeDeps: {
-      include: [
-        'reveal.js',
-        'reveal.js/plugin/markdown',
-        'reveal.js/plugin/highlight',
-        'reveal.js/plugin/math',
-        'reveal.js/plugin/notes',
-      ],
-    },
     build: {
-      chunkSizeWarningLimit: 3500,
+      chunkSizeWarningLimit: 2000,
       rollupOptions: {
         output: {
           manualChunks(id) {
+            // Aislamiento estricto de librerías pesadas
             if (id.includes('node_modules/mermaid')) return 'vendor-mermaid';
-            if (id.includes('node_modules/force-graph')) return 'vendor-force-graph';
+            if (id.includes('node_modules/force-graph') || id.includes('node_modules/d3-force-3d')) return 'vendor-graph';
             if (id.includes('node_modules/reveal.js')) return 'vendor-reveal';
+            if (id.includes('node_modules/katex')) return 'vendor-katex';
           },
         },
       },
@@ -33,7 +26,7 @@ export default defineConfig({
   markdown: {
     syntaxHighlight: 'shiki',
     shikiConfig: {
-      theme: 'material-theme-palenight', // Tema Palenight
+      theme: 'material-theme-palenight',
       wrap: true,
     },
     remarkPlugins: [
