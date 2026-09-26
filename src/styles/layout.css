@@ -288,21 +288,25 @@ html.no-meta #sec-meta {
   scroll-padding-top: 2rem;
   background-color: var(--bg-color);
   z-index: 10;
-  padding: 2.5rem 0;
+  padding: 2.5rem 2rem;
   box-sizing: border-box;
   scrollbar-width: none !important;
 }
+
 .main-content::-webkit-scrollbar {
     display: none !important;
 }
+
 .content-wrapper {
   width: 100%;
-  max-width: 820px;
+  /* Resta de forma exacta los espacios laterales de los paneles y la barra de actividad */
+  max-width: calc(90vw - 48px - 260px - 260px);
+  min-width: 650px;
   margin: 0 auto;
   padding: 0 1.5rem;
   box-sizing: border-box;
+  transition: max-width 0.2s ease;
 }
-
 /* Breadcrumbs superiores */
 .breadcrumbs {
   display: flex;
