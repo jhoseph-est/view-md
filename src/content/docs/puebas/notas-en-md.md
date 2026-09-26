@@ -60,7 +60,7 @@ title: "notas en md"
 
 ## [!tip] — Consejo
 > [!tip] Consejo
-> Truco práctico o forma más simple de entender el concepto.
+> Truco práctico o forma más simple de entender el concepto.das
 
 ---
 

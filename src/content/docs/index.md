@@ -1,32 +1,293 @@
 ---
-title: Bienvenido a tu Repositorio
-date: 2026-09-03
-author: Admin
-tags:
-  - inicio
-  - bienvenida
-  - sistema
-orden: 1
-theme: "academico"
+// src/components/LeftSidebar.astro
+import { getCollection, type CollectionEntry } from 'astro:content';
+import { formatName } from '../utils/fileTree';
+
+const allDocs = await getCollection('docs');
+const docs = allDocs.filter((d: CollectionEntry<'docs'>) => d.data.draft !== true);
+
+interface FileNode {
+  type: 'file';
+  doc: CollectionEntry<'docs'>;
+  url: string;
+}
+
+interface FolderNode {
+  type: 'folder';
+  children: Record<string, TreeNode>;
+}
+
+type TreeNode = FileNode | FolderNode;
+
+const fileTree: Record<string, TreeNode> = {};
+
+docs.forEach((doc: CollectionEntry<'docs'>) => {
+  const normalizedId = doc.id.replace(/\\/g, '/');
+  const parts = normalizedId.split('/');
+  let current = fileTree;
+
+  for (let i = 0; i < parts.length - 1; i++) {
+    const part = parts[i];
+    if (!current[part] || current[part].type !== 'folder') {
+      current[part] = { type: 'folder', children: {} };
+    }
+    current = (current[part] as FolderNode).children;
+  }
+
+  const fileName = parts[parts.length - 1];
+  current[fileName] = { type: 'file', doc, url: `/docs/${normalizedId}` };
+});
+
+const currentPath = Astro.url.pathname;
+
+const folderSvg = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>`;
+const fileSvg = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>`;
+
+function buildExplorerHTML(treeNode: Record<string, TreeNode>, parentPath = ''): string {
+  let html = '';
+  const keys = Object.keys(treeNode).sort((a, b) => {
+    const aIsFolder = treeNode[a].type === 'folder';
+    const bIsFolder = treeNode[b].type === 'folder';
+    if (aIsFolder && !bIsFolder) return -1;
+    if (!aIsFolder && bIsFolder) return 1;
+    return a.localeCompare(b);
+  });
+
+  keys.forEach((key) => {
+    const node = treeNode[key];
+    const nodePath = parentPath ? `${parentPath}/${key}` : key;
+    if (node.type === 'folder') {
+      html += `
+        <li>
+          <details class="folder" data-folder-path="${nodePath}">
+            <summary class="nav-item folder-summary" title="${formatName(key)}">
+              <span class="chevron">›</span>
+              <span class="nav-icon folder-icon">${folderSvg}</span>
+              <span class="text-truncate">${formatName(key)}</span>
+            </summary>
+            <ul class="nav-nested">${buildExplorerHTML(node.children, nodePath)}</ul>
+          </details>
+        </li>
+      `;
+    } else {
+      const isCurrent = node.url === currentPath ? 'style="background: rgba(139, 92, 246, 0.2); color: #8b5cf6; font-weight: 600;"' : '';
+      html += `
+        <li>
+          <a href="${node.url}" class="nav-item file-item" data-url="${node.url}" title="${node.doc.data.title}" ${isCurrent}>
+            <span class="file-spacer"></span>
+            <span class="nav-icon file-icon">${fileSvg}</span>
+            <span class="text-truncate">${node.doc.data.title}</span>
+          </a>
+        </li>`;
+    }
+  });
+  return html;
+}
+
+const explorerHTML = buildExplorerHTML(fileTree);
 ---
 
-# Bienvenido a tu Espacio Personal de Documentación 🚀
+<aside class="left-sidebar-panel" id="left-panel" transition:persist="left-sidebar-panel">
+  <div class="panel-header" id="left-panel-title">EXPLORADOR</div>
+  <div class="panel-body" id="left-panel-body">
+    <!-- 1. Explorador -->
+    <div id="pane-explorer" class="l-pane">
+      <ul class="nav-tree" set:html={explorerHTML}></ul>
+    </div>
 
-Este repositorio está construido con **Astro**, **Markdown** y **MDX**, estructurado de forma idéntica a un explorador de archivos local para mantener el orden al estilo Obsidian.
+    <!-- 2. Buscador -->
+    <div id="pane-search" class="l-pane">
+      <div id="inline-pagefind-container"></div>
+    </div>
 
-## ¿Qué puedes hacer aquí?
-* **Navegar por carpetas:** Usa el explorador del panel izquierdo para organizar tus apuntes de forma jerárquica.
-* **Consultar el Índice (TOC):** Salta rápidamente entre los subtítulos de la página actual desde la pestaña de índice.
-* **Soporte Matemático (KaTeX):** Escribe fórmulas complejas tanto en línea ($a^2 + b^2 = c^2$) como en bloques dedicados.
-* **Personalizar la Apariencia:** Cambia entre modo claro/oscuro, ajusta la tipografía (moderno, académico, minimalista) y modifica el ancho de lectura desde el panel de configuración de la derecha.
+    <!-- 3. Ajustes de Apariencia -->
+    <div id="pane-settings" class="l-pane">
+      <div class="settings-group">
+        <label for="pref-select-modo" class="settings-label">Modo de color</label>
+        <select id="pref-select-modo" class="settings-select">
+          <option value="oscuro">Oscuro</option>
+          <option value="claro">Claro</option>
+        </select>
+      </div>
 
----
+      <div class="settings-group">
+        <label for="pref-select-estilo" class="settings-label">Estilo tipográfico</label>
+        <select id="pref-select-estilo" class="settings-select">
+          <option value="moderno">Moderno</option>
+          <option value="academico">Académico</option>
+          <option value="minimalista">Minimalista</option>
+        </select>
+      </div>
 
-Usa el menú superior para ir a la **Portada** y aprender la guía básica e intermedia sobre cómo escribir tus propios archivos `.md` y `.mdx`.
+      <div class="settings-group">
+        <label for="pref-select-texto" class="settings-label">Tamaño de fuente</label>
+        <select id="pref-select-texto" class="settings-select">
+          <option value="pequeno">Pequeño</option>
+          <option value="estandar">Estándar</option>
+          <option value="grande">Grande</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</aside>
 
-```mermaid
-%%layout: pan-x%%
-graph LR
-A --> B
-B --> C
-```
+<script>
+  function setupTreeState() {
+    const folders = document.querySelectorAll<HTMLDetailsElement>('details.folder');
+    if (!folders.length) return;
+
+    let openFolders: string[] = [];
+    try {
+      openFolders = JSON.parse(localStorage.getItem('wiki-open-folders') || '[]');
+    } catch {
+      openFolders = [];
+    }
+
+    folders.forEach((details) => {
+      const path = details.dataset.folderPath;
+      if (path && openFolders.includes(path)) {
+        details.open = true;
+      }
+
+      details.addEventListener('toggle', () => {
+        if (!path) return;
+        let current: string[] = [];
+        try {
+          current = JSON.parse(localStorage.getItem('wiki-open-folders') || '[]');
+        } catch {
+          current = [];
+        }
+
+        if (details.open) {
+          if (!current.includes(path)) current.push(path);
+        } else {
+          current = current.filter((p) => p !== path);
+        }
+        localStorage.setItem('wiki-open-folders', JSON.stringify(current));
+      });
+    });
+
+    const currentPath = window.location.pathname;
+    document.querySelectorAll<HTMLAnchorElement>('.file-item').forEach(link => {
+      if (link.getAttribute('href') === currentPath) {
+        link.style.background = 'rgba(139, 92, 246, 0.2)';
+        link.style.color = '#8b5cf6';
+        link.style.fontWeight = '600';
+      } else {
+        link.style.background = '';
+        link.style.color = '';
+        link.style.fontWeight = '';
+      }
+    });
+  }
+
+  function setupAppearanceSettings() {
+    const html = document.documentElement;
+    const temaForzado = html.getAttribute('data-tema-doc');
+
+    const configKeys = [
+      { id: 'pref-select-modo', storage: 'pref-modo', attr: 'data-modo', fallback: 'oscuro' },
+      { id: 'pref-select-estilo', storage: 'pref-estilo', attr: 'data-estilo', fallback: 'moderno' },
+      { id: 'pref-select-texto', storage: 'pref-texto', attr: 'data-texto', fallback: 'estandar' }
+    ];
+
+    configKeys.forEach(({ id, storage, attr, fallback }) => {
+      const select = document.getElementById(id) as HTMLSelectElement | null;
+      if (!select) return;
+
+      if (attr === 'data-estilo' && temaForzado) {
+        // El documento fuerza su propio estilo por frontmatter
+        select.value = temaForzado;
+        select.disabled = true;
+        select.title = `Estilo fijado por el apunte (${temaForzado})`;
+        select.style.opacity = '0.55';
+        html.setAttribute('data-estilo', temaForzado);
+      } else {
+        if (attr === 'data-estilo') {
+          select.disabled = false;
+          select.title = '';
+          select.style.opacity = '1';
+        }
+        const currentValue = localStorage.getItem(storage) || html.getAttribute(attr) || fallback;
+        select.value = currentValue;
+        html.setAttribute(attr, currentValue);
+      }
+
+      select.onchange = (e) => {
+        const target = e.target as HTMLSelectElement;
+        const val = target.value;
+        html.setAttribute(attr, val);
+        localStorage.setItem(storage, val);
+
+        if (attr === 'data-modo') {
+          window.dispatchEvent(new CustomEvent('theme-changed', { detail: { mode: val } }));
+        }
+      };
+    });
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    setupTreeState();
+    setupAppearanceSettings();
+  });
+</script>
+
+<style>
+  .l-pane { display: none; flex-direction: column; width: 100%; }
+  .l-pane.active { display: flex; }
+
+  :global(.nav-tree), :global(.nav-nested) { list-style: none !important; padding: 0 !important; margin: 0 !important; }
+  :global(.nav-nested) { border-left: 1px solid var(--border-color) !important; margin-left: 0.65rem !important; padding-left: 0.25rem !important; }
+  :global(.nav-item) {
+    display: flex;
+    align-items: center;
+    padding: 0.35rem 0.4rem !important;
+    color: var(--text-color);
+    text-decoration: none;
+    font-size: 0.82rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  :global(.nav-item:hover) { background: rgba(139, 92, 246, 0.12); color: #8b5cf6; }
+  :global(.text-truncate) { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+  :global(.chevron) { width: 14px; font-size: 1rem; opacity: 0.5; margin-right: 0.3rem; transition: transform 0.2s; display: inline-flex; align-items: center; justify-content: center; }
+  :global(.folder[open] > summary .chevron) { transform: rotate(90deg); color: #8b5cf6; opacity: 1; }
+  :global(.file-spacer) { width: 14px; margin-right: 0.3rem; }
+  :global(.nav-icon) { display: flex; align-items: center; margin-right: 0.4rem; opacity: 0.7; }
+  :global(.folder-icon) { color: #8b5cf6; }
+
+  .settings-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .settings-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #8b5cf6;
+  }
+
+  .settings-select {
+    width: 100%;
+    padding: 0.45rem 0.6rem;
+    border-radius: var(--radius-sm, 6px);
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--ui-font);
+    font-size: 0.82rem;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.15s ease;
+  }
+
+  .settings-select:focus {
+    border-color: #8b5cf6;
+  }
+</style>

@@ -16,6 +16,7 @@ const {
   isLanding = false
 } = Astro.props;
 
+// Si el YAML define theme explícitamente, ese manda
 const temaDoc = frontmatter.theme || '';
 const hasSlides = frontmatter.slides === true ? 'true' : 'false';
 ---
@@ -36,6 +37,7 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
         const modo = localStorage.getItem('pref-modo') || 'oscuro';
         const texto = localStorage.getItem('pref-texto') || 'estandar';
         
+        // Prioridad: YAML del documento > preferencia guardada > 'moderno'
         const temaForzado = html.getAttribute('data-tema-doc');
         const estilo = temaForzado || localStorage.getItem('pref-estilo') || 'moderno';
         
@@ -56,12 +58,8 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
 
         if (!showToc) html.classList.add('no-toc');
         if (!showMeta) html.classList.add('no-meta');
-        
+
         document.addEventListener('astro:before-swap', (ev) => {
-          if (document.fullscreenElement) {
-            const nextGrid = ev.newDocument.getElementById('main-grid');
-            if (nextGrid) nextGrid.classList.add('zen-active');
-          }
           const m = localStorage.getItem('pref-modo') || 'oscuro';
           const t = localStorage.getItem('pref-texto') || 'estandar';
           
@@ -103,15 +101,6 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
 
        <!-- ÁREA CENTRAL DE LECTURA -->
        <main class="main-content" data-pagefind-ignore id="main-scroll-container">
-         <!-- Botón flotante para salir del Modo Zen -->
-         <button id="btn-exit-zen" class="zen-exit-btn" title="Salir de Modo Zen (Esc o Alt+Z)">
-           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-             <line x1="18" y1="6" x2="6" y2="18"></line>
-             <line x1="6" y1="6" x2="18" y2="18"></line>
-           </svg>
-           <span>Salir Zen (Esc)</span>
-         </button>
-
          <div class="content-wrapper">
            {!isLanding && <Breadcrumbs title={title} />}
            <slot />
@@ -147,8 +136,6 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
         const actToc = document.getElementById('act-toc');
         const actMeta = document.getElementById('act-meta');
         const actCollapse = document.getElementById('act-collapse');
-        const actZen = document.getElementById('act-zen');
-        const btnExitZen = document.getElementById('btn-exit-zen');
         const actExplorer = document.getElementById('act-explorer');
         const actSearch = document.getElementById('act-search');
         const actSettings = document.getElementById('act-settings');
@@ -201,7 +188,6 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
           setTimeout(() => container?.querySelector('input')?.focus(), 80);
         }
 
-        // Colapso Maestro (Ctrl+B)
         if (actCollapse) {
           actCollapse.onclick = () => {
             const anyActive = isLeftOpen || showToc || showMeta;
@@ -228,44 +214,7 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
             syncUI();
           };
         }
-        // Reconciliar estado si se navegó mediante SPA estando en Fullscreen
-        if (document.fullscreenElement && mainGrid) {
-          mainGrid.classList.add('zen-active');
-        }
-        // Modo Zen Funcional
-        function toggleZenMode() {
-          if (!document.fullscreenElement) {
-            document.documentElement.requestFullscreen().then(() => {
-              mainGrid?.classList.add('zen-active');
-            }).catch(() => {});
-          } else {
-            document.exitFullscreen().catch(() => {});
-          }
-        }
 
-        if (actZen) {
-          actZen.onclick = toggleZenMode;
-        }
-
-        if (btnExitZen) {
-          btnExitZen.onclick = () => {
-            if (document.fullscreenElement) {
-              document.exitFullscreen().catch(() => {});
-            } else {
-              mainGrid?.classList.remove('zen-active');
-            }
-          };
-        }
-
-        document.addEventListener('fullscreenchange', () => {
-          if (!document.fullscreenElement) {
-            mainGrid?.classList.remove('zen-active');
-          } else {
-            mainGrid?.classList.add('zen-active');
-          }
-        });
-
-        // Pestañas Izquierdas
         if (actExplorer) {
           actExplorer.onclick = () => {
             if (isLeftOpen && activePane === 'pane-explorer') {
@@ -302,7 +251,6 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
           };
         }
 
-        // Paneles derechos independientes
         if (actToc) {
           actToc.onclick = () => {
             showToc = !showToc;
@@ -317,14 +265,31 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
           };
         }
 
-        // Impresión / Exportar PDF
         if (actPrint) {
           actPrint.onclick = () => {
             window.print();
           };
         }
 
-        // Atajos de teclado: Ctrl+B, Alt+Z, Ctrl+K
+        function toggleZenMode() {
+          const isZen = mainGrid?.classList.toggle('zen-active');
+          if (isZen) {
+            if (!document.fullscreenElement) {
+              document.documentElement.requestFullscreen().catch(() => {});
+            }
+          } else {
+            if (document.fullscreenElement) {
+              document.exitFullscreen().catch(() => {});
+            }
+          }
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+          if (!document.fullscreenElement) {
+            mainGrid?.classList.remove('zen-active');
+          }
+        });
+
         document.addEventListener('keydown', (e) => {
           if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
             e.preventDefault();
