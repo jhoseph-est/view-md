@@ -15,6 +15,8 @@ Mermaid usa estas direcciones:
 |LR|izquierda → derecha (horizontal)|
 |RL|derecha → izquierda|
 
+---
+
 Ejemplo vertical:
 ```mermaid
 %%layout: pan-x%%
@@ -28,6 +30,9 @@ sequenceDiagram
     FE->>API: Request
     API->>DB: Query
 ```
+
+---
+
 ```mermaid
 %%width: 10%%
 %%layout: pan-x%%
@@ -36,6 +41,8 @@ A --> B
 B --> C
 ```
 
+---
+
 ```mermaid
 %%width: 100%%
 %%layout: pan-x%%
@@ -43,6 +50,8 @@ graph TB
 A --> B
 B --> C
 ```
+
+---
 
 Ejemplo horizontal:
 
@@ -254,12 +263,14 @@ erDiagram
 USUARIO ||--o{ PEDIDO : "realiza"
 ```
 
+---
+
 ## Gantt
 
 Cronogramas.
 
 ```mermaid
-
+%%width: 10%%
 gantt
     title Plan Anual Extenso
     dateFormat YYYY-MM-DD
@@ -268,8 +279,11 @@ gantt
     Tarea 1 : 2026-01-01, 30d
 ```
 
+---
+
 
 ```mermaid
+%%width: 1000%%
 %%layout: pan-x %%
 gantt
     title Sprint Corto

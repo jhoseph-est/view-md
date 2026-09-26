@@ -1,10 +1,10 @@
 ---
 // src/pages/slides/[...id].astro
 import { getCollection, type CollectionEntry } from 'astro:content';
-
 import 'reveal.js/reveal.css';
 import 'reveal.js/theme/black.css';
 import 'reveal.js/plugin/highlight/monokai.css';
+import '../../styles/mermaid.css';
 
 export async function getStaticPaths() {
   const allDocs = await getCollection('docs');
@@ -27,12 +27,11 @@ const contentBody = doc.body || '';
 ---
 
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-modo="oscuro">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Presentación: {doc.data.title}</title>
-  
   <style>
     html, body {
       width: 100%;
@@ -50,6 +49,7 @@ const contentBody = doc.body || '';
       text-transform: none; 
       color: #a78bfa; 
       font-weight: bold; 
+      text-align: center;
     }
     .reveal p, .reveal li { 
       font-size: 1.15em; 
@@ -67,6 +67,36 @@ const contentBody = doc.body || '';
       overflow-y: auto !important; 
       padding: 20px; 
     }
+    
+    /* Contenedor SIEMPRE centrado absoluto horizontal y vertical */
+    .reveal .slide-mermaid-container {
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: center !important;
+      align-items: center !important;
+      width: 100% !important;
+      margin: 1.5rem auto !important;
+      background: transparent;
+      padding: 0.5rem;
+      box-sizing: border-box;
+    }
+    .reveal .slide-mermaid-container svg {
+      display: block !important;
+      margin: 0 auto !important;
+      height: auto;
+    }
+
+    /* Scroll horizontal si el diagrama excede la pantalla */
+    .reveal .slide-mermaid-container.has-pan-x {
+      overflow-x: auto !important;
+      max-width: 90vw !important;
+      justify-content: flex-start !important;
+    }
+    .reveal .slide-mermaid-container.has-pan-y {
+      overflow-y: auto !important;
+      max-height: 60vh !important;
+    }
+
     .btn-exit {
       position: fixed; 
       top: 18px; 
@@ -94,10 +124,11 @@ const contentBody = doc.body || '';
   </style>
 </head>
 <body>
+
   <button onclick="window.close()" class="btn-exit" aria-label="Cerrar ventana">
     ✕ Cerrar (Q)
   </button>
-  
+
   <div class="reveal">
     <div class="slides">
       <section data-markdown data-separator="^\n---\n$" data-separator-vertical="^\n--\n$">
@@ -110,7 +141,6 @@ const contentBody = doc.body || '';
     import Reveal from 'reveal.js';
 
     async function initSlides() {
-      // Importaciones dinámicas oficiales que Vite resuelve sin violar el "exports" de Node
       const [
         { default: Markdown },
         { default: Highlight },
@@ -130,6 +160,135 @@ const contentBody = doc.body || '';
         hash: true,
         transition: 'slide',
         plugins: [ Markdown, Highlight, RevealMath.MathJax3, Notes ]
+      });
+
+      let mermaidInstance: any = null;
+
+      async function processSlideMermaid() {
+        const codeElements = Array.from(document.querySelectorAll('.reveal pre code'));
+        
+        const mermaidKeywords = [
+          'graph ', 'graph\n', 'flowchart ', 'flowchart\n', 
+          'sequenceDiagram', 'classDiagram', 'stateDiagram', 
+          'erDiagram', 'gantt', 'pie', 'gitGraph'
+        ];
+
+        const targets = codeElements.filter(el => {
+          if (el.classList.contains('language-mermaid') || el.classList.contains('mermaid')) {
+            return true;
+          }
+          const text = (el.textContent || '').trim();
+          return mermaidKeywords.some(keyword => text.startsWith(keyword) || text.includes('%%layout:') || text.includes('%%width:'));
+        });
+
+        if (targets.length === 0) return;
+
+        if (!mermaidInstance) {
+          const { default: m } = await import('mermaid');
+          mermaidInstance = m;
+          mermaidInstance.initialize({
+            startOnLoad: false,
+            theme: 'dark',
+            themeVariables: {
+              background: 'transparent',
+              primaryColor: '#1e293b',
+              primaryTextColor: '#f8fafc',
+              primaryBorderColor: '#38bdf8',
+              lineColor: '#94a3b8',
+              textColor: '#f8fafc'
+            },
+            gantt: {
+              useWidth: 1500,
+              useMaxWidth: false
+            }
+          });
+        }
+
+        for (const [idx, codeEl] of targets.entries()) {
+          const pre = codeEl.closest('pre');
+          if (!pre || pre.dataset.mermaidProcessed === 'true') continue;
+
+          pre.dataset.mermaidProcessed = 'true';
+
+          const code = (codeEl.textContent || '').trim();
+
+          const layoutMatch = code.match(/%%layout:\s*(fit|pan-x|pan-y)\s*%%/i);
+          const widthMatch = code.match(/%%width:\s*(\d+(?:px|%)?)\s*%%/i);
+          const maxWidthMatch = code.match(/%%max-width:\s*(\d+(?:px|%)?)\s*%%/i);
+          const heightMatch = code.match(/%%height:\s*(\d+(?:px|%)?)\s*%%/i);
+
+          const parseUnit = (val: string | null) => {
+            if (!val) return null;
+            return val.endsWith('%') || val.endsWith('px') ? val : `${val}px`;
+          };
+
+          const parsedLayout = layoutMatch ? layoutMatch[1].toLowerCase() : 'fit';
+          const parsedWidth = parseUnit(widthMatch ? widthMatch[1] : null);
+          const parsedMaxWidth = parseUnit(maxWidthMatch ? maxWidthMatch[1] : null);
+          const parsedHeight = parseUnit(heightMatch ? heightMatch[1] : null);
+
+          let cleanCode = code
+            .replace(/%%layout:.*?%%/gi, '')
+            .replace(/%%width:.*?%%/gi, '')
+            .replace(/%%max-width:.*?%%/gi, '')
+            .replace(/%%height:.*?%%/gi, '')
+            .trim();
+
+          const isGantt = cleanCode.replace(/%%[\s\S]*?%%/g, '').trim().startsWith('gantt');
+          if (isGantt && widthMatch) {
+            const numericWidth = parseInt(widthMatch[1], 10);
+            cleanCode = `%%{init: { 'gantt': { 'useWidth': ${numericWidth} } } }%%\n` + cleanCode;
+          }
+
+          if (!cleanCode) continue;
+
+          const renderId = `slide-mermaid-${Date.now()}-${idx}`;
+
+          try {
+            const { svg } = await mermaidInstance.render(renderId, cleanCode);
+            const container = document.createElement('div');
+            container.className = `slide-mermaid-container layout-${parsedLayout}`;
+            if (parsedLayout === 'pan-x') container.classList.add('has-pan-x');
+            if (parsedLayout === 'pan-y') container.classList.add('has-pan-y');
+            
+            container.innerHTML = svg;
+
+            const svgEl = container.querySelector('svg');
+            if (svgEl) {
+              // El contenedor siempre se queda al 100% para centrar, el ancho solo se aplica al SVG
+              if (parsedWidth) {
+                svgEl.style.setProperty('width', parsedWidth, 'important');
+              }
+              if (parsedMaxWidth) {
+                svgEl.style.setProperty('max-width', parsedMaxWidth, 'important');
+              } else if (!parsedWidth) {
+                svgEl.style.setProperty('max-width', '85vw', 'important');
+              }
+              
+              if (parsedHeight) {
+                svgEl.style.setProperty('height', parsedHeight, 'important');
+                svgEl.style.setProperty('max-height', parsedHeight, 'important');
+              } else {
+                svgEl.style.setProperty('max-height', '58vh', 'important');
+              }
+            }
+
+            pre.replaceWith(container);
+          } catch (err) {
+            console.error('Error renderizando Mermaid en slide:', err);
+            pre.dataset.mermaidProcessed = 'false';
+          }
+        }
+
+        deck.layout();
+      }
+
+      deck.on('ready', () => {
+        setTimeout(processSlideMermaid, 50);
+      });
+
+      deck.on('slidechanged', () => {
+        processSlideMermaid();
       });
 
       deck.initialize();
