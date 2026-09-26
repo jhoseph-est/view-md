@@ -288,7 +288,7 @@ html.no-meta #sec-meta {
 }
 
 .main-content::-webkit-scrollbar {
-    display: none !important;
+  display: none !important;
 }
 
 .content-wrapper {
@@ -317,14 +317,6 @@ html.no-meta #sec-meta {
 }
 .breadcrumbs a:hover {
   color: #8b5cf6;
-}
-
-/* Aislamiento KaTeX */
-.markdown-body .katex-display {
-  overflow-x: auto;
-  overflow-y: hidden;
-  max-width: 100%;
-  padding: 0.6rem 0;
 }
 
 /* ==========================================================
@@ -374,20 +366,6 @@ html.no-meta #sec-meta {
   color: var(--text-color) !important;
   opacity: 0.8;
   font-size: 0.85rem;
-}
-
-/* Contenedores Markdown */
-.markdown-body pre {
-  border-radius: var(--radius-md) !important;
-  border: 1px solid var(--border-color);
-}
-
-.markdown-body blockquote {
-  border-left: 4px solid #8b5cf6;
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-  background: rgba(139, 92, 246, 0.05);
-  margin: 1rem 0;
-  padding: 0.5rem 1rem;
 }
 
 /* ==========================================================
@@ -486,8 +464,7 @@ html.no-meta #sec-meta {
     z-index: 120;
     transform: translateY(100%);
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    /* Permitir que los menús desplegables largos no queden atrapados de forma estricta */
-    overflow: visible !important; 
+    overflow: visible !important;
   }
 
   .mobile-drawer.open {

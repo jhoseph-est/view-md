@@ -1,3 +1,4 @@
+/* src/styles/markdown.css */
 /* --- ESTILOS DE LECTURA DE MARKDOWN (AISLADOS) --- */
 .main-content article {
   color: var(--text-color);
@@ -20,14 +21,6 @@
   box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
 }
 
-.main-content pre { 
-  padding: 1.5rem; 
-  border-radius: 8px; 
-  position: relative; 
-  margin: 1.5rem 0; 
-  border: 1px solid var(--border-color); 
-}
-
 /* Enlaces internos y externos en Markdown */
 .main-content a.internal { 
   color: var(--text-color); 
@@ -44,31 +37,26 @@
   color: #ffffff; 
 }
 
-/* Contenedor responsivo para tablas */
-.main-content table-container, 
-.main-content table {
-    width: 100%;
-    margin: 1.5rem 0;
-}
-
-/* Hacemos que la tabla sea fluida y el scroll recaiga limpiamente en su contenedor o en sí misma sin holguras */
-.main-content table {
-    display: table; /* Cambiamos de block a table para evitar cálculos extraños de ancho */
-    width: 100%;
-    border-collapse: collapse;
-    overflow-x: auto;
-}
-
-/* Contenedor envolvente si el navegador lo requiere, o forzamos el scroll horizontal seguro */
-.main-content article {
-    overflow-x: hidden; /* Evita que las tablas ensanchen la página principal de forma invisible */
-}
-
-/* Permitir scroll horizontal aislado solo cuando la tabla sea muy ancha */
+/* ==========================================================
+   SCROLL RESPONSIVO PARA TABLAS MARKDOWN
+   ========================================================== */
+.main-content table-container,
 .main-content table-wrapper {
-    width: 100%;
-    overflow-x: auto;
-    margin: 1.5rem 0;
+  width: 100%;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  -webkit-overflow-scrolling: touch;
+}
+
+.main-content article table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  margin: 1.5rem 0;
 }
 
 .main-content th, .main-content td { 
@@ -77,7 +65,7 @@
   text-align: left; 
 }
 .main-content th { 
-  background-color: rgba(0, 0, 0, 0.04); 
+  background-color: rgba(139, 92, 246, 0.08); 
   font-weight: 600; 
 }
 html[data-modo="oscuro"] .main-content th { 
@@ -85,10 +73,56 @@ html[data-modo="oscuro"] .main-content th {
 }
 
 /* ==========================================================
+   BLOQUES DE CÓDIGO Y BOTÓN COPIAR
+   ========================================================== */
+.main-content pre { 
+  background: var(--header-bg) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 1.25rem !important;
+  position: relative; 
+  margin: 1.5rem 0; 
+  overflow-x: auto;
+}
+
+.main-content pre code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.85rem;
+  color: var(--text-color);
+}
+
+.copy-code-btn { 
+  position: absolute; 
+  top: 0.5rem; 
+  right: 0.5rem; 
+  background: rgba(139, 92, 246, 0.12); 
+  color: #a78bfa; 
+  border: 1px solid rgba(139, 92, 246, 0.25); 
+  padding: 0.25rem 0.6rem; 
+  border-radius: var(--radius-sm); 
+  font-size: 0.75rem; 
+  font-family: var(--ui-font);
+  font-weight: 600;
+  cursor: pointer; 
+  opacity: 0; 
+  transition: all 0.2s ease; 
+}
+.main-content pre:hover .copy-code-btn { 
+  opacity: 1; 
+}
+.copy-code-btn:hover { 
+  background: rgba(139, 92, 246, 0.25); 
+  color: #c4b5fd;
+}
+.copy-code-btn.copied { 
+  background: #10b981 !important; 
+  color: white !important; 
+  border-color: #10b981 !important; 
+}
+
+/* ==========================================================
    CALLOUTS OBSIDIAN (MINIMALISTA Y LIMPIO)
    ========================================================== */
-
-/* 1. Contenedor principal: una sola tarjeta con borde izquierdo */
 .main-content blockquote[data-callout],
 .main-content [class*="callout-"] {
   display: block;
@@ -103,7 +137,6 @@ html[data-modo="oscuro"] .main-content th {
   box-shadow: none !important;
 }
 
-/* 2. Neutralizar CUALQUIER fondo o borde que meta el plugin a los hijos */
 .main-content [class*="callout-"] div,
 .main-content [class*="callout-"] .callout-title,
 .main-content [class*="callout-"] .callout-title-icon,
@@ -115,7 +148,6 @@ html[data-modo="oscuro"] .main-content th {
   outline: none !important;
 }
 
-/* 3. Encabezado en una sola línea continua */
 .main-content [class*="callout-"] .callout-title {
   display: flex !important;
   align-items: center !important;
@@ -153,7 +185,6 @@ html[data-modo="oscuro"] .main-content th {
   line-height: normal !important;
 }
 
-/* 4. Texto del cuerpo */
 .main-content [class*="callout-"] .callout-content {
   padding: 0 !important;
   margin: 0 !important;
@@ -173,7 +204,7 @@ html[data-modo="oscuro"] .main-content th {
 }
 
 /* ----------------------------------------------------------
-   COLORES MODO CLARO (Pasteles sutiles)
+   COLORES MODO CLARO
    ---------------------------------------------------------- */
 [data-callout="note"], [data-callout="info"], .callout-note, .callout-info { 
   --callout-color: #0284c7; --callout-bg: rgba(2, 132, 199, 0.06); --callout-border: rgba(2, 132, 199, 0.15); 
@@ -207,7 +238,7 @@ html[data-modo="oscuro"] .main-content th {
 }
 
 /* ----------------------------------------------------------
-   COLORES MODO OSCURO (html[data-modo="oscuro"])
+   COLORES MODO OSCURO
    ---------------------------------------------------------- */
 html[data-modo="oscuro"] [data-callout="note"],
 html[data-modo="oscuro"] [data-callout="info"],
@@ -284,54 +315,36 @@ html[data-modo="oscuro"] .callout-cite {
   --callout-color: #94a3b8; --callout-bg: rgba(148, 163, 184, 0.08); --callout-border: rgba(148, 163, 184, 0.18); 
 }
 
-/* Botón de copiar código */
-.copy-code-btn { 
-  position: absolute; 
-  top: 0.5rem; 
-  right: 0.5rem; 
-  background: rgba(255, 255, 255, 0.1); 
-  color: #f8fafc; 
-  border: 1px solid rgba(255, 255, 255, 0.2); 
-  padding: 0.3rem 0.6rem; 
-  border-radius: 6px; 
-  font-size: 0.8rem; 
-  cursor: pointer; 
-  opacity: 0; 
-  transition: all 0.2s ease; 
-}
-.main-content pre:hover .copy-code-btn { opacity: 1; }
-.copy-code-btn:hover { background: rgba(255, 255, 255, 0.2); }
-.copy-code-btn.copied { background: #10b981; color: white; border-color: #10b981; }
-
 /* ==========================================================
-   CENTRADO ABSOLUTO Y ROBUSTO PARA KaTeX EN BLOQUE
+   ALINEACIÓN IZQUIERDA Y SCROLL NATIVO PARA KaTeX
    ========================================================== */
 .main-content .katex-display {
-    display: flex !important;
-    justify-content: center !important;
-    width: 100% !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    padding: 0.5rem 0 !important;
-    margin: 1.5rem 0 !important;
-    text-align: center !important;
-    -webkit-overflow-scrolling: touch;
+  display: block !important;
+  width: 100% !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  padding: 0.85rem 0.5rem !important;
+  margin: 1.5rem 0 !important;
+  text-align: center !important;
+  -webkit-overflow-scrolling: touch;
 }
 
 .main-content .katex-display > .katex {
-    display: inline-block !important;
-    text-align: center !important;
-    max-width: none !important;
+  display: inline-block !important;
+  text-align: center !important;
+  max-width: fit-content !important;
+  min-width: min-content !important;
+  margin: 0 auto !important;
 }
 
 .main-content .katex-display .katex-html {
-    white-space: nowrap !important;
+  white-space: nowrap !important;
+  text-align: center !important;
 }
 
 .main-content .katex .array {
-    display: inline-table !important;
+  display: inline-table !important;
 }
-
 
 .main-content {
   padding: var(--content-padding, 2rem 3rem);
@@ -340,7 +353,91 @@ html[data-modo="oscuro"] .callout-cite {
   overflow-x: hidden;
   box-sizing: border-box;
   scroll-behavior: smooth;
-  
-  /* AQUÍ ESTÁ LA CLAVE: Forzamos el espacio superior obligatorio para cualquier anclaje (#) */
-  scroll-padding-top: 100px; /* Puedes subir o bajar este valor (ej. 4rem o 6rem) según el espacio que quieras dejar con el header */
+  scroll-padding-top: 100px;
+}
+
+/* ==========================================================
+   BLOQUES DE CÓDIGO ESTILO VS CODE
+   ========================================================== */
+.code-block-wrapper {
+  margin: 1.75rem 0;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--header-bg);
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.code-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.45rem 0.85rem;
+  background: rgba(0, 0, 0, 0.18);
+  border-bottom: 1px solid var(--border-color);
+  user-select: none;
+}
+
+.code-dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.code-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.code-dot.red { background: #ff5f56; }
+.code-dot.yellow { background: #ffbd2e; }
+.code-dot.green { background: #27c93f; }
+
+.code-lang-tag {
+  font-size: 0.72rem;
+  font-family: var(--ui-font);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.65;
+}
+
+.main-content pre {
+  margin: 0 !important;
+  padding: 1.2rem 1.25rem !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  overflow-x: auto;
+}
+
+.main-content pre code {
+  font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.copy-code-btn {
+  background: rgba(139, 92, 246, 0.15);
+  color: #a78bfa;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  font-family: var(--ui-font);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.copy-code-btn:hover {
+  background: rgba(139, 92, 246, 0.3);
+  color: #c4b5fd;
+}
+
+.copy-code-btn.copied {
+  background: #10b981 !important;
+  color: #ffffff !important;
+  border-color: #10b981 !important;
 }

@@ -24,12 +24,17 @@ export type DocPathResult =
 /** Limpia prefijos numéricos y guiones para mostrar nombres legibles */
 export function formatName(str?: string): string {
   if (!str) return '';
+  try {
+    // Decodifica correctamente los caracteres UTF-8 y tildes (ej: Est%C3%A1stica -> Estadística)
+    str = decodeURIComponent(str);
+  } catch (e) {
+    // Si ya está decodificado o falla, continuamos de forma segura
+  }
   const clean = str
     .replace(/^\d+-/, '')
     .split('--')
     .map((word) => word.replace(/-/g, ' '))
     .join('-');
-
   return clean.charAt(0).toUpperCase() + clean.slice(1);
 }
 
