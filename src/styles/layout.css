@@ -50,11 +50,67 @@ body {
   background-color: var(--bg-color);
 }
 
-/* Modo Zen */
+/* ==========================================================
+   MODO ZEN TOTAL (INMERSIÓN PURA DE LECTURA)
+   ========================================================== */
+/* 1. Ocultar todas las barras periféricas */
 .layout-grid.zen-active .activity-bar,
 .layout-grid.zen-active .left-sidebar-panel,
-.layout-grid.zen-active .independent-panel {
+.layout-grid.zen-active .independent-panel,
+.layout-grid.zen-active .breadcrumbs {
   display: none !important;
+}
+
+/* 2. El área de lectura toma el 100% de la pantalla sin offsets */
+.layout-grid.zen-active .main-content {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  padding: 3.5rem 1rem !important;
+  z-index: 999 !important;
+}
+
+/* 3. Ampliar el ancho del texto en Zen (de 820px a 1080px de confort) */
+.layout-grid.zen-active .content-wrapper {
+  max-width: 1080px !important;
+  transition: max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 4. Botón flotante para salir del Modo Zen */
+.zen-exit-btn {
+  display: none;
+  position: fixed;
+  top: 1.25rem;
+  right: 1.5rem;
+  z-index: 10000;
+  background: var(--header-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-family: var(--ui-font);
+  font-weight: 600;
+  cursor: pointer;
+  align-items: center;
+  gap: 0.4rem;
+  opacity: 0.4;
+  backdrop-filter: blur(8px);
+  transition: opacity 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+}
+
+.zen-exit-btn:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* Solo se muestra cuando el modo zen está activo */
+.layout-grid.zen-active .zen-exit-btn {
+  display: inline-flex !important;
 }
 
 /* 1. Barra de Actividad Izquierda (48px) */
