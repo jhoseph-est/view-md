@@ -61,6 +61,12 @@ body {
   display: none !important;
 }
 
+.layout-grid.zen-active ~ .mobile-bottom-bar,
+.layout-grid.zen-active ~ .mobile-drawer,
+.layout-grid.zen-active ~ .mobile-drawer-backdrop {
+  display: none !important;
+}
+
 .layout-grid.zen-active .main-content {
   position: fixed !important;
   inset: 0 !important;
@@ -369,7 +375,7 @@ html.no-meta #sec-meta {
 }
 
 /* ==========================================================
-   ESTRATEGIA MÓVIL (< 768px) - ÚNICO Y LIMPIO
+   ESTRATEGIA MÓVIL (< 768px)
    ========================================================== */
 .mobile-bottom-bar, .mobile-drawer {
   display: none;
@@ -452,6 +458,13 @@ html.no-meta #sec-meta {
     justify-content: space-around !important;
     align-items: center !important;
     backdrop-filter: blur(8px) !important;
+  }
+
+  /* Ocultar barra inferior y cajones cuando el Modo Zen esté activo en móvil */
+  .layout-grid.zen-active ~ .mobile-bottom-bar,
+  .layout-grid.zen-active ~ .mobile-drawer,
+  .layout-grid.zen-active ~ .mobile-drawer-backdrop {
+    display: none !important;
   }
 
   .m-btn {
