@@ -377,11 +377,19 @@ html.no-meta #sec-meta {
 }
 
 @media (max-width: 768px) {
+  /* 1. Liberamos el viewport del navegador para permitir el gesto de refrescar */
+  html, body {
+    height: auto !important;
+    overflow-y: auto !important;
+    overscroll-behavior-y: contain; /* Permite el rebote de recarga nativo sin romper el scroll */
+  }
+  
   .layout-grid {
     display: block !important;
     width: 100vw;
-    height: 100vh;
-    overflow: hidden;
+    height: auto !important;
+    min-height: 100vh;
+    overflow: visible !important;
   }
 
   .activity-bar,
@@ -390,9 +398,14 @@ html.no-meta #sec-meta {
     display: none !important;
   }
   
+  /* 2. El contenido principal fluye con el scroll nativo de la pantalla */
   .main-content {
+    position: static !important;
+    width: 100vw !important;
+    height: auto !important;
+    min-height: 100vh;
+    overflow-y: visible !important;
     padding: 1.25rem 1rem 5rem 1rem !important;
-    height: 100vh;
   }
 
   .content-wrapper {
