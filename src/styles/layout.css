@@ -338,18 +338,35 @@ html.no-meta #sec-meta {
   --pagefind-ui-border-radius: var(--radius-md);
 }
 
+/* Ocultar la lupa y el botón de limpiar */
+.pagefind-ui__search-icon,
+.pagefind-ui__search-clear {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
 .pagefind-ui__search-input {
   background-color: var(--bg-color) !important;
   color: var(--text-color) !important;
   border: 1px solid var(--border-color) !important;
   border-radius: var(--radius-md) !important;
-  padding: 0.5rem 1rem !important;
+  padding: 0.6rem 0.85rem !important; /* Padding simétrico sin hueco para la lupa */
   font-family: var(--ui-font) !important;
+  font-size: 0.9rem !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 .pagefind-ui__search-input:focus {
   border-color: #8b5cf6 !important;
   outline: none !important;
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2) !important;
+}
+
+.pagefind-ui__form::before {
+  display: none !important;
 }
 
 .pagefind-ui__drawer {

@@ -326,13 +326,23 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
       }
 
       // 2. Buscador Móvil
+      // 2. Buscador Móvil
       async function initMobileSearch() {
         const mobileSearchTarget = document.getElementById('mobile-search-content');
         if (mobileSearchTarget && mobileSearchTarget.innerHTML.trim() === '') {
           mobileSearchTarget.innerHTML = `<div style="padding: 0.5rem 0;" id="mobile-pagefind-container">Cargando buscador...</div>`;
           await loadPagefindAssets();
           mobileSearchTarget.innerHTML = `<div style="padding: 0.5rem 0;" id="mobile-pagefind-container"></div>`;
-          new window.PagefindUI({ element: "#mobile-pagefind-container", showSubResults: true });
+          new window.PagefindUI({ 
+            element: "#mobile-pagefind-container", 
+            showSubResults: true,
+            resetStyles: false,
+            ranking: {
+              termFrequency: 0.2,
+              pageLength: 0.75,
+              termSaturation: 1.4
+            }
+          });
         }
       }
 
@@ -459,7 +469,16 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
           container.innerHTML = '<span style="opacity: 0.5; font-size: 0.85rem;">Cargando motor de búsqueda...</span>';
           await loadPagefindAssets();
           container.innerHTML = '';
-          new window.PagefindUI({ element: "#inline-pagefind-container", showSubResults: true });
+          new window.PagefindUI({ 
+            element: "#inline-pagefind-container", 
+            showSubResults: true,
+            resetStyles: false,
+            ranking: {
+              termFrequency: 0.2,
+              pageLength: 0.75,
+              termSaturation: 1.4
+            }
+          });
         }
         setTimeout(() => container?.querySelector('input')?.focus(), 80);
       }
