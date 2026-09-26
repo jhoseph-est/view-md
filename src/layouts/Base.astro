@@ -34,11 +34,12 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
         const html = document.documentElement;
         
         const modo = localStorage.getItem('pref-modo') || 'oscuro';
+        const estilo = localStorage.getItem('pref-estilo') || html.getAttribute('data-estilo') || 'moderno';
         const texto = localStorage.getItem('pref-texto') || 'estandar';
-        const ancho = localStorage.getItem('pref-ancho') || 'normal';
+        
         html.setAttribute('data-modo', modo);
+        html.setAttribute('data-estilo', estilo);
         html.setAttribute('data-texto', texto);
-        html.setAttribute('data-ancho', ancho);
 
         const leftOpen = localStorage.getItem('wiki-left-open') === 'true';
         const showToc = localStorage.getItem('wiki-show-toc') === 'true';
@@ -56,15 +57,13 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
 
         document.addEventListener('astro:before-swap', (ev) => {
           const m = localStorage.getItem('pref-modo') || 'oscuro';
+          const e = localStorage.getItem('pref-estilo') || ev.newDocument.documentElement.getAttribute('data-estilo') || 'moderno';
           const t = localStorage.getItem('pref-texto') || 'estandar';
-          const a = localStorage.getItem('pref-ancho') || 'normal';
-          const nuevoEstilo = ev.newDocument.documentElement.getAttribute('data-estilo') || 'moderno';
           const incomingSlides = ev.newDocument.documentElement.getAttribute('data-has-slides') || 'false';
           
           ev.newDocument.documentElement.setAttribute('data-modo', m);
-          ev.newDocument.documentElement.setAttribute('data-estilo', nuevoEstilo);
+          ev.newDocument.documentElement.setAttribute('data-estilo', e);
           ev.newDocument.documentElement.setAttribute('data-texto', t);
-          ev.newDocument.documentElement.setAttribute('data-ancho', a);
           ev.newDocument.documentElement.setAttribute('data-has-slides', incomingSlides);
           
           const lOpen = localStorage.getItem('wiki-left-open') === 'true';

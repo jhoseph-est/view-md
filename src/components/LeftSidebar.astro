@@ -90,27 +90,42 @@ const explorerHTML = buildExplorerHTML(fileTree);
 <aside class="left-sidebar-panel" id="left-panel" transition:persist="left-sidebar-panel">
   <div class="panel-header" id="left-panel-title">EXPLORADOR</div>
   <div class="panel-body" id="left-panel-body">
+    <!-- 1. Explorador -->
     <div id="pane-explorer" class="l-pane">
       <ul class="nav-tree" set:html={explorerHTML}></ul>
     </div>
+
+    <!-- 2. Buscador -->
     <div id="pane-search" class="l-pane">
       <div id="inline-pagefind-container"></div>
     </div>
+
+    <!-- 3. Ajustes de Apariencia -->
     <div id="pane-settings" class="l-pane">
-      <div class="setting-group">
-        <label>MODO DE COLOR</label>
-        <div class="setting-buttons">
-          <button class="cfg-btn" data-modo="claro">Claro</button>
-          <button class="cfg-btn" data-modo="oscuro">Oscuro</button>
-        </div>
+      <div class="settings-group">
+        <label for="pref-select-modo" class="settings-label">Modo de color</label>
+        <select id="pref-select-modo" class="settings-select">
+          <option value="oscuro">Oscuro</option>
+          <option value="claro">Claro</option>
+        </select>
       </div>
-      <div class="setting-group">
-        <label>TIPOGRAFÍA</label>
-        <div class="setting-buttons">
-          <button class="cfg-btn" data-estilo="moderno">Moderno</button>
-          <button class="cfg-btn" data-estilo="academico">Académico</button>
-          <button class="cfg-btn" data-estilo="minimalista">Minimal</button>
-        </div>
+
+      <div class="settings-group">
+        <label for="pref-select-estilo" class="settings-label">Estilo tipográfico</label>
+        <select id="pref-select-estilo" class="settings-select">
+          <option value="moderno">Moderno</option>
+          <option value="academico">Académico</option>
+          <option value="minimalista">Minimalista</option>
+        </select>
+      </div>
+
+      <div class="settings-group">
+        <label for="pref-select-texto" class="settings-label">Tamaño de fuente</label>
+        <select id="pref-select-texto" class="settings-select">
+          <option value="pequeno">Pequeño</option>
+          <option value="estandar">Estándar</option>
+          <option value="grande">Grande</option>
+        </select>
       </div>
     </div>
   </div>
@@ -166,11 +181,44 @@ const explorerHTML = buildExplorerHTML(fileTree);
     });
   }
 
-  document.addEventListener('astro:page-load', setupTreeState);
+  function setupAppearanceSettings() {
+    const html = document.documentElement;
+
+    const configKeys = [
+      { id: 'pref-select-modo', storage: 'pref-modo', attr: 'data-modo', fallback: 'oscuro' },
+      { id: 'pref-select-estilo', storage: 'pref-estilo', attr: 'data-estilo', fallback: 'moderno' },
+      { id: 'pref-select-texto', storage: 'pref-texto', attr: 'data-texto', fallback: 'estandar' }
+    ];
+
+    configKeys.forEach(({ id, storage, attr, fallback }) => {
+      const select = document.getElementById(id) as HTMLSelectElement | null;
+      if (!select) return;
+
+      const currentValue = localStorage.getItem(storage) || html.getAttribute(attr) || fallback;
+      select.value = currentValue;
+      html.setAttribute(attr, currentValue);
+
+      select.onchange = (e) => {
+        const target = e.target as HTMLSelectElement;
+        const val = target.value;
+        html.setAttribute(attr, val);
+        localStorage.setItem(storage, val);
+
+        if (attr === 'data-modo') {
+          window.dispatchEvent(new CustomEvent('theme-changed', { detail: { mode: val } }));
+        }
+      };
+    });
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    setupTreeState();
+    setupAppearanceSettings();
+  });
 </script>
 
 <style>
-  .l-pane { display: none; }
+  .l-pane { display: none; flex-direction: column; width: 100%; }
   .l-pane.active { display: flex; }
 
   :global(.nav-tree), :global(.nav-nested) { list-style: none !important; padding: 0 !important; margin: 0 !important; }
@@ -194,19 +242,37 @@ const explorerHTML = buildExplorerHTML(fileTree);
   :global(.nav-icon) { display: flex; align-items: center; margin-right: 0.4rem; opacity: 0.7; }
   :global(.folder-icon) { color: #8b5cf6; }
 
-  .setting-group { margin-bottom: 1.25rem; }
-  .setting-group label { font-size: 0.7rem; font-weight: 700; color: #8b5cf6; display: block; margin-bottom: 0.4rem; letter-spacing: 0.05em; }
-  .setting-buttons { display: flex; gap: 4px; }
-  .cfg-btn {
-    flex: 1;
-    background: rgba(0,0,0,0.04);
-    border: 1px solid var(--border-color);
-    color: var(--text-color);
-    padding: 0.4rem;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    cursor: pointer;
-    transition: all 0.2s;
+  .settings-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1.2rem;
   }
-  .cfg-btn:hover { background: rgba(139, 92, 246, 0.15); border-color: #8b5cf6; color: #8b5cf6; }
+
+  .settings-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    opacity: 0.8;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #8b5cf6;
+  }
+
+  .settings-select {
+    width: 100%;
+    padding: 0.45rem 0.6rem;
+    border-radius: var(--radius-sm, 6px);
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--ui-font);
+    font-size: 0.82rem;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.15s ease;
+  }
+
+  .settings-select:focus {
+    border-color: #8b5cf6;
+  }
 </style>
