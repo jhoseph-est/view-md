@@ -27,8 +27,7 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{title} | Repositorio Personal</title>
     <ClientRouter />
-    <link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
-    <script src="/pagefind/pagefind-ui.js" is:inline></script>
+
     <script is:inline>
       (function () {
         const html = document.documentElement;
@@ -92,7 +91,6 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
         });
       })();
     </script>
-    <!-- KaTeX cargado de forma no bloqueante para FCP rápido -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
@@ -198,17 +196,39 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
       }
     }
 
+    // CARGA BAJO DEMANDA DE PAGEFIND
+    let pagefindLoadingPromise: Promise<void> | null = null;
+    function loadPagefindAssets(): Promise<void> {
+      if (window.PagefindUI) return Promise.resolve();
+      if (pagefindLoadingPromise) return pagefindLoadingPromise;
+
+      pagefindLoadingPromise = new Promise((resolve, reject) => {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '/pagefind/pagefind-ui.css';
+        document.head.appendChild(link);
+
+        const script = document.createElement('script');
+        script.src = '/pagefind/pagefind-ui.js';
+        script.onload = () => resolve();
+        script.onerror = (err) => reject(err);
+        document.head.appendChild(script);
+      });
+      return pagefindLoadingPromise;
+    }
+
     function initializeApp() {
       renderCallouts();
       renderMermaid(false);
 
-      // 1. Forzar inicio a la izquierda en todas las ecuaciones KaTeX
-      document.querySelectorAll<HTMLElement>('.main-content .katex-display').forEach((el) => {
+      // 1. Reset KaTeX horizontal scroll
+      document.querySelectorAll('.main-content .katex-display').forEach((el) => {
         el.scrollLeft = 0;
       });
 
-      // 2. Inyección de contenedor estilo VS Code preservando los tokens de Shiki
-      document.querySelectorAll<HTMLElement>('.main-content pre').forEach((pre) => {
+      // 2. Decoración de bloques de código (con bandera para no reprocesar)
+      document.querySelectorAll('.main-content pre:not([data-code-decorated])').forEach((preNode) => {
+        const pre = preNode as HTMLElement;
         if (
           pre.closest('.code-block-wrapper') ||
           pre.dataset.language === 'mermaid' ||
@@ -218,6 +238,7 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
           return;
         }
 
+        pre.setAttribute('data-code-decorated', 'true');
         const codeEl = pre.querySelector('code');
         const langClass = Array.from(codeEl?.classList || []).find((c) => c.startsWith('language-'));
         const lang = langClass ? langClass.replace('language-', '') : (pre.dataset.language || 'code');
@@ -298,21 +319,20 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
       // 1. Explorador Móvil
       const desktopExplorer = document.getElementById('pane-explorer');
       const mobileExplorerTarget = document.getElementById('mobile-explorer-content');
-      if (desktopExplorer && mobileExplorerTarget) {
-        mobileExplorerTarget.innerHTML = '';
+      if (desktopExplorer && mobileExplorerTarget && mobileExplorerTarget.children.length === 0) {
         const clone = desktopExplorer.cloneNode(true) as HTMLElement;
         clone.style.display = 'flex';
         mobileExplorerTarget.appendChild(clone);
       }
 
-      // 2. Buscador Móvil (Montaje Lazy bajo demanda)
-      function initMobileSearch() {
+      // 2. Buscador Móvil
+      async function initMobileSearch() {
         const mobileSearchTarget = document.getElementById('mobile-search-content');
         if (mobileSearchTarget && mobileSearchTarget.innerHTML.trim() === '') {
+          mobileSearchTarget.innerHTML = `<div style="padding: 0.5rem 0;" id="mobile-pagefind-container">Cargando buscador...</div>`;
+          await loadPagefindAssets();
           mobileSearchTarget.innerHTML = `<div style="padding: 0.5rem 0;" id="mobile-pagefind-container"></div>`;
-          if (window.PagefindUI) {
-            new window.PagefindUI({ element: "#mobile-pagefind-container", showSubResults: true });
-          }
+          new window.PagefindUI({ element: "#mobile-pagefind-container", showSubResults: true });
         }
       }
 
@@ -345,8 +365,7 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
       // 5. Ajustes Móvil
       const mobileSettingsTarget = document.getElementById('mobile-settings-content');
       const desktopSettings = document.getElementById('pane-settings');
-      if (mobileSettingsTarget && desktopSettings) {
-        mobileSettingsTarget.innerHTML = '';
+      if (mobileSettingsTarget && desktopSettings && mobileSettingsTarget.children.length === 0) {
         const clone = desktopSettings.cloneNode(true) as HTMLElement;
         clone.style.display = 'flex';
         clone.querySelectorAll('select').forEach((sel, idx) => {
@@ -434,12 +453,13 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
         }
       }
 
-      function initSearch() {
+      async function initSearch() {
         const container = document.getElementById('inline-pagefind-container');
         if (container && container.innerHTML.trim() === '') {
-          if (window.PagefindUI) {
-            new window.PagefindUI({ element: "#inline-pagefind-container", showSubResults: true });
-          }
+          container.innerHTML = '<span style="opacity: 0.5; font-size: 0.85rem;">Cargando motor de búsqueda...</span>';
+          await loadPagefindAssets();
+          container.innerHTML = '';
+          new window.PagefindUI({ element: "#inline-pagefind-container", showSubResults: true });
         }
         setTimeout(() => container?.querySelector('input')?.focus(), 80);
       }
