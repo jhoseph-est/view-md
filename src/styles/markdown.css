@@ -304,8 +304,13 @@ html[data-modo="oscuro"] .callout-cite {
   overflow-y: auto;
   overflow-x: hidden;
   box-sizing: border-box;
-  scroll-behavior: smooth;
   scroll-padding-top: 100px;
+  /* El scroll-behavior: smooth solo debe existir en pantallas grandes */
+}
+@media (min-width: 769px) {
+  .main-content {
+    scroll-behavior: smooth;
+  }
 }
 
 /* ==========================================================

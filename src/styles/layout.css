@@ -369,61 +369,58 @@ html.no-meta #sec-meta {
 }
 
 /* ==========================================================
-   ESTRATEGIA MÓVIL (< 768px)
+   ESTRATEGIA MÓVIL (< 768px) - SIN TIRONES DE DIRECCIÓN
    ========================================================== */
-.mobile-bottom-bar,
-.mobile-drawer {
+.mobile-bottom-bar, .mobile-drawer {
   display: none;
 }
 
-/* ==========================================================
-   ESTRATEGIA MÓVIL (< 768px) - CORRECCIÓN DE SCROLL Y RECARGA
-   ========================================================== */
 @media (max-width: 768px) {
-  /* 1. La ventana debe tener flujo normal, sin atrapar el viewport */
+  /* 1. Scroll nativo inmediato sin inercia artificial */
   html {
     height: auto !important;
-    overflow-y: auto !important;
+    overflow-y: scroll !important; /* Fuerza una sola barra real */
     overflow-x: hidden !important;
-    -webkit-overflow-scrolling: touch;
+    scroll-behavior: auto !important; /* CRUCIAL: elimina la pausa al cambiar de dirección */
+    overscroll-behavior-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 
   body {
     height: auto !important;
-    min-height: 100vh !important;
-    overflow-y: visible !important;
-    overflow-x: hidden !important;
-    position: relative !important;
+    min-height: 100% !important;
+    overflow: visible !important;
+    position: static !important;
     display: block !important;
+    scroll-behavior: auto !important;
   }
 
-  /* 2. El grid se convierte en bloque normal */
   .layout-grid {
     display: block !important;
     width: 100% !important;
     height: auto !important;
-    min-height: 100vh !important;
-    position: relative !important;
+    min-height: 100% !important;
+    position: static !important;
     overflow: visible !important;
   }
 
-  /* 3. Ocultar paneles laterales */
+  /* 2. Ocultar paneles de escritorio */
   .activity-bar,
   .left-sidebar-panel,
   .independent-panel {
     display: none !important;
   }
 
-  /* 4. El contenido principal ya NO es absolute ni tiene su propio scroll atrapado */
+  /* 3. Área de lectura: flujo natural del documento */
   .main-content {
-    position: relative !important;
+    position: static !important;
     inset: auto !important;
     width: 100% !important;
     height: auto !important;
-    min-height: 100vh !important;
-    overflow-y: visible !important;   /* Crucial: el scroll lo hace el documento global */
-    overflow-x: hidden !important;
-    padding: 1.25rem 1rem 5.5rem 1rem !important; /* Espacio inferior para no tapar con la barra */
+    min-height: auto !important;
+    overflow: visible !important;
+    scroll-behavior: auto !important; /* CRUCIAL: cancela la animación que bloqueaba el dedo */
+    padding: 1.25rem 1rem 5.5rem 1rem !important;
     box-sizing: border-box !important;
   }
 
@@ -434,20 +431,106 @@ html.no-meta #sec-meta {
     margin: 0 !important;
   }
 
-  /* 5. Barra inferior móvil fija */
+  /* 4. Barra inferior de navegación */
   .mobile-bottom-bar {
     display: flex !important;
     position: fixed !important;
     bottom: 0 !important;
     left: 0 !important;
-    width: 100% !important;
+    width: 100vw !important;
     height: 56px !important;
     background: var(--header-bg) !important;
     border-top: 1px solid var(--border-color) !important;
     z-index: 100 !important;
-    justify-content: space-around;
-    align-items: center;
-    backdrop-filter: blur(8px);
+    justify-content: space-around !important;
+    align-items: center !important;
+    backdrop-filter: blur(8px) !important;
+  }
+
+  .m-btn {
+    background: transparent !important;
+    border: none !important;
+    color: var(--text-color) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 0.6rem !important;
+    gap: 2px !important;
+    opacity: 0.7 !important;
+    cursor: pointer !important;
+    flex: 1 !important;
+    height: 100% !important;
+  }
+
+  .m-btn.active {
+    opacity: 1 !important;
+    color: #8b5cf6 !important;
+  }
+
+  /* 5. Drawers / Cajones móviles */
+  .mobile-drawer-backdrop {
+    display: none;
+    position: fixed !important;
+    inset: 0 !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    z-index: 110 !important;
+  }
+
+  .mobile-drawer-backdrop.active {
+    display: block !important;
+  }
+
+  .mobile-drawer {
+    display: flex !important;
+    flex-direction: column !important;
+    position: fixed !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 75vh !important;
+    max-height: 560px !important;
+    background: var(--bg-color) !important;
+    border-top-left-radius: 16px !important;
+    border-top-right-radius: 16px !important;
+    border-top: 1px solid var(--border-color) !important;
+    z-index: 120 !important;
+    transform: translateY(100%) !important;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    overflow: visible !important;
+  }
+
+  .mobile-drawer.open {
+    transform: translateY(0) !important;
+  }
+
+  .drawer-handle {
+    width: 36px !important;
+    height: 4px !important;
+    background: var(--border-color) !important;
+    border-radius: 4px !important;
+    margin: 10px auto 4px auto !important;
+  }
+
+  .drawer-header {
+    padding: 0.5rem 1rem 0.75rem 1rem !important;
+    border-bottom: 1px solid var(--border-color) !important;
+  }
+
+  .drawer-header h3 {
+    margin: 0 !important;
+    font-size: 0.85rem !important;
+    color: #8b5cf6 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+  }
+
+  .drawer-body {
+    flex: 1 !important;
+    overflow-y: auto !important;
+    padding: 1rem !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 }
 
