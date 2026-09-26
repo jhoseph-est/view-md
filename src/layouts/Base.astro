@@ -188,7 +188,7 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
       <div class="drawer-body" id="mobile-settings-content"></div>
     </div>
   
-<script>
+  <script>
     import { renderMermaid } from '../utils/mermaidViewer';
     import { renderCallouts } from '../utils/callouts';
 
@@ -209,7 +209,6 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
 
       // 2. Inyección de contenedor estilo VS Code preservando los tokens de Shiki
       document.querySelectorAll<HTMLElement>('.main-content pre').forEach((pre) => {
-        // EXCEPCIÓN MERMAID: No envolver si es bloque Mermaid o si ya está envuelto
         if (
           pre.closest('.code-block-wrapper') ||
           pre.dataset.language === 'mermaid' ||
@@ -343,25 +342,39 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
         }
       }
 
-      // 5. Ajustes Móvil
+      // 5. Ajustes Móvil (Marcando los selectores con un atributo único para evitar conflictos de ID)
       const mobileSettingsTarget = document.getElementById('mobile-settings-content');
       const desktopSettings = document.getElementById('pane-settings');
       if (mobileSettingsTarget && desktopSettings) {
         mobileSettingsTarget.innerHTML = '';
         const clone = desktopSettings.cloneNode(true) as HTMLElement;
         clone.style.display = 'flex';
+        // Limpiamos o modificamos IDs duplicados de los selects clonados y añadimos atributos de control
+        clone.querySelectorAll('select').forEach((sel, idx) => {
+          sel.removeAttribute('id'); // Quitamos el ID duplicado para evitar conflictos en el DOM
+          if (idx === 0) sel.setAttribute('data-setting', 'modo');
+          else if (idx === 1) sel.setAttribute('data-setting', 'estilo');
+          else if (idx === 2) sel.setAttribute('data-setting', 'texto');
+        });
         mobileSettingsTarget.appendChild(clone);
 
         const curModo = root.getAttribute('data-modo') || 'oscuro';
         const curEstilo = root.getAttribute('data-estilo') || 'moderno';
         const curTexto = root.getAttribute('data-texto') || 'estandar';
         
+        // Asignamos también atributos data-setting en los selects de escritorio originales si no los tienen
+        desktopSettings.querySelectorAll('select').forEach((sel, idx) => {
+          if (idx === 0) sel.setAttribute('data-setting', 'modo');
+          else if (idx === 1) sel.setAttribute('data-setting', 'estilo');
+          else if (idx === 2) sel.setAttribute('data-setting', 'texto');
+        });
+
         mobileSettingsTarget.querySelectorAll('select').forEach((sel) => {
           const selectEl = sel as HTMLSelectElement;
-          const id = selectEl.id.toLowerCase();
-          if (id.includes('theme') || id.includes('modo')) selectEl.value = curModo;
-          if (id.includes('style') || id.includes('estilo')) selectEl.value = curEstilo;
-          if (id.includes('size') || id.includes('texto')) selectEl.value = curTexto;
+          const settingType = selectEl.getAttribute('data-setting');
+          if (settingType === 'modo') selectEl.value = curModo;
+          if (settingType === 'estilo') selectEl.value = curEstilo;
+          if (settingType === 'texto') selectEl.value = curTexto;
         });
       }
 
@@ -388,7 +401,9 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
         };
       });
 
-      backdrop?.addEventListener('click', closeAllDrawers);
+      if (backdrop) {
+        backdrop.onclick = closeAllDrawers;
+      }
 
       function syncUI(save = true) {
         root.classList.toggle('no-left-panel', !isLeftOpen);
@@ -532,36 +547,37 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
       syncUI(false);
     }
 
-    // Delegación de eventos global para selectores (PC y Móvil)
+    // Delegación de eventos global mejorada usando data-setting para evitar fallos de ID duplicados
     document.addEventListener('change', (e) => {
       const target = e.target as HTMLElement;
       if (!(target instanceof HTMLSelectElement)) return;
 
       const html = document.documentElement;
       const val = target.value;
-      const id = target.id.toLowerCase();
+      const settingType = target.getAttribute('data-setting') || target.id.toLowerCase();
 
-      if (id.includes('theme') || id.includes('modo')) {
+      if (settingType.includes('theme') || settingType.includes('modo') || settingType === 'modo') {
         html.setAttribute('data-modo', val);
         localStorage.setItem('pref-modo', val);
         window.dispatchEvent(new Event('theme-changed'));
-      } else if (id.includes('style') || id.includes('estilo')) {
+      } else if (settingType.includes('style') || settingType.includes('estilo') || settingType === 'estilo') {
         html.setAttribute('data-estilo', val);
         localStorage.setItem('pref-estilo', val);
         window.dispatchEvent(new Event('theme-changed'));
-      } else if (id.includes('size') || id.includes('texto')) {
+      } else if (settingType.includes('size') || settingType.includes('texto') || settingType === 'texto') {
         html.setAttribute('data-texto', val);
         localStorage.setItem('pref-texto', val);
       }
 
-      // Sincronizar todos los selectores duplicados en el DOM
+      // Sincronizar todos los selectores relacionados en el DOM (tanto en escritorio como en móvil)
       document.querySelectorAll('select').forEach((sel) => {
         const other = sel as HTMLSelectElement;
         if (other !== target) {
-          const otherId = other.id.toLowerCase();
-          if ((id.includes('theme') && otherId.includes('theme')) ||
-              (id.includes('style') && otherId.includes('style')) ||
-              (id.includes('size') && otherId.includes('size'))) {
+          const otherType = other.getAttribute('data-setting') || other.id.toLowerCase();
+          if (otherType === settingType || 
+             (settingType.includes('modo') && otherType.includes('modo')) ||
+             (settingType.includes('estilo') && otherType.includes('estilo')) ||
+             (settingType.includes('texto') && otherType.includes('texto'))) {
             other.value = val;
           }
         }

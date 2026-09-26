@@ -273,18 +273,20 @@ html[data-modo="oscuro"] .callout-cite {
 .main-content .katex-display {
   display: block !important;
   width: 100% !important;
+  max-width: 100% !important; /* Impide que desborde el contenedor principal */
   overflow-x: auto !important;
   overflow-y: hidden !important;
   padding: 0.85rem 0.5rem !important;
   margin: 1.5rem 0 !important;
   text-align: center !important;
   -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
 }
 
 .main-content .katex-display > .katex {
   display: inline-block !important;
   text-align: center !important;
-  max-width: fit-content !important;
+  max-width: 100% !important;
   min-width: min-content !important;
   margin: 0 auto !important;
 }
