@@ -277,6 +277,66 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
         wrapper.appendChild(pre);
       });
 
+      // 3. Decoración interactiva para imágenes (Botón Copiar)
+      document.querySelectorAll('.main-content article img').forEach((imgNode) => {
+        const img = imgNode as HTMLImageElement;
+        if (img.closest('.img-interactive-wrapper')) return;
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'img-interactive-wrapper';
+
+        const toolbar = document.createElement('div');
+        toolbar.className = 'img-toolbar';
+
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'img-tool-btn';
+        copyBtn.innerHTML = `
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+          </svg>
+          <span>Copiar</span>
+        `;
+
+        copyBtn.onclick = async () => {
+          try {
+            // Intentar copiar el archivo binario real de la imagen al portapapeles
+            const response = await fetch(img.src);
+            const blob = await response.blob();
+            
+            // Si el formato es PNG/JPEG se copia directo, sino se copia su URL
+            if (blob.type.includes('png') || blob.type.includes('jpeg')) {
+              await navigator.clipboard.write([
+                new ClipboardItem({ [blob.type]: blob })
+              ]);
+            } else {
+              await navigator.clipboard.writeText(img.src);
+            }
+
+            copyBtn.classList.add('copied');
+            copyBtn.querySelector('span')!.textContent = '✓ Copiado';
+            setTimeout(() => {
+              copyBtn.classList.remove('copied');
+              copyBtn.querySelector('span')!.textContent = 'Copiar';
+            }, 1500);
+          } catch (e) {
+            // Fallback: si el navegador bloquea copiar el blob, copia el enlace directo
+            await navigator.clipboard.writeText(img.src);
+            copyBtn.classList.add('copied');
+            copyBtn.querySelector('span')!.textContent = '✓ Enlace Copiado';
+            setTimeout(() => {
+              copyBtn.classList.remove('copied');
+              copyBtn.querySelector('span')!.textContent = 'Copiar';
+            }, 1500);
+          }
+        };
+
+        toolbar.appendChild(copyBtn);
+        img.parentNode?.insertBefore(wrapper, img);
+        wrapper.appendChild(img);
+        wrapper.appendChild(toolbar);
+      });
+      
       const root = document.documentElement;
       const mainGrid = document.getElementById('main-grid');
       let isLeftOpen = localStorage.getItem('wiki-left-open') === 'true';

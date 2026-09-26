@@ -273,7 +273,7 @@ html[data-modo="oscuro"] .callout-cite {
 .main-content .katex-display {
   display: block !important;
   width: 100% !important;
-  max-width: 100% !important; /* Impide que desborde el contenedor principal */
+  max-width: 100% !important;
   overflow-x: auto !important;
   overflow-y: hidden !important;
   padding: 0.85rem 0.5rem !important;
@@ -307,7 +307,6 @@ html[data-modo="oscuro"] .callout-cite {
   overflow-x: hidden;
   box-sizing: border-box;
   scroll-padding-top: 100px;
-  /* El scroll-behavior: smooth solo debe existir en pantallas grandes */
 }
 @media (min-width: 769px) {
   .main-content {
@@ -377,28 +376,25 @@ html[data-modo="oscuro"] .callout-cite {
   font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
   font-size: 0.85rem;
   line-height: 1.6;
-  white-space: pre-wrap !important;       /* Permite el quiebre de línea */
-  word-break: break-word !important;      /* Corta palabras largas */
+  white-space: pre-wrap !important;
+  word-break: break-word !important;
   overflow-wrap: anywhere !important;
   display: block;
 }
 
-/* Tabulación visual para las líneas envueltas (hanging indent) */
 .main-content pre code .line {
   display: inline-block;
   width: 100%;
-  padding-left: 2rem;                    /* Espacio de la sangría cuando la línea se dobla */
-  text-indent: -2rem;                    /* Regresa la primera línea a su posición original */
+  padding-left: 2rem;
+  text-indent: -2rem;
   box-sizing: border-box;
 }
 
-/* Si tu Shiki no usa .line, aplicamos sangría secundaria a cualquier corte continuo */
 .main-content pre code:not(:has(.line)) {
   padding-left: 1.5rem;
   text-indent: -1.5rem;
 }
 
-/* Se permite que los span hereden los colores inline inyectados por Shiki */
 .main-content pre code span {
   color: inherit;
 }
@@ -425,4 +421,185 @@ html[data-modo="oscuro"] .callout-cite {
   background: #10b981 !important;
   color: #ffffff !important;
   border-color: #10b981 !important;
+}
+
+/* ==========================================================
+   REPRODUCTOR DE AUDIO NATIVO (CÁPSULA CON RESPLANDOR/SOMBRA)
+   ========================================================== */
+
+/* 1. La etiqueta externa adopta la misma forma de píldora y proyecta la sombra curva */
+.main-content audio,
+.reveal audio {
+  display: block !important;
+  width: 100% !important;
+  max-width: 440px !important;
+  height: 44px !important;
+  margin: 1.5rem auto !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  border-radius: 9999px !important; /* Moldea la sombra exactamente a la cápsula */
+  transition: box-shadow 0.3s ease, transform 0.2s ease !important;
+}
+
+/* 2. Color del panel interno (la cápsula nativa) */
+.main-content audio::-webkit-media-controls-panel,
+.reveal audio::-webkit-media-controls-panel,
+.main-content audio::-webkit-media-controls-enclosure,
+.reveal audio::-webkit-media-controls-enclosure {
+  background-color: var(--header-bg) !important;
+  border-radius: 9999px !important;
+  transition: background-color 0.25s ease;
+}
+
+/* 3. Modo Claro / Oscuro: textos y botones automáticos */
+html[data-modo="oscuro"] .main-content audio,
+html[data-modo="oscuro"] .reveal audio {
+  color-scheme: dark !important;
+}
+
+html[data-modo="claro"] .main-content audio,
+html[data-modo="claro"] .reveal audio {
+  color-scheme: light !important;
+}
+
+/* ==========================================================
+   4. SOMBRA DIFUMINADA Y ACENTO CROMÁTICO SEGÚN EL TEMA
+   ========================================================== */
+
+/* --- A) MODERNO (Resplandor Violeta) --- */
+html[data-estilo="moderno"] .main-content audio,
+html[data-estilo="moderno"] .reveal audio {
+  accent-color: #8b5cf6 !important;
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.22) !important;
+}
+html[data-estilo="moderno"] .main-content audio:hover,
+html[data-estilo="moderno"] .reveal audio:hover {
+  box-shadow: 0 6px 26px rgba(139, 92, 246, 0.42) !important;
+}
+
+/* --- B) ACADÉMICO (Resplandor Ámbar / Sepia Cálido) --- */
+html[data-estilo="academico"][data-modo="oscuro"] .main-content audio,
+html[data-estilo="academico"][data-modo="oscuro"] .reveal audio {
+  accent-color: #d97706 !important;
+  box-shadow: 0 4px 20px rgba(217, 119, 6, 0.2) !important;
+}
+html[data-estilo="academico"][data-modo="oscuro"] .main-content audio:hover,
+html[data-estilo="academico"][data-modo="oscuro"] .reveal audio:hover {
+  box-shadow: 0 6px 26px rgba(217, 119, 6, 0.38) !important;
+}
+
+html[data-estilo="academico"][data-modo="claro"] .main-content audio,
+html[data-estilo="academico"][data-modo="claro"] .reveal audio {
+  accent-color: #78350f !important;
+  box-shadow: 0 4px 18px rgba(120, 53, 15, 0.15) !important;
+}
+html[data-estilo="academico"][data-modo="claro"] .main-content audio:hover,
+html[data-estilo="academico"][data-modo="claro"] .reveal audio:hover {
+  box-shadow: 0 6px 24px rgba(120, 53, 15, 0.28) !important;
+}
+
+/* --- C) MINIMALISTA (Sombra Neutra y Limpia) --- */
+html[data-estilo="minimalista"][data-modo="oscuro"] .main-content audio,
+html[data-estilo="minimalista"][data-modo="oscuro"] .reveal audio {
+  accent-color: #ffffff !important;
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.08) !important;
+}
+html[data-estilo="minimalista"][data-modo="oscuro"] .main-content audio:hover,
+html[data-estilo="minimalista"][data-modo="oscuro"] .reveal audio:hover {
+  box-shadow: 0 6px 24px rgba(255, 255, 255, 0.18) !important;
+}
+
+html[data-estilo="minimalista"][data-modo="claro"] .main-content audio,
+html[data-estilo="minimalista"][data-modo="claro"] .reveal audio {
+  accent-color: #000000 !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1) !important;
+}
+html[data-estilo="minimalista"][data-modo="claro"] .main-content audio:hover,
+html[data-estilo="minimalista"][data-modo="claro"] .reveal audio:hover {
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* ==========================================================
+   CONTENEDOR DE IMÁGENES CON BOTÓN COPIAR (ESTILO VS CODE)
+   ========================================================== */
+.img-interactive-wrapper {
+  position: relative;
+  display: inline-block;
+  width: auto;
+  max-width: 100%;
+  margin: 1.75rem auto;
+  text-align: center;
+  border-radius: var(--radius-md, 8px);
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.main-content .img-interactive-wrapper,
+.reveal .img-interactive-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
+}
+
+.img-interactive-wrapper img {
+  display: block !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+.img-toolbar {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  display: flex;
+  gap: 0.35rem;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  background: var(--header-bg, #18181b);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.15));
+  border-radius: 6px;
+  padding: 0.25rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 5;
+}
+
+.img-interactive-wrapper:hover .img-toolbar {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.img-tool-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-color, #f8fafc);
+  cursor: pointer;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-family: var(--ui-font, system-ui);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.img-tool-btn:hover {
+  background-color: rgba(139, 92, 246, 0.2);
+  color: #a78bfa;
+}
+
+.img-tool-btn.copied {
+  background: #10b981 !important;
+  color: #ffffff !important;
 }

@@ -3,7 +3,6 @@ title: "Guía Multimedia y Animaciones SVG"
 date: 2026-09-26
 author: "Admin"
 tags: ["multimedia", "imagenes", "svg", "tutorial"]
-theme: "moderno"
 slides: true
 orden: 3
 ---
@@ -129,11 +128,8 @@ Este ejemplo rota constantemente en su propio eje:
    * La etiqueta `<style>` interna en el SVG aísla las animaciones `@keyframes` sin interferir con el CSS global del sitio.
 
 
-### Ejemplo de Imagen con tamaño directo
-<img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80" width="350" style="display: block; margin: 1rem auto; border-radius: 8px;" alt="Chip" />
+### Ejemplo de Reproductor Integrado
+<audio controls src="/assets/apuntes/mi-grabacion.mp3"></audio>
 
-### Ejemplo de Reproductor de Audio
-<audio controls src="https://www.w3schools.com/html/horse.mp3" style="width: 90%; max-width: 420px; display: block; margin: 1rem auto;">
-</audio>
-
-
+### Imagen con Botón Copiar Automático
+![Diagrama del circuito](https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80)
