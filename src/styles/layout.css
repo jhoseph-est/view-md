@@ -1,4 +1,8 @@
 /* src/styles/layout.css */
+
+/* ==========================================================
+   1. RESET Y VARIABLES GLOBALES
+   ========================================================== */
 * {
   box-sizing: border-box;
   scrollbar-width: thin;
@@ -41,7 +45,7 @@ body {
 }
 
 /* ==========================================================
-   ESTRUCTURA PRINCIPAL (Centrado absoluto al viewport)
+   2. ESTRUCTURA PRINCIPAL (LAYOUT GRID Y PANELES WEB)
    ========================================================== */
 .layout-grid {
   position: relative;
@@ -51,9 +55,7 @@ body {
   background-color: var(--bg-color);
 }
 
-/* ==========================================================
-   MODO ZEN TOTAL (INMERSIÓN PURA DE LECTURA)
-   ========================================================== */
+/* 2.1 Modo Zen */
 .layout-grid.zen-active .activity-bar,
 .layout-grid.zen-active .left-sidebar-panel,
 .layout-grid.zen-active .independent-panel,
@@ -115,7 +117,7 @@ body {
   display: inline-flex !important;
 }
 
-/* 1. Barra de Actividad Izquierda (48px) */
+/* 2.2 Barra de Actividad Izquierda (48px) */
 .activity-bar {
   position: absolute;
   top: 0;
@@ -177,7 +179,7 @@ html:not(.no-meta) #act-meta,
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
 
-/* 2. Panel Izquierdo Desplegable (260px) */
+/* 2.3 Panel Izquierdo Desplegable (260px) */
 .left-sidebar-panel {
   position: absolute;
   top: 0;
@@ -236,7 +238,7 @@ html[data-active-pane="pane-settings"] #pane-settings,
   display: flex;
 }
 
-/* 3. PANELES DERECHOS INDEPENDIENTES (TOC y Metadatos) */
+/* 2.4 Paneles Derechos Independientes (TOC y Metadatos) */
 .independent-panel {
   position: absolute;
   right: 0;
@@ -276,7 +278,7 @@ html.no-meta #sec-meta {
   pointer-events: none;
 }
 
-/* 4. Área Central de Lectura */
+/* 2.5 Área Central de Lectura */
 .main-content {
   position: absolute;
   inset: 0;
@@ -307,7 +309,6 @@ html.no-meta #sec-meta {
   transition: max-width 0.2s ease;
 }
 
-/* Breadcrumbs superiores */
 .breadcrumbs {
   display: flex;
   align-items: center;
@@ -325,8 +326,17 @@ html.no-meta #sec-meta {
   color: #8b5cf6;
 }
 
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  scroll-margin-top: 1.5rem;
+}
+
 /* ==========================================================
-   ESTILOS PERSONALIZADOS DE PAGEFIND (Modo Oscuro)
+   3. BUSCADOR PAGEFIND (MODO OSCURO / CLARO)
    ========================================================== */
 :root {
   --pagefind-ui-scale: 0.85;
@@ -338,7 +348,6 @@ html.no-meta #sec-meta {
   --pagefind-ui-border-radius: var(--radius-md);
 }
 
-/* Ocultar la lupa y el botón de limpiar */
 .pagefind-ui__search-icon,
 .pagefind-ui__search-clear {
   display: none !important;
@@ -352,7 +361,7 @@ html.no-meta #sec-meta {
   color: var(--text-color) !important;
   border: 1px solid var(--border-color) !important;
   border-radius: var(--radius-md) !important;
-  padding: 0.6rem 0.85rem !important; /* Padding simétrico sin hueco para la lupa */
+  padding: 0.6rem 0.85rem !important;
   font-family: var(--ui-font) !important;
   font-size: 0.9rem !important;
   width: 100% !important;
@@ -392,7 +401,137 @@ html.no-meta #sec-meta {
 }
 
 /* ==========================================================
-   ESTRATEGIA MÓVIL (< 768px)
+   4. ESTILO DE PANTALLA: INFORME APA (WEB REACTIVO AL MODO)
+   ========================================================== */
+
+/* --- VARIABLES BASE (MODO CLARO POR DEFECTO) --- */
+html[data-estilo="informe"] {
+  --content-font: "Times New Roman", Times, "Liberation Serif", serif;
+  --title-font: "Times New Roman", Times, "Liberation Serif", serif;
+  --line-height: 1.8;
+  --bg-color: #ffffff;
+  --text-color: #0f172a;
+  --header-bg: #f8fafc;
+  --border-color: #e2e8f0;
+}
+
+/* --- VARIABLES MODO OSCURO --- */
+html[data-estilo="informe"][data-modo="oscuro"] {
+  --bg-color: #0f172a;       /* Fondo noche profundo */
+  --text-color: #f1f5f9;     /* Texto claro */
+  --header-bg: #1e293b;      /* Paneles oscuros */
+  --border-color: #334155;   /* Bordes sutiles */
+}
+
+/* Tipografía formal en el texto */
+html[data-estilo="informe"] .markdown-body {
+  font-family: var(--content-font);
+  line-height: var(--line-height);
+  font-size: 1.05rem;
+}
+
+html[data-estilo="informe"] .markdown-body h1,
+html[data-estilo="informe"] .markdown-body h2,
+html[data-estilo="informe"] .markdown-body h3,
+html[data-estilo="informe"] .markdown-body h4 {
+  font-family: var(--title-font);
+  letter-spacing: normal;
+}
+
+/* --- APLICACIÓN DEL MODO OSCURO EN PANTALLA --- */
+html[data-estilo="informe"][data-modo="oscuro"],
+html[data-estilo="informe"][data-modo="oscuro"] body,
+html[data-estilo="informe"][data-modo="oscuro"] .layout-grid,
+html[data-estilo="informe"][data-modo="oscuro"] .main-content,
+html[data-estilo="informe"][data-modo="oscuro"] #document-view,
+html[data-estilo="informe"][data-modo="oscuro"] .markdown-body {
+  background-color: var(--bg-color) !important;
+  color: var(--text-color) !important;
+}
+
+html[data-estilo="informe"][data-modo="oscuro"] .markdown-body h1,
+html[data-estilo="informe"][data-modo="oscuro"] .markdown-body h2,
+html[data-estilo="informe"][data-modo="oscuro"] .markdown-body h3,
+html[data-estilo="informe"][data-modo="oscuro"] .markdown-body h4,
+html[data-estilo="informe"][data-modo="oscuro"] .markdown-body strong {
+  color: #ffffff !important;
+}
+
+html[data-estilo="informe"][data-modo="oscuro"] .markdown-body p,
+html[data-estilo="informe"][data-modo="oscuro"] .markdown-body li {
+  color: #cbd5e1 !important;
+}
+
+/* --- APLICACIÓN DEL MODO CLARO EN PANTALLA --- */
+html[data-estilo="informe"][data-modo="claro"],
+html[data-estilo="informe"][data-modo="claro"] body,
+html[data-estilo="informe"][data-modo="claro"] .layout-grid,
+html[data-estilo="informe"][data-modo="claro"] .main-content,
+html[data-estilo="informe"][data-modo="claro"] #document-view,
+html[data-estilo="informe"][data-modo="claro"] .markdown-body {
+  background-color: var(--bg-color) !important;
+  color: var(--text-color) !important;
+}
+
+html[data-estilo="informe"][data-modo="claro"] .markdown-body h1,
+html[data-estilo="informe"][data-modo="claro"] .markdown-body h2,
+html[data-estilo="informe"][data-modo="claro"] .markdown-body h3,
+html[data-estilo="informe"][data-modo="claro"] .markdown-body h4,
+html[data-estilo="informe"][data-modo="claro"] .markdown-body strong {
+  color: #0f172a !important;
+}
+
+html[data-estilo="informe"][data-modo="claro"] .markdown-body p,
+html[data-estilo="informe"][data-modo="claro"] .markdown-body li {
+  color: #334155 !important;
+}
+
+/* Párrafos en pantalla */
+html[data-estilo="informe"] .markdown-body p {
+  margin: 0 0 1.25rem 0;
+  text-align: left;
+}
+
+/* Citas */
+html[data-estilo="informe"] .markdown-body blockquote:not([data-callout]) {
+  border-left: 3px solid var(--border-color);
+  padding-left: 1.25rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+/* ==========================================================
+   PROTECCIÓN DE MERMAID Y KATEX EN PANTALLA (SIN DEFORMAR)
+   ========================================================== */
+/* El contenedor se centra en la página */
+html[data-estilo="informe"] .mermaid-wrapper {
+  margin: 2rem auto !important;
+  text-align: center !important;
+}
+
+/* Tipografía de los nodos, permitiendo que Mermaid controle su tamaño nativo */
+html[data-estilo="informe"] .mermaid-wrapper svg {
+  height: auto !important;
+  font-family: var(--ui-font) !important;
+}
+
+/* Fórmulas matemáticas centradas */
+html[data-estilo="informe"] .katex-display {
+  display: block !important;
+  text-align: center !important;
+  margin: 1.5rem auto !important;
+}
+
+html[data-estilo="informe"][data-modo="oscuro"] {
+  --accent-color: #93c5fd;
+}
+html[data-estilo="informe"][data-modo="claro"] {
+  --accent-color: #1d4ed8;
+}
+
+/* ==========================================================
+   5. ESTRATEGIA MÓVIL (< 768px)
    ========================================================== */
 .mobile-bottom-bar, .mobile-drawer {
   display: none;
@@ -461,7 +600,6 @@ html.no-meta #sec-meta {
     overflow-x: hidden !important;
   }
 
-  /* Barra inferior fija */
   .mobile-bottom-bar {
     display: flex !important;
     position: fixed !important;
@@ -477,7 +615,6 @@ html.no-meta #sec-meta {
     backdrop-filter: blur(8px) !important;
   }
 
-  /* Ocultar barra inferior y cajones cuando el Modo Zen esté activo en móvil */
   .layout-grid.zen-active ~ .mobile-bottom-bar,
   .layout-grid.zen-active ~ .mobile-drawer,
   .layout-grid.zen-active ~ .mobile-drawer-backdrop {
@@ -505,7 +642,6 @@ html.no-meta #sec-meta {
     color: #8b5cf6 !important;
   }
 
-  /* Backdrop */
   .mobile-drawer-backdrop {
     display: none;
     position: fixed !important;
@@ -518,7 +654,6 @@ html.no-meta #sec-meta {
     display: block !important;
   }
 
-  /* Cajones móviles */
   .mobile-drawer {
     display: flex !important;
     flex-direction: column !important;
@@ -573,62 +708,397 @@ html.no-meta #sec-meta {
   }
 }
 
-.markdown-body h1,
-.markdown-body h2,
-.markdown-body h3,
-.markdown-body h4,
-.markdown-body h5,
-.markdown-body h6 {
-  scroll-margin-top: 1.5rem;
+/* ==========================================================
+   ESTILIZADO Y CONTRASTE DE MERMAID (MODO CLARO Y OSCURO)
+   ========================================================== */
+
+/* 1. Modal reactivo al modo de color */
+html[data-modo="claro"] #global-modal .modal-content,
+html[data-modo="claro"] .modal-content {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12) !important;
+}
+
+html[data-modo="oscuro"] #global-modal .modal-content,
+html[data-modo="oscuro"] .modal-content {
+  background-color: #0f172a !important;
+  color: #f8fafc !important;
+  border: 1px solid #334155 !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* 2. Reglas cromáticas para los nodos de Mermaid (Abarca cualquier contenedor) */
+
+/* --- A) MODO CLARO --- */
+html[data-modo="claro"] .mermaid-wrapper svg .node rect,
+html[data-modo="claro"] .mermaid-wrapper svg .node circle,
+html[data-modo="claro"] .mermaid-wrapper svg .node ellipse,
+html[data-modo="claro"] .mermaid-wrapper svg .node polygon,
+html[data-modo="claro"] .mermaid-wrapper svg .node path,
+html[data-modo="claro"] .mermaid svg .node rect,
+html[data-modo="claro"] .mermaid svg .node circle,
+html[data-modo="claro"] .mermaid svg .node ellipse,
+html[data-modo="claro"] .mermaid svg .node polygon,
+html[data-modo="claro"] .mermaid svg .node path,
+html[data-modo="claro"] #global-modal svg .node rect,
+html[data-modo="claro"] #global-modal svg .node polygon {
+  fill: #f8fafc !important;
+  stroke: #475569 !important;
+  stroke-width: 1.5px !important;
+}
+
+/* Texto dentro de los nodos en Modo Claro */
+html[data-modo="claro"] .mermaid-wrapper svg .node .label,
+html[data-modo="claro"] .mermaid-wrapper svg .node text,
+html[data-modo="claro"] .mermaid-wrapper svg .node span,
+html[data-modo="claro"] .mermaid-wrapper svg .node p,
+html[data-modo="claro"] .mermaid svg .node .label,
+html[data-modo="claro"] .mermaid svg .node text,
+html[data-modo="claro"] .mermaid svg .node span,
+html[data-modo="claro"] .mermaid svg .node p,
+html[data-modo="claro"] #global-modal svg .node text,
+html[data-modo="claro"] #global-modal svg .node span {
+  fill: #0f172a !important;
+  color: #0f172a !important;
+  font-weight: 600 !important;
+}
+
+/* Flechas y líneas en Modo Claro */
+html[data-modo="claro"] .mermaid-wrapper svg .flowchart-link,
+html[data-modo="claro"] .mermaid-wrapper svg .edgePath .path,
+html[data-modo="claro"] .mermaid svg .flowchart-link,
+html[data-modo="claro"] .mermaid svg .edgePath .path,
+html[data-modo="claro"] #global-modal svg .flowchart-link,
+html[data-modo="claro"] #global-modal svg .edgePath .path {
+  stroke: #475569 !important;
+  stroke-width: 1.75px !important;
+}
+
+/* Etiquetas en las flechas ("Conforme", "No Conforme") */
+html[data-modo="claro"] .mermaid-wrapper svg .edgeLabel,
+html[data-modo="claro"] .mermaid-wrapper svg .edgeLabel rect,
+html[data-modo="claro"] .mermaid svg .edgeLabel,
+html[data-modo="claro"] .mermaid svg .edgeLabel rect,
+html[data-modo="claro"] #global-modal svg .edgeLabel,
+html[data-modo="claro"] #global-modal svg .edgeLabel rect {
+  background-color: #ffffff !important;
+  fill: #ffffff !important;
+}
+html[data-modo="claro"] .mermaid-wrapper svg .edgeLabel span,
+html[data-modo="claro"] .mermaid-wrapper svg .edgeLabel text,
+html[data-modo="claro"] .mermaid svg .edgeLabel span,
+html[data-modo="claro"] .mermaid svg .edgeLabel text,
+html[data-modo="claro"] #global-modal svg .edgeLabel span,
+html[data-modo="claro"] #global-modal svg .edgeLabel text {
+  fill: #334155 !important;
+  color: #334155 !important;
+  font-weight: 600 !important;
+}
+
+/* --- B) MODO OSCURO --- */
+html[data-modo="oscuro"] .mermaid-wrapper svg .node rect,
+html[data-modo="oscuro"] .mermaid-wrapper svg .node circle,
+html[data-modo="oscuro"] .mermaid-wrapper svg .node ellipse,
+html[data-modo="oscuro"] .mermaid-wrapper svg .node polygon,
+html[data-modo="oscuro"] .mermaid-wrapper svg .node path,
+html[data-modo="oscuro"] .mermaid svg .node rect,
+html[data-modo="oscuro"] .mermaid svg .node circle,
+html[data-modo="oscuro"] .mermaid svg .node ellipse,
+html[data-modo="oscuro"] .mermaid svg .node polygon,
+html[data-modo="oscuro"] .mermaid svg .node path,
+html[data-modo="oscuro"] #global-modal svg .node rect,
+html[data-modo="oscuro"] #global-modal svg .node polygon {
+  fill: #1e293b !important;
+  stroke: #38bdf8 !important;
+  stroke-width: 1.5px !important;
+}
+
+/* Texto dentro de los nodos en Modo Oscuro */
+html[data-modo="oscuro"] .mermaid-wrapper svg .node .label,
+html[data-modo="oscuro"] .mermaid-wrapper svg .node text,
+html[data-modo="oscuro"] .mermaid-wrapper svg .node span,
+html[data-modo="oscuro"] .mermaid-wrapper svg .node p,
+html[data-modo="oscuro"] .mermaid svg .node .label,
+html[data-modo="oscuro"] .mermaid svg .node text,
+html[data-modo="oscuro"] .mermaid svg .node span,
+html[data-modo="oscuro"] .mermaid svg .node p,
+html[data-modo="oscuro"] #global-modal svg .node text,
+html[data-modo="oscuro"] #global-modal svg .node span {
+  fill: #ffffff !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+}
+
+/* Flechas y líneas en Modo Oscuro */
+html[data-modo="oscuro"] .mermaid-wrapper svg .flowchart-link,
+html[data-modo="oscuro"] .mermaid-wrapper svg .edgePath .path,
+html[data-modo="oscuro"] .mermaid svg .flowchart-link,
+html[data-modo="oscuro"] .mermaid svg .edgePath .path,
+html[data-modo="oscuro"] #global-modal svg .flowchart-link,
+html[data-modo="oscuro"] #global-modal svg .edgePath .path {
+  stroke: #94a3b8 !important;
+  stroke-width: 1.75px !important;
+}
+
+/* Etiquetas en las flechas en Modo Oscuro */
+html[data-modo="oscuro"] .mermaid-wrapper svg .edgeLabel,
+html[data-modo="oscuro"] .mermaid-wrapper svg .edgeLabel rect,
+html[data-modo="oscuro"] .mermaid svg .edgeLabel,
+html[data-modo="oscuro"] .mermaid svg .edgeLabel rect,
+html[data-modo="oscuro"] #global-modal svg .edgeLabel,
+html[data-modo="oscuro"] #global-modal svg .edgeLabel rect {
+  background-color: #0f172a !important;
+  fill: #0f172a !important;
+}
+html[data-modo="oscuro"] .mermaid-wrapper svg .edgeLabel span,
+html[data-modo="oscuro"] .mermaid-wrapper svg .edgeLabel text,
+html[data-modo="oscuro"] .mermaid svg .edgeLabel span,
+html[data-modo="oscuro"] .mermaid svg .edgeLabel text,
+html[data-modo="oscuro"] #global-modal svg .edgeLabel span,
+html[data-modo="oscuro"] #global-modal svg .edgeLabel text {
+  fill: #e2e8f0 !important;
+  color: #e2e8f0 !important;
+  font-weight: 600 !important;
 }
 
 /* ==========================================================
-   ESTILOS DE IMPRESIÓN Y EXPORTACIÓN A PDF (@media print)
+   6. EXPORTACIÓN A PDF E IMPRESIÓN OFICIAL (SIEMPRE CLARO Y APA 7)
    ========================================================== */
 @media print {
+  @page {
+    size: A4 portrait;
+    margin: 2.54cm;
+  }
+
+  /* 6.1 Ocultar interfaz web al 100% */
   .activity-bar,
   .left-sidebar-panel,
   .independent-panel,
   .mobile-bottom-bar,
   .mobile-drawer,
-  .breadcrumbs {
+  .breadcrumbs,
+  .doc-nav,
+  .nav-divider,
+  .zen-exit-btn,
+  .copy-code-btn,
+  .img-toolbar,
+  .mermaid-toolbar {
     display: none !important;
   }
 
-  html, body, .layout-grid {
-    width: 100% !important;
-    height: auto !important;
-    overflow: visible !important;
-    background: transparent !important;
-    color: #000 !important;
+  /* 6.2 FUERZA BRUTA: SIEMPRE FONDO BLANCO Y TEXTO NEGRO */
+  html, body, .layout-grid, .main-content, 
+  .content-wrapper, #document-view, .markdown-body,
+  .report-cover-page, .report-toc-page {
+    background-color: #ffffff !important;
+    background: none !important;
+    color: #000000 !important;
+    font-family: "Times New Roman", Times, serif !important;
+    font-size: 12pt !important;
+    line-height: 2 !important;
+    border: none !important;
+    box-shadow: none !important;
   }
 
-  .main-content {
-    position: static !important;
-    width: 100% !important;
-    height: auto !important;
-    overflow: visible !important;
-    padding: 0 !important;
+  /* Forzar todos los textos, títulos y listas a negro puro */
+  .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4,
+  .markdown-body p, .markdown-body li, .markdown-body strong, .markdown-body em,
+  .markdown-body table, .markdown-body th, .markdown-body td,
+  .report-toc-title, .formal-toc-link, .toc-text, .toc-page-num, .toc-dots {
+    color: #000000 !important;
+    border-color: #000000 !important;
   }
 
-  .content-wrapper {
-    max-width: 100% !important;
-    padding: 0 !important;
-    margin: 0 !important;
+  /* 6.3 Párrafos APA 7 (Sangría 1.27cm solo para texto ordinario) */
+  .markdown-body p {
+    text-indent: 1.27cm !important;
+    margin: 0 0 1rem 0 !important;
+    text-align: left !important;
   }
 
-  .markdown-body pre,
-  .markdown-body blockquote,
-  .markdown-body table,
+  /* 6.4 Fórmulas KaTeX centradas */
+  .markdown-body p:has(.katex-display),
+  .markdown-body p:has(.katex),
   .markdown-body .katex-display {
-    break-inside: avoid;
-    page-break-inside: avoid;
+    display: block !important;
+    text-align: center !important;
+    text-indent: 0 !important;
+    margin: 1.5rem auto !important;
   }
 
-  .markdown-body h1,
-  .markdown-body h2,
-  .markdown-body h3 {
+  .markdown-body .katex-display > .katex {
+    display: inline-block !important;
+    text-align: center !important;
+    text-indent: 0 !important;
+  }
+
+  /* 6.5 Limpieza Absoluta de Diagramas Mermaid y Anulación de Sangría */
+  .markdown-body .mermaid-wrapper,
+  .markdown-body .mermaid-wrapper * {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+  .markdown-body .mermaid-wrapper {
+    display: block !important;
+    margin: 2rem auto !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    text-indent: 0 !important;
+  }
+
+  .markdown-body .mermaid-viewport {
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    text-indent: 0 !important;
+  }
+
+  .markdown-body .mermaid-wrapper svg {
+    display: block !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    margin: 0 auto !important;
+    text-indent: 0 !important;
+  }
+
+  /* BLINDAJE: Quita el text-indent APA a cualquier elemento interno de Mermaid */
+  .markdown-body .mermaid-wrapper svg foreignObject,
+  .markdown-body .mermaid-wrapper svg foreignObject p,
+  .markdown-body .mermaid-wrapper svg foreignObject span,
+  .markdown-body .mermaid-wrapper svg foreignObject div,
+  .markdown-body .mermaid-wrapper svg text,
+  .markdown-body .mermaid-wrapper .nodeLabel,
+  .markdown-body .mermaid-wrapper .edgeLabel,
+  .markdown-body .mermaid-wrapper .label {
+    text-indent: 0 !important;
+    text-align: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: normal !important;
+    font-family: var(--ui-font) !important;
+  }
+
+  /* Nodos SVG en blanco y negro nítido para impresión */
+  .markdown-body .mermaid-wrapper svg .node rect,
+  .markdown-body .mermaid-wrapper svg .node circle,
+  .markdown-body .mermaid-wrapper svg .node polygon {
+    fill: #ffffff !important;
+    stroke: #000000 !important;
+    stroke-width: 1.5px !important;
+  }
+
+  .markdown-body .mermaid-wrapper svg .label,
+  .markdown-body .mermaid-wrapper svg text,
+  .markdown-body .mermaid-wrapper svg span,
+  .markdown-body .mermaid-wrapper svg p,
+  .markdown-body .mermaid-wrapper svg .edgeLabel span {
+    color: #000000 !important;
+    fill: #000000 !important;
+  }
+
+  .markdown-body .mermaid-wrapper svg .flowchart-link,
+  .markdown-body .mermaid-wrapper svg .edgePath .path {
+    stroke: #000000 !important;
+  }
+
+  .markdown-body .mermaid-wrapper svg .edgeLabel,
+  .markdown-body .mermaid-wrapper svg .edgeLabel rect {
+    background-color: #ffffff !important;
+    fill: #ffffff !important;
+  }
+
+  /* 6.6 Jerarquía de Títulos APA 7 */
+  .markdown-body h1 {
+    font-size: 14pt !important;
+    font-weight: bold !important;
+    text-align: center !important;
+    margin: 2rem 0 1.5rem 0 !important;
+    break-before: page;
+    page-break-before: always;
+  }
+
+  .markdown-body h2 {
+    font-size: 13pt !important;
+    font-weight: bold !important;
+    text-align: left !important;
+    margin: 1.75rem 0 1rem 0 !important;
     break-after: avoid;
     page-break-after: avoid;
+  }
+
+  .markdown-body h3 {
+    font-size: 12pt !important;
+    font-weight: bold !important;
+    font-style: italic !important;
+    text-align: left !important;
+    margin: 1.5rem 0 0.75rem 0 !important;
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  /* 6.7 Citas en Bloque (> 40 palabras) */
+  .markdown-body blockquote:not([data-callout]) {
+    margin: 1.5rem 0 1.5rem 1.27cm !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    line-height: 2 !important;
+  }
+  .markdown-body blockquote:not([data-callout]) p {
+    text-indent: 0 !important;
+  }
+
+  /* 6.8 Tablas APA 7 */
+  .markdown-body table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    margin: 2rem auto !important;
+    border-top: 1.5pt solid #000000 !important;
+    border-bottom: 1.5pt solid #000000 !important;
+    border-left: none !important;
+    border-right: none !important;
+    break-inside: avoid !important;
+  }
+  .markdown-body th {
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: 1pt solid #000000 !important;
+    font-weight: bold !important;
+    text-align: left !important;
+    padding: 0.5rem 0.75rem !important;
+    background: transparent !important;
+  }
+  .markdown-body td {
+    border: none !important;
+    padding: 0.5rem 0.75rem !important;
+  }
+
+  /* 6.9 Referencias Bibliográficas con Sangría Francesa */
+  .markdown-body h2:has(+ ul):last-of-type + ul,
+  .markdown-body .referencias-apa ul,
+  .markdown-body #referencias + ul {
+    list-style: none !important;
+    padding-left: 1.27cm !important;
+    text-indent: -1.27cm !important;
+    line-height: 2 !important;
+  }
+
+  /* 6.10 Evitar saltos de página partidos en bloques técnicos */
+  .markdown-body pre,
+  .markdown-body .code-block-wrapper,
+  .markdown-body img,
+  .markdown-body svg {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    max-width: 100% !important;
   }
 }

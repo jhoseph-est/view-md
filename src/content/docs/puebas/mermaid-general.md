@@ -74,6 +74,7 @@ Esto se hace con **subgraphs**.
 ## ✔ Ejemplo: bloques horizontales y luego flujo vertical
 
 ```mermaid
+%%width: 100px%%
 %%layout: pan-y%%
 graph TB
 

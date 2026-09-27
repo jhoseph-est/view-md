@@ -1,0 +1,147 @@
+---
+// src/components/ReportToc.astro
+export interface TocHeading {
+  depth: number;
+  slug: string;
+  text: string;
+}
+
+interface Props {
+  headings?: TocHeading[];
+}
+
+const { headings = [] } = Astro.props;
+
+// Filtramos títulos de niveles 1 a 3 con tipado estricto
+const filteredHeadings: TocHeading[] = headings.filter(
+  (h: TocHeading) => h.depth >= 1 && h.depth <= 3
+);
+---
+
+<div class="report-toc-page">
+  <h2 class="report-toc-title">ÍNDICE</h2>
+
+  <ul class="formal-toc-list">
+    {filteredHeadings.map((h: TocHeading, idx: number) => (
+      <li class={`formal-toc-item depth-${h.depth}`}>
+        <a href={`#${h.slug}`} class="formal-toc-link">
+          <span class="toc-text">{h.text}</span>
+          <span class="toc-dots"></span>
+          <span class="toc-page-num" data-heading-slug={h.slug}>
+            {idx + 1}
+          </span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .report-toc-page {
+    margin: 2.5rem 0 4rem 0;
+    padding: 2.5rem 0;
+    box-sizing: border-box;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    color: var(--text-color);
+  }
+
+  .report-toc-title {
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 0 0 2rem 0;
+    color: var(--text-color);
+  }
+
+  .formal-toc-list {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .formal-toc-item {
+    width: 100%;
+  }
+
+  .formal-toc-item.depth-1 {
+    font-weight: 700;
+    margin-top: 0.5rem;
+  }
+  .formal-toc-item.depth-2 {
+    padding-left: 1.5rem;
+    font-weight: 500;
+    font-style: italic;
+  }
+  .formal-toc-item.depth-3 {
+    padding-left: 3rem;
+    font-weight: 400;
+    opacity: 0.9;
+  }
+
+  .formal-toc-link {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 0.95rem;
+    transition: color 0.15s ease;
+  }
+  .formal-toc-link:hover {
+    color: #8b5cf6;
+  }
+  html[data-modo="claro"] .formal-toc-link:hover {
+    color: #7c3aed;
+  }
+
+  .toc-text {
+    flex-shrink: 0;
+    max-width: 75%;
+  }
+
+  .toc-dots {
+    flex-grow: 1;
+    margin: 0 0.5rem;
+    border-bottom: 1.5px dotted var(--border-color);
+    height: 1px;
+    opacity: 0.6;
+  }
+
+  .toc-page-num {
+    flex-shrink: 0;
+    font-style: italic;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media print {
+    .report-toc-page {
+      border: none !important;
+      box-shadow: none !important;
+      background: transparent !important;
+      color: #000000 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      page-break-after: always !important;
+      break-after: page !important;
+    }
+    .report-toc-title {
+      color: #000000 !important;
+    }
+    .formal-toc-link {
+      color: #000000 !important;
+    }
+    .toc-dots {
+      border-bottom-color: #000000 !important;
+      opacity: 0.4 !important;
+    }
+  }
+</style>

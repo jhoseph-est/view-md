@@ -4,6 +4,8 @@ import Base from '../../layouts/Base.astro';
 import GraphModal from '../../components/GraphModal.astro';
 import FolderView from '../../components/FolderView.astro';
 import { formatName, generateDocPaths } from '../../utils/fileTree';
+import ReportCover from '../../components/ReportCover.astro';
+import ReportToc from '../../components/ReportToc.astro';
 
 export async function getStaticPaths() {
   const allDocs = await getCollection('docs');
@@ -52,36 +54,51 @@ if (props.type === 'folder' && props.folderPath === 'explorar') {
 <Base title={title} headings={headings} frontmatter={frontmatterConExtra}>
   <div class="doc-container">
     {props.type === 'file' ? (
-      <div id="document-view">
-        <article class="markdown-body">
-          <Content />
-        </article>
-        <hr class="nav-divider" />
+  <div id="document-view">
+    {/* Mostrar portada si el tema o tipo es informe */}
+    {(props.doc.data.theme === 'informe' || props.doc.data.tipo === 'informe') && (
+      <ReportCover data={props.doc.data} />
+    )}
+
+    {/* Mostrar índice formal si el tema o tipo es informe */}
+    {(props.doc.data.theme === 'informe' || props.doc.data.tipo === 'informe') && 
+      props.doc.data.mostrarIndice !== false && (
+      <ReportToc headings={headings} />
+    )}
+
+    <article class="markdown-body">
+      <Content />
+    </article>
         
-        <div class="doc-nav">
-          {props.prev ? (
-            <a href={`/docs/${props.prev.id.replace(/\\/g, '/')}`} class="nav-btn prev">
-              <span class="nav-label">&larr; Anterior</span>
-              <span class="nav-title">{props.prev.data.title}</span>
-            </a>
-          ) : (
-            <div class="nav-btn disabled prev">
-              <span class="nav-label">&larr; Anterior</span>
-              <span class="nav-title">Inicio de sección</span>
+        {props.doc.data.tipo !== 'informe' && (
+          <>
+            <hr class="nav-divider" />
+            <div class="doc-nav">
+              {props.prev ? (
+                <a href={`/docs/${props.prev.id.replace(/\\/g, '/')}`} class="nav-btn prev">
+                  <span class="nav-label">&larr; Anterior</span>
+                  <span class="nav-title">{props.prev.data.title}</span>
+                </a>
+              ) : (
+                <div class="nav-btn disabled prev">
+                  <span class="nav-label">&larr; Anterior</span>
+                  <span class="nav-title">Inicio de sección</span>
+                </div>
+              )}
+              {props.next ? (
+                <a href={`/docs/${props.next.id.replace(/\\/g, '/')}`} class="nav-btn next">
+                  <span class="nav-label">Siguiente &rarr;</span>
+                  <span class="nav-title">{props.next.data.title}</span>
+                </a>
+              ) : (
+                <div class="nav-btn disabled next">
+                  <span class="nav-label">Siguiente &rarr;</span>
+                  <span class="nav-title">Fin de sección</span>
+                </div>
+              )}
             </div>
-          )}
-          {props.next ? (
-            <a href={`/docs/${props.next.id.replace(/\\/g, '/')}`} class="nav-btn next">
-              <span class="nav-label">Siguiente &rarr;</span>
-              <span class="nav-title">{props.next.data.title}</span>
-            </a>
-          ) : (
-            <div class="nav-btn disabled next">
-              <span class="nav-label">Siguiente &rarr;</span>
-              <span class="nav-title">Fin de sección</span>
-            </div>
-          )}
-        </div>
+          </>
+        )}
       </div>
     ) : (
       <FolderView 

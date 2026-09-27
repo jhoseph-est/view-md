@@ -3,30 +3,54 @@ import type { MermaidConfig } from 'mermaid';
 
 function getMermaidConfig(): MermaidConfig {
   const isDark = document.documentElement.getAttribute('data-modo') === 'oscuro';
+  
   return {
     startOnLoad: false,
     look: 'classic',
-    theme: isDark ? 'dark' : 'default',
+    // 'neutral' es el tema oficial con mejor contraste para fondos claros
+    theme: isDark ? 'dark' : 'neutral',
     themeVariables: {
       background: 'transparent',
       fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
       fontSize: '14px',
-      primaryColor: isDark ? '#1e293b' : '#f1f5f9',
+
+      // --- COLORES DE NODOS PRINCIPALES (Rectángulos, Rombos, Círculos) ---
+      primaryColor: isDark ? '#1e293b' : '#f8fafc',
       primaryTextColor: isDark ? '#f8fafc' : '#0f172a',
-      primaryBorderColor: isDark ? '#38bdf8' : '#6366f1',
-      lineColor: isDark ? '#94a3b8' : '#64748b',
+      primaryBorderColor: isDark ? '#38bdf8' : '#64748b',
+
+      // Fondo secundario y terciario para rombos y formas condicionales
+      secondaryColor: isDark ? '#0f172a' : '#f1f5f9',
+      secondaryTextColor: isDark ? '#f8fafc' : '#0f172a',
+      secondaryBorderColor: isDark ? '#38bdf8' : '#64748b',
+      tertiaryColor: isDark ? '#1e293b' : '#ffffff',
+      tertiaryTextColor: isDark ? '#f8fafc' : '#0f172a',
+      tertiaryBorderColor: isDark ? '#38bdf8' : '#64748b',
+
+      // --- LÍNEAS, CONECTORES Y FLECHAS ---
+      lineColor: isDark ? '#94a3b8' : '#475569',
       textColor: isDark ? '#f8fafc' : '#0f172a',
+
+      // --- TEXTOS EN LAS FLECHAS ("Conforme", "No Conforme") ---
+      // Evita los rectángulos blancos duros sobre fondo claro/oscuro
+      labelBoxBkgColor: isDark ? '#0f172a' : '#ffffff',
+      labelBoxBorderColor: isDark ? '#334155' : '#cbd5e1',
+      labelTextColor: isDark ? '#e2e8f0' : '#334155',
+
+      // --- DIAGRAMAS DE SECUENCIA ---
+      actorBkg: isDark ? '#1e293b' : '#f8fafc',
+      actorBorder: isDark ? '#38bdf8' : '#64748b',
       actorTextColor: isDark ? '#f8fafc' : '#0f172a',
-      actorLineColor: isDark ? '#38bdf8' : '#6366f1',
+      actorLineColor: isDark ? '#94a3b8' : '#475569',
       signalColor: isDark ? '#f8fafc' : '#0f172a',
       signalTextColor: isDark ? '#f8fafc' : '#0f172a',
-      labelBoxBkgColor: isDark ? '#1e293b' : '#f8fafc',
-      labelBoxBorderColor: isDark ? '#38bdf8' : '#6366f1',
-      labelTextColor: isDark ? '#f8fafc' : '#0f172a',
-      loopTextColor: isDark ? '#f8fafc' : '#0f172a',
+
+      // --- NOTAS Y ADVERTENCIAS ---
       noteBorderColor: isDark ? '#f59e0b' : '#d97706',
-      noteBkgColor: isDark ? '#78350f' : '#fef3c7',
-      noteTextColor: isDark ? '#fef3c7' : '#78350f',
+      noteBkgColor: isDark ? '#451a03' : '#fef3c7',
+      noteTextColor: isDark ? '#fef3c7' : '#92400e',
+
+      // --- GANTT ---
       taskBorderColor: isDark ? '#38bdf8' : '#6366f1',
       taskBkgColor: isDark ? '#1e293b' : '#e2e8f0',
       taskTextColor: isDark ? '#f8fafc' : '#0f172a',
@@ -39,10 +63,10 @@ function getMermaidConfig(): MermaidConfig {
     },
     flowchart: {
       htmlLabels: true,
-      padding: 10,
-      nodeSpacing: 35,
-      rankSpacing: 35,
-      curve: 'linear'
+      padding: 12,
+      nodeSpacing: 40,
+      rankSpacing: 40,
+      curve: 'basis'
     },
     gantt: {
       useWidth: 1500,
@@ -287,19 +311,25 @@ export async function renderMermaid(forceReRender = false) {
         console.error('Error renderizando Gantt:', err);
       }
     } else {
-      const tempDiv = document.createElement('div');
-      tempDiv.className = 'mermaid-native';
-      tempDiv.textContent = cleanCode;
-      tempDiv.dataset.sourceCode = code;
-      item.replaceWith(tempDiv);
-      standardNodes.push({
-        el: tempDiv,
-        layout: parsedLayout,
-        width: parsedWidth,
-        maxWidth: parsedMaxWidth,
-        height: parsedHeight,
-        rawCode: code
-      });
+      // En el bloque 'else' (diagramas estándar: flowchart, sequence, etc.)
+    const isDark = document.documentElement.getAttribute('data-modo') === 'oscuro';
+    const directivaTema = `%%{init: { "theme": "${isDark ? 'dark' : 'neutral'}" } }%%\n`;
+    const finalCode = directivaTema + cleanCode;
+
+    const tempDiv = document.createElement('div');
+    tempDiv.className = 'mermaid-native';
+    tempDiv.textContent = finalCode;
+    tempDiv.dataset.sourceCode = code; // guardamos el original
+    item.replaceWith(tempDiv);
+    
+    standardNodes.push({
+      el: tempDiv,
+      layout: parsedLayout,
+      width: parsedWidth,
+      maxWidth: parsedMaxWidth,
+      height: parsedHeight,
+      rawCode: code
+    });
     }
   }
 
@@ -308,25 +338,30 @@ export async function renderMermaid(forceReRender = false) {
       await mermaid.run({ nodes: standardNodes.map((n) => n.el) });
       const currentMode = document.documentElement.getAttribute('data-modo') || 'oscuro';
 
-      standardNodes.forEach(({ el, layout, width, maxWidth, height, rawCode }) => {
-        const svgEl = el.querySelector('svg') as SVGElement | null;
-        if (svgEl) {
-          if (width) svgEl.style.setProperty('width', width, 'important');
-          if (maxWidth) svgEl.style.setProperty('max-width', maxWidth, 'important');
-          if (height) svgEl.style.setProperty('max-height', height, 'important');
-        }
+      // En src/utils/mermaidViewer.ts (dentro del forEach de standardNodes)
+standardNodes.forEach(({ el, layout, width, maxWidth, height, rawCode }) => {
+  const svgEl = el.querySelector('svg') as SVGElement | null;
+  if (svgEl) {
+    if (width) {
+      svgEl.style.setProperty('width', width, 'important');
+      // Si el usuario especificó un ancho, no dejamos que se comprima
+      svgEl.style.setProperty('min-width', width, 'important');
+    }
+    if (maxWidth) svgEl.style.setProperty('max-width', maxWidth, 'important');
+    if (height) svgEl.style.setProperty('max-height', height, 'important');
+  }
 
-        const wrapper = buildWrapperStructure(svgEl ? svgEl.outerHTML : '');
-        wrapper.dataset.sourceCode = rawCode;
-        wrapper.dataset.layout = layout;
-        if (width || maxWidth || height) {
-          wrapper.classList.add('has-custom-width');
-        }
+  const wrapper = buildWrapperStructure(svgEl ? svgEl.outerHTML : '');
+  wrapper.dataset.sourceCode = rawCode;
+  wrapper.dataset.layout = layout;
+  if (width || maxWidth || height) {
+    wrapper.classList.add('has-custom-width');
+  }
 
-        el.replaceWith(wrapper);
-        attachMermaidControls(wrapper, rawCode);
-        wrapper.dataset.renderedMode = currentMode;
-      });
+  el.replaceWith(wrapper);
+  attachMermaidControls(wrapper, rawCode);
+  wrapper.dataset.renderedMode = currentMode;
+});
     } catch (error) {
       console.error('Error en mermaid.run():', error);
     }

@@ -1,0 +1,303 @@
+---
+// src/components/ReportCover.astro
+export interface Integrante {
+  nombre: string;
+  codigo?: string;
+  rol?: string;
+}
+
+export interface CoverData {
+  title: string;
+  subtitulo?: string;
+  institucion?: string;
+  facultad?: string;
+  escuela?: string;
+  logo?: string;
+  author?: string;
+  codigo?: string;
+  docente?: string;
+  ciudad?: string;
+  anio?: string | number;
+  integrantes?: Integrante[];
+}
+
+interface Props {
+  data: CoverData;
+}
+
+const { data } = Astro.props;
+const institucion = data.institucion || "UNIVERSIDAD NACIONAL DE INGENIERÍA";
+const facultad = data.facultad || "FACULTAD DE INGENIERÍA MECÁNICA";
+const escuela = data.escuela || "Escuela Profesional de Ingeniería Mecánica";
+const ciudad = data.ciudad || "LIMA-PERÚ";
+const anio = data.anio || new Date().getFullYear();
+const logoSrc = data.logo || "/assets/logos/logo-uni.png";
+---
+
+<div class="report-cover-page">
+  <!-- 1. Membrete Superior -->
+  <header class="cover-header">
+    <h1 class="inst-title">{institucion}</h1>
+    {facultad && <h2 class="inst-subtitle">{facultad}</h2>}
+    {escuela && <h3 class="inst-career">{escuela}</h3>}
+  </header>
+
+  <!-- 2. Escudo / Logo Central -->
+  <div class="cover-logo-container">
+    {logoSrc && (
+      <img src={logoSrc} alt={`Logo ${institucion}`} class="cover-logo-img" />
+    )}
+  </div>
+
+  <!-- 3. Título del Informe -->
+  <div class="cover-report-title-box">
+    <h2 class="report-main-title">{data.title}</h2>
+    {data.subtitulo && <p class="report-sub-title">{data.subtitulo}</p>}
+  </div>
+
+  <!-- 4. Cuadro de Autores / Integrantes / Docente -->
+  <div class="cover-metadata-body">
+    {data.integrantes && data.integrantes.length > 0 ? (
+      <div class="meta-section">
+        <span class="meta-section-label">INTEGRANTES</span>
+        <div class="integrantes-list">
+          {data.integrantes.map((m: Integrante) => (
+            <div class="integrante-item">
+              <span class="integrante-name">{m.nombre}</span>
+              {m.codigo && <span class="integrante-code">{m.codigo}</span>}
+            </div>
+          ))}
+        </div>
+      </div>
+    ) : (
+      <>
+        {data.author && (
+          <div class="meta-section">
+            <span class="meta-section-label">AUTOR / PRACTICANTE</span>
+            <p class="meta-section-val author-val">{data.author}</p>
+          </div>
+        )}
+        {data.codigo && (
+          <div class="meta-section">
+            <span class="meta-section-label">CÓDIGO</span>
+            <p class="meta-section-val">{data.codigo}</p>
+          </div>
+        )}
+      </>
+    )}
+
+    {data.docente && (
+      <div class="meta-section">
+        <span class="meta-section-label">DOCENTE</span>
+        <p class="meta-section-val">{data.docente}</p>
+      </div>
+    )}
+
+    <div class="meta-section inst-footer-ref">
+      <span class="meta-section-label">INSTITUCIÓN</span>
+      <p class="meta-section-val">{institucion}</p>
+    </div>
+  </div>
+
+  <!-- 5. Pie de Carátula (Lugar y Año) -->
+  <footer class="cover-footer">
+    <span class="city-name">{ciudad}</span>
+    <span class="year-val">{anio}</span>
+  </footer>
+</div>
+
+<style>
+  .report-cover-page {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    min-height: 85vh;
+    padding: 3rem 2rem 2rem 2rem;
+    margin-bottom: 4rem;
+    box-sizing: border-box;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    color: var(--text-color);
+  }
+
+  .cover-header {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .inst-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0;
+    color: var(--text-color);
+    line-height: 1.3;
+  }
+  .inst-subtitle {
+    font-size: 1.05rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin: 0;
+    opacity: 0.9;
+    color: var(--text-color);
+  }
+  .inst-career {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0;
+    opacity: 0.8;
+  }
+
+  /* Contenedor del escudo: anula el marco interactivo de Base.astro */
+  .cover-logo-container {
+    margin: 2rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .cover-logo-container :global(.img-interactive-wrapper) {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  .cover-logo-container :global(.img-toolbar) {
+    display: none !important;
+  }
+
+  /* Escudo limpio sin sombras de caja ni filtros */
+  .cover-logo-img {
+    width: 160px;
+    height: 160px;
+    object-fit: contain;
+    filter: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+  }
+
+  html[data-modo="claro"] .cover-logo-img {
+    mix-blend-mode: multiply;
+  }
+
+  .cover-report-title-box {
+    margin: 1.5rem 0 2rem 0;
+    max-width: 90%;
+  }
+  .report-main-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    line-height: 1.4;
+    letter-spacing: 0.04em;
+    margin: 0 0 0.5rem 0;
+    color: var(--text-color);
+  }
+  .report-sub-title {
+    font-size: 0.95rem;
+    opacity: 0.75;
+    margin: 0;
+    font-style: italic;
+  }
+
+  .cover-metadata-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    max-width: 480px;
+  }
+  .meta-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .meta-section-label {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.65;
+  }
+  .meta-section-val {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0;
+  }
+  .author-val {
+    text-transform: uppercase;
+    font-size: 1rem;
+  }
+
+  .integrantes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-top: 0.2rem;
+  }
+  .integrante-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    border-bottom: 1px dotted var(--border-color);
+    padding-bottom: 0.2rem;
+  }
+  .integrante-name {
+    font-weight: 600;
+    text-align: left;
+  }
+  .integrante-code {
+    opacity: 0.8;
+    font-family: monospace;
+  }
+
+  .inst-footer-ref {
+    margin-top: 0.5rem;
+  }
+
+  .cover-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-top: 2rem;
+  }
+
+  @media print {
+    .report-cover-page {
+      border: none !important;
+      box-shadow: none !important;
+      background: transparent !important;
+      color: #000000 !important;
+      min-height: 98vh !important;
+      height: 98vh !important;
+      padding: 1.5cm 1cm !important;
+      margin: 0 !important;
+      page-break-after: always !important;
+      break-after: page !important;
+    }
+    .inst-title, .inst-subtitle, .report-main-title {
+      color: #000000 !important;
+    }
+    .cover-logo-img {
+      filter: none !important;
+      box-shadow: none !important;
+    }
+  }
+</style>
