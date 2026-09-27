@@ -19,43 +19,74 @@ export const GET: APIRoute = async () => {
 
   const nodes: Node[] = [];
   const links: Link[] = [];
-  const docIds = new Set<string>();
+  const docPathMap = new Map<string, string>();
 
-  // 1. Crear nodos
+  // 1. Crear nodos y mapa de rutas canónicas
   docs.forEach((doc: CollectionEntry<'docs'>) => {
-    const normalizedId = `/docs/${doc.id.replace(/\\/g, '/')}`;
-    const parts = doc.id.replace(/\\/g, '/').split('/');
+    const cleanId = doc.id.replace(/\\/g, '/').replace(/\.(md|mdx)$/, '');
+    const canonicalPath = `/docs/${cleanId}`;
+    const parts = cleanId.split('/');
     const group = parts.length > 1 ? parts[0] : 'General';
 
-    docIds.add(normalizedId);
+    docPathMap.set(canonicalPath.toLowerCase(), canonicalPath);
+    docPathMap.set(cleanId.toLowerCase(), canonicalPath);
+    if (doc.data.title) {
+      docPathMap.set(doc.data.title.toLowerCase(), canonicalPath);
+    }
+
     nodes.push({
-      id: normalizedId,
+      id: canonicalPath,
       name: doc.data.title || parts[parts.length - 1],
       group
     });
   });
 
-  // 2. Extraer conexiones internas desde el markdown
-  docs.forEach((doc: CollectionEntry<'docs'>) => {
-    const sourceId = `/docs/${doc.id.replace(/\\/g, '/')}`;
-    const body = doc.body || '';
+  // Regex para limpiar código y fórmulas antes de buscar enlaces
+  const codeBlockRegex = /```[\s\S]*?```/g;
+  const inlineCodeRegex = /`[^`]*?`/g;
+  const mathBlockRegex = /\$\$[\s\S]*?\$\$/g;
+  const inlineMathRegex = /\$[^$]*?\$/g;
 
-    // Regex para enlaces estándar [texto](/docs/ruta) y tipo wiki [[ruta]]
-    const mdLinkRegex = /\[.*?\]\((\/docs\/[^)#]+)(?:#[^)]+)?\)/g;
-    const wikiLinkRegex = /\[\[([a-zA-Z0-9_\-\/]+)(?:\Vert{}.*?)?\]\]/g;
+  const mdLinkRegex = /\[(?:[^\]]+)\]\(([^)#\s]+)(?:#[^)]*)?\)/g;
+  const wikiLinkRegex = /\[\[([a-zA-Z0-9_\-\/]+)(?:\Vert{}.*?)?\]\]/g;
+
+  // 2. Extraer conexiones internas válidas
+  docs.forEach((doc: CollectionEntry<'docs'>) => {
+    const cleanSourceId = doc.id.replace(/\\/g, '/').replace(/\.(md|mdx)$/, '');
+    const sourceId = `/docs/${cleanSourceId}`;
+    let rawBody = doc.body || '';
+
+    // Limpieza de código y matemáticas
+    const cleanBody = rawBody
+      .replace(codeBlockRegex, '')
+      .replace(inlineCodeRegex, '')
+      .replace(mathBlockRegex, '')
+      .replace(inlineMathRegex, '');
+
+    const addedTargets = new Set<string>();
 
     let match: RegExpExecArray | null;
-    while ((match = mdLinkRegex.exec(body)) !== null) {
-      const targetUrl = match[1];
-      if (docIds.has(targetUrl) && targetUrl !== sourceId) {
-        links.push({ source: sourceId, target: targetUrl });
+
+    // Enlaces Markdown [texto](/docs/ruta)
+    while ((match = mdLinkRegex.exec(cleanBody)) !== null) {
+      let raw = match[1].trim().toLowerCase();
+      raw = raw.startsWith('/docs/') ? raw : `/docs/${raw}`;
+      raw = raw.replace(/\/$/, '');
+
+      const targetPath = docPathMap.get(raw);
+      if (targetPath && targetPath !== sourceId && !addedTargets.has(targetPath)) {
+        links.push({ source: sourceId, target: targetPath });
+        addedTargets.add(targetPath);
       }
     }
 
-    while ((match = wikiLinkRegex.exec(body)) !== null) {
-      const targetUrl = `/docs/${match[1].replace(/\\/g, '/')}`;
-      if (docIds.has(targetUrl) && targetUrl !== sourceId) {
-        links.push({ source: sourceId, target: targetUrl });
+    // WikiLinks [[ruta]] o [[Título]]
+    while ((match = wikiLinkRegex.exec(cleanBody)) !== null) {
+      const slug = match[1].trim().toLowerCase().replace(/^\/docs\//, '').replace(/\/$/, '');
+      const targetPath = docPathMap.get(slug) || docPathMap.get(`/docs/${slug}`);
+      if (targetPath && targetPath !== sourceId && !addedTargets.has(targetPath)) {
+        links.push({ source: sourceId, target: targetPath });
+        addedTargets.add(targetPath);
       }
     }
   });

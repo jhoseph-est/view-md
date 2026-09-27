@@ -31,19 +31,35 @@ const currentDoc = allDocs.find((doc: CollectionEntry<'docs'>) => {
 
 const docBody = currentDoc?.body || '';
 
-// 1. Enlaces Salientes (Outlinks): Extraídos automáticamente del texto Markdown actual
+// Helper para limpiar bloques de código y expresiones que causan falsos positivos
+function sanitizeBody(rawText: string): string {
+  return rawText
+    .replace(/```[\s\S]*?```/g, '') // Quitar bloques ```...```
+    .replace(/`[^`]*?`/g, '')       // Quitar código en línea `...`
+    .replace(/\$\$[\s\S]*?\$\$/g, '') // Quitar bloques KaTeX $$...$$
+    .replace(/\$[^$]*?\$/g, '');     // Quitar KaTeX en línea $...$
+}
+
+const cleanCurrentDocBody = sanitizeBody(docBody);
+
+// 1. Enlaces Salientes (Outlinks): Extraídos con sintaxis explícita
 const outlinks: { title: string; url: string }[] = [];
 const seenOutlinks = new Set<string>();
 
-if (docBody) {
-  const mdLinkRegex = /\[.*?\]\((\/docs\/[^)#]+)(?:#[^)]+)?\)/g;
-  const wikiLinkRegex = /\[\[([a-zA-Z0-9_\-\/]+)(?:\#.*?)?(?:\Vert{}.*?)?\]\]/g;
+if (cleanCurrentDocBody) {
+  const mdLinkRegex = /\[(?:[^\]]+)\]\(([^)#\s]+)(?:#[^)]*)?\)/g;
+  const wikiLinkRegex = /\[\[([a-zA-Z0-9_\-\/]+)(?:\Vert{}.*?)?\]\]/g;
 
   let match: RegExpExecArray | null;
-  while ((match = mdLinkRegex.exec(docBody)) !== null) {
-    const targetUrl = match[1].replace(/\/$/, '');
+  while ((match = mdLinkRegex.exec(cleanCurrentDocBody)) !== null) {
+    const rawTarget = match[1].trim().replace(/\/$/, '');
+    const targetUrl = rawTarget.startsWith('/docs/') ? rawTarget : `/docs/${rawTarget}`;
+    
     if (targetUrl !== currentPath && !seenOutlinks.has(targetUrl)) {
-      const targetDoc = allDocs.find((d: CollectionEntry<'docs'>) => `/docs/${d.id.replace(/\\/g, '/')}` === targetUrl);
+      const targetDoc = allDocs.find((d: CollectionEntry<'docs'>) => {
+        const p = `/docs/${d.id.replace(/\\/g, '/').replace(/\.(md|mdx)$/, '')}`;
+        return p.toLowerCase() === targetUrl.toLowerCase();
+      });
       if (targetDoc) {
         seenOutlinks.add(targetUrl);
         outlinks.push({ title: targetDoc.data.title, url: targetUrl });
@@ -51,10 +67,16 @@ if (docBody) {
     }
   }
 
-  while ((match = wikiLinkRegex.exec(docBody)) !== null) {
-    const targetUrl = `/docs/${match[1].replace(/\\/g, '/')}`.replace(/\/$/, '');
+  while ((match = wikiLinkRegex.exec(cleanCurrentDocBody)) !== null) {
+    const cleanSlug = match[1].replace(/\\/g, '/').replace(/^\/docs\//, '').replace(/\/$/, '');
+    const targetUrl = `/docs/${cleanSlug}`;
+    
     if (targetUrl !== currentPath && !seenOutlinks.has(targetUrl)) {
-      const targetDoc = allDocs.find((d: CollectionEntry<'docs'>) => `/docs/${d.id.replace(/\\/g, '/')}` === targetUrl);
+      const targetDoc = allDocs.find((d: CollectionEntry<'docs'>) => {
+        const idPath = d.id.replace(/\\/g, '/').replace(/\.(md|mdx)$/, '');
+        return idPath.toLowerCase() === cleanSlug.toLowerCase() || 
+               d.data.title.toLowerCase() === cleanSlug.toLowerCase();
+      });
       if (targetDoc) {
         seenOutlinks.add(targetUrl);
         outlinks.push({ title: targetDoc.data.title, url: targetUrl });
@@ -63,17 +85,41 @@ if (docBody) {
   }
 }
 
-// 2. Backlinks automáticos (documentos que enlazan hacia este apunte)
+// 2. Backlinks automáticos (SOLO enlaces reales: [texto](/docs/...) o [[wiki]])
 const backlinks: { title: string; url: string }[] = [];
-allDocs.forEach((doc: CollectionEntry<'docs'>) => {
-  const docPath = `/docs/${doc.id.replace(/\\/g, '/')}`;
-  if (docPath !== currentPath && doc.body) {
-    if (doc.body.includes(currentPath) || (frontmatter.title && doc.body.includes(frontmatter.title))) {
-      backlinks.push({
-        title: doc.data.title,
-        url: docPath
-      });
-    }
+const currentCleanSlug = currentPath.replace(/^\/docs\//, '').toLowerCase();
+const currentDocTitle = (frontmatter.title || '').trim().toLowerCase();
+
+allDocs.forEach((otherDoc: CollectionEntry<'docs'>) => {
+  const otherPath = `/docs/${otherDoc.id.replace(/\\/g, '/').replace(/\.(md\vert{}mdx)$/, '')}`;
+  if (otherPath.toLowerCase() === currentPath.toLowerCase() || !otherDoc.body) return;
+
+  // Limpiamos bloques de código y fórmulas para evitar falsos positivos
+  const cleanBody = sanitizeBody(otherDoc.body).toLowerCase();
+
+  // Búsqueda segura por subcadenas (sin RegExp dinámico para no romper con caracteres como +, (), [], etc.)
+  const hasMarkdownLink = 
+    cleanBody.includes(`(/docs/${currentCleanSlug})`) || 
+    cleanBody.includes(`(${currentCleanSlug})`);
+
+  const hasWikiLinkBySlug = 
+    cleanBody.includes(`[[${currentCleanSlug}]]`) || 
+    cleanBody.includes(`[[${currentCleanSlug}|`) ||
+    cleanBody.includes(`[[/docs/${currentCleanSlug}]]`) ||
+    cleanBody.includes(`[[/docs/${currentCleanSlug}|`);
+
+  const hasWikiLinkByTitle = currentDocTitle ? (
+    cleanBody.includes(`[[${currentDocTitle}]]`) || 
+    cleanBody.includes(`[[${currentDocTitle}|`)
+  ) : false;
+
+  const isBacklink = hasMarkdownLink || hasWikiLinkBySlug || hasWikiLinkByTitle;
+
+  if (isBacklink) {
+    backlinks.push({
+      title: otherDoc.data.title,
+      url: otherPath
+    });
   }
 });
 
