@@ -1,3 +1,4 @@
+// astro.config.mjs
 import { defineConfig } from 'astro/config';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
@@ -9,15 +10,16 @@ export default defineConfig({
   output: 'static',
   vite: {
     build: {
-      chunkSizeWarningLimit: 2000,
+      chunkSizeWarningLimit: 5000,
       rollupOptions: {
         output: {
           manualChunks(id) {
-            // Aislamiento estricto de librerías pesadas
-            if (id.includes('node_modules/mermaid')) return 'vendor-mermaid';
-            if (id.includes('node_modules/force-graph') || id.includes('node_modules/d3-force-3d')) return 'vendor-graph';
-            if (id.includes('node_modules/reveal.js')) return 'vendor-reveal';
-            if (id.includes('node_modules/katex')) return 'vendor-katex';
+            if (id.includes('node_modules')) {
+              if (id.includes('mermaid')) return 'vendor-mermaid';
+              if (id.includes('force-graph') || id.includes('d3-force-3d') || id.includes('d3')) return 'vendor-graph';
+              if (id.includes('reveal.js')) return 'vendor-reveal';
+              if (id.includes('katex')) return 'vendor-katex';
+            }
           },
         },
       },
@@ -49,5 +51,32 @@ export default defineConfig({
       ],
     ],
   },
-  integrations: [mdx()],
+  integrations: [
+    mdx({
+      syntaxHighlight: 'shiki',
+      shikiConfig: {
+        theme: 'material-theme-palenight',
+        wrap: true,
+      },
+      remarkPlugins: [
+        remarkMath,
+        remarkObsidianCallout,
+        [
+          remarkWikiLink,
+          {
+            pathFormat: 'absolute',
+            hrefTemplate: (permalink) => `/docs/${permalink}`,
+          },
+        ],
+      ],
+      rehypePlugins: [
+        [
+          rehypeKatex,
+          {
+            strict: false,
+          },
+        ],
+      ],
+    }),
+  ],
 });
