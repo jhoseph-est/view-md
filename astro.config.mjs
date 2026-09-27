@@ -1,5 +1,6 @@
 // astro.config.mjs
 import { defineConfig } from 'astro/config';
+import { unified } from '@astrojs/markdown-remark';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import mdx from '@astrojs/mdx';
@@ -31,33 +32,7 @@ export default defineConfig({
       theme: 'material-theme-palenight',
       wrap: true,
     },
-    remarkPlugins: [
-      remarkMath,
-      remarkObsidianCallout,
-      [
-        remarkWikiLink,
-        {
-          pathFormat: 'absolute',
-          hrefTemplate: (permalink) => `/docs/${permalink}`,
-        },
-      ],
-    ],
-    rehypePlugins: [
-      [
-        rehypeKatex,
-        {
-          strict: false,
-        },
-      ],
-    ],
-  },
-  integrations: [
-    mdx({
-      syntaxHighlight: 'shiki',
-      shikiConfig: {
-        theme: 'material-theme-palenight',
-        wrap: true,
-      },
+    processor: unified({
       remarkPlugins: [
         remarkMath,
         remarkObsidianCallout,
@@ -78,5 +53,6 @@ export default defineConfig({
         ],
       ],
     }),
-  ],
+  },
+  integrations: [mdx()],
 });
