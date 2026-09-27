@@ -25,7 +25,7 @@ Puedes enlazar imágenes externas o locales guardadas en tu carpeta `public/`:
 
 --
 
-![](/assets/apuntes/imagen.png)
+![algo](/assets/apuntes/imagen.png)
 
 ## 2. Imágenes con Tamaño y Centrado Personalizado
 

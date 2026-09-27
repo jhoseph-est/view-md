@@ -12,9 +12,9 @@ interface Props {
 
 const { headings = [] } = Astro.props;
 
-// Filtramos títulos de niveles 1 a 3 con tipado estricto
+// Aceptamos todos los niveles de encabezados (del 1 al 6)
 const filteredHeadings: TocHeading[] = headings.filter(
-  (h: TocHeading) => h.depth >= 1 && h.depth <= 3
+  (h: TocHeading) => h.depth >= 1 && h.depth <= 6
 );
 ---
 
@@ -72,19 +72,37 @@ const filteredHeadings: TocHeading[] = headings.filter(
     width: 100%;
   }
 
+  /* Sangrías y jerarquía visual formal para todos los niveles */
   .formal-toc-item.depth-1 {
     font-weight: 700;
     margin-top: 0.5rem;
   }
   .formal-toc-item.depth-2 {
-    padding-left: 1.5rem;
-    font-weight: 500;
+    padding-left: 1.27cm;
+    font-weight: 600;
     font-style: italic;
   }
   .formal-toc-item.depth-3 {
-    padding-left: 3rem;
+    padding-left: 2.54cm;
+    font-weight: 500;
+    opacity: 0.95;
+  }
+  .formal-toc-item.depth-4 {
+    padding-left: 3.81cm;
     font-weight: 400;
+    font-style: italic;
     opacity: 0.9;
+  }
+  .formal-toc-item.depth-5 {
+    padding-left: 5.08cm;
+    font-weight: 400;
+    opacity: 0.85;
+  }
+  .formal-toc-item.depth-6 {
+    padding-left: 6.35cm;
+    font-weight: 400;
+    font-style: italic;
+    opacity: 0.8;
   }
 
   .formal-toc-link {
@@ -133,9 +151,7 @@ const filteredHeadings: TocHeading[] = headings.filter(
       page-break-after: always !important;
       break-after: page !important;
     }
-    .report-toc-title {
-      color: #000000 !important;
-    }
+    .report-toc-title,
     .formal-toc-link {
       color: #000000 !important;
     }

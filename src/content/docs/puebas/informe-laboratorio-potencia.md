@@ -100,6 +100,8 @@ La caída del rendimiento por encima del 100% de carga refleja el impacto cuadr�
 * Se demostró experimentalmente que la corrección del factor de potencia mediante capacitores en paralelo reduce la corriente total demandada a la red eléctrica en un 18.5%, sin alterar el par mecánico útil entregado por la máquina.
 * Los parámetros del circuito equivalente obtenidos por el método de rotor bloqueado permitieron predecir la corriente de arranque con un margen de error menor al 3.2% respecto a la lectura del osciloscopio digital.
 * Se recomienda para ensayos futuros incorporar un registrador térmico termográfico para monitorear el calentamiento diferencial entre el paquete estatórico y los cojinetes mecánicos.
+![algo](/assets/apuntes/imagen.png)
+
 
 # Referencias
 

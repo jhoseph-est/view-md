@@ -8,10 +8,6 @@ interface Heading {
   text: string;
 }
 
-interface TocItem extends Heading {
-  children: TocItem[];
-}
-
 interface Props {
   headings?: Heading[];
   frontmatter?: any;
@@ -94,10 +90,8 @@ allDocs.forEach((otherDoc: CollectionEntry<'docs'>) => {
   const otherPath = `/docs/${otherDoc.id.replace(/\\/g, '/').replace(/\.(md\vert{}mdx)$/, '')}`;
   if (otherPath.toLowerCase() === currentPath.toLowerCase() || !otherDoc.body) return;
 
-  // Limpiamos bloques de código y fórmulas para evitar falsos positivos
   const cleanBody = sanitizeBody(otherDoc.body).toLowerCase();
 
-  // Búsqueda segura por subcadenas (sin RegExp dinámico para no romper con caracteres como +, (), [], etc.)
   const hasMarkdownLink = 
     cleanBody.includes(`(/docs/${currentCleanSlug})`) || 
     cleanBody.includes(`(${currentCleanSlug})`);
@@ -123,54 +117,22 @@ allDocs.forEach((otherDoc: CollectionEntry<'docs'>) => {
   }
 });
 
-function buildToc(flatHeadings: Heading[]): TocItem[] {
-  const toc: TocItem[] = [];
-  const parentStack: TocItem[] = [];
-  if (!Array.isArray(flatHeadings)) return toc;
-
-  flatHeadings.forEach((h) => {
-    if (!h || !h.slug || !h.text) return;
-    const item: TocItem = { ...h, children: [] };
-    while (parentStack.length > 0 && parentStack[parentStack.length - 1].depth >= item.depth) {
-      parentStack.pop();
-    }
-    if (parentStack.length === 0) {
-      toc.push(item);
-    } else {
-      parentStack[parentStack.length - 1].children.push(item);
-    }
-    parentStack.push(item);
-  });
-  return toc;
-}
-
-const tocTree = buildToc(headings);
+// Aceptamos todos los encabezados válidos del 1 al 6
+const allHeadings = headings.filter((h: Heading) => Boolean(h && h.slug && h.text && h.depth >= 1 && h.depth <= 6));
 ---
 
 <!-- 1. BLOQUE INDEPENDIENTE: ÍNDICE (2/3 SUPERIOR) -->
 <aside class="independent-panel top-toc" id="sec-toc" aria-label="Índice de Contenidos">
   <div class="panel-header">ÍNDICE</div>
   <div class="panel-body" id="toc-body">
-    {tocTree.length > 0 ? (
+    {allHeadings.length > 0 ? (
       <ul class="r-toc-list">
-        {tocTree.map((h1) => (
-          <li>
-            <a href={`#${h1.slug}`} class="r-toc-item" data-slug={h1.slug} title={h1.text}>
+        {allHeadings.map((h: Heading) => (
+          <li class={`r-toc-entry depth-${h.depth}`}>
+            <a href={`#${h.slug}`} class="r-toc-item" data-slug={h.slug} title={h.text}>
               <span class="toc-hash">#</span>
-              <span class="text-truncate">{h1.text}</span>
+              <span class="text-truncate">{h.text}</span>
             </a>
-            {h1.children.length > 0 && (
-              <ul class="r-toc-nested">
-                {h1.children.map((h2) => (
-                  <li>
-                    <a href={`#${h2.slug}`} class="r-toc-item sub" data-slug={h2.slug} title={h2.text}>
-                      <span class="toc-hash">#</span>
-                      <span class="text-truncate">{h2.text}</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            )}
           </li>
         ))}
       </ul>
@@ -420,8 +382,19 @@ const tocTree = buildToc(headings);
     gap: 0.5rem;
   }
 
-  .r-toc-list, .r-toc-nested { list-style: none !important; padding: 0 !important; margin: 0 !important; }
-  .r-toc-nested { margin-left: 0.6rem !important; border-left: 1px solid var(--border-color); padding-left: 0.3rem !important; }
+  .r-toc-list { 
+    list-style: none !important; 
+    padding: 0 !important; 
+    margin: 0 !important; 
+  }
+
+  /* Sangrías y jerarquía visual del H1 al H6 */
+  .r-toc-entry.depth-1 { padding-left: 0; font-weight: 600; }
+  .r-toc-entry.depth-2 { padding-left: 0.6rem; }
+  .r-toc-entry.depth-3 { padding-left: 1.1rem; opacity: 0.9; }
+  .r-toc-entry.depth-4 { padding-left: 1.6rem; opacity: 0.85; font-size: 0.78rem; }
+  .r-toc-entry.depth-5 { padding-left: 2.1rem; opacity: 0.8; font-size: 0.75rem; }
+  .r-toc-entry.depth-6 { padding-left: 2.6rem; opacity: 0.75; font-size: 0.72rem; }
   
   .r-toc-item {
     display: flex;
@@ -431,7 +404,7 @@ const tocTree = buildToc(headings);
     color: var(--text-color);
     text-decoration: none;
     font-size: 0.8rem;
-    opacity: 0.65;
+    opacity: 0.7;
     border-radius: 4px;
     transition: all 0.15s ease;
   }
