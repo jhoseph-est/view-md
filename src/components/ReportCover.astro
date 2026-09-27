@@ -158,7 +158,7 @@ const logoSrc = data.logo || "/assets/logos/logo-uni.png";
 
   /* Contenedor del escudo: anula el marco interactivo de Base.astro */
   .cover-logo-container {
-    margin: 2rem 0;
+    margin: 2rem 0; /* <-- CAMBIA ESTE 2rem a 1rem o 0.5rem para reducir el espacio del logo */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -179,8 +179,8 @@ const logoSrc = data.logo || "/assets/logos/logo-uni.png";
 
   /* Escudo limpio sin sombras de caja ni filtros */
   .cover-logo-img {
-    width: 160px;
-    height: 160px;
+    width: 160px;  /* <-- PRUEBA BAJAR ESTO (ej. 120px o 100px) */
+    height: 160px; /* <-- PRUEBA BAJAR ESTO (ej. 120px o 100px) */
     object-fit: contain;
     filter: none !important;
     box-shadow: none !important;
@@ -281,17 +281,16 @@ const logoSrc = data.logo || "/assets/logos/logo-uni.png";
 
   @media print {
     .report-cover-page {
-      border: none !important;
-      box-shadow: none !important;
-      background: transparent !important;
-      color: #000000 !important;
-      min-height: 98vh !important;
-      height: 98vh !important;
-      padding: 1.5cm 1cm !important;
-      margin: 0 !important;
-      page-break-after: always !important;
-      break-after: page !important;
-    }
+    page-break-after: always !important;
+    break-after: page !important;
+    min-height: 100vh !important;
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
     .inst-title, .inst-subtitle, .report-main-title {
       color: #000000 !important;
     }

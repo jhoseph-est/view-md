@@ -12,9 +12,9 @@ interface Props {
 
 const { headings = [] } = Astro.props;
 
-// Aceptamos todos los niveles de encabezados (del 1 al 6)
+// Aceptamos todos los niveles de encabezados
 const filteredHeadings: TocHeading[] = headings.filter(
-  (h: TocHeading) => h.depth >= 1 && h.depth <= 6
+  (h: TocHeading) => h && h.slug && h.text && h.depth >= 1 && h.depth <= 6
 );
 ---
 
@@ -22,19 +22,53 @@ const filteredHeadings: TocHeading[] = headings.filter(
   <h2 class="report-toc-title">ÍNDICE</h2>
 
   <ul class="formal-toc-list">
-    {filteredHeadings.map((h: TocHeading, idx: number) => (
+    {filteredHeadings.map((h: TocHeading) => (
       <li class={`formal-toc-item depth-${h.depth}`}>
         <a href={`#${h.slug}`} class="formal-toc-link">
           <span class="toc-text">{h.text}</span>
           <span class="toc-dots"></span>
           <span class="toc-page-num" data-heading-slug={h.slug}>
-            {idx + 1}
+            —
           </span>
         </a>
       </li>
     ))}
   </ul>
 </div>
+
+<script>
+  function calculateRealPrintPages() {
+    const pageNumElements = document.querySelectorAll<HTMLElement>('.toc-page-num');
+    if (!pageNumElements.length) return;
+
+    // Altura aproximada de una página A4/Letter con márgenes de 2.54cm
+    // A 96 DPI: 11 pulgadas = 1056px, menos márgenes (~195px) = ~860px útiles
+    const PAGE_HEIGHT_PX = 860;
+    
+    // Offset inicial APA 7:
+    // Portada = Pág. 1, Índice = Pág. 2 -> El cuerpo empieza en la Pág. 3
+    const INITIAL_PAGE_OFFSET = 3;
+
+    const firstHeading = document.querySelector('.markdown-body h1, .markdown-body h2');
+    const startTop = firstHeading ? firstHeading.getBoundingClientRect().top + window.scrollY : 0;
+
+    pageNumElements.forEach((numEl) => {
+      const slug = numEl.getAttribute('data-heading-slug');
+      if (!slug) return;
+      const targetHeading = document.getElementById(slug);
+      if (targetHeading) {
+        const headingTop = targetHeading.getBoundingClientRect().top + window.scrollY;
+        const relativePosition = Math.max(0, headingTop - startTop);
+        const calculatedPage = Math.floor(relativePosition / PAGE_HEIGHT_PX) + INITIAL_PAGE_OFFSET;
+        numEl.textContent = calculatedPage.toString();
+      }
+    });
+  }
+
+  // Ejecutar al cargar la vista y antes de imprimir
+  window.addEventListener('beforeprint', calculateRealPrintPages);
+  document.addEventListener('astro:page-load', calculateRealPrintPages);
+</script>
 
 <style>
   .report-toc-page {
@@ -45,7 +79,6 @@ const filteredHeadings: TocHeading[] = headings.filter(
     border-radius: 0 !important;
     box-shadow: none !important;
     background: transparent !important;
-    background-color: transparent !important;
     color: var(--text-color);
   }
 
@@ -72,38 +105,12 @@ const filteredHeadings: TocHeading[] = headings.filter(
     width: 100%;
   }
 
-  /* Sangrías y jerarquía visual formal para todos los niveles */
-  .formal-toc-item.depth-1 {
-    font-weight: 700;
-    margin-top: 0.5rem;
-  }
-  .formal-toc-item.depth-2 {
-    padding-left: 1.27cm;
-    font-weight: 600;
-    font-style: italic;
-  }
-  .formal-toc-item.depth-3 {
-    padding-left: 2.54cm;
-    font-weight: 500;
-    opacity: 0.95;
-  }
-  .formal-toc-item.depth-4 {
-    padding-left: 3.81cm;
-    font-weight: 400;
-    font-style: italic;
-    opacity: 0.9;
-  }
-  .formal-toc-item.depth-5 {
-    padding-left: 5.08cm;
-    font-weight: 400;
-    opacity: 0.85;
-  }
-  .formal-toc-item.depth-6 {
-    padding-left: 6.35cm;
-    font-weight: 400;
-    font-style: italic;
-    opacity: 0.8;
-  }
+  .formal-toc-item.depth-1 { font-weight: 700; margin-top: 0.5rem; }
+  .formal-toc-item.depth-2 { padding-left: 1.27cm; font-weight: 600; }
+  .formal-toc-item.depth-3 { padding-left: 2.54cm; font-weight: 500; font-style: italic; }
+  .formal-toc-item.depth-4 { padding-left: 3.81cm; opacity: 0.9; }
+  .formal-toc-item.depth-5 { padding-left: 5.08cm; opacity: 0.85; font-style: italic; }
+  .formal-toc-item.depth-6 { padding-left: 6.35cm; opacity: 0.8; }
 
   .formal-toc-link {
     display: flex;
@@ -112,13 +119,6 @@ const filteredHeadings: TocHeading[] = headings.filter(
     text-decoration: none;
     color: var(--text-color);
     font-size: 0.95rem;
-    transition: color 0.15s ease;
-  }
-  .formal-toc-link:hover {
-    color: #8b5cf6;
-  }
-  html[data-modo="claro"] .formal-toc-link:hover {
-    color: #7c3aed;
   }
 
   .toc-text {
@@ -136,25 +136,25 @@ const filteredHeadings: TocHeading[] = headings.filter(
 
   .toc-page-num {
     flex-shrink: 0;
-    font-style: italic;
     font-variant-numeric: tabular-nums;
   }
 
   @media print {
     .report-toc-page {
-      border: none !important;
-      box-shadow: none !important;
-      background: transparent !important;
-      color: #000000 !important;
-      padding: 0 !important;
-      margin: 0 !important;
+      page-break-before: always !important;
+      break-before: page !important;
       page-break-after: always !important;
       break-after: page !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      color: #000000 !important;
     }
+
     .report-toc-title,
     .formal-toc-link {
       color: #000000 !important;
     }
+
     .toc-dots {
       border-bottom-color: #000000 !important;
       opacity: 0.4 !important;
