@@ -1,0 +1,254 @@
+/* ==========================================================
+   REPRODUCTOR DE AUDIO NATIVO (CÁPSULA CON RESPLANDOR/SOMBRA)
+   ========================================================== */
+.main-content audio,
+.reveal audio {
+  display: block !important;
+  width: 100% !important;
+  max-width: 440px !important;
+  height: 44px !important;
+  margin: 1.5rem auto !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  border-radius: 9999px !important;
+  transition: box-shadow 0.3s ease, transform 0.2s ease !important;
+}
+
+.main-content audio::-webkit-media-controls-panel,
+.reveal audio::-webkit-media-controls-panel,
+.main-content audio::-webkit-media-controls-enclosure,
+.reveal audio::-webkit-media-controls-enclosure {
+  background-color: var(--header-bg) !important;
+  border-radius: 9999px !important;
+  transition: background-color 0.25s ease;
+}
+
+html[data-modo="oscuro"] .main-content audio,
+html[data-modo="oscuro"] .reveal audio {
+  color-scheme: dark !important;
+}
+
+html[data-modo="claro"] .main-content audio,
+html[data-modo="claro"] .reveal audio {
+  color-scheme: light !important;
+}
+
+/* --- SOMBRA Y ACENTO SEGÚN TEMA (AUDIO) --- */
+html[data-estilo="moderno"] .main-content audio,
+html[data-estilo="moderno"] .reveal audio {
+  accent-color: #8b5cf6 !important;
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.22) !important;
+}
+html[data-estilo="moderno"] .main-content audio:hover,
+html[data-estilo="moderno"] .reveal audio:hover {
+  box-shadow: 0 6px 26px rgba(139, 92, 246, 0.42) !important;
+}
+
+html[data-estilo="academico"][data-modo="oscuro"] .main-content audio,
+html[data-estilo="academico"][data-modo="oscuro"] .reveal audio {
+  accent-color: #d97706 !important;
+  box-shadow: 0 4px 20px rgba(217, 119, 6, 0.2) !important;
+}
+html[data-estilo="academico"][data-modo="oscuro"] .main-content audio:hover,
+html[data-estilo="academico"][data-modo="oscuro"] .reveal audio:hover {
+  box-shadow: 0 6px 26px rgba(217, 119, 6, 0.38) !important;
+}
+
+html[data-estilo="academico"][data-modo="claro"] .main-content audio,
+html[data-estilo="academico"][data-modo="claro"] .reveal audio {
+  accent-color: #78350f !important;
+  box-shadow: 0 4px 18px rgba(120, 53, 15, 0.15) !important;
+}
+html[data-estilo="academico"][data-modo="claro"] .main-content audio:hover,
+html[data-estilo="academico"][data-modo="claro"] .reveal audio:hover {
+  box-shadow: 0 6px 24px rgba(120, 53, 15, 0.28) !important;
+}
+
+html[data-estilo="minimalista"][data-modo="oscuro"] .main-content audio,
+html[data-estilo="minimalista"][data-modo="oscuro"] .reveal audio {
+  accent-color: #ffffff !important;
+  box-shadow: 0 4px 20px rgba(255, 255, 255, 0.08) !important;
+}
+html[data-estilo="minimalista"][data-modo="oscuro"] .main-content audio:hover,
+html[data-estilo="minimalista"][data-modo="oscuro"] .reveal audio:hover {
+  box-shadow: 0 6px 24px rgba(255, 255, 255, 0.18) !important;
+}
+
+html[data-estilo="minimalista"][data-modo="claro"] .main-content audio,
+html[data-estilo="minimalista"][data-modo="claro"] .reveal audio {
+  accent-color: #000000 !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.1) !important;
+}
+html[data-estilo="minimalista"][data-modo="claro"] .main-content audio:hover,
+html[data-estilo="minimalista"][data-modo="claro"] .reveal audio:hover {
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* ==========================================================
+   REPRODUCTOR DE VIDEO NATIVO
+   ========================================================== */
+.main-content video,
+.reveal video {
+  display: block !important;
+  width: 100% !important;
+  max-width: 720px !important;
+  max-height: 52vh !important;
+  margin: 1.75rem auto !important;
+  background-color: #000000 !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: var(--radius-md, 10px) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25) !important;
+  outline: none !important;
+  object-fit: contain !important;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+html[data-modo="oscuro"] .main-content video,
+html[data-modo="oscuro"] .reveal video {
+  color-scheme: dark !important;
+}
+
+html[data-modo="claro"] .main-content video,
+html[data-modo="claro"] .reveal video {
+  color-scheme: light !important;
+}
+
+html[data-estilo="moderno"] .main-content video,
+html[data-estilo="moderno"] .reveal video {
+  accent-color: #8b5cf6 !important;
+}
+html[data-estilo="moderno"] .main-content video:hover,
+html[data-estilo="moderno"] .reveal video:hover {
+  border-color: #8b5cf6 !important;
+  box-shadow: 0 10px 30px rgba(139, 92, 246, 0.25) !important;
+}
+
+html[data-estilo="academico"] .main-content video,
+html[data-estilo="academico"] .reveal video {
+  border-radius: var(--radius-sm, 6px) !important;
+}
+html[data-estilo="academico"][data-modo="oscuro"] .main-content video,
+html[data-estilo="academico"][data-modo="oscuro"] .reveal video {
+  accent-color: #d97706 !important;
+}
+html[data-estilo="academico"][data-modo="oscuro"] .main-content video:hover,
+html[data-estilo="academico"][data-modo="oscuro"] .reveal video:hover {
+  border-color: #d97706 !important;
+  box-shadow: 0 10px 30px rgba(217, 119, 6, 0.22) !important;
+}
+html[data-estilo="academico"][data-modo="claro"] .main-content video,
+html[data-estilo="academico"][data-modo="claro"] .reveal video {
+  accent-color: #78350f !important;
+}
+html[data-estilo="academico"][data-modo="claro"] .main-content video:hover,
+html[data-estilo="academico"][data-modo="claro"] .reveal video:hover {
+  border-color: #78350f !important;
+  box-shadow: 0 8px 24px rgba(120, 53, 15, 0.18) !important;
+}
+
+html[data-estilo="minimalista"] .main-content video,
+html[data-estilo="minimalista"] .reveal video {
+  border-radius: 0px !important;
+  box-shadow: none !important;
+}
+html[data-estilo="minimalista"][data-modo="oscuro"] .main-content video,
+html[data-estilo="minimalista"][data-modo="oscuro"] .reveal video {
+  accent-color: #ffffff !important;
+}
+html[data-estilo="minimalista"][data-modo="oscuro"] .main-content video:hover,
+html[data-estilo="minimalista"][data-modo="oscuro"] .reveal video:hover {
+  border-color: #ffffff !important;
+}
+html[data-estilo="minimalista"][data-modo="claro"] .main-content video,
+html[data-estilo="minimalista"][data-modo="claro"] .reveal video {
+  accent-color: #000000 !important;
+}
+html[data-estilo="minimalista"][data-modo="claro"] .main-content video:hover,
+html[data-estilo="minimalista"][data-modo="claro"] .reveal video:hover {
+  border-color: #000000 !important;
+}
+
+/* ==========================================================
+   CONTENEDOR DE IMÁGENES CON BOTÓN COPIAR (ESTILO VS CODE)
+   ========================================================== */
+.img-interactive-wrapper {
+  position: relative;
+  display: inline-block;
+  width: auto;
+  max-width: 100%;
+  margin: 1.75rem auto;
+  text-align: center;
+  border-radius: var(--radius-md, 8px);
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.main-content .img-interactive-wrapper,
+.reveal .img-interactive-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
+}
+
+.img-interactive-wrapper img {
+  display: block !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+.img-toolbar {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  display: flex;
+  gap: 0.35rem;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  background: var(--header-bg, #18181b);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.15));
+  border-radius: 6px;
+  padding: 0.25rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 5;
+}
+
+.img-interactive-wrapper:hover .img-toolbar {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.img-tool-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-color, #f8fafc);
+  cursor: pointer;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-family: var(--ui-font, system-ui);
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.img-tool-btn:hover {
+  background-color: rgba(139, 92, 246, 0.2);
+  color: #a78bfa;
+}
+
+.img-tool-btn.copied {
+  background: #10b981 !important;
+  color: #ffffff !important;
+}

@@ -426,8 +426,6 @@ html[data-modo="oscuro"] .callout-cite {
 /* ==========================================================
    REPRODUCTOR DE AUDIO NATIVO (CÁPSULA CON RESPLANDOR/SOMBRA)
    ========================================================== */
-
-/* 1. La etiqueta externa adopta la misma forma de píldora y proyecta la sombra curva */
 .main-content audio,
 .reveal audio {
   display: block !important;
@@ -438,11 +436,10 @@ html[data-modo="oscuro"] .callout-cite {
   background: transparent !important;
   border: none !important;
   outline: none !important;
-  border-radius: 9999px !important; /* Moldea la sombra exactamente a la cápsula */
+  border-radius: 9999px !important;
   transition: box-shadow 0.3s ease, transform 0.2s ease !important;
 }
 
-/* 2. Color del panel interno (la cápsula nativa) */
 .main-content audio::-webkit-media-controls-panel,
 .reveal audio::-webkit-media-controls-panel,
 .main-content audio::-webkit-media-controls-enclosure,
@@ -452,7 +449,6 @@ html[data-modo="oscuro"] .callout-cite {
   transition: background-color 0.25s ease;
 }
 
-/* 3. Modo Claro / Oscuro: textos y botones automáticos */
 html[data-modo="oscuro"] .main-content audio,
 html[data-modo="oscuro"] .reveal audio {
   color-scheme: dark !important;
@@ -463,11 +459,7 @@ html[data-modo="claro"] .reveal audio {
   color-scheme: light !important;
 }
 
-/* ==========================================================
-   4. SOMBRA DIFUMINADA Y ACENTO CROMÁTICO SEGÚN EL TEMA
-   ========================================================== */
-
-/* --- A) MODERNO (Resplandor Violeta) --- */
+/* --- SOMBRA Y ACENTO SEGÚN TEMA (AUDIO) --- */
 html[data-estilo="moderno"] .main-content audio,
 html[data-estilo="moderno"] .reveal audio {
   accent-color: #8b5cf6 !important;
@@ -478,7 +470,6 @@ html[data-estilo="moderno"] .reveal audio:hover {
   box-shadow: 0 6px 26px rgba(139, 92, 246, 0.42) !important;
 }
 
-/* --- B) ACADÉMICO (Resplandor Ámbar / Sepia Cálido) --- */
 html[data-estilo="academico"][data-modo="oscuro"] .main-content audio,
 html[data-estilo="academico"][data-modo="oscuro"] .reveal audio {
   accent-color: #d97706 !important;
@@ -499,7 +490,6 @@ html[data-estilo="academico"][data-modo="claro"] .reveal audio:hover {
   box-shadow: 0 6px 24px rgba(120, 53, 15, 0.28) !important;
 }
 
-/* --- C) MINIMALISTA (Sombra Neutra y Limpia) --- */
 html[data-estilo="minimalista"][data-modo="oscuro"] .main-content audio,
 html[data-estilo="minimalista"][data-modo="oscuro"] .reveal audio {
   accent-color: #ffffff !important;
@@ -521,10 +511,8 @@ html[data-estilo="minimalista"][data-modo="claro"] .reveal audio:hover {
 }
 
 /* ==========================================================
-   REPRODUCTOR DE VIDEO NATIVO (ADAPTADO A TEMAS Y SLIDES)
+   REPRODUCTOR DE VIDEO NATIVO
    ========================================================== */
-
-/* 1. Base del contenedor de video */
 .main-content video,
 .reveal video {
   display: block !important;
@@ -541,7 +529,6 @@ html[data-estilo="minimalista"][data-modo="claro"] .reveal audio:hover {
   transition: border-color 0.25s ease, box-shadow 0.25s ease !important;
 }
 
-/* 2. Sincronización de controles nativos (Play, volumen, tiempo) */
 html[data-modo="oscuro"] .main-content video,
 html[data-modo="oscuro"] .reveal video {
   color-scheme: dark !important;
@@ -552,9 +539,6 @@ html[data-modo="claro"] .reveal video {
   color-scheme: light !important;
 }
 
-/* 3. Acentos de color y sombras por tema */
-
-/* --- A) MODERNO (Acento Violeta) --- */
 html[data-estilo="moderno"] .main-content video,
 html[data-estilo="moderno"] .reveal video {
   accent-color: #8b5cf6 !important;
@@ -565,7 +549,6 @@ html[data-estilo="moderno"] .reveal video:hover {
   box-shadow: 0 10px 30px rgba(139, 92, 246, 0.25) !important;
 }
 
-/* --- B) ACADÉMICO (Tonos Sepia / Clásico) --- */
 html[data-estilo="academico"] .main-content video,
 html[data-estilo="academico"] .reveal video {
   border-radius: var(--radius-sm, 6px) !important;
@@ -589,7 +572,6 @@ html[data-estilo="academico"][data-modo="claro"] .reveal video:hover {
   box-shadow: 0 8px 24px rgba(120, 53, 15, 0.18) !important;
 }
 
-/* --- C) MINIMALISTA (Plano y Angular) --- */
 html[data-estilo="minimalista"] .main-content video,
 html[data-estilo="minimalista"] .reveal video {
   border-radius: 0px !important;
@@ -694,4 +676,65 @@ html[data-estilo="minimalista"][data-modo="claro"] .reveal video:hover {
 .img-tool-btn.copied {
   background: #10b981 !important;
   color: #ffffff !important;
+}
+
+/* ==========================================================
+   MODIFICACIÓN DE DISEÑO PARA CHECKBOXES (ESTILO TAREAS)
+   ========================================================== */
+.markdown-body ul.contains-task-list,
+.markdown-body .task-list-item {
+  list-style: none !important;
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+}
+
+.markdown-body li.task-list-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.6rem !important;
+  margin: 0.4rem 0 !important;
+  font-family: var(--ui-font) !important;
+}
+
+.markdown-body input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1.15rem;
+  height: 1.15rem;
+  border: 1.5px solid var(--border-color, #64748b);
+  border-radius: 4px;
+  background-color: var(--header-bg, #1e293b);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.2s ease;
+  margin: 0 !important;
+}
+
+.markdown-body input[type="checkbox"]:hover {
+  border-color: #8b5cf6;
+}
+
+.markdown-body input[type="checkbox"]:checked {
+  background-color: #8b5cf6 !important;
+  border-color: #8b5cf6 !important;
+}
+
+.markdown-body input[type="checkbox"]:checked::after {
+  content: "";
+  width: 4px;
+  height: 8px;
+  border: solid #ffffff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  position: absolute;
+  top: 1px;
+}
+
+.markdown-body li.task-list-item:has(input[type="checkbox"]:checked) {
+  opacity: 0.75;
+  text-decoration: line-through;
+  text-decoration-color: #8b5cf6;
 }

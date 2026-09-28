@@ -1,0 +1,108 @@
+/* ==========================================================
+   BLOQUES DE CÓDIGO ESTILO VS CODE + RESPETO DE TOKENS SHIKI
+   ========================================================== */
+.code-block-wrapper {
+  margin: 1.75rem 0;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: #292d3e !important;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.code-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.45rem 0.85rem;
+  background: rgba(0, 0, 0, 0.25);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  user-select: none;
+}
+
+.code-dots {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.code-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.code-dot.red { background: #ff5f56; }
+.code-dot.yellow { background: #ffbd2e; }
+.code-dot.green { background: #27c93f; }
+
+.code-lang-tag {
+  font-size: 0.72rem;
+  font-family: var(--ui-font);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #a6accd;
+}
+
+.main-content pre {
+  margin: 0 !important;
+  padding: 1.2rem 1.25rem !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  overflow-x: auto;
+  tab-size: 4;
+  -moz-tab-size: 4;
+}
+
+.main-content pre code {
+  font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  white-space: pre-wrap !important;
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
+  display: block;
+}
+
+.main-content pre code .line {
+  display: inline-block;
+  width: 100%;
+  padding-left: 2rem;
+  text-indent: -2rem;
+  box-sizing: border-box;
+}
+
+.main-content pre code:not(:has(.line)) {
+  padding-left: 1.5rem;
+  text-indent: -1.5rem;
+}
+
+.main-content pre code span {
+  color: inherit;
+}
+
+.copy-code-btn {
+  background: rgba(139, 92, 246, 0.15);
+  color: #a78bfa;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.72rem;
+  font-family: var(--ui-font);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.copy-code-btn:hover {
+  background: rgba(139, 92, 246, 0.3);
+  color: #c4b5fd;
+}
+
+.copy-code-btn.copied {
+  background: #10b981 !important;
+  color: #ffffff !important;
+  border-color: #10b981 !important;
+}
