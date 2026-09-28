@@ -7,6 +7,7 @@
   background-color: transparent !important;
 }
 
+/* Forzar legibilidad de textos en todos los selectores de Mermaid */
 .main-content .mermaid-wrapper .label, 
 .main-content .mermaid-wrapper .nodeLabel, 
 .main-content .mermaid-wrapper .entityLabel, 
@@ -36,6 +37,26 @@
   font-family: var(--ui-font);
   font-size: var(--mermaid-font-size, 14px);
   line-height: normal;
+}
+
+/* ==========================================================
+   CORRECCIÓN CLAVE: NODO OSCURO O CON ESTILO MANUAL (TEXTO BLANCO)
+   ========================================================== */
+/* Si un nodo tiene un fondo oscuro de forma nativa o por inline style, forzamos texto blanco */
+.main-content .mermaid-wrapper .node rect[style*="fill:#1e1e1e"],
+.main-content .mermaid-wrapper .node rect[style*="fill:#000"],
+.main-content .mermaid-wrapper .node rect[style*="fill:black"],
+.main-content .mermaid-wrapper .node rect[fill*="#1e1e1e"],
+.main-content .mermaid-wrapper .node rect[fill*="#000000"] {
+  fill: #1e1e1e !important;
+}
+
+/* Forzar que cualquier etiqueta de texto dentro de un nodo con fondo oscuro sea blanca */
+.main-content .mermaid-wrapper .node:has(rect[style*="fill:#1e1e1e"], rect[style*="fill:#000"], rect[style*="fill:black"], rect[fill*="#1e1e1e"]) .nodeLabel,
+.main-content .mermaid-wrapper .node:has(rect[style*="fill:#1e1e1e"], rect[style*="fill:#000"], rect[style*="fill:black"], rect[fill*="#1e1e1e"]) text,
+.main-content .mermaid-wrapper .node:has(rect[style*="fill:#1e1e1e"], rect[style*="fill:#000"], rect[style*="fill:black"], rect[fill*="#1e1e1e"]) span {
+  fill: #ffffff !important;
+  color: #ffffff !important;
 }
 
 /* ==========================================================

@@ -3,6 +3,7 @@ import type { MermaidConfig } from 'mermaid';
 
 function getMermaidConfig(): MermaidConfig {
   const isDark = document.documentElement.getAttribute('data-modo') === 'oscuro';
+  const textColor = isDark ? '#f8fafc' : '#0f172a';
   
   return {
     startOnLoad: false,
@@ -16,23 +17,22 @@ function getMermaidConfig(): MermaidConfig {
 
       // --- COLORES DE NODOS PRINCIPALES (Rectángulos, Rombos, Círculos) ---
       primaryColor: isDark ? '#1e293b' : '#f8fafc',
-      primaryTextColor: isDark ? '#f8fafc' : '#0f172a',
+      primaryTextColor: textColor,
       primaryBorderColor: isDark ? '#38bdf8' : '#64748b',
 
       // Fondo secundario y terciario para rombos y formas condicionales
       secondaryColor: isDark ? '#0f172a' : '#f1f5f9',
-      secondaryTextColor: isDark ? '#f8fafc' : '#0f172a',
+      secondaryTextColor: textColor,
       secondaryBorderColor: isDark ? '#38bdf8' : '#64748b',
       tertiaryColor: isDark ? '#1e293b' : '#ffffff',
-      tertiaryTextColor: isDark ? '#f8fafc' : '#0f172a',
+      tertiaryTextColor: textColor,
       tertiaryBorderColor: isDark ? '#38bdf8' : '#64748b',
 
       // --- LÍNEAS, CONECTORES Y FLECHAS ---
       lineColor: isDark ? '#94a3b8' : '#475569',
-      textColor: isDark ? '#f8fafc' : '#0f172a',
+      textColor: textColor,
 
       // --- TEXTOS EN LAS FLECHAS ("Conforme", "No Conforme") ---
-      // Evita los rectángulos blancos duros sobre fondo claro/oscuro
       labelBoxBkgColor: isDark ? '#0f172a' : '#ffffff',
       labelBoxBorderColor: isDark ? '#334155' : '#cbd5e1',
       labelTextColor: isDark ? '#e2e8f0' : '#334155',
@@ -40,10 +40,10 @@ function getMermaidConfig(): MermaidConfig {
       // --- DIAGRAMAS DE SECUENCIA ---
       actorBkg: isDark ? '#1e293b' : '#f8fafc',
       actorBorder: isDark ? '#38bdf8' : '#64748b',
-      actorTextColor: isDark ? '#f8fafc' : '#0f172a',
+      actorTextColor: textColor,
       actorLineColor: isDark ? '#94a3b8' : '#475569',
-      signalColor: isDark ? '#f8fafc' : '#0f172a',
-      signalTextColor: isDark ? '#f8fafc' : '#0f172a',
+      signalColor: textColor,
+      signalTextColor: textColor,
 
       // --- NOTAS Y ADVERTENCIAS ---
       noteBorderColor: isDark ? '#f59e0b' : '#d97706',
@@ -53,8 +53,8 @@ function getMermaidConfig(): MermaidConfig {
       // --- GANTT ---
       taskBorderColor: isDark ? '#38bdf8' : '#6366f1',
       taskBkgColor: isDark ? '#1e293b' : '#e2e8f0',
-      taskTextColor: isDark ? '#f8fafc' : '#0f172a',
-      taskTextOutsideColor: isDark ? '#f8fafc' : '#0f172a',
+      taskTextColor: textColor,
+      taskTextOutsideColor: textColor,
       activeTaskBorderColor: isDark ? '#818cf8' : '#4f46e5',
       activeTaskBkgColor: isDark ? '#312e81' : '#c7d2fe',
       gridColor: isDark ? '#334155' : '#cbd5e1',
@@ -83,6 +83,38 @@ function getMermaidConfig(): MermaidConfig {
       axisFormat: '%d/%m'
     }
   };
+}
+
+/**
+ * FUNCIÓN AUXILIAR: Corrige automáticamente el contraste de texto 
+ * en nodos con fondos oscuros personalizados (ej. style A fill:#1e1e1e)
+ */
+function fixDarkNodeTextContrast(svgEl: SVGElement) {
+  const nodes = svgEl.querySelectorAll('.node');
+  nodes.forEach((node) => {
+    const rectOrPath = node.querySelector('rect, path, circle, polygon');
+    if (!rectOrPath) return;
+
+    const fillAttr = rectOrPath.getAttribute('fill') || '';
+    const styleAttr = rectOrPath.getAttribute('style') || '';
+    const combined = (fillAttr + styleAttr).toLowerCase();
+
+    // Si el nodo tiene un color de fondo oscuro personalizado
+    if (
+      combined.includes('#1e1e1e') || 
+      combined.includes('#000') || 
+      combined.includes('black') ||
+      combined.includes('#111') ||
+      combined.includes('#222')
+    ) {
+      const texts = node.querySelectorAll('text, span, p, .nodeLabel');
+      texts.forEach((t) => {
+        const el = t as HTMLElement | SVGElement;
+        el.style.setProperty('fill', '#ffffff', 'important');
+        el.style.setProperty('color', '#ffffff', 'important');
+      });
+    }
+  });
 }
 
 function buildWrapperStructure(innerContent: string): HTMLElement {
@@ -239,10 +271,8 @@ export async function renderMermaid(forceReRender = false) {
 
   const containers = Array.from(document.querySelectorAll<HTMLElement>('.mermaid-native, .mermaid-wrapper'));
 
-  // GUARDA DE RENDIMIENTO: Si no hay diagramas en la página, no descargamos ni ejecutamos Mermaid
   if (containers.length === 0) return;
 
-  // Importación dinámica: solo descarga los 2.5MB si realmente se van a procesar diagramas
   const { default: mermaid } = await import('mermaid');
   mermaid.initialize(getMermaidConfig());
 
@@ -293,7 +323,15 @@ export async function renderMermaid(forceReRender = false) {
 
       try {
         const { svg } = await mermaid.render(renderId, ganttCode);
-        const wrapper = buildWrapperStructure(svg);
+        
+        const tempSvgContainer = document.createElement('div');
+        tempSvgContainer.innerHTML = svg;
+        const svgElParsed = tempSvgContainer.querySelector('svg');
+        if (svgElParsed) {
+          fixDarkNodeTextContrast(svgElParsed);
+        }
+
+        const wrapper = buildWrapperStructure(svgElParsed ? svgElParsed.outerHTML : svg);
         wrapper.classList.add('is-gantt');
         wrapper.dataset.sourceCode = code;
         wrapper.dataset.layout = parsedLayout;
@@ -311,25 +349,24 @@ export async function renderMermaid(forceReRender = false) {
         console.error('Error renderizando Gantt:', err);
       }
     } else {
-      // En el bloque 'else' (diagramas estándar: flowchart, sequence, etc.)
-    const isDark = document.documentElement.getAttribute('data-modo') === 'oscuro';
-    const directivaTema = `%%{init: { "theme": "${isDark ? 'dark' : 'neutral'}" } }%%\n`;
-    const finalCode = directivaTema + cleanCode;
+      const isDark = document.documentElement.getAttribute('data-modo') === 'oscuro';
+      const directivaTema = `%%{init: { "theme": "${isDark ? 'dark' : 'neutral'}" } }%%\n`;
+      const finalCode = directivaTema + cleanCode;
 
-    const tempDiv = document.createElement('div');
-    tempDiv.className = 'mermaid-native';
-    tempDiv.textContent = finalCode;
-    tempDiv.dataset.sourceCode = code; // guardamos el original
-    item.replaceWith(tempDiv);
-    
-    standardNodes.push({
-      el: tempDiv,
-      layout: parsedLayout,
-      width: parsedWidth,
-      maxWidth: parsedMaxWidth,
-      height: parsedHeight,
-      rawCode: code
-    });
+      const tempDiv = document.createElement('div');
+      tempDiv.className = 'mermaid-native';
+      tempDiv.textContent = finalCode;
+      tempDiv.dataset.sourceCode = code;
+      item.replaceWith(tempDiv);
+      
+      standardNodes.push({
+        el: tempDiv,
+        layout: parsedLayout,
+        width: parsedWidth,
+        maxWidth: parsedMaxWidth,
+        height: parsedHeight,
+        rawCode: code
+      });
     }
   }
 
@@ -338,30 +375,29 @@ export async function renderMermaid(forceReRender = false) {
       await mermaid.run({ nodes: standardNodes.map((n) => n.el) });
       const currentMode = document.documentElement.getAttribute('data-modo') || 'oscuro';
 
-      // En src/utils/mermaidViewer.ts (dentro del forEach de standardNodes)
-standardNodes.forEach(({ el, layout, width, maxWidth, height, rawCode }) => {
-  const svgEl = el.querySelector('svg') as SVGElement | null;
-  if (svgEl) {
-    if (width) {
-      svgEl.style.setProperty('width', width, 'important');
-      // Si el usuario especificó un ancho, no dejamos que se comprima
-      svgEl.style.setProperty('min-width', width, 'important');
-    }
-    if (maxWidth) svgEl.style.setProperty('max-width', maxWidth, 'important');
-    if (height) svgEl.style.setProperty('max-height', height, 'important');
-  }
+      standardNodes.forEach(({ el, layout, width, maxWidth, height, rawCode }) => {
+        const svgEl = el.querySelector('svg') as SVGElement | null;
+        if (svgEl) {
+          fixDarkNodeTextContrast(svgEl);
+          if (width) {
+            svgEl.style.setProperty('width', width, 'important');
+            svgEl.style.setProperty('min-width', width, 'important');
+          }
+          if (maxWidth) svgEl.style.setProperty('max-width', maxWidth, 'important');
+          if (height) svgEl.style.setProperty('max-height', height, 'important');
+        }
 
-  const wrapper = buildWrapperStructure(svgEl ? svgEl.outerHTML : '');
-  wrapper.dataset.sourceCode = rawCode;
-  wrapper.dataset.layout = layout;
-  if (width || maxWidth || height) {
-    wrapper.classList.add('has-custom-width');
-  }
+        const wrapper = buildWrapperStructure(svgEl ? svgEl.outerHTML : '');
+        wrapper.dataset.sourceCode = rawCode;
+        wrapper.dataset.layout = layout;
+        if (width || maxWidth || height) {
+          wrapper.classList.add('has-custom-width');
+        }
 
-  el.replaceWith(wrapper);
-  attachMermaidControls(wrapper, rawCode);
-  wrapper.dataset.renderedMode = currentMode;
-});
+        el.replaceWith(wrapper);
+        attachMermaidControls(wrapper, rawCode);
+        wrapper.dataset.renderedMode = currentMode;
+      });
     } catch (error) {
       console.error('Error en mermaid.run():', error);
     }
