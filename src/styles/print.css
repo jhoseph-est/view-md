@@ -1,11 +1,15 @@
 /* ==========================================================
-   5. EXPORTACIÓN A PDF E IMPRESIÓN INTELIGENTE (APA 7 vs NORMAL)
+   5. EXPORTACIÓN A PDF E IMPRESIÓN (APA 7 vs NORMAL)
    ========================================================== */
 @media print {
-  /* 5.1 Configuración universal de página y márgenes reglamentarios */
+  /* 5.1 Configuración de página estándar y limpia */
   @page {
     size: letter portrait;
     margin: 2.54cm;
+  }
+
+  /* Si es un informe, activamos la numeración reglamentaria APA 7 */
+  @page {
     @top-right {
       content: counter(page);
       font-family: "Times New Roman", Times, serif;
@@ -14,14 +18,13 @@
     }
   }
 
-  /* La portada APA oficial no lleva número de página */
   @page :first {
     @top-right {
       content: "";
     }
   }
 
-  /* 5.2 Ocultar elementos de navegación web en cualquier impresión */
+  /* 5.2 Ocultar elementos web interactivos al imprimir */
   .activity-bar,
   .left-sidebar-panel,
   .independent-panel,
@@ -38,16 +41,14 @@
   }
 
   /* --------------------------------------------------------
-     CASO 1: SOLO SI ES UN INFORME (Aplica APA 7 completo)
+     CASO 1: FORMATO APA 7 ESTRICTO (Exclusivo para Informes)
      -------------------------------------------------------- */
   html[data-estilo="informe"] body,
   html[data-estilo="informe"] .layout-grid,
   html[data-estilo="informe"] .main-content,
   html[data-estilo="informe"] .content-wrapper,
   html[data-estilo="informe"] #document-view,
-  html[data-estilo="informe"] .markdown-body,
-  html[data-estilo="informe"] body:has(.report-cover-page),
-  html[data-estilo="informe"] .main-content:has(.report-cover-page) {
+  html[data-estilo="informe"] .markdown-body {
     background-color: #ffffff !important;
     background: none !important;
     color: #000000 !important;
@@ -103,45 +104,6 @@
     text-align: left !important;
   }
 
-  html[data-estilo="informe"] .markdown-body p:has(> em:first-child) {
-    text-indent: 0 !important;
-    font-size: 10pt !important;
-    line-height: 1.5 !important;
-    margin-top: 0.5rem !important;
-  }
-
-  html[data-estilo="informe"] .markdown-body p:has(.katex-display),
-  html[data-estilo="informe"] .markdown-body p:has(.katex),
-  html[data-estilo="informe"] .markdown-body .katex-display {
-    display: block !important;
-    text-align: center !important;
-    text-indent: 0 !important;
-    margin: 1.5rem auto !important;
-  }
-
-  html[data-estilo="informe"] .markdown-body .katex-display > .katex {
-    display: inline-block !important;
-    text-align: center !important;
-    text-indent: 0 !important;
-  }
-
-  html[data-estilo="informe"] .markdown-body .mermaid-wrapper,
-  html[data-estilo="informe"] .markdown-body .mermaid-wrapper * {
-    box-shadow: none !important;
-    border-radius: 0 !important;
-  }
-
-  html[data-estilo="informe"] .markdown-body .mermaid-wrapper {
-    display: block !important;
-    margin: 2rem auto !important;
-    padding: 0 !important;
-    border: none !important;
-    background: transparent !important;
-    break-inside: avoid !important;
-    page-break-inside: avoid !important;
-    text-indent: 0 !important;
-  }
-
   html[data-estilo="informe"] .markdown-body h1 {
     font-size: 14pt !important;
     font-weight: bold !important;
@@ -170,24 +132,6 @@
     page-break-after: avoid !important;
   }
 
-  html[data-estilo="informe"] .markdown-body h4,
-  html[data-estilo="informe"] .markdown-body h5,
-  html[data-estilo="informe"] .markdown-body h6 {
-    break-after: avoid !important;
-    page-break-after: avoid !important;
-  }
-
-  html[data-estilo="informe"] .markdown-body blockquote:not([data-callout]) {
-    margin: 1.5rem 0 1.5rem 1.27cm !important;
-    padding: 0 !important;
-    border: none !important;
-    background: transparent !important;
-    line-height: 2 !important;
-  }
-  html[data-estilo="informe"] .markdown-body blockquote:not([data-callout]) p {
-    text-indent: 0 !important;
-  }
-
   html[data-estilo="informe"] .markdown-body table {
     width: 100% !important;
     border-collapse: collapse !important;
@@ -199,6 +143,7 @@
     break-inside: avoid !important;
     page-break-inside: avoid !important;
   }
+
   html[data-estilo="informe"] .markdown-body th {
     border-top: none !important;
     border-left: none !important;
@@ -209,6 +154,7 @@
     padding: 0.5rem 0.75rem !important;
     background: transparent !important;
   }
+
   html[data-estilo="informe"] .markdown-body td {
     border: none !important;
     padding: 0.5rem 0.75rem !important;
@@ -225,16 +171,15 @@
 
 
   /* --------------------------------------------------------
-     CASO 2: PARA CUALQUIER OTRO APUNTE O PÁGINA NORMAL
-     (Se imprime respetando exactamente el diseño y colores de pantalla)
+     CASO 2: APUNTES Y PÁGINAS NORMALES (Diseño fiel a pantalla en modo claro)
      -------------------------------------------------------- */
   html:not([data-estilo="informe"]) body,
   html:not([data-estilo="informe"]) .layout-grid,
   html:not([data-estilo="informe"]) .main-content,
   html:not([data-estilo="informe"]) .content-wrapper,
   html:not([data-estilo="informe"]) .markdown-body {
-    background-color: var(--bg-color) !important;
-    color: var(--text-color) !important;
+    background-color: #ffffff !important;
+    color: #1e293b !important;
     font-family: var(--doc-font) !important;
     font-size: var(--font-size) !important;
     line-height: var(--doc-line-height) !important;
@@ -255,15 +200,16 @@
 
   html:not([data-estilo="informe"]) .markdown-body th, 
   html:not([data-estilo="informe"]) .markdown-body td {
-    border: 1px solid var(--border-color) !important;
+    border: 1px solid #cbd5e1 !important;
     padding: 0.75rem 1rem !important;
   }
 
   html:not([data-estilo="informe"]) .code-block-wrapper {
     break-inside: avoid !important;
     page-break-inside: avoid !important;
-    border: 1px solid var(--border-color) !important;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
+    background: #f8fafc !important;
+    border: 1px solid #cbd5e1 !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
   }
 
   /* Forzar la impresión de colores de fondo, bloques y gráficos */

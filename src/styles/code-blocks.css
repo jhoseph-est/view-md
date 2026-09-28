@@ -1,37 +1,40 @@
 /* ==========================================================
-   BLOQUES DE CÓDIGO ESTILO VS CODE + RESPETO DE TOKENS SHIKI
+   BLOQUES DE CÓDIGO - INTEGRACIÓN DINÁMICA SHIKI (SIMÉTRICA)
    ========================================================== */
+
+/* 1. Contenedor principal: Se vuelve transparente para revelar el fondo del <pre> */
 .code-block-wrapper {
   margin: 1.75rem 0;
   border-radius: var(--radius-md);
   border: 1px solid var(--border-color);
-  background: #292d3e !important;
   overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  background-color: transparent !important; 
+  transition: border-color 0.25s ease;
 }
 
+/* 2. Cabecera (estilo ventana de macOS neutra) */
 .code-block-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0.45rem 0.85rem;
+  user-select: none;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+}
+
+html[data-modo="oscuro"] .code-block-header {
   background: rgba(0, 0, 0, 0.25);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  user-select: none;
 }
 
-.code-dots {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+html[data-modo="claro"] .code-block-header {
+  background: rgba(0, 0, 0, 0.04);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-.code-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  display: inline-block;
-}
+.code-dots { display: flex; align-items: center; gap: 6px; }
+.code-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
 .code-dot.red { background: #ff5f56; }
 .code-dot.yellow { background: #ffbd2e; }
 .code-dot.green { background: #27c93f; }
@@ -42,20 +45,44 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #a6accd;
+  color: var(--text-color);
+  opacity: 0.7;
 }
 
-.main-content pre {
+/* 3. Reset del bloque <pre> para que ocupe todo el espacio del wrapper */
+.main-content pre.astro-code {
   margin: 0 !important;
   padding: 1.2rem 1.25rem !important;
   border: none !important;
   border-radius: 0 !important;
-  background: transparent !important;
   overflow-x: auto;
   tab-size: 4;
-  -moz-tab-size: 4;
+  transition: background-color 0.25s ease; /* Transición suave al cambiar el tema */
 }
 
+/* ==========================================================
+   INTERRUPTORES DE MODO DUAL (LECTURA DE VARIABLES)
+   ========================================================== */
+
+/* 1. MODO OSCURO */
+html[data-modo="oscuro"] pre.astro-code {
+  background-color: var(--shiki-dark-bg) !important;
+}
+html[data-modo="oscuro"] pre.astro-code code span {
+  color: var(--shiki-dark) !important;
+}
+
+/* 2. MODO CLARO */
+html[data-modo="claro"] pre.astro-code {
+  background-color: var(--shiki-light-bg) !important;
+}
+html[data-modo="claro"] pre.astro-code code span {
+  color: var(--shiki-light) !important;
+}
+
+/* ==========================================================
+   AJUSTES DEL TEXTO Y BOTÓN COPIAR
+   ========================================================== */
 .main-content pre code {
   font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
   font-size: 0.85rem;
@@ -72,15 +99,6 @@
   padding-left: 2rem;
   text-indent: -2rem;
   box-sizing: border-box;
-}
-
-.main-content pre code:not(:has(.line)) {
-  padding-left: 1.5rem;
-  text-indent: -1.5rem;
-}
-
-.main-content pre code span {
-  color: inherit;
 }
 
 .copy-code-btn {

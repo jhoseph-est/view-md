@@ -29,7 +29,11 @@ export default defineConfig({
   markdown: {
     syntaxHighlight: 'shiki',
     shikiConfig: {
-      theme: 'material-theme-palenight',
+      themes: {
+        light: 'red',
+        dark: 'solarized-dark',
+      },
+      defaultColor: false,
       wrap: true,
     },
     processor: unified({
