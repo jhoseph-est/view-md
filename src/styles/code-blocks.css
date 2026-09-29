@@ -1,3 +1,4 @@
+/* src/styles/code-blocks.css */
 /* ==========================================================
    BLOQUES DE CÓDIGO - INTEGRACIÓN DINÁMICA SHIKI (SIMÉTRICA)
    ========================================================== */
@@ -22,23 +23,19 @@
   user-select: none;
   transition: background-color 0.25s ease, border-color 0.25s ease;
 }
-
 html[data-modo="oscuro"] .code-block-header {
   background: rgba(0, 0, 0, 0.25);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
-
 html[data-modo="claro"] .code-block-header {
   background: rgba(0, 0, 0, 0.04);
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
-
 .code-dots { display: flex; align-items: center; gap: 6px; }
 .code-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
 .code-dot.red { background: #ff5f56; }
 .code-dot.yellow { background: #ffbd2e; }
 .code-dot.green { background: #27c93f; }
-
 .code-lang-tag {
   font-size: 0.72rem;
   font-family: var(--ui-font);
@@ -63,7 +60,6 @@ html[data-modo="claro"] .code-block-header {
 /* ==========================================================
    INTERRUPTORES DE MODO DUAL (LECTURA DE VARIABLES)
    ========================================================== */
-
 /* 1. MODO OSCURO */
 html[data-modo="oscuro"] pre.astro-code {
   background-color: var(--shiki-dark-bg) !important;
@@ -71,7 +67,6 @@ html[data-modo="oscuro"] pre.astro-code {
 html[data-modo="oscuro"] pre.astro-code code span {
   color: var(--shiki-dark) !important;
 }
-
 /* 2. MODO CLARO */
 html[data-modo="claro"] pre.astro-code {
   background-color: var(--shiki-light-bg) !important;
@@ -92,7 +87,6 @@ html[data-modo="claro"] pre.astro-code code span {
   overflow-wrap: anywhere !important;
   display: block;
 }
-
 .main-content pre code .line {
   display: inline-block;
   width: 100%;
@@ -113,12 +107,10 @@ html[data-modo="claro"] pre.astro-code code span {
   cursor: pointer;
   transition: all 0.2s ease;
 }
-
 .copy-code-btn:hover {
   background: rgba(139, 92, 246, 0.3);
   color: #c4b5fd;
 }
-
 .copy-code-btn.copied {
   background: #10b981 !important;
   color: #ffffff !important;

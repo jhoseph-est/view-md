@@ -217,4 +217,16 @@
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
   }
+  /* --------------------------------------------------------
+     PROTEGER TEXTOS DE MERMAID DE LA SANGRÍA APA 7
+     -------------------------------------------------------- */
+  html[data-estilo="informe"] .mermaid-wrapper foreignObject p,
+  html[data-estilo="informe"] .mermaid-wrapper foreignObject div,
+  .mermaid-wrapper foreignObject p,
+  .mermaid-wrapper foreignObject div {
+    text-indent: 0 !important;
+    text-align: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
 }

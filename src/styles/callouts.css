@@ -1,3 +1,4 @@
+/* src/styles/callouts.css */
 /* ==========================================================
    CALLOUTS OBSIDIAN (MINIMALISTA Y LIMPIO)
    ========================================================== */
@@ -76,7 +77,6 @@
 .main-content [class*="callout-"] .callout-content p {
   margin: 0.25rem 0 !important;
 }
-
 .main-content [class*="callout-"] .callout-content p:last-child {
   margin-bottom: 0 !important;
 }

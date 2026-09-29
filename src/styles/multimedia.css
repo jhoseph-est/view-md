@@ -1,8 +1,8 @@
+/* src/styles/multimedia.css */
 /* ==========================================================
    REPRODUCTOR DE AUDIO NATIVO (CÁPSULA CON RESPLANDOR/SOMBRA)
    ========================================================== */
-.main-content audio,
-.reveal audio {
+.main-content audio, .reveal audio {
   display: block !important;
   width: 100% !important;
   max-width: 440px !important;
@@ -14,7 +14,6 @@
   border-radius: 9999px !important;
   transition: box-shadow 0.3s ease, transform 0.2s ease !important;
 }
-
 .main-content audio::-webkit-media-controls-panel,
 .reveal audio::-webkit-media-controls-panel,
 .main-content audio::-webkit-media-controls-enclosure,
@@ -23,12 +22,10 @@
   border-radius: 9999px !important;
   transition: background-color 0.25s ease;
 }
-
 html[data-modo="oscuro"] .main-content audio,
 html[data-modo="oscuro"] .reveal audio {
   color-scheme: dark !important;
 }
-
 html[data-modo="claro"] .main-content audio,
 html[data-modo="claro"] .reveal audio {
   color-scheme: light !important;
@@ -44,7 +41,6 @@ html[data-estilo="moderno"] .main-content audio:hover,
 html[data-estilo="moderno"] .reveal audio:hover {
   box-shadow: 0 6px 26px rgba(139, 92, 246, 0.42) !important;
 }
-
 html[data-estilo="academico"][data-modo="oscuro"] .main-content audio,
 html[data-estilo="academico"][data-modo="oscuro"] .reveal audio {
   accent-color: #d97706 !important;
@@ -54,7 +50,6 @@ html[data-estilo="academico"][data-modo="oscuro"] .main-content audio:hover,
 html[data-estilo="academico"][data-modo="oscuro"] .reveal audio:hover {
   box-shadow: 0 6px 26px rgba(217, 119, 6, 0.38) !important;
 }
-
 html[data-estilo="academico"][data-modo="claro"] .main-content audio,
 html[data-estilo="academico"][data-modo="claro"] .reveal audio {
   accent-color: #78350f !important;
@@ -64,7 +59,6 @@ html[data-estilo="academico"][data-modo="claro"] .main-content audio:hover,
 html[data-estilo="academico"][data-modo="claro"] .reveal audio:hover {
   box-shadow: 0 6px 24px rgba(120, 53, 15, 0.28) !important;
 }
-
 html[data-estilo="minimalista"][data-modo="oscuro"] .main-content audio,
 html[data-estilo="minimalista"][data-modo="oscuro"] .reveal audio {
   accent-color: #ffffff !important;
@@ -74,7 +68,6 @@ html[data-estilo="minimalista"][data-modo="oscuro"] .main-content audio:hover,
 html[data-estilo="minimalista"][data-modo="oscuro"] .reveal audio:hover {
   box-shadow: 0 6px 24px rgba(255, 255, 255, 0.18) !important;
 }
-
 html[data-estilo="minimalista"][data-modo="claro"] .main-content audio,
 html[data-estilo="minimalista"][data-modo="claro"] .reveal audio {
   accent-color: #000000 !important;
@@ -88,8 +81,7 @@ html[data-estilo="minimalista"][data-modo="claro"] .reveal audio:hover {
 /* ==========================================================
    REPRODUCTOR DE VIDEO NATIVO
    ========================================================== */
-.main-content video,
-.reveal video {
+.main-content video, .reveal video {
   display: block !important;
   width: 100% !important;
   max-width: 720px !important;
@@ -103,12 +95,10 @@ html[data-estilo="minimalista"][data-modo="claro"] .reveal audio:hover {
   object-fit: contain !important;
   transition: border-color 0.25s ease, box-shadow 0.25s ease !important;
 }
-
 html[data-modo="oscuro"] .main-content video,
 html[data-modo="oscuro"] .reveal video {
   color-scheme: dark !important;
 }
-
 html[data-modo="claro"] .main-content video,
 html[data-modo="claro"] .reveal video {
   color-scheme: light !important;
@@ -185,7 +175,6 @@ html[data-estilo="minimalista"][data-modo="claro"] .reveal video:hover {
   border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
   background: rgba(0, 0, 0, 0.15);
 }
-
 .main-content .img-interactive-wrapper,
 .reveal .img-interactive-wrapper {
   display: flex;
@@ -195,7 +184,6 @@ html[data-estilo="minimalista"][data-modo="claro"] .reveal video:hover {
   margin-right: auto;
   width: fit-content;
 }
-
 .img-interactive-wrapper img {
   display: block !important;
   margin: 0 !important;
@@ -204,7 +192,6 @@ html[data-estilo="minimalista"][data-modo="claro"] .reveal video:hover {
   max-width: 100% !important;
   height: auto !important;
 }
-
 .img-toolbar {
   position: absolute;
   top: 0.6rem;
@@ -221,12 +208,10 @@ html[data-estilo="minimalista"][data-modo="claro"] .reveal video:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   z-index: 5;
 }
-
 .img-interactive-wrapper:hover .img-toolbar {
   opacity: 1;
   transform: translateY(0);
 }
-
 .img-tool-btn {
   background: transparent;
   border: none;
@@ -242,12 +227,10 @@ html[data-estilo="minimalista"][data-modo="claro"] .reveal video:hover {
   gap: 4px;
   transition: background-color 0.15s ease, color 0.15s ease;
 }
-
 .img-tool-btn:hover {
   background-color: rgba(139, 92, 246, 0.2);
   color: #a78bfa;
 }
-
 .img-tool-btn.copied {
   background: #10b981 !important;
   color: #ffffff !important;
