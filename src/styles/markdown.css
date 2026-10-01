@@ -20,6 +20,48 @@
   box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
 }
 
+/* ==========================================================
+   JERARQUÍA DE ENCABEZADOS (COLOR-CODING Y TAMAÑOS)
+   ========================================================== */
+.markdown-body h1 { color: var(--color-h1); font-size: var(--h1-size); font-weight: 800; }
+.markdown-body h2 { color: var(--color-h2); font-size: var(--h2-size); font-weight: 700; margin-top: 2rem; }
+.markdown-body h3 { color: var(--color-h3); font-size: var(--h3-size); font-weight: 600; margin-top: 1.75rem; }
+.markdown-body h4 { color: var(--color-h4); font-size: var(--h4-size); font-weight: 600; margin-top: 1.5rem; }
+.markdown-body h5 { color: var(--color-h5); font-size: var(--h5-size); font-weight: 600; margin-top: 1.25rem; }
+.markdown-body h6 { color: var(--color-h6); font-size: var(--h6-size); font-weight: 600; margin-top: 1rem; }
+
+/* ==========================================================
+   ÉNFASIS Y FORMATO DE TEXTO (COLOR-CODING)
+   ========================================================== */
+.markdown-body strong { 
+  color: var(--color-negrita); 
+  font-weight: 700; 
+}
+.markdown-body em { 
+  color: var(--color-cursiva); 
+  font-style: italic; 
+}
+.markdown-body strong em, 
+.markdown-body em strong { 
+  color: var(--color-negrita-cursiva); 
+}
+.markdown-body del, 
+.markdown-body s { 
+  color: var(--color-tachado); 
+  text-decoration-color: var(--color-tachado); 
+}
+
+/* Código en línea (inline code) */
+.markdown-body code:not([class*="language-"]) {
+  color: var(--color-codigo-inline);
+  background-color: var(--bg-codigo-inline);
+  padding: 0.2em 0.4em;
+  border-radius: 6px;
+  font-family: 'Fira Code', ui-monospace, monospace;
+  font-size: 0.85em;
+  font-weight: 500;
+}
+
 /* Enlaces internos y externos en Markdown */
 .main-content a.internal { 
   color: var(--text-color); 
@@ -69,8 +111,11 @@ html[data-modo="oscuro"] .main-content th {
 }
 
 /* ==========================================================
-   ALINEACIÓN Y SCROLL NATIVO PARA KaTeX
+   ALINEACIÓN, SCROLL NATIVO Y COLOR PARA KaTeX
    ========================================================== */
+.main-content .katex {
+  color: var(--color-math); /* Color inyectado a las matemáticas */
+}
 .main-content .katex-display {
   display: block !important;
   width: 100% !important;

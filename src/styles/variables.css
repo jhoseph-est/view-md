@@ -1,3 +1,4 @@
+/* src/styles/variables.css */
 /* ==========================================================
    VARIABLES GLOBALES Y SEPARACIÓN DE TIPOGRAFÍAS
    ========================================================== */
@@ -9,13 +10,21 @@
   --font-size: 16px;
   
   /* EL MURO DE CONTENCIÓN */
-  --ui-font: system-ui, -apple-system, sans-serif; /* Siempre fija para la interfaz */
-  --doc-font: system-ui, -apple-system, sans-serif; /* Dinámica para la lectura */
+  --ui-font: system-ui, -apple-system, sans-serif; 
+  --doc-font: system-ui, -apple-system, sans-serif; 
   --doc-line-height: 1.6;
+
+  /* TAMAÑOS DE ENCABEZADOS (H6 nunca menor a 1rem) */
+  --h1-size: 2.2rem;
+  --h2-size: 1.8rem;
+  --h3-size: 1.5rem;
+  --h4-size: 1.25rem;
+  --h5-size: 1.1rem;
+  --h6-size: 1rem;
 }
 
 /* ==========================================================
-   1. ESTILO MODERNO (Azules corporativos)
+   1. ESTILO MODERNO (Azules corporativos y Neón)
    ========================================================== */
 html[data-estilo="moderno"] {
   --doc-font: system-ui, -apple-system, sans-serif;
@@ -26,12 +35,52 @@ html[data-estilo="moderno"][data-modo="claro"] {
   --text-color: #1e293b;
   --border-color: #cbd5e1;
   --header-bg: #f8fafc;
+
+  /* Color Coding */
+  --color-h1: #15803d; 
+  --color-h2: #0f766e; 
+  --color-h3: #0369a1; 
+  --color-h4: #4338ca; 
+  --color-h5: #7e22ce; 
+  --color-h6: #be123c; 
+  
+  --color-negrita: #0f172a;
+  --color-cursiva: #16a34a;
+  --color-negrita-cursiva: #9333ea;
+  --color-tachado: #94a3b8;
+  
+  --color-codigo-inline: #c2410c;
+  --bg-codigo-inline: rgba(234, 88, 12, 0.08);
+  --color-math: #b45309;
+  
+  --mermaid-node-bg: #f8fafc;
+  --mermaid-node-border: #cbd5e1;
 }
 html[data-estilo="moderno"][data-modo="oscuro"] {
   --bg-color: #0f172a;
   --text-color: #f1f5f9;
   --border-color: #334155;
   --header-bg: #1e293b;
+
+  /* Color Coding (Como en tu imagen) */
+  --color-h1: #4ade80;
+  --color-h2: #2dd4bf;
+  --color-h3: #38bdf8;
+  --color-h4: #818cf8;
+  --color-h5: #c084fc;
+  --color-h6: #fb7185;
+  
+  --color-negrita: #ffffff;
+  --color-cursiva: #a3e635;
+  --color-negrita-cursiva: #c084fc;
+  --color-tachado: #64748b;
+  
+  --color-codigo-inline: #fb923c;
+  --bg-codigo-inline: rgba(251, 146, 60, 0.15);
+  --color-math: #facc15;
+  
+  --mermaid-node-bg: #1e293b;
+  --mermaid-node-border: #475569;
 }
 
 /* ==========================================================
@@ -46,12 +95,52 @@ html[data-estilo="academico"][data-modo="claro"] {
   --text-color: #2c221e; 
   --border-color: #e7e0d3;
   --header-bg: #f4efdf;
+
+  /* Color Coding (Tonos tierra y sobrios) */
+  --color-h1: #451a03;
+  --color-h2: #78350f;
+  --color-h3: #92400e;
+  --color-h4: #b45309;
+  --color-h5: #d97706;
+  --color-h6: #f59e0b;
+  
+  --color-negrita: #000000;
+  --color-cursiva: #4d7c0f;
+  --color-negrita-cursiva: #4338ca;
+  --color-tachado: #a8a29e;
+  
+  --color-codigo-inline: #9a3412;
+  --bg-codigo-inline: rgba(154, 52, 18, 0.08);
+  --color-math: #1e3a8a;
+  
+  --mermaid-node-bg: #f5f5f4;
+  --mermaid-node-border: #d6d3d1;
 }
 html[data-estilo="academico"][data-modo="oscuro"] {
   --bg-color: #1c1815; 
   --text-color: #f3efe6; 
   --border-color: #38302b;
   --header-bg: #26211d;
+
+  /* Color Coding (Tonos cálidos claros) */
+  --color-h1: #fef3c7;
+  --color-h2: #fde68a;
+  --color-h3: #fcd34d;
+  --color-h4: #fbbf24;
+  --color-h5: #f59e0b;
+  --color-h6: #d97706;
+  
+  --color-negrita: #ffffff;
+  --color-cursiva: #bef264;
+  --color-negrita-cursiva: #818cf8;
+  --color-tachado: #78716c;
+  
+  --color-codigo-inline: #fdba74;
+  --bg-codigo-inline: rgba(253, 186, 116, 0.15);
+  --color-math: #93c5fd;
+  
+  --mermaid-node-bg: #292524;
+  --mermaid-node-border: #57534e;
 }
 
 /* ==========================================================
@@ -66,12 +155,44 @@ html[data-estilo="minimalista"][data-modo="claro"] {
   --text-color: #000000;
   --border-color: #d4d4d4;
   --header-bg: #fafafa;
+
+  /* Color Coding (Monocromático) */
+  --color-h1: #000; --color-h2: #000; --color-h3: #000;
+  --color-h4: #000; --color-h5: #000; --color-h6: #000;
+  
+  --color-negrita: #000;
+  --color-cursiva: #000;
+  --color-negrita-cursiva: #000;
+  --color-tachado: #a3a3a3;
+  
+  --color-codigo-inline: #000;
+  --bg-codigo-inline: #f5f5f5;
+  --color-math: #000;
+  
+  --mermaid-node-bg: #fff;
+  --mermaid-node-border: #a3a3a3;
 }
 html[data-estilo="minimalista"][data-modo="oscuro"] {
   --bg-color: #000000; 
   --text-color: #ffffff; 
   --border-color: #262626;
   --header-bg: #0a0a0a;
+
+  /* Color Coding (Monocromático Inverso) */
+  --color-h1: #fff; --color-h2: #fff; --color-h3: #fff;
+  --color-h4: #fff; --color-h5: #fff; --color-h6: #fff;
+  
+  --color-negrita: #fff;
+  --color-cursiva: #fff;
+  --color-negrita-cursiva: #fff;
+  --color-tachado: #525252;
+  
+  --color-codigo-inline: #fff;
+  --bg-codigo-inline: #262626;
+  --color-math: #fff;
+  
+  --mermaid-node-bg: #000;
+  --mermaid-node-border: #525252;
 }
 
 /* ==========================================================
