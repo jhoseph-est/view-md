@@ -1,6 +1,6 @@
 ---
 title: "Suite de Inspección: Todos los Diagramas Mermaid"
-tags: ["mermaid", "inspeccion"]
+slides: true
 ---
 
 ## 1. Flowchart (Diagramas de Flujo con Subgráficos)
@@ -22,6 +22,8 @@ flowchart TB
     style Finish fill:#8b5cf6,stroke:#7c3aed,color:#fff
 
 ```
+
+---
 
 ## 2. Sequence Diagram (Diagrama de Secuencia con Bucles y Notas)
 
@@ -49,6 +51,8 @@ sequenceDiagram
 
 ```
 
+---
+
 ## 3. Class Diagram (Diagrama de Clases POO)
 
 ```mermaid
@@ -66,6 +70,8 @@ classDiagram
 
 ```
 
+---
+
 ## 4. State Diagram (Máquina de Estados con Concurrencia)
 
 ```mermaid
@@ -82,6 +88,8 @@ stateDiagram-v2
     SesionActiva --> Inactivo : Logout
 
 ```
+
+---
 
 ## 5. ER Diagram (Entidad-Relación de Base de Datos)
 
@@ -101,6 +109,8 @@ erDiagram
 
 ```
 
+---
+
 ## 6. Gantt Chart (Cronogramas de Proyecto)
 
 ```mermaid
@@ -115,6 +125,8 @@ gantt
 
 ```
 
+---
+
 ## 7. GitGraph (Historial de Ramas Git)
 
 ```mermaid
@@ -127,6 +139,8 @@ gitGraph
     merge develop id: "Release 1.0" tag: "v1.0"
 
 ```
+
+---
 
 ## 8. Quadrant Chart (Matriz de Cuadrantes)
 
@@ -145,6 +159,8 @@ quadrantChart
 
 ```
 
+---
+
 ## 9. Mindmap (Mapa Mental Jerárquico)
 
 ```mermaid
@@ -159,17 +175,31 @@ mindmap
 
 ```
 
+---
+
 ## 10. Pie Chart (Gráfico Circular / Pastel)
 
 ```mermaid
-pie title Distribución del Proyecto
-    "Astro & MDX" : 45
-    "TypeScript" : 25
-    "CSS Estilos" : 20
-    "Configuración" : 10
+---
+config:
+  pie:
+    textPosition: 0.5
+    donutHole: 0.2
+    highlightSlice: "Potassium"
+  themeVariables:
+    pieOuterStrokeWidth: "10px"
+---
+pie showData
+    title Key elements in Product X
+    "Calcium" : 42.96
+    "Potassium" : 50.05
+    "Magnesium" : 10.01
+    "Iron" :  5
+
 
 ```
 
+---
 
 ```mermaid
 %%{init: {
@@ -217,4 +247,67 @@ flowchart TB
     class Start,Success verde;
     class ErrorAuth rojo;
     class AuthCheck,WorkerNode azul;
+```
+
+---
+
+```mermaid
+gantt
+    apple :a, 2017-07-20, 1w
+    banana :crit, b, 2017-07-23, 1d
+    cherry :active, c, after b a, 1d
+    kiwi   :d, 2017-07-20, until b c
+
+```
+---
+
+```mermaid
+xychart
+    title "Sales Revenue"
+    x-axis [jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec]
+    y-axis "Revenue (in $)" 4000 --> 11000
+    bar [5000, 6000, 7500, 8200, 9500, 10500, 11000, 10200, 9200, 8500, 7000, 6000]
+    line [5000, 6000, 7500, 8200, 9500, 10500, 11000, 10200, 9200, 8500, 7000, 6000]
+
+```
+
+---
+
+```mermaid
+ graph LR
+      A["$$x^2$$"] -->|"$$\sqrt{x+3}$$"| B("$$\frac{1}{2}$$")
+      A -->|"$$\overbrace{a+b+c}^{\text{note}}$$"| C("$$\pi r^2$$")
+      B --> D("$$ x = \begin{cases} a &\text{if } b \\ c &\text{if } d \end{cases} $$")
+      C --> E("$$x(t)=c_1\begin{bmatrix}-\cos{t}+\sin{t}\\ 2\cos{t} \end{bmatrix}e^{2t}$$")
+
+```
+
+---
+
+```mermaid
+%%{init: {
+  "theme": "base",
+  "themeVariables": {
+    "primaryColor": "#BB2528",
+    "primaryTextColor": "#fff",
+    "primaryBorderColor": "#7C0000",
+    "lineColor": "#F8B229",
+    "secondaryColor": "#006100",
+    "tertiaryColor": "#fff"
+  }
+}}%%
+graph TD
+  A[Christmas] -->|Get money| B(Go shopping)
+  B --> C{Let me think}
+  B --> G[/Another/]
+  C ==>|One| D[Laptop]
+  C -->|Two| E[iPhone]
+  C -->|Three| F[fa:fa-car Car]
+  subgraph section
+    C
+    D
+    E
+    F
+    G
+  end
 ```

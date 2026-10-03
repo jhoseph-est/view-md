@@ -6,7 +6,17 @@ import { getThemeForDiagram } from './mermaidThemes';
  * Detecta la familia de diagrama a partir del código fuente
  */
 function detectDiagramType(code: string): string {
-  const clean = code.replace(/%%[\s\S]*?%%/g, '').trim();
+  // Limpia directivas %%...%% y comentarios antes de evaluar
+  let clean = code.replace(/%%[\s\S]*?%%/g, '').trim();
+
+  // Si tiene bloque YAML inicial (--- config ... ---), lo salta para encontrar la palabra clave del diagrama
+  if (clean.startsWith('---')) {
+    const yamlEndIndex = clean.indexOf('---', 3);
+    if (yamlEndIndex !== -1) {
+      clean = clean.slice(yamlEndIndex + 3).trim();
+    }
+  }
+
   if (clean.startsWith('flowchart') || clean.startsWith('graph')) return 'flowchart';
   if (clean.startsWith('erDiagram')) return 'er';
   if (clean.startsWith('quadrantChart')) return 'quadrant';
@@ -17,6 +27,7 @@ function detectDiagramType(code: string): string {
   if (clean.startsWith('pie')) return 'pie';
   if (clean.startsWith('mindmap')) return 'mindmap';
   if (clean.startsWith('gantt')) return 'gantt';
+  if (clean.startsWith('xychart')) return 'xychart';
   return 'flowchart';
 }
 
@@ -50,9 +61,6 @@ function getMermaidConfig(): MermaidConfig {
   };
 }
 
-/**
- * Garantiza contraste de texto en nodos oscuros configurados manualmente
- */
 function fixDarkNodeTextContrast(svgEl: SVGElement) {
   const nodes = svgEl.querySelectorAll('.node');
   nodes.forEach((node) => {
@@ -212,9 +220,9 @@ function attachMermaidControls(wrapper: HTMLElement, code: string) {
   });
 }
 
-export async function renderMermaid(forceReRender = false) {
+export async function renderMermaid(forceReRender = false, targetSelector = '.main-content') {
   const codeBlocks = Array.from(
-    document.querySelectorAll('pre[data-language="mermaid"], pre:has(code.language-mermaid)')
+    document.querySelectorAll(`${targetSelector} pre[data-language="mermaid"], ${targetSelector} pre:has(code.language-mermaid), ${targetSelector} pre.mermaid`)
   );
 
   codeBlocks.forEach((preNode) => {
@@ -232,7 +240,7 @@ export async function renderMermaid(forceReRender = false) {
     pre.dataset.mermaidRegistered = 'true';
   });
 
-  const containers = Array.from(document.querySelectorAll<HTMLElement>('.mermaid-native, .mermaid-wrapper'));
+  const containers = Array.from(document.querySelectorAll<HTMLElement>(`${targetSelector} .mermaid-native, ${targetSelector} .mermaid-wrapper`));
   if (containers.length === 0) return;
 
   const { default: mermaid } = await import('mermaid');
@@ -269,7 +277,8 @@ export async function renderMermaid(forceReRender = false) {
       .replace(/%%height:.*?%%/gi, '')
       .trim();
 
-    const hasCustomInit = cleanCode.includes('%%{init');
+    // Detección unificada: reconoce tanto %%{init como Frontmatter YAML ---
+    const hasCustomConfig = cleanCode.includes('%%{init') || cleanCode.startsWith('---');
     const isGantt = cleanCode.replace(/%%[\s\S]*?%%/g, '').trim().startsWith('gantt');
     const diagramType = detectDiagramType(cleanCode);
 
@@ -277,11 +286,11 @@ export async function renderMermaid(forceReRender = false) {
 
     if (isGantt) {
       const numericWidth = widthMatch ? parseInt(widthMatch[1], 10) : 1200;
-      codeToRender = hasCustomInit 
+      codeToRender = hasCustomConfig 
         ? cleanCode 
         : `%%{init: { 'gantt': { 'useWidth': ${numericWidth} } } }%%\n` + cleanCode;
-    } else if (!hasCustomInit) {
-      // Inyección dinámica de configuración leída de variables CSS
+    } else if (!hasCustomConfig) {
+      // Inyección automática solo si el autor no configuró nada explícito
       const initConfig = getThemeForDiagram(diagramType);
       const generatedInit = `%%{init: ${JSON.stringify(initConfig)} }%%\n`;
       codeToRender = generatedInit + cleanCode;
@@ -311,7 +320,7 @@ export async function renderMermaid(forceReRender = false) {
       wrapper.dataset.sourceCode = code;
       wrapper.dataset.layout = parsedLayout;
 
-      if (hasCustomInit) {
+      if (hasCustomConfig) {
         wrapper.classList.add('has-custom-init');
       } else {
         wrapper.classList.add('use-site-theme');
