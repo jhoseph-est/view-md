@@ -1,66 +1,31 @@
 // src/utils/mermaidViewer.ts
 import type { MermaidConfig } from 'mermaid';
+import { getThemeForDiagram } from './mermaidThemes';
+
+/**
+ * Detecta la familia de diagrama a partir del código fuente
+ */
+function detectDiagramType(code: string): string {
+  const clean = code.replace(/%%[\s\S]*?%%/g, '').trim();
+  if (clean.startsWith('flowchart') || clean.startsWith('graph')) return 'flowchart';
+  if (clean.startsWith('erDiagram')) return 'er';
+  if (clean.startsWith('quadrantChart')) return 'quadrant';
+  if (clean.startsWith('sequenceDiagram')) return 'sequence';
+  if (clean.startsWith('classDiagram')) return 'classDiagram';
+  if (clean.startsWith('stateDiagram')) return 'state';
+  if (clean.startsWith('gitGraph')) return 'gitGraph';
+  if (clean.startsWith('pie')) return 'pie';
+  if (clean.startsWith('mindmap')) return 'mindmap';
+  if (clean.startsWith('gantt')) return 'gantt';
+  return 'flowchart';
+}
 
 function getMermaidConfig(): MermaidConfig {
-  const isDark = document.documentElement.getAttribute('data-modo') === 'oscuro';
-  const textColor = isDark ? '#f8fafc' : '#0f172a';
-  
   return {
     startOnLoad: false,
     look: 'classic',
-    // 'neutral' es el tema oficial con mejor contraste para fondos claros
-    theme: isDark ? 'dark' : 'neutral',
-    themeVariables: {
-      background: 'transparent',
-      fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-      fontSize: '14px',
-
-      // --- COLORES DE NODOS PRINCIPALES (Rectángulos, Rombos, Círculos) ---
-      primaryColor: isDark ? '#1e293b' : '#f8fafc',
-      primaryTextColor: textColor,
-      primaryBorderColor: isDark ? '#38bdf8' : '#64748b',
-
-      // Fondo secundario y terciario para rombos y formas condicionales
-      secondaryColor: isDark ? '#0f172a' : '#f1f5f9',
-      secondaryTextColor: textColor,
-      secondaryBorderColor: isDark ? '#38bdf8' : '#64748b',
-      tertiaryColor: isDark ? '#1e293b' : '#ffffff',
-      tertiaryTextColor: textColor,
-      tertiaryBorderColor: isDark ? '#38bdf8' : '#64748b',
-
-      // --- LÍNEAS, CONECTORES Y FLECHAS ---
-      lineColor: isDark ? '#94a3b8' : '#475569',
-      textColor: textColor,
-
-      // --- TEXTOS EN LAS FLECHAS ("Conforme", "No Conforme") ---
-      labelBoxBkgColor: isDark ? '#0f172a' : '#ffffff',
-      labelBoxBorderColor: isDark ? '#334155' : '#cbd5e1',
-      labelTextColor: isDark ? '#e2e8f0' : '#334155',
-
-      // --- DIAGRAMAS DE SECUENCIA ---
-      actorBkg: isDark ? '#1e293b' : '#f8fafc',
-      actorBorder: isDark ? '#38bdf8' : '#64748b',
-      actorTextColor: textColor,
-      actorLineColor: isDark ? '#94a3b8' : '#475569',
-      signalColor: textColor,
-      signalTextColor: textColor,
-
-      // --- NOTAS Y ADVERTENCIAS ---
-      noteBorderColor: isDark ? '#f59e0b' : '#d97706',
-      noteBkgColor: isDark ? '#451a03' : '#fef3c7',
-      noteTextColor: isDark ? '#fef3c7' : '#92400e',
-
-      // --- GANTT ---
-      taskBorderColor: isDark ? '#38bdf8' : '#6366f1',
-      taskBkgColor: isDark ? '#1e293b' : '#e2e8f0',
-      taskTextColor: textColor,
-      taskTextOutsideColor: textColor,
-      activeTaskBorderColor: isDark ? '#818cf8' : '#4f46e5',
-      activeTaskBkgColor: isDark ? '#312e81' : '#c7d2fe',
-      gridColor: isDark ? '#334155' : '#cbd5e1',
-      sectionBkgColor: isDark ? 'rgba(255,255,255,0.02)' : 'rgba(0,0,0,0.02)',
-      altSectionBkgColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)'
-    },
+    theme: 'base',
+    themeVariables: { background: 'transparent' },
     flowchart: {
       htmlLabels: true,
       padding: 12,
@@ -86,8 +51,7 @@ function getMermaidConfig(): MermaidConfig {
 }
 
 /**
- * FUNCIÓN AUXILIAR: Corrige automáticamente el contraste de texto 
- * en nodos con fondos oscuros personalizados (ej. style A fill:#1e1e1e)
+ * Garantiza contraste de texto en nodos oscuros configurados manualmente
  */
 function fixDarkNodeTextContrast(svgEl: SVGElement) {
   const nodes = svgEl.querySelectorAll('.node');
@@ -99,7 +63,6 @@ function fixDarkNodeTextContrast(svgEl: SVGElement) {
     const styleAttr = rectOrPath.getAttribute('style') || '';
     const combined = (fillAttr + styleAttr).toLowerCase();
 
-    // Si el nodo tiene un color de fondo oscuro personalizado
     if (
       combined.includes('#1e1e1e') || 
       combined.includes('#000') || 
@@ -270,27 +233,19 @@ export async function renderMermaid(forceReRender = false) {
   });
 
   const containers = Array.from(document.querySelectorAll<HTMLElement>('.mermaid-native, .mermaid-wrapper'));
-
   if (containers.length === 0) return;
 
   const { default: mermaid } = await import('mermaid');
   mermaid.initialize(getMermaidConfig());
 
-  interface NodeItem {
-    el: HTMLElement;
-    layout: 'fit' | 'pan-x' | 'pan-y';
-    width: string | null;
-    maxWidth: string | null;
-    height: string | null;
-    rawCode: string;
-  }
-
-  const standardNodes: NodeItem[] = [];
+  const currentModo = document.documentElement.getAttribute('data-modo') || 'oscuro';
+  const currentEstilo = document.documentElement.getAttribute('data-estilo') || 'moderno';
+  const renderSignature = `${currentModo}-${currentEstilo}`;
 
   for (const [index, item] of containers.entries()) {
     const code = item.dataset.sourceCode;
     if (!code) continue;
-    if (item.dataset.renderedMode && !forceReRender) continue;
+    if (item.dataset.renderedSignature === renderSignature && !forceReRender) continue;
 
     const layoutMatch = code.match(/%%layout:\s*(fit|pan-x|pan-y)\s*%%/i);
     const widthMatch = code.match(/%%width:\s*(\d+(?:px|%)?)\s*%%/i);
@@ -314,92 +269,66 @@ export async function renderMermaid(forceReRender = false) {
       .replace(/%%height:.*?%%/gi, '')
       .trim();
 
+    const hasCustomInit = cleanCode.includes('%%{init');
     const isGantt = cleanCode.replace(/%%[\s\S]*?%%/g, '').trim().startsWith('gantt');
+    const diagramType = detectDiagramType(cleanCode);
+
+    let codeToRender = cleanCode;
 
     if (isGantt) {
       const numericWidth = widthMatch ? parseInt(widthMatch[1], 10) : 1200;
-      const ganttCode = `%%{init: { 'gantt': { 'useWidth': ${numericWidth} } } }%%\n` + cleanCode;
-      const renderId = `mermaid-gantt-${Date.now()}-${index}`;
-
-      try {
-        const { svg } = await mermaid.render(renderId, ganttCode);
-        
-        const tempSvgContainer = document.createElement('div');
-        tempSvgContainer.innerHTML = svg;
-        const svgElParsed = tempSvgContainer.querySelector('svg');
-        if (svgElParsed) {
-          fixDarkNodeTextContrast(svgElParsed);
-        }
-
-        const wrapper = buildWrapperStructure(svgElParsed ? svgElParsed.outerHTML : svg);
-        wrapper.classList.add('is-gantt');
-        wrapper.dataset.sourceCode = code;
-        wrapper.dataset.layout = parsedLayout;
-
-        const svgEl = wrapper.querySelector('svg') as SVGElement | null;
-        if (svgEl) {
-          if (parsedWidth) svgEl.style.setProperty('width', parsedWidth, 'important');
-          if (parsedMaxWidth) svgEl.style.setProperty('max-width', parsedMaxWidth, 'important');
-        }
-
-        item.replaceWith(wrapper);
-        attachMermaidControls(wrapper, code);
-        wrapper.dataset.renderedMode = document.documentElement.getAttribute('data-modo') || 'oscuro';
-      } catch (err) {
-        console.error('Error renderizando Gantt:', err);
-      }
-    } else {
-      const isDark = document.documentElement.getAttribute('data-modo') === 'oscuro';
-      const directivaTema = `%%{init: { "theme": "${isDark ? 'dark' : 'neutral'}" } }%%\n`;
-      const finalCode = directivaTema + cleanCode;
-
-      const tempDiv = document.createElement('div');
-      tempDiv.className = 'mermaid-native';
-      tempDiv.textContent = finalCode;
-      tempDiv.dataset.sourceCode = code;
-      item.replaceWith(tempDiv);
-      
-      standardNodes.push({
-        el: tempDiv,
-        layout: parsedLayout,
-        width: parsedWidth,
-        maxWidth: parsedMaxWidth,
-        height: parsedHeight,
-        rawCode: code
-      });
+      codeToRender = hasCustomInit 
+        ? cleanCode 
+        : `%%{init: { 'gantt': { 'useWidth': ${numericWidth} } } }%%\n` + cleanCode;
+    } else if (!hasCustomInit) {
+      // Inyección dinámica de configuración leída de variables CSS
+      const initConfig = getThemeForDiagram(diagramType);
+      const generatedInit = `%%{init: ${JSON.stringify(initConfig)} }%%\n`;
+      codeToRender = generatedInit + cleanCode;
     }
-  }
 
-  if (standardNodes.length > 0) {
+    const renderId = `mermaid-render-${Date.now()}-${index}`;
+
     try {
-      await mermaid.run({ nodes: standardNodes.map((n) => n.el) });
-      const currentMode = document.documentElement.getAttribute('data-modo') || 'oscuro';
+      const { svg } = await mermaid.render(renderId, codeToRender);
 
-      standardNodes.forEach(({ el, layout, width, maxWidth, height, rawCode }) => {
-        const svgEl = el.querySelector('svg') as SVGElement | null;
-        if (svgEl) {
-          fixDarkNodeTextContrast(svgEl);
-          if (width) {
-            svgEl.style.setProperty('width', width, 'important');
-            svgEl.style.setProperty('min-width', width, 'important');
-          }
-          if (maxWidth) svgEl.style.setProperty('max-width', maxWidth, 'important');
-          if (height) svgEl.style.setProperty('max-height', height, 'important');
+      const tempContainer = document.createElement('div');
+      tempContainer.innerHTML = svg;
+      const svgEl = tempContainer.querySelector('svg');
+
+      if (svgEl) {
+        fixDarkNodeTextContrast(svgEl);
+
+        if (parsedWidth) {
+          svgEl.style.setProperty('width', parsedWidth, 'important');
+          svgEl.style.setProperty('min-width', parsedWidth, 'important');
         }
+        if (parsedMaxWidth) svgEl.style.setProperty('max-width', parsedMaxWidth, 'important');
+        if (parsedHeight) svgEl.style.setProperty('max-height', parsedHeight, 'important');
+      }
 
-        const wrapper = buildWrapperStructure(svgEl ? svgEl.outerHTML : '');
-        wrapper.dataset.sourceCode = rawCode;
-        wrapper.dataset.layout = layout;
-        if (width || maxWidth || height) {
-          wrapper.classList.add('has-custom-width');
-        }
+      const wrapper = buildWrapperStructure(svgEl ? svgEl.outerHTML : svg);
+      wrapper.dataset.sourceCode = code;
+      wrapper.dataset.layout = parsedLayout;
 
-        el.replaceWith(wrapper);
-        attachMermaidControls(wrapper, rawCode);
-        wrapper.dataset.renderedMode = currentMode;
-      });
-    } catch (error) {
-      console.error('Error en mermaid.run():', error);
+      if (hasCustomInit) {
+        wrapper.classList.add('has-custom-init');
+      } else {
+        wrapper.classList.add('use-site-theme');
+      }
+
+      if (isGantt) {
+        wrapper.classList.add('is-gantt');
+      }
+      if (parsedWidth || parsedMaxWidth || parsedHeight) {
+        wrapper.classList.add('has-custom-width');
+      }
+
+      item.replaceWith(wrapper);
+      attachMermaidControls(wrapper, code);
+      wrapper.dataset.renderedSignature = renderSignature;
+    } catch (err) {
+      console.error(`Error renderizando diagrama #${index}:`, err);
     }
   }
 }

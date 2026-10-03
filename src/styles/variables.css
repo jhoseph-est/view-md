@@ -9,7 +9,7 @@
   --max-grid-width: 1600px;
   --font-size: 16px;
   
-  /* EL MURO DE CONTENCIÓN */
+  /* CONTENCIÓN TIPOGRÁFICA */
   --ui-font: system-ui, -apple-system, sans-serif; 
   --doc-font: system-ui, -apple-system, sans-serif; 
   --doc-line-height: 1.6;
@@ -30,6 +30,7 @@ html[data-estilo="moderno"] {
   --doc-font: system-ui, -apple-system, sans-serif;
   --doc-line-height: 1.6;
 }
+
 html[data-estilo="moderno"][data-modo="claro"] {
   --bg-color: #ffffff;
   --text-color: #1e293b;
@@ -52,17 +53,15 @@ html[data-estilo="moderno"][data-modo="claro"] {
   --color-codigo-inline: #c2410c;
   --bg-codigo-inline: rgba(234, 88, 12, 0.08);
   --color-math: #b45309;
-  
-  --mermaid-node-bg: #f8fafc;
-  --mermaid-node-border: #cbd5e1;
 }
+
 html[data-estilo="moderno"][data-modo="oscuro"] {
   --bg-color: #0f172a;
   --text-color: #f1f5f9;
   --border-color: #334155;
   --header-bg: #1e293b;
 
-  /* Color Coding (Como en tu imagen) */
+  /* Color Coding */
   --color-h1: #4ade80;
   --color-h2: #2dd4bf;
   --color-h3: #38bdf8;
@@ -78,9 +77,6 @@ html[data-estilo="moderno"][data-modo="oscuro"] {
   --color-codigo-inline: #fb923c;
   --bg-codigo-inline: rgba(251, 146, 60, 0.15);
   --color-math: #facc15;
-  
-  --mermaid-node-bg: #1e293b;
-  --mermaid-node-border: #475569;
 }
 
 /* ==========================================================
@@ -90,13 +86,14 @@ html[data-estilo="academico"] {
   --doc-font: "Times New Roman", Times, serif;
   --doc-line-height: 1.8;
 }
+
 html[data-estilo="academico"][data-modo="claro"] {
   --bg-color: #fdfbf7; 
   --text-color: #2c221e; 
   --border-color: #e7e0d3;
   --header-bg: #f4efdf;
 
-  /* Color Coding (Tonos tierra y sobrios) */
+  /* Color Coding */
   --color-h1: #451a03;
   --color-h2: #78350f;
   --color-h3: #92400e;
@@ -112,17 +109,15 @@ html[data-estilo="academico"][data-modo="claro"] {
   --color-codigo-inline: #9a3412;
   --bg-codigo-inline: rgba(154, 52, 18, 0.08);
   --color-math: #1e3a8a;
-  
-  --mermaid-node-bg: #f5f5f4;
-  --mermaid-node-border: #d6d3d1;
 }
+
 html[data-estilo="academico"][data-modo="oscuro"] {
   --bg-color: #1c1815; 
   --text-color: #f3efe6; 
   --border-color: #38302b;
   --header-bg: #26211d;
 
-  /* Color Coding (Tonos cálidos claros) */
+  /* Color Coding */
   --color-h1: #fef3c7;
   --color-h2: #fde68a;
   --color-h3: #fcd34d;
@@ -138,9 +133,6 @@ html[data-estilo="academico"][data-modo="oscuro"] {
   --color-codigo-inline: #fdba74;
   --bg-codigo-inline: rgba(253, 186, 116, 0.15);
   --color-math: #93c5fd;
-  
-  --mermaid-node-bg: #292524;
-  --mermaid-node-border: #57534e;
 }
 
 /* ==========================================================
@@ -150,13 +142,14 @@ html[data-estilo="minimalista"] {
   --doc-font: "Courier New", Courier, monospace;
   --doc-line-height: 1.5;
 }
+
 html[data-estilo="minimalista"][data-modo="claro"] {
   --bg-color: #ffffff;
   --text-color: #000000;
   --border-color: #d4d4d4;
   --header-bg: #fafafa;
 
-  /* Color Coding (Monocromático) */
+  /* Color Coding Monocromático */
   --color-h1: #000; --color-h2: #000; --color-h3: #000;
   --color-h4: #000; --color-h5: #000; --color-h6: #000;
   
@@ -168,17 +161,15 @@ html[data-estilo="minimalista"][data-modo="claro"] {
   --color-codigo-inline: #000;
   --bg-codigo-inline: #f5f5f5;
   --color-math: #000;
-  
-  --mermaid-node-bg: #fff;
-  --mermaid-node-border: #a3a3a3;
 }
+
 html[data-estilo="minimalista"][data-modo="oscuro"] {
   --bg-color: #000000; 
   --text-color: #ffffff; 
   --border-color: #262626;
   --header-bg: #0a0a0a;
 
-  /* Color Coding (Monocromático Inverso) */
+  /* Color Coding Monocromático Inverso */
   --color-h1: #fff; --color-h2: #fff; --color-h3: #fff;
   --color-h4: #fff; --color-h5: #fff; --color-h6: #fff;
   
@@ -190,15 +181,11 @@ html[data-estilo="minimalista"][data-modo="oscuro"] {
   --color-codigo-inline: #fff;
   --bg-codigo-inline: #262626;
   --color-math: #fff;
-  
-  --mermaid-node-bg: #000;
-  --mermaid-node-border: #525252;
 }
 
 /* ==========================================================
    APLICACIÓN ESTRUCTURAL ESTRICTA
    ========================================================== */
-/* 1. Body y toda la Interfaz Externa (Header, Sidebars) */
 body {
   margin: 0;
   background-color: var(--bg-color) !important;
@@ -210,7 +197,6 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* 2. Área de lectura Markdown */
 .main-content {
   font-family: var(--doc-font);
 }
@@ -219,7 +205,6 @@ body {
   line-height: var(--doc-line-height);
 }
 
-/* Enlaces generales dentro del contenido Markdown */
 .main-content article a:not(.mermaid-native *):not(pre *) {
   color: #a78bfa !important;
   text-decoration: none;

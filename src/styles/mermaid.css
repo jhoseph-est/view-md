@@ -1,120 +1,16 @@
-/* ==========================================================
-   AISLAMIENTO DE MERMAID Y ADAPTABILIDAD DE TEMAS
-   ========================================================== */
-.main-content .mermaid-wrapper svg,
-.global-modal-body svg {
-  line-height: normal;
-  background-color: transparent !important;
-}
+/* src/styles/mermaid.css */
+/* ==========================================================================
+   ESTRUCTURA DEL VISOR Y TOKENS PARA MERMAID
+   ========================================================================== */
 
-/* Forzar legibilidad de textos en todos los selectores de Mermaid */
-.main-content .mermaid-wrapper .label, 
-.main-content .mermaid-wrapper .nodeLabel, 
-.main-content .mermaid-wrapper .entityLabel, 
-.main-content .mermaid-wrapper .edgeLabel, 
-.main-content .mermaid-wrapper .relationshipLabel,
-.global-modal-body .label,
-.global-modal-body .nodeLabel,
-.global-modal-body .entityLabel,
-.global-modal-body .edgeLabel,
-.global-modal-body .relationshipLabel {
-  line-height: normal;
-  font-family: var(--ui-font);
-  font-size: var(--mermaid-font-size, 14px);
-  fill: var(--text-color) !important;
-  color: var(--text-color) !important;
-}
-
-.main-content .mermaid-wrapper foreignObject,
-.global-modal-body foreignObject {
-  overflow: visible;
-}
-
-.main-content .mermaid-wrapper foreignObject p,
-.global-modal-body foreignObject p {
-  margin: 0;
-  color: var(--text-color) !important;
-  font-family: var(--ui-font);
-  font-size: var(--mermaid-font-size, 14px);
-  line-height: normal;
-}
-
-/* ==========================================================
-   CORRECCIÓN CLAVE: NODO OSCURO O CON ESTILO MANUAL (TEXTO BLANCO)
-   ========================================================== */
-/* Si un nodo tiene un fondo oscuro de forma nativa o por inline style, forzamos texto blanco */
-.main-content .mermaid-wrapper .node rect[style*="fill:#1e1e1e"],
-.main-content .mermaid-wrapper .node rect[style*="fill:#000"],
-.main-content .mermaid-wrapper .node rect[style*="fill:black"],
-.main-content .mermaid-wrapper .node rect[fill*="#1e1e1e"],
-.main-content .mermaid-wrapper .node rect[fill*="#000000"] {
-  fill: #1e1e1e !important;
-}
-
-/* Forzar que cualquier etiqueta de texto dentro de un nodo con fondo oscuro sea blanca */
-.main-content .mermaid-wrapper .node:has(rect[style*="fill:#1e1e1e"], rect[style*="fill:#000"], rect[style*="fill:black"], rect[fill*="#1e1e1e"]) .nodeLabel,
-.main-content .mermaid-wrapper .node:has(rect[style*="fill:#1e1e1e"], rect[style*="fill:#000"], rect[style*="fill:black"], rect[fill*="#1e1e1e"]) text,
-.main-content .mermaid-wrapper .node:has(rect[style*="fill:#1e1e1e"], rect[style*="fill:#000"], rect[style*="fill:black"], rect[fill*="#1e1e1e"]) span {
-  fill: #ffffff !important;
-  color: #ffffff !important;
-}
-
-/* ==========================================================
-   COLORES DINÁMICOS UNIFICADOS (Vínculo directo con Temas y Modos)
-   ========================================================== */
-.main-content .mermaid-wrapper .node rect,
-.main-content .mermaid-wrapper .node polygon,
-.main-content .mermaid-wrapper .node circle,
-.main-content .mermaid-wrapper .cluster rect,
-.global-modal-body .node rect,
-.global-modal-body .node polygon,
-.global-modal-body .node circle,
-.global-modal-body .cluster rect {
-  fill: var(--header-bg) !important;
-  stroke: var(--border-color) !important;
-  stroke-width: 1.5px !important;
-}
-
-.main-content .mermaid-wrapper .nodeLabel,
-.main-content .mermaid-wrapper foreignObject p,
-.global-modal-body .nodeLabel,
-.global-modal-body foreignObject p {
-  color: var(--text-color) !important;
-  fill: var(--text-color) !important;
-}
-
-/* Conexiones / Flechas unificadas al borde del tema */
-.main-content .mermaid-wrapper .edgePath path,
-.global-modal-body .edgePath path {
-  stroke: var(--border-color) !important;
-  stroke-width: 2px !important;
-}
-
-.main-content .mermaid-wrapper .arrowheadPath,
-.global-modal-body .arrowheadPath {
-  fill: var(--border-color) !important;
-}
-
-/* Corrección de textos de Gantt */
-.main-content .mermaid-wrapper .taskTextOutsideRight,
-.main-content .mermaid-wrapper .taskTextOutsideLeft,
-.global-modal-body .taskTextOutsideRight,
-.global-modal-body .taskTextOutsideLeft {
-  fill: var(--text-color) !important;
-  font-weight: 600 !important;
-  font-size: 11px !important;
-}
-
-/* ==========================================================
-   VISOR INTERACTIVO Y BARRA FLOTANTE
-   ========================================================== */
+/* --- 1. ESTRUCTURA Y TOOLBAR FLOTANTE --- */
 .mermaid-wrapper {
   position: relative;
   width: 100%;
-  margin: 2rem 0;
-  border: 1px solid var(--border-color);
+  margin: 1.5rem 0;
+  border: 1px solid var(--border-color, #334155);
   border-radius: 8px;
-  background-color: var(--bg-color);
+  background-color: transparent;
   overflow: hidden;
 }
 
@@ -126,13 +22,13 @@
   gap: 0.35rem;
   z-index: 10;
   opacity: 0;
-  transition: opacity 0.2s ease, transform 0.2s ease;
   transform: translateY(-4px);
-  background: var(--bg-color);
-  border: 1px solid var(--border-color);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
   padding: 0.25rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .mermaid-wrapper:hover .mermaid-toolbar {
@@ -143,26 +39,20 @@
 .mermaid-tool-btn {
   background: transparent;
   border: none;
-  color: var(--text-color);
+  color: #f8fafc;
   cursor: pointer;
   padding: 0.25rem 0.45rem;
   border-radius: 4px;
-  font-size: 0.8rem;
-  font-family: var(--ui-font);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.15s ease, color 0.15s ease;
+  font-size: 0.75rem;
+  font-family: inherit;
+  transition: background-color 0.15s;
 }
 
 .mermaid-tool-btn:hover {
-  background-color: rgba(139, 92, 246, 0.15);
-  color: #8b5cf6;
+  background: rgba(139, 92, 246, 0.35);
+  color: #c4b5fd;
 }
 
-/* ==========================================================
-   MODOS DE LAYOUT (fit, pan-x, pan-y) EN VISTA NORMAL
-   ========================================================== */
 .mermaid-viewport {
   width: 100%;
   padding: 1.5rem 1rem;
@@ -170,107 +60,186 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: all 0.2s ease;
 }
 
 .mermaid-viewport svg {
-  display: block !important;
-  margin: 0 auto !important;
+  display: block;
+  max-width: 100%;
   height: auto;
-  transition: transform 0.2s ease;
 }
 
-.mermaid-wrapper.layout-fit .mermaid-viewport {
-  overflow: hidden;
-}
-.mermaid-wrapper.layout-fit .mermaid-viewport svg {
-  max-width: 100% !important;
-  width: auto !important;
+/* ==========================================================================
+   2. MATRIZ DE VARIABLES PARA MERMAID (Leídas por getComputedStyle)
+   Sincronizado con data-estilo y data-modo de variables.css
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   ESTILO 1: MODERNO
+   -------------------------------------------------------------------------- */
+html[data-estilo="moderno"][data-modo="oscuro"] {
+  --mm-node-bg: #1e293b;
+  --mm-node-border: #38bdf8;
+  --mm-line-color: #38bdf8;
+  --mm-text-color: #f8fafc;
+  --mm-header-bg: #0f172a;
+  --mm-label-bg: #0f172a;
+  --mm-note-bg: #4c1d95;
+  --mm-note-border: #a855f7;
+
+  --mm-quad-border: #38bdf8;
+  --mm-quad-line: #38bdf8;
+  --mm-q1: rgba(56, 189, 248, 0.15);
+  --mm-q2: rgba(16, 185, 129, 0.15);
+  --mm-q3: rgba(244, 63, 94, 0.15);
+  --mm-q4: rgba(234, 179, 8, 0.15);
+
+  --mm-git-1: #38bdf8;
+  --mm-git-2: #a855f7;
+  --mm-git-3: #10b981;
+  --mm-git-4: #f59e0b;
+
+  --mm-pie-1: #38bdf8;
+  --mm-pie-2: #10b981;
+  --mm-pie-3: #f59e0b;
 }
 
-.mermaid-wrapper.layout-pan-x .mermaid-viewport {
-  overflow-x: auto !important;
-  overflow-y: hidden !important;
-  display: flex;
-  justify-content: center;
-}
-.mermaid-wrapper.layout-pan-x .mermaid-viewport svg {
-  max-width: none !important;
-  flex-shrink: 0;
-  margin: 0 auto !important;
+html[data-estilo="moderno"][data-modo="claro"] {
+  --mm-node-bg: #f8fafc;
+  --mm-node-border: #0ea5e9;
+  --mm-line-color: #0284c7;
+  --mm-text-color: #0f172a;
+  --mm-header-bg: #e0f2fe;
+  --mm-label-bg: #ffffff;
+  --mm-note-bg: #fdf4ff;
+  --mm-note-border: #c084fc;
+
+  --mm-quad-border: #0ea5e9;
+  --mm-quad-line: #0ea5e9;
+  --mm-q1: rgba(14, 165, 233, 0.15);
+  --mm-q2: rgba(34, 197, 94, 0.15);
+  --mm-q3: rgba(239, 68, 68, 0.15);
+  --mm-q4: rgba(245, 158, 11, 0.15);
+
+  --mm-git-1: #0284c7;
+  --mm-git-2: #7c3aed;
+  --mm-git-3: #059669;
+  --mm-git-4: #d97706;
+
+  --mm-pie-1: #0284c7;
+  --mm-pie-2: #059669;
+  --mm-pie-3: #d97706;
 }
 
-.mermaid-wrapper.layout-pan-y .mermaid-viewport {
-  max-height: var(--mermaid-viewport-height, 500px);
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-}
-.mermaid-wrapper.layout-pan-y .mermaid-viewport svg {
-  max-width: 100% !important;
-  width: auto !important;
-  height: auto !important;
-  margin: 0 auto !important;
+/* --------------------------------------------------------------------------
+   ESTILO 2: ACADÉMICO
+   -------------------------------------------------------------------------- */
+html[data-estilo="academico"][data-modo="oscuro"] {
+  --mm-node-bg: #292524;
+  --mm-node-border: #57534e;
+  --mm-line-color: #a8a29e;
+  --mm-text-color: #f3efe6;
+  --mm-header-bg: #1c1815;
+  --mm-label-bg: #1c1815;
+  --mm-note-bg: #451a03;
+  --mm-note-border: #b45309;
+
+  --mm-quad-border: #78716c;
+  --mm-quad-line: #57534e;
+  --mm-q1: rgba(254, 243, 199, 0.08);
+  --mm-q2: rgba(253, 230, 138, 0.08);
+  --mm-q3: rgba(251, 191, 36, 0.08);
+  --mm-q4: rgba(245, 158, 11, 0.08);
+
+  --mm-git-1: #f59e0b;
+  --mm-git-2: #818cf8;
+  --mm-git-3: #bef264;
+  --mm-git-4: #fdba74;
+
+  --mm-pie-1: #b45309;
+  --mm-pie-2: #4d7c0f;
+  --mm-pie-3: #d97706;
 }
 
-/* ==========================================================
-   MODOS DE VISUALIZACIÓN DENTRO DEL MODAL GLOBAL
-   ========================================================== */
-.modal-layout-fit {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-}
-.modal-layout-fit svg {
-  max-width: 100% !important;
-  max-height: 100% !important;
-  width: auto !important;
-  height: auto !important;
-  margin: auto !important;
+html[data-estilo="academico"][data-modo="claro"] {
+  --mm-node-bg: #f5f5f4;
+  --mm-node-border: #d6d3d1;
+  --mm-line-color: #78350f;
+  --mm-text-color: #2c221e;
+  --mm-header-bg: #f4efdf;
+  --mm-label-bg: #ffffff;
+  --mm-note-bg: #fef3c7;
+  --mm-note-border: #d97706;
+
+  --mm-quad-border: #a8a29e;
+  --mm-quad-line: #d6d3d1;
+  --mm-q1: rgba(120, 53, 15, 0.06);
+  --mm-q2: rgba(146, 64, 14, 0.06);
+  --mm-q3: rgba(180, 83, 9, 0.06);
+  --mm-q4: rgba(217, 119, 6, 0.06);
+
+  --mm-git-1: #78350f;
+  --mm-git-2: #4338ca;
+  --mm-git-3: #4d7c0f;
+  --mm-git-4: #9a3412;
+
+  --mm-pie-1: #92400e;
+  --mm-pie-2: #4d7c0f;
+  --mm-pie-3: #b45309;
 }
 
-.modal-layout-pan-x {
-  display: flex !important;
-  flex-direction: row !important;
-  align-items: center !important;
-  overflow-x: auto !important;
-  overflow-y: hidden !important;
-  padding: 1rem 2rem 2.5rem 2rem !important;
-  box-sizing: border-box !important;
-  width: 100% !important;
-  height: 100% !important;
-}
-.modal-layout-pan-x svg {
-  height: calc(85vh - 5rem) !important;
-  min-height: calc(85vh - 5rem) !important;
-  width: auto !important;
-  min-width: max-content !important;
-  max-width: none !important;
-  flex-shrink: 0 !important;
-  margin: 0 auto !important;
+/* --------------------------------------------------------------------------
+   ESTILO 3: MINIMALISTA
+   -------------------------------------------------------------------------- */
+html[data-estilo="minimalista"][data-modo="oscuro"] {
+  --mm-node-bg: #000000;
+  --mm-node-border: #525252;
+  --mm-line-color: #a3a3a3;
+  --mm-text-color: #ffffff;
+  --mm-header-bg: #0a0a0a;
+  --mm-label-bg: #000000;
+  --mm-note-bg: #171717;
+  --mm-note-border: #404040;
+
+  --mm-quad-border: #525252;
+  --mm-quad-line: #262626;
+  --mm-q1: rgba(255, 255, 255, 0.03);
+  --mm-q2: rgba(255, 255, 255, 0.06);
+  --mm-q3: rgba(255, 255, 255, 0.01);
+  --mm-q4: rgba(255, 255, 255, 0.04);
+
+  --mm-git-1: #ffffff;
+  --mm-git-2: #a3a3a3;
+  --mm-git-3: #737373;
+  --mm-git-4: #525252;
+
+  --mm-pie-1: #ffffff;
+  --mm-pie-2: #a3a3a3;
+  --mm-pie-3: #525252;
 }
 
-.modal-layout-pan-y {
-  display: block !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  padding: 2rem 1.5rem 3rem 1.5rem !important;
-  box-sizing: border-box !important;
-  text-align: center !important;
-  width: 100%;
-  height: 100%;
-}
-.modal-layout-pan-y svg {
-  display: block !important;
-  width: auto !important;
-  max-width: 85vw !important;
-  min-height: min-content !important;
-  height: auto !important;
-  max-height: none !important;
-  margin: 0 auto !important;
+html[data-estilo="minimalista"][data-modo="claro"] {
+  --mm-node-bg: #ffffff;
+  --mm-node-border: #a3a3a3;
+  --mm-line-color: #000000;
+  --mm-text-color: #000000;
+  --mm-header-bg: #fafafa;
+  --mm-label-bg: #ffffff;
+  --mm-note-bg: #f5f5f5;
+  --mm-note-border: #a3a3a3;
+
+  --mm-quad-border: #a3a3a3;
+  --mm-quad-line: #d4d4d4;
+  --mm-q1: rgba(0, 0, 0, 0.03);
+  --mm-q2: rgba(0, 0, 0, 0.06);
+  --mm-q3: rgba(0, 0, 0, 0.01);
+  --mm-q4: rgba(0, 0, 0, 0.04);
+
+  --mm-git-1: #000000;
+  --mm-git-2: #525252;
+  --mm-git-3: #737373;
+  --mm-git-4: #a3a3a3;
+
+  --mm-pie-1: #18181b;
+  --mm-pie-2: #71717a;
+  --mm-pie-3: #d4d4d8;
 }
