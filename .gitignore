@@ -25,6 +25,7 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 prueba/
+pagefind/
 
 # Python cache y binarios
 __pycache__/

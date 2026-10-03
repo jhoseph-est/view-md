@@ -7,8 +7,8 @@
   },
 "scripts": {
   "dev": "astro dev",
-  "start": "astro dev",
-  "build": "astro build && npx -y pagefind --site dist --glob \"**/*.html\"",
+  "build": "astro build && npx pagefind --site dist",
+  "build:search": "astro build && npx pagefind --site dist --output-path public/pagefind",
   "preview": "astro preview"
 },
   "dependencies": {

@@ -128,3 +128,21 @@ html[data-modo="claro"] pre.astro-code code span {
   color: #ffffff !important;
   border-color: #10b981 !important;
 }
+
+/* Ocultar la cabecera estilo macOS si el bloque contiene un diagrama o visor Mermaid */
+.code-block-wrapper:has(.mermaid-container),
+.code-block-wrapper:has(.mermaid-viewer),
+.code-block-wrapper:has(svg[id^="mermaid-"]),
+.code-block-wrapper:has(.mermaid) {
+  border: none !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+  background: transparent !important;
+}
+
+.code-block-wrapper:has(.mermaid-container) > .code-block-header,
+.code-block-wrapper:has(.mermaid-viewer) > .code-block-header,
+.code-block-wrapper:has(svg[id^="mermaid-"]) > .code-block-header,
+.code-block-wrapper:has(.mermaid) > .code-block-header {
+  display: none !important;
+}
