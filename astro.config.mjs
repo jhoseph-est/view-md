@@ -5,6 +5,7 @@ import rehypeKatex from 'rehype-katex';
 import mdx from '@astrojs/mdx';
 import remarkObsidianCallout from 'remark-obsidian-callout';
 import remarkWikiLink from 'remark-wiki-link';
+import rehypeCodeBlock from './src/plugins/rehype-code-block.mjs';
 
 export default defineConfig({
   output: 'static',
@@ -47,6 +48,7 @@ export default defineConfig({
       ],
     ],
     rehypePlugins: [
+      rehypeCodeBlock,
       [
         rehypeKatex,
         {

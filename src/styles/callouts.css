@@ -2,7 +2,9 @@
 /* ==========================================================
    CALLOUTS OBSIDIAN (MINIMALISTA Y LIMPIO)
    ========================================================== */
+/* En src/styles/callouts.css */
 .main-content blockquote[data-callout],
+.main-content .callout,
 .main-content [class*="callout-"] {
   display: block;
   margin: 1.5rem 0 !important;

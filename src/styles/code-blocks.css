@@ -10,6 +10,7 @@
   border: 1px solid var(--border-color);
   overflow: hidden;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  background: transparent !important;
   background-color: transparent !important; 
   transition: border-color 0.25s ease;
 }
@@ -46,15 +47,15 @@ html[data-modo="claro"] .code-block-header {
   opacity: 0.7;
 }
 
-/* 3. Reset del bloque <pre> para que ocupe todo el espacio del wrapper */
+/* 3. Reset del bloque <pre> con scroll horizontal nativo */
 .main-content pre.astro-code {
   margin: 0 !important;
   padding: 1.2rem 1.25rem !important;
   border: none !important;
   border-radius: 0 !important;
-  overflow-x: auto;
+  overflow-x: auto !important;
   tab-size: 4;
-  transition: background-color 0.25s ease; /* Transición suave al cambiar el tema */
+  transition: background-color 0.25s ease;
 }
 
 /* ==========================================================
@@ -76,25 +77,36 @@ html[data-modo="claro"] pre.astro-code code span {
 }
 
 /* ==========================================================
-   AJUSTES DEL TEXTO Y BOTÓN COPIAR
+   AJUSTES DEL TEXTO Y ANULACIÓN DE FONDOS PARÁSITOS
    ========================================================== */
+/* Anula la pastilla o fondo secundario del <code> interior aplicado por markdown.css */
+.code-block-wrapper pre code,
+.main-content pre.astro-code code,
 .main-content pre code {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  box-shadow: none !important;
   font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
   font-size: 0.85rem;
   line-height: 1.6;
-  white-space: pre-wrap !important;
-  word-break: break-word !important;
-  overflow-wrap: anywhere !important;
+  white-space: pre !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
   display: block;
 }
+
 .main-content pre code .line {
   display: inline-block;
-  width: 100%;
-  padding-left: 2rem;
-  text-indent: -2rem;
+  min-width: 100%;
   box-sizing: border-box;
 }
 
+/* ==========================================================
+   BOTÓN COPIAR
+   ========================================================== */
 .copy-code-btn {
   background: rgba(139, 92, 246, 0.15);
   color: #a78bfa;

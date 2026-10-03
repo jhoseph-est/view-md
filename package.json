@@ -5,12 +5,12 @@
   "engines": {
     "node": "22.x"
   },
-  "scripts": {
-    "dev": "astro dev",
-    "build": "astro build && pagefind --site dist --glob \"**/*.html\"",
-    "preview": "astro preview",
-    "astro": "astro"
-  },
+"scripts": {
+  "dev": "astro dev",
+  "start": "astro dev",
+  "build": "astro build && npx -y pagefind --site dist --glob \"**/*.html\"",
+  "preview": "astro preview"
+},
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.0",
     "@astrojs/mdx": "^8.0.1",
