@@ -10,64 +10,67 @@ function extractAllText(node) {
   return '';
 }
 
-const MERMAID_KEYWORDS = [
-  'graph ', 'graph\n', 'flowchart ', 'flowchart\n',
-  'sequencediagram', 'classdiagram', 'statediagram',
-  'erdiagram', 'gantt', 'pie', 'gitgraph', 'quadrantchart',
-  'mindmap', 'xychart', 'journey', 'timeline'
-];
+const MERMAID_REGEX = /^(?:---|%%\s*\{|graph\b|flowchart\b|sequencediagram\b|classdiagram\b|statediagram\b|erdiagram\b|gantt\b|pie\b|gitgraph\b|quadrantchart\b|mindmap\b|xychart\b|journey\b|timeline\b|packet-beta\b|architecture-beta\b)/i;
 
 export default function rehypeCodeBlock() {
   return (tree) => {
     visit(tree, 'element', (node, index, parent) => {
-      // Solo actuar sobre elementos <pre> válidos
+      // 1. Solo elementos <pre>
       if (node.tagName !== 'pre' || !parent || typeof index !== 'number') return;
 
-      const codeChild = node.children?.find((c) => c.type === 'element' && c.tagName === 'code');
+      // 2. Si ya está dentro de un wrapper, omitir
+      if (parent.properties?.className && Array.isArray(parent.properties.className)) {
+        if (parent.properties.className.includes('code-block-wrapper')) return;
+      }
 
-      // 1. Extraer clases y atributos de lenguaje de ambos elementos
+      const codeChild = node.children?.find((c) => c.type === 'element' && c.tagName === 'code');
       const preProps = node.properties || {};
       const codeProps = codeChild?.properties || {};
-
       const preClass = (Array.isArray(preProps.className) ? preProps.className.join(' ') : String(preProps.className || '')).toLowerCase();
       const codeClass = (Array.isArray(codeProps.className) ? codeProps.className.join(' ') : String(codeProps.className || '')).toLowerCase();
-      const rawLanguage = String(preProps['data-language'] || codeProps['data-language'] || '').toLowerCase();
 
-      // 2. Extraer el texto interior para verificar el contenido
+      const rawLanguage = String(
+        preProps['data-language'] ||
+        codeProps['data-language'] ||
+        preProps.dataLanguage ||
+        codeProps.dataLanguage ||
+        ''
+      ).toLowerCase();
+
       const textContent = extractAllText(node).trim();
-      const lowerContent = textContent.toLowerCase();
 
-      // 3. IDENTIFICACIÓN ESTRICTA DE MERMAID:
-      // Si el bloque fue declarado con ```mermaid o contiene sintaxis de diagrama, IGNORAR POR COMPLETO
-      const isMermaidLanguage = 
+      // 3. Comprobación de si es Mermaid
+      const isMermaidLanguage =
         rawLanguage === 'mermaid' ||
         preClass.includes('language-mermaid') ||
         preClass.includes('mermaid') ||
         codeClass.includes('language-mermaid') ||
         codeClass.includes('mermaid');
+      const isMermaidSyntax = MERMAID_REGEX.test(textContent);
 
-      const isMermaidSyntax = 
-        lowerContent.startsWith('---') ||
-        lowerContent.startsWith('%%') ||
-        MERMAID_KEYWORDS.some((kw) => lowerContent.startsWith(kw));
-
-      if (isMermaidLanguage || isMermaidSyntax) {
-        // No creamos ningún wrapper ni cabecera; dejamos el nodo intacto
-        return;
-      }
-
-      // 4. Si es un bloque de código estándar (bash, js, json, python, etc.), detectar el nombre del lenguaje
       let lang = rawLanguage;
-      if (!lang) {
-        const langMatch = `${preClass}${codeClass}`.match(/(?:language|lang)-([a-z0-9_-]+)/);
-        lang = langMatch ? langMatch[1] : '';
+      if (isMermaidLanguage || isMermaidSyntax) {
+        lang = 'mermaid';
+        node.properties = node.properties || {};
+        node.properties['data-language'] = 'mermaid';
+        if (Array.isArray(node.properties.className)) {
+          if (!node.properties.className.includes('language-mermaid')) {
+            node.properties.className.push('language-mermaid');
+          }
+        } else {
+          node.properties.className = ['language-mermaid'];
+        }
+      } else {
+        if (!lang) {
+          const langMatch = `${preClass} ${codeClass}`.match(/(?:language|lang)-([a-z0-9_-]+)/);
+          lang = langMatch ? langMatch[1] : '';
+        }
+        if (!lang || lang === 'plaintext') {
+          lang = 'code';
+        }
       }
 
-      if (!lang || lang === 'plaintext') {
-        lang = 'code';
-      }
-
-      // 5. Construir la cabecera estilo macOS y envolver el código
+      // 4. Cabecera estilo macOS neutra con botón copiar
       const headerNode = {
         type: 'element',
         tagName: 'div',

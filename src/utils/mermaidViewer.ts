@@ -2,14 +2,8 @@
 import type { MermaidConfig } from 'mermaid';
 import { getThemeForDiagram } from './mermaidThemes';
 
-/**
- * Detecta la familia de diagrama a partir del código fuente
- */
 function detectDiagramType(code: string): string {
-  // Limpia directivas %%...%% y comentarios antes de evaluar
   let clean = code.replace(/%%[\s\S]*?%%/g, '').trim();
-
-  // Si tiene bloque YAML inicial (--- config ... ---), lo salta para encontrar la palabra clave del diagrama
   if (clean.startsWith('---')) {
     const yamlEndIndex = clean.indexOf('---', 3);
     if (yamlEndIndex !== -1) {
@@ -66,16 +60,14 @@ function fixDarkNodeTextContrast(svgEl: SVGElement) {
   nodes.forEach((node) => {
     const rectOrPath = node.querySelector('rect, path, circle, polygon');
     if (!rectOrPath) return;
-
     const fillAttr = rectOrPath.getAttribute('fill') || '';
     const styleAttr = rectOrPath.getAttribute('style') || '';
     const combined = (fillAttr + styleAttr).toLowerCase();
-
     if (
       combined.includes('#1e1e1e') || 
       combined.includes('#000') || 
-      combined.includes('black') ||
-      combined.includes('#111') ||
+      combined.includes('black') || 
+      combined.includes('#111') || 
       combined.includes('#222')
     ) {
       const texts = node.querySelectorAll('text, span, p, .nodeLabel');
@@ -91,6 +83,7 @@ function fixDarkNodeTextContrast(svgEl: SVGElement) {
 function buildWrapperStructure(innerContent: string): HTMLElement {
   const wrapper = document.createElement('div');
   wrapper.className = 'mermaid-wrapper';
+  // Eliminado el botón Copiar de la barra flotante
   wrapper.innerHTML = `
     <div class="mermaid-toolbar">
       <button class="mermaid-tool-btn btn-zoom-in" title="Acercar">+</button>
@@ -98,7 +91,6 @@ function buildWrapperStructure(innerContent: string): HTMLElement {
       <button class="mermaid-tool-btn btn-zoom-reset" title="Restablecer">1:1</button>
       <button class="mermaid-tool-btn btn-fullscreen-diagram" title="Ver en Pantalla Completa">⛶</button>
       <button class="mermaid-tool-btn btn-download-svg" title="Descargar como SVG">SVG</button>
-      <button class="mermaid-tool-btn btn-copy-code" title="Copiar sintaxis fuente">Copiar</button>
     </div>
     <div class="mermaid-viewport">${innerContent}</div>
   `;
@@ -114,7 +106,6 @@ function attachMermaidControls(wrapper: HTMLElement, code: string) {
       if (currentScale === 1) return;
       e.stopPropagation();
     }, { passive: true });
-
     viewport.addEventListener('touchmove', (e) => {
       e.stopPropagation();
     }, { passive: true });
@@ -176,14 +167,6 @@ function attachMermaidControls(wrapper: HTMLElement, code: string) {
   window.addEventListener('mousemove', onMouseMove);
   window.addEventListener('mouseup', onMouseUp);
 
-  wrapper.querySelector('.btn-copy-code')?.addEventListener('click', async (e) => {
-    const btn = e.currentTarget as HTMLElement;
-    await navigator.clipboard.writeText(code);
-    const prevText = btn.textContent;
-    btn.textContent = '✓ Copiado';
-    setTimeout(() => (btn.textContent = prevText), 1500);
-  });
-
   wrapper.querySelector('.btn-download-svg')?.addEventListener('click', () => {
     const svgData = new XMLSerializer().serializeToString(svg);
     const blob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
@@ -232,6 +215,12 @@ export async function renderMermaid(forceReRender = false, targetSelector = '.ma
     const rawCode = (codeEl?.textContent || pre.textContent || '').trim();
     if (!rawCode) return;
 
+    // Guardamos el código original en el bloque envolvente (code-block-wrapper)
+    const codeBlockWrapper = pre.closest('.code-block-wrapper') as HTMLElement | null;
+    if (codeBlockWrapper) {
+      codeBlockWrapper.dataset.sourceCode = rawCode;
+    }
+
     const container = document.createElement('div');
     container.className = 'mermaid-native';
     container.dataset.sourceCode = rawCode;
@@ -277,37 +266,30 @@ export async function renderMermaid(forceReRender = false, targetSelector = '.ma
       .replace(/%%height:.*?%%/gi, '')
       .trim();
 
-    // Detección unificada: reconoce tanto %%{init como Frontmatter YAML ---
     const hasCustomConfig = cleanCode.includes('%%{init') || cleanCode.startsWith('---');
     const isGantt = cleanCode.replace(/%%[\s\S]*?%%/g, '').trim().startsWith('gantt');
     const diagramType = detectDiagramType(cleanCode);
 
     let codeToRender = cleanCode;
-
     if (isGantt) {
       const numericWidth = widthMatch ? parseInt(widthMatch[1], 10) : 1200;
       codeToRender = hasCustomConfig 
         ? cleanCode 
         : `%%{init: { 'gantt': { 'useWidth': ${numericWidth} } } }%%\n` + cleanCode;
     } else if (!hasCustomConfig) {
-      // Inyección automática solo si el autor no configuró nada explícito
       const initConfig = getThemeForDiagram(diagramType);
       const generatedInit = `%%{init: ${JSON.stringify(initConfig)} }%%\n`;
       codeToRender = generatedInit + cleanCode;
     }
 
     const renderId = `mermaid-render-${Date.now()}-${index}`;
-
     try {
       const { svg } = await mermaid.render(renderId, codeToRender);
-
       const tempContainer = document.createElement('div');
       tempContainer.innerHTML = svg;
       const svgEl = tempContainer.querySelector('svg');
-
       if (svgEl) {
         fixDarkNodeTextContrast(svgEl);
-
         if (parsedWidth) {
           svgEl.style.setProperty('width', parsedWidth, 'important');
           svgEl.style.setProperty('min-width', parsedWidth, 'important');
@@ -329,6 +311,7 @@ export async function renderMermaid(forceReRender = false, targetSelector = '.ma
       if (isGantt) {
         wrapper.classList.add('is-gantt');
       }
+
       if (parsedWidth || parsedMaxWidth || parsedHeight) {
         wrapper.classList.add('has-custom-width');
       }

@@ -1,9 +1,9 @@
 /* src/styles/code-blocks.css */
 /* ==========================================================
-   BLOQUES DE CÓDIGO - INTEGRACIÓN DINÁMICA SHIKI (SIMÉTRICA)
+   BLOQUES DE CÓDIGO - INTEGRACIÓN DINÁMICA SHIKI & MERMAID
    ========================================================== */
 
-/* 1. Contenedor principal: Se vuelve transparente para revelar el fondo del <pre> */
+/* 1. Contenedor principal */
 .code-block-wrapper {
   margin: 1.75rem 0;
   border-radius: var(--radius-md);
@@ -11,11 +11,10 @@
   overflow: hidden;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   background: transparent !important;
-  background-color: transparent !important; 
   transition: border-color 0.25s ease;
 }
 
-/* 2. Cabecera (estilo ventana de macOS neutra) */
+/* 2. Cabecera superior */
 .code-block-header {
   display: flex;
   align-items: center;
@@ -24,19 +23,34 @@
   user-select: none;
   transition: background-color 0.25s ease, border-color 0.25s ease;
 }
+
 html[data-modo="oscuro"] .code-block-header {
   background: rgba(0, 0, 0, 0.25);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
+
 html[data-modo="claro"] .code-block-header {
   background: rgba(0, 0, 0, 0.04);
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
-.code-dots { display: flex; align-items: center; gap: 6px; }
-.code-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+.code-dots { 
+  display: flex; 
+  align-items: center; 
+  gap: 6px; 
+}
+
+.code-dot { 
+  width: 10px; 
+  height: 10px; 
+  border-radius: 50%; 
+  display: inline-block; 
+}
+
 .code-dot.red { background: #ff5f56; }
 .code-dot.yellow { background: #ffbd2e; }
 .code-dot.green { background: #27c93f; }
+
 .code-lang-tag {
   font-size: 0.72rem;
   font-family: var(--ui-font);
@@ -47,7 +61,7 @@ html[data-modo="claro"] .code-block-header {
   opacity: 0.7;
 }
 
-/* 3. Reset del bloque <pre> con scroll horizontal nativo */
+/* 3. Reset del bloque <pre> */
 .main-content pre.astro-code {
   margin: 0 !important;
   padding: 1.2rem 1.25rem !important;
@@ -58,17 +72,15 @@ html[data-modo="claro"] .code-block-header {
   transition: background-color 0.25s ease;
 }
 
-/* ==========================================================
-   INTERRUPTORES DE MODO DUAL (LECTURA DE VARIABLES)
-   ========================================================== */
-/* 1. MODO OSCURO */
+/* MODO OSCURO */
 html[data-modo="oscuro"] pre.astro-code {
   background-color: var(--shiki-dark-bg) !important;
 }
 html[data-modo="oscuro"] pre.astro-code code span {
   color: var(--shiki-dark) !important;
 }
-/* 2. MODO CLARO */
+
+/* MODO CLARO */
 html[data-modo="claro"] pre.astro-code {
   background-color: var(--shiki-light-bg) !important;
 }
@@ -76,15 +88,11 @@ html[data-modo="claro"] pre.astro-code code span {
   color: var(--shiki-light) !important;
 }
 
-/* ==========================================================
-   AJUSTES DEL TEXTO Y ANULACIÓN DE FONDOS PARÁSITOS
-   ========================================================== */
-/* Anula la pastilla o fondo secundario del <code> interior aplicado por markdown.css */
+/* Tipografía de código */
 .code-block-wrapper pre code,
 .main-content pre.astro-code code,
 .main-content pre code {
   background: transparent !important;
-  background-color: transparent !important;
   border: none !important;
   border-radius: 0 !important;
   padding: 0 !important;
@@ -104,9 +112,7 @@ html[data-modo="claro"] pre.astro-code code span {
   box-sizing: border-box;
 }
 
-/* ==========================================================
-   BOTÓN COPIAR
-   ========================================================== */
+/* 4. Botón Copiar */
 .copy-code-btn {
   background: rgba(139, 92, 246, 0.15);
   color: #a78bfa;
@@ -119,30 +125,14 @@ html[data-modo="claro"] pre.astro-code code span {
   cursor: pointer;
   transition: all 0.2s ease;
 }
+
 .copy-code-btn:hover {
   background: rgba(139, 92, 246, 0.3);
   color: #c4b5fd;
 }
+
 .copy-code-btn.copied {
   background: #10b981 !important;
   color: #ffffff !important;
   border-color: #10b981 !important;
-}
-
-/* Ocultar la cabecera estilo macOS si el bloque contiene un diagrama o visor Mermaid */
-.code-block-wrapper:has(.mermaid-container),
-.code-block-wrapper:has(.mermaid-viewer),
-.code-block-wrapper:has(svg[id^="mermaid-"]),
-.code-block-wrapper:has(.mermaid) {
-  border: none !important;
-  box-shadow: none !important;
-  margin: 0 !important;
-  background: transparent !important;
-}
-
-.code-block-wrapper:has(.mermaid-container) > .code-block-header,
-.code-block-wrapper:has(.mermaid-viewer) > .code-block-header,
-.code-block-wrapper:has(svg[id^="mermaid-"]) > .code-block-header,
-.code-block-wrapper:has(.mermaid) > .code-block-header {
-  display: none !important;
 }

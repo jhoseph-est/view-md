@@ -627,18 +627,21 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
     document.addEventListener('click', async (e) => {
       const target = e.target;
       if (!(target instanceof HTMLElement)) return;
-
       const btn = target.closest('.copy-code-btn');
       if (!btn) return;
 
-      const wrapper = btn.closest('.code-block-wrapper');
-      const codeEl = wrapper?.querySelector('pre code') || wrapper?.querySelector('pre');
-      const text = codeEl?.textContent || '';
+      const wrapper = btn.closest('.code-block-wrapper') as HTMLElement | null;
+      
+      // Si es un bloque Mermaid o tiene sourceCode guardado, usa ese. De lo contrario, lee el pre/code normal.
+      const text = wrapper?.dataset.sourceCode ||
+                  wrapper?.querySelector('pre code')?.textContent ||
+                  wrapper?.querySelector('pre')?.textContent ||
+                  '';
 
       if (!text) return;
 
       await navigator.clipboard.writeText(text.trim());
-      btn.textContent = '✓ Copiado!';
+      btn.textContent = '  Copiado!';
       btn.classList.add('copied');
       setTimeout(() => {
         btn.textContent = 'Copiar';
