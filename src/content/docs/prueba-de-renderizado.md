@@ -259,6 +259,7 @@ gantt
     kiwi   :d, 2017-07-20, until b c
 
 ```
+
 ---
 
 ```mermaid
