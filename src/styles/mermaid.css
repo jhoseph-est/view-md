@@ -250,3 +250,84 @@ html[data-estilo="minimalista"][data-modo="claro"] {
   --mm-pie-2: #71717a;
   --mm-pie-3: #d4d4d8;
 }
+
+/* ==========================================================
+   1. CONTENEDOR PRINCIPAL DEL MODAL
+   ========================================================== */
+.global-modal-body {
+    display: flex !important;
+    overflow: auto !important;
+    padding: 2.5rem !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* ==========================================================
+   2. ENVOLTORIO INTERMEDIO (LIBERA EL TAMAÑO)
+   ========================================================== */
+.mermaid-modal-body {
+    display: flex !important;
+    margin: auto !important;
+    flex-shrink: 0 !important;
+}
+
+/* Asegurar que el SVG mantenga su relación de aspecto vectorial */
+.mermaid-modal-body svg {
+    flex-shrink: 0 !important;
+}
+
+/* ==========================================================
+   3. REGLAS DE LAYOUT SEGÚN LA DIRECTIVA
+   ========================================================== */
+
+/* LAYOUT FIT:
+   Entra completo en pantalla (sin desbordar ni en ancho ni en alto). */
+.modal-layout-fit {
+    width: 100% !important;
+    height: 100% !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+.modal-layout-fit svg {
+    max-width: 100% !important;
+    max-height: 100% !important;
+    width: auto !important;
+    height: auto !important;
+}
+
+/* LAYOUT PAN-Y:
+   Ocupa el alto disponible exacto (100% de la ventana visible del modal).
+   El ancho crece libremente según la proporción del diagrama.
+   Si desborda a lo ancho, activa el scroll horizontal iniciando a la izquierda. */
+.modal-layout-pan-y {
+    height: 100% !important;
+    width: auto !important;
+    align-items: center !important;
+}
+.modal-layout-pan-y svg {
+    height: 100% !important;
+    min-height: 100% !important;
+    max-height: 100% !important;
+    width: auto !important;
+    max-width: none !important;
+    min-width: auto !important;
+}
+
+/* LAYOUT PAN-X:
+   Ocupa el ancho disponible exacto (100% del contenedor del modal).
+   El alto crece libremente según la proporción del diagrama.
+   Si desborda hacia abajo, activa el scroll vertical iniciando arriba. */
+.modal-layout-pan-x {
+    width: 100% !important;
+    height: auto !important;
+    justify-content: center !important;
+}
+.modal-layout-pan-x svg {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+    min-height: auto !important;
+}

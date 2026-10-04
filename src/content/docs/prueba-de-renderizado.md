@@ -5,6 +5,7 @@ slides: true
 
 ## 1. Flowchart (Diagramas de Flujo con Subgráficos)
 ```mermaid
+%%width: 1000px%%
 flowchart TB
     Start([Inicio]) --> Step1[Paso Rectangular]
     Step1 --> Decision{¿Permisos?}
