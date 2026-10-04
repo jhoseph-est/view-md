@@ -1,17 +1,6 @@
 // src/plugins/rehype-code-block.mjs
 import { visit } from 'unist-util-visit';
 
-function extractAllText(node) {
-  if (!node) return '';
-  if (node.type === 'text') return node.value || '';
-  if (Array.isArray(node.children)) {
-    return node.children.map(extractAllText).join('');
-  }
-  return '';
-}
-
-const MERMAID_REGEX = /^(?:---|%%\s*\{|graph\b|flowchart\b|sequencediagram\b|classdiagram\b|statediagram\b|erdiagram\b|gantt\b|pie\b|gitgraph\b|quadrantchart\b|mindmap\b|xychart\b|journey\b|timeline\b|packet-beta\b|architecture-beta\b)/i;
-
 export default function rehypeCodeBlock() {
   return (tree) => {
     visit(tree, 'element', (node, index, parent) => {
@@ -29,28 +18,23 @@ export default function rehypeCodeBlock() {
       const preClass = (Array.isArray(preProps.className) ? preProps.className.join(' ') : String(preProps.className || '')).toLowerCase();
       const codeClass = (Array.isArray(codeProps.className) ? codeProps.className.join(' ') : String(codeProps.className || '')).toLowerCase();
 
+      // Extraer el lenguaje exacto declarado en el Markdown
+      const classLangMatch = `${preClass}${codeClass}`.match(/(?:language|lang)-([a-z0-9_-]+)/);
       const rawLanguage = String(
         preProps['data-language'] ||
         codeProps['data-language'] ||
         preProps.dataLanguage ||
         codeProps.dataLanguage ||
-        ''
+        (classLangMatch ? classLangMatch[1] : '')
       ).toLowerCase();
 
-      const textContent = extractAllText(node).trim();
+      // Es Mermaid ÚNICAMENTE si se declaró explícitamente como mermaid
+      const isMermaid = rawLanguage === 'mermaid' || preClass.includes('mermaid') || codeClass.includes('mermaid');
 
-      // 3. Comprobación de si es Mermaid
-      const isMermaidLanguage =
-        rawLanguage === 'mermaid' ||
-        preClass.includes('language-mermaid') ||
-        preClass.includes('mermaid') ||
-        codeClass.includes('language-mermaid') ||
-        codeClass.includes('mermaid');
-      const isMermaidSyntax = MERMAID_REGEX.test(textContent);
+      let lang = isMermaid ? 'mermaid' : (rawLanguage || 'code');
+      if (lang === 'plaintext') lang = 'code';
 
-      let lang = rawLanguage;
-      if (isMermaidLanguage || isMermaidSyntax) {
-        lang = 'mermaid';
+      if (isMermaid) {
         node.properties = node.properties || {};
         node.properties['data-language'] = 'mermaid';
         if (Array.isArray(node.properties.className)) {
@@ -60,17 +44,9 @@ export default function rehypeCodeBlock() {
         } else {
           node.properties.className = ['language-mermaid'];
         }
-      } else {
-        if (!lang) {
-          const langMatch = `${preClass} ${codeClass}`.match(/(?:language|lang)-([a-z0-9_-]+)/);
-          lang = langMatch ? langMatch[1] : '';
-        }
-        if (!lang || lang === 'plaintext') {
-          lang = 'code';
-        }
       }
 
-      // 4. Cabecera estilo macOS neutra con botón copiar
+      // 3. Cabecera estilo macOS con botón copiar y etiqueta de lenguaje real
       const headerNode = {
         type: 'element',
         tagName: 'div',

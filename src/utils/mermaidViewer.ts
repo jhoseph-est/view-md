@@ -60,9 +60,11 @@ function fixDarkNodeTextContrast(svgEl: SVGElement) {
   nodes.forEach((node) => {
     const rectOrPath = node.querySelector('rect, path, circle, polygon');
     if (!rectOrPath) return;
+
     const fillAttr = rectOrPath.getAttribute('fill') || '';
     const styleAttr = rectOrPath.getAttribute('style') || '';
     const combined = (fillAttr + styleAttr).toLowerCase();
+
     if (
       combined.includes('#1e1e1e') || 
       combined.includes('#000') || 
@@ -83,7 +85,6 @@ function fixDarkNodeTextContrast(svgEl: SVGElement) {
 function buildWrapperStructure(innerContent: string): HTMLElement {
   const wrapper = document.createElement('div');
   wrapper.className = 'mermaid-wrapper';
-  // Eliminado el botón Copiar de la barra flotante
   wrapper.innerHTML = `
     <div class="mermaid-toolbar">
       <button class="mermaid-tool-btn btn-zoom-in" title="Acercar">+</button>
@@ -106,6 +107,7 @@ function attachMermaidControls(wrapper: HTMLElement, code: string) {
       if (currentScale === 1) return;
       e.stopPropagation();
     }, { passive: true });
+
     viewport.addEventListener('touchmove', (e) => {
       e.stopPropagation();
     }, { passive: true });
@@ -211,11 +213,11 @@ export async function renderMermaid(forceReRender = false, targetSelector = '.ma
   codeBlocks.forEach((preNode) => {
     const pre = preNode as HTMLElement;
     if (pre.dataset.mermaidRegistered === 'true') return;
+
     const codeEl = pre.querySelector('code');
     const rawCode = (codeEl?.textContent || pre.textContent || '').trim();
     if (!rawCode) return;
 
-    // Guardamos el código original en el bloque envolvente (code-block-wrapper)
     const codeBlockWrapper = pre.closest('.code-block-wrapper') as HTMLElement | null;
     if (codeBlockWrapper) {
       codeBlockWrapper.dataset.sourceCode = rawCode;
