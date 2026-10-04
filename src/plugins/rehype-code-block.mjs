@@ -19,7 +19,7 @@ export default function rehypeCodeBlock() {
       const codeClass = (Array.isArray(codeProps.className) ? codeProps.className.join(' ') : String(codeProps.className || '')).toLowerCase();
 
       // Extraer el lenguaje exacto declarado en el Markdown
-      const classLangMatch = `${preClass}${codeClass}`.match(/(?:language|lang)-([a-z0-9_-]+)/);
+      const classLangMatch = `${preClass} ${codeClass}`.match(/(?:language|lang)-([a-z0-9_-]+)/);
       const rawLanguage = String(
         preProps['data-language'] ||
         codeProps['data-language'] ||
@@ -28,9 +28,7 @@ export default function rehypeCodeBlock() {
         (classLangMatch ? classLangMatch[1] : '')
       ).toLowerCase();
 
-      // Es Mermaid ÚNICAMENTE si se declaró explícitamente como mermaid
       const isMermaid = rawLanguage === 'mermaid' || preClass.includes('mermaid') || codeClass.includes('mermaid');
-
       let lang = isMermaid ? 'mermaid' : (rawLanguage || 'code');
       if (lang === 'plaintext') lang = 'code';
 
@@ -46,22 +44,12 @@ export default function rehypeCodeBlock() {
         }
       }
 
-      // 3. Cabecera estilo macOS con botón copiar y etiqueta de lenguaje real
-      const headerNode = {
+      // 3. Barra flotante estilo píldora inferior derecha [LENGUAJE | Copiar]
+      const toolbarNode = {
         type: 'element',
         tagName: 'div',
-        properties: { className: ['code-block-header'] },
+        properties: { className: ['code-toolbar'] },
         children: [
-          {
-            type: 'element',
-            tagName: 'div',
-            properties: { className: ['code-dots'] },
-            children: [
-              { type: 'element', tagName: 'span', properties: { className: ['code-dot', 'red'] }, children: [] },
-              { type: 'element', tagName: 'span', properties: { className: ['code-dot', 'yellow'] }, children: [] },
-              { type: 'element', tagName: 'span', properties: { className: ['code-dot', 'green'] }, children: [] }
-            ]
-          },
           {
             type: 'element',
             tagName: 'span',
@@ -85,7 +73,7 @@ export default function rehypeCodeBlock() {
         type: 'element',
         tagName: 'div',
         properties: { className: ['code-block-wrapper'] },
-        children: [headerNode, node]
+        children: [toolbarNode, node]
       };
 
       parent.children[index] = wrapperNode;

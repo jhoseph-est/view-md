@@ -179,6 +179,7 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
 
   <script>
     import { renderMermaid } from '../utils/mermaidViewer';
+    import { exportarAPDF } from '../utils/pdfExporter';
 
     declare global {
       interface Window {
@@ -569,7 +570,11 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
 
       if (actToc) actToc.onclick = () => { showToc = !showToc; syncUI(); };
       if (actMeta) actMeta.onclick = () => { showMeta = !showMeta; syncUI(); };
-      if (actPrint) actPrint.onclick = () => { window.print(); };
+      if (actPrint) {
+        actPrint.onclick = () => {
+          window.print();
+        };
+      }
 
       syncUI(false);
     }
@@ -655,6 +660,9 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
 
     // Único listener oficial de ciclo de vida en Astro con ClientRouter
     document.addEventListener('astro:page-load', initializeApp);
+    document.addEventListener('astro:after-swap', () => {
+      initializeApp();
+    });
   </script>
   </body>
 </html>

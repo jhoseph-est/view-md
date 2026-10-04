@@ -1,94 +1,116 @@
 /* src/styles/code-blocks.css */
-/* ==========================================================
-   BLOQUES DE CÓDIGO - INTEGRACIÓN DINÁMICA SHIKI & MERMAID
-   ========================================================== */
 
 /* 1. Contenedor principal */
 .code-block-wrapper {
+  position: relative !important;
   margin: 1.75rem 0;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md, 8px);
+  border: 1px solid var(--border-color, #334155);
   overflow: hidden;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   background: transparent !important;
   transition: border-color 0.25s ease;
 }
 
-/* 2. Cabecera superior */
-.code-block-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.45rem 0.85rem;
-  user-select: none;
-  transition: background-color 0.25s ease, border-color 0.25s ease;
+/* 2. Ocultar los 3 puntos */
+.code-dots {
+  display: none !important;
 }
 
-html[data-modo="oscuro"] .code-block-header {
-  background: rgba(0, 0, 0, 0.25);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+/* 3. PÍLDORA FLOTANTE: SIEMPRE ARRIBA A LA IZQUIERDA */
+.code-block-wrapper > .code-toolbar,
+.code-block-wrapper > .code-block-header {
+  position: absolute !important;
+  top: 0.5rem !important;
+  left: 0.6rem !important;
+  bottom: auto !important;
+  right: auto !important;
+  width: auto !important;
+  height: auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.45rem !important;
+  z-index: 25 !important;
+
+  /* Invisible por defecto */
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(-4px) !important;
+  transition: opacity 0.2s ease, transform 0.2s ease !important;
+
+  background: rgba(15, 23, 42, 0.85) !important;
+  backdrop-filter: blur(6px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  border-radius: 6px !important;
+  padding: 0.25rem 0.5rem !important;
+  margin: 0 !important;
 }
 
-html[data-modo="claro"] .code-block-header {
-  background: rgba(0, 0, 0, 0.04);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+/* Aparece al colocar el cursor sobre el bloque */
+.code-block-wrapper:hover > .code-toolbar,
+.code-block-wrapper:hover > .code-block-header {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+  pointer-events: auto !important;
 }
 
-.code-dots { 
-  display: flex; 
-  align-items: center; 
-  gap: 6px; 
-}
-
-.code-dot { 
-  width: 10px; 
-  height: 10px; 
-  border-radius: 50%; 
-  display: inline-block; 
-}
-
-.code-dot.red { background: #ff5f56; }
-.code-dot.yellow { background: #ffbd2e; }
-.code-dot.green { background: #27c93f; }
-
+/* Etiqueta del lenguaje */
 .code-lang-tag {
-  font-size: 0.72rem;
-  font-family: var(--ui-font);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--text-color);
-  opacity: 0.7;
+  font-size: 0.7rem !important;
+  font-family: var(--ui-font, system-ui) !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
+  color: #94a3b8 !important;
+  user-select: none !important;
+  padding-right: 0.45rem !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.15) !important;
+  margin: 0 !important;
+  line-height: normal !important;
 }
 
-/* 3. Reset del bloque <pre> */
+/* Botón de copiar */
+.copy-code-btn {
+  background: transparent !important;
+  color: #f8fafc !important;
+  border: none !important;
+  padding: 0.2rem 0.45rem !important;
+  border-radius: 4px !important;
+  font-size: 0.72rem !important;
+  font-family: var(--ui-font, system-ui) !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  line-height: normal !important;
+  transition: background-color 0.15s ease, color 0.15s ease !important;
+}
+
+.copy-code-btn:hover {
+  background: rgba(139, 92, 246, 0.35) !important;
+  color: #c4b5fd !important;
+}
+
+.copy-code-btn.copied {
+  background: #10b981 !important;
+  color: #ffffff !important;
+}
+
+/* 4. Reset y fondos de bloques <pre> */
 .main-content pre.astro-code {
   margin: 0 !important;
-  padding: 1.2rem 1.25rem !important;
+  padding: 1.25rem 1.4rem !important;
   border: none !important;
   border-radius: 0 !important;
   overflow-x: auto !important;
   tab-size: 4;
-  transition: background-color 0.25s ease;
 }
 
-/* MODO OSCURO */
 html[data-modo="oscuro"] pre.astro-code {
-  background-color: var(--shiki-dark-bg) !important;
-}
-html[data-modo="oscuro"] pre.astro-code code span {
-  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg, #0f172a) !important;
 }
 
-/* MODO CLARO */
 html[data-modo="claro"] pre.astro-code {
-  background-color: var(--shiki-light-bg) !important;
-}
-html[data-modo="claro"] pre.astro-code code span {
-  color: var(--shiki-light) !important;
+  background-color: var(--shiki-light-bg, #f8fafc) !important;
 }
 
-/* Tipografía de código */
 .code-block-wrapper pre code,
 .main-content pre.astro-code code,
 .main-content pre code {
@@ -110,29 +132,4 @@ html[data-modo="claro"] pre.astro-code code span {
   display: inline-block;
   min-width: 100%;
   box-sizing: border-box;
-}
-
-/* 4. Botón Copiar */
-.copy-code-btn {
-  background: rgba(139, 92, 246, 0.15);
-  color: #a78bfa;
-  border: 1px solid rgba(139, 92, 246, 0.3);
-  padding: 0.2rem 0.55rem;
-  border-radius: var(--radius-sm);
-  font-size: 0.72rem;
-  font-family: var(--ui-font);
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.copy-code-btn:hover {
-  background: rgba(139, 92, 246, 0.3);
-  color: #c4b5fd;
-}
-
-.copy-code-btn.copied {
-  background: #10b981 !important;
-  color: #ffffff !important;
-  border-color: #10b981 !important;
 }
