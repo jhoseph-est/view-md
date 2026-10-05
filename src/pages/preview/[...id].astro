@@ -1,6 +1,7 @@
 ---
 // src/pages/preview/[...id].astro
 import { getCollection, render } from 'astro:content';
+import 'katex/dist/katex.min.css';
 import { generateDocPaths } from '../../utils/fileTree';
 import ReportCover from '../../components/ReportCover.astro';
 import ReportToc from '../../components/ReportToc.astro';

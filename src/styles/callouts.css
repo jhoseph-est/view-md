@@ -73,7 +73,12 @@
   line-height: 1.6;
   color: var(--text-color);
   opacity: 0.95;
-  white-space: pre-line !important;
+  white-space: normal !important; /* Permite fluir a KaTeX y elementos en bloque */
+}
+
+/* Blindar KaTeX dentro de callouts para que no herede saltos forzados */
+.main-content [class*="callout-"] .katex {
+  white-space: nowrap !important;
 }
 
 .main-content [class*="callout-"] .callout-content p {
