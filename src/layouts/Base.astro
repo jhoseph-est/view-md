@@ -646,7 +646,13 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
         // Conexión del botón Imprimir a la función de iframe aislado
         if (actPrint) {
           actPrint.onclick = () => {
-            imprimirDocumentoAislado();
+            // Extraer la ruta activa limpia sin prefijo /docs/ ni barras finales
+            const docPath = window.location.pathname.replace(/^\/docs\/?/, '').replace(/\/$/, '');
+            if (docPath && docPath !== 'explorar') {
+              window.open(`/preview/${docPath}`, '_blank');
+            } else {
+              window.print();
+            }
           };
         }
 

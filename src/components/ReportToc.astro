@@ -12,9 +12,16 @@ interface Props {
 
 const { headings = [] } = Astro.props;
 
-// Aceptamos todos los niveles de encabezados
+// Filtramos: omitimos el h1 inicial si coincide con el título o si es "ÍNDICE", 
+// y limitamos hasta nivel 4 para mantener el índice limpio y legible
 const filteredHeadings: TocHeading[] = headings.filter(
-  (h: TocHeading) => h && h.slug && h.text && h.depth >= 1 && h.depth <= 6
+  (h: TocHeading) =>
+    h &&
+    h.slug &&
+    h.text &&
+    h.depth >= 1 &&
+    h.depth <= 4 &&
+    !h.text.toLowerCase().includes('índice')
 );
 ---
 
@@ -41,16 +48,15 @@ const filteredHeadings: TocHeading[] = headings.filter(
     const pageNumElements = document.querySelectorAll<HTMLElement>('.toc-page-num');
     if (!pageNumElements.length) return;
 
-    // Altura aproximada de una página A4/Letter con márgenes de 2.54cm
-    // A 96 DPI: 11 pulgadas = 1056px, menos márgenes (~195px) = ~860px útiles
+    // Altura útil aproximada de una hoja A4 con márgenes (96 DPI)
     const PAGE_HEIGHT_PX = 860;
     
-    // Offset inicial APA 7:
-    // Portada = Pág. 1, Índice = Pág. 2 -> El cuerpo empieza en la Pág. 3
-    const INITIAL_PAGE_OFFSET = 3;
+    // Si hay portada activa = Pág 1, Índice = Pág 2 -> El contenido arranca en Pág 3
+    const hasCover = Boolean(document.querySelector('.report-cover-page'));
+    const INITIAL_PAGE_OFFSET = hasCover ? 3 : 2;
 
-    const firstHeading = document.querySelector('.markdown-body h1, .markdown-body h2');
-    const startTop = firstHeading ? firstHeading.getBoundingClientRect().top + window.scrollY : 0;
+    const firstContentBlock = document.querySelector('.markdown-body h1, .markdown-body h2');
+    const startTop = firstContentBlock ? firstContentBlock.getBoundingClientRect().top + window.scrollY : 0;
 
     pageNumElements.forEach((numEl) => {
       const slug = numEl.getAttribute('data-heading-slug');
@@ -65,31 +71,36 @@ const filteredHeadings: TocHeading[] = headings.filter(
     });
   }
 
-  // Ejecutar al cargar la vista y antes de imprimir
+  // Disparar en vista previa, al cargar Astro y antes de imprimir
   window.addEventListener('beforeprint', calculateRealPrintPages);
   document.addEventListener('astro:page-load', calculateRealPrintPages);
+  document.addEventListener('DOMContentLoaded', calculateRealPrintPages);
+  // Un pase adicional para asegurar que Mermaid y fuentes hayan terminado de posicionarse
+  setTimeout(calculateRealPrintPages, 400);
 </script>
 
 <style>
   .report-toc-page {
-    margin: 2.5rem 0 4rem 0;
-    padding: 2.5rem 0;
     box-sizing: border-box;
-    border: none !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
+    width: 100%;
+    margin: 0 auto;
+    padding: 1.5rem 0 3rem 0;
+    page-break-before: always;
+    break-before: page;
+    page-break-after: always;
+    break-after: page;
     background: transparent !important;
-    color: var(--text-color);
+    color: inherit;
   }
 
   .report-toc-title {
-    text-align: center;
-    font-size: 1.25rem;
-    font-weight: 800;
-    letter-spacing: 0.1em;
+    text-align: center !important;
+    font-size: 13pt !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    margin: 0 0 2rem 0;
-    color: var(--text-color);
+    margin: 0 0 2rem 0 !important;
+    color: inherit;
   }
 
   .formal-toc-list {
@@ -98,53 +109,74 @@ const filteredHeadings: TocHeading[] = headings.filter(
     margin: 0 !important;
     display: flex;
     flex-direction: column;
-    gap: 0.65rem;
+    gap: 0.6rem;
+    width: 100%;
   }
 
   .formal-toc-item {
     width: 100%;
+    box-sizing: border-box;
   }
 
-  .formal-toc-item.depth-1 { font-weight: 700; margin-top: 0.5rem; }
-  .formal-toc-item.depth-2 { padding-left: 1.27cm; font-weight: 600; }
-  .formal-toc-item.depth-3 { padding-left: 2.54cm; font-weight: 500; font-style: italic; }
-  .formal-toc-item.depth-4 { padding-left: 3.81cm; opacity: 0.9; }
-  .formal-toc-item.depth-5 { padding-left: 5.08cm; opacity: 0.85; font-style: italic; }
-  .formal-toc-item.depth-6 { padding-left: 6.35cm; opacity: 0.8; }
+  /* Sangrías proporcionales equilibradas */
+  .formal-toc-item.depth-1 {
+    font-weight: 700;
+    padding-left: 0;
+    margin-top: 0.4rem;
+  }
+
+  .formal-toc-item.depth-2 {
+    font-weight: 600;
+    padding-left: 1.25rem;
+  }
+
+  .formal-toc-item.depth-3 {
+    font-weight: 400;
+    font-style: italic;
+    padding-left: 2.25rem;
+  }
+
+  .formal-toc-item.depth-4 {
+    font-weight: 400;
+    padding-left: 3.25rem;
+    opacity: 0.9;
+  }
 
   .formal-toc-link {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
     text-decoration: none;
-    color: var(--text-color);
-    font-size: 0.95rem;
+    color: inherit;
+    font-size: 10.5pt;
+    line-height: 1.4;
   }
 
   .toc-text {
-    flex-shrink: 0;
-    max-width: 75%;
+    flex-shrink: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 80%;
   }
 
+  /* Puntos suspensivos continuos y nítidos */
   .toc-dots {
     flex-grow: 1;
     margin: 0 0.5rem;
-    border-bottom: 1.5px dotted var(--border-color);
-    height: 1px;
-    opacity: 0.6;
+    border-bottom: 1.5px dotted currentColor;
+    opacity: 0.45;
+    min-width: 1.5rem;
   }
 
   .toc-page-num {
     flex-shrink: 0;
     font-variant-numeric: tabular-nums;
+    font-weight: 600;
   }
 
   @media print {
     .report-toc-page {
-      page-break-before: always !important;
-      break-before: page !important;
-      page-break-after: always !important;
-      break-after: page !important;
       padding: 0 !important;
       margin: 0 !important;
       color: #000000 !important;
