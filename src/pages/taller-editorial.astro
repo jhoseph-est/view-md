@@ -1,0 +1,540 @@
+---
+// src/pages/taller-editorial.astro
+import '../styles/base.css';
+import { generateThemeCss } from '../utils/themeInjector';
+import estilosBase from '../config/estilos-base.json';
+
+const dynamicCss = generateThemeCss();
+const defaultConfig = estilosBase.moderno;
+---
+
+<!DOCTYPE html>
+<html lang="es" data-modo="claro" data-estilo="moderno">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Taller Editorial y Calibración de Diseño</title>
+    <style is:global set:html={dynamicCss}></style>
+
+    <style is:global>
+      /* Reset para la mesa de trabajo */
+      body {
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        background-color: #111418 !important;
+        font-family: system-ui, -apple-system, sans-serif !important;
+      }
+
+      .taller-layout {
+        display: flex;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      /* Inspector lateral */
+      .taller-sidebar {
+        width: 360px;
+        min-width: 360px;
+        height: 100vh;
+        background-color: #181d24;
+        border-right: 1px solid #28313d;
+        color: #f1f5f9;
+        display: flex;
+        flex-direction: column;
+        z-index: 50;
+      }
+
+      .taller-sidebar-header {
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid #28313d;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .taller-sidebar-header h2 {
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: #8b5cf6;
+        margin: 0;
+      }
+
+      .taller-sidebar-body {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+      }
+
+      .taller-section {
+        background: #111418;
+        border: 1px solid #28313d;
+        border-radius: 8px;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .taller-section-title {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #94a3b8;
+        margin: 0 0 0.25rem 0;
+      }
+
+      .ctrl-row {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+      }
+
+      .ctrl-row-inline {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .ctrl-row label, .ctrl-row-inline label {
+        font-size: 0.75rem;
+        color: #cbd5e1;
+      }
+
+      .taller-input, .taller-select {
+        background: #181d24;
+        border: 1px solid #334155;
+        color: #f8fafc;
+        padding: 0.4rem 0.6rem;
+        border-radius: 6px;
+        font-size: 0.82rem;
+      }
+
+      .taller-input[type="color"] {
+        padding: 0.1rem;
+        width: 44px;
+        height: 28px;
+        cursor: pointer;
+      }
+
+      .taller-btn-action {
+        width: 100%;
+        background: #8b5cf6;
+        color: #ffffff;
+        border: none;
+        padding: 0.7rem;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.85rem;
+        cursor: pointer;
+        transition: background 0.15s;
+      }
+
+      .taller-btn-action:hover {
+        background: #7c3aed;
+      }
+
+      /* Lienzo central */
+      .taller-viewport {
+        flex: 1;
+        height: 100vh;
+        overflow-y: auto;
+        padding: 2.5rem 1.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3rem;
+        box-sizing: border-box;
+      }
+
+      /* Hoja física A4 estricta */
+      .a4-sheet {
+        width: 210mm;
+        min-height: 297mm;
+        max-height: 297mm;
+        height: 297mm;
+        background: #ffffff;
+        color: #0f172a;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+        box-sizing: border-box;
+        padding: var(--test-margin, 2.54cm);
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .sheet-header-badge {
+        position: absolute;
+        top: 8px;
+        right: 12px;
+        font-size: 0.65rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #94a3b8;
+        letter-spacing: 0.05em;
+      }
+
+      /* Variables dinámicas en caliente para la prueba */
+      :root {
+        --test-h1-color: #15803d;
+        --test-h1-size: 20pt;
+        --test-h1-align: left;
+        --test-h2-color: #0f766e;
+        --test-h2-size: 16pt;
+        --test-para-indent: 1.27cm;
+        --test-line-height: 1.65;
+        --test-font: system-ui, -apple-system, sans-serif;
+      }
+
+      .a4-sheet .markdown-body {
+        font-family: var(--test-font);
+        line-height: var(--test-line-height);
+      }
+
+      .a4-sheet .markdown-body p {
+        text-indent: var(--test-para-indent);
+        margin-bottom: 0.85rem;
+      }
+
+      .a4-sheet h1.dyn-h1 {
+        color: var(--test-h1-color) !important;
+        font-size: var(--test-h1-size) !important;
+        text-align: var(--test-h1-align) !important;
+        margin-top: 0.5rem;
+      }
+
+      .a4-sheet h2.dyn-h2 {
+        color: var(--test-h2-color) !important;
+        font-size: var(--test-h2-size) !important;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="taller-layout">
+      <!-- PANEL DE CONTROL -->
+      <aside class="taller-sidebar">
+        <div class="taller-sidebar-header">
+          <h2>Inspector de Diseño</h2>
+          <a href="/docs/explorar" style="color: #94a3b8; font-size: 0.75rem; text-decoration: none;">← Salir</a>
+        </div>
+
+        <div class="taller-sidebar-body">
+          <!-- Modo de previsualización -->
+          <div class="taller-section">
+            <span class="taller-section-title">Modo de Visualización</span>
+            <div class="ctrl-row-inline">
+              <label for="sel-preview-mode">Simular Apariencia</label>
+              <select id="sel-preview-mode" class="taller-select">
+                <option value="claro">Modo Claro (Papel)</option>
+                <option value="oscuro">Modo Oscuro</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Párrafos y Prosa -->
+          <div class="taller-section">
+            <span class="taller-section-title">Cuerpo de Texto y Prosa</span>
+            <div class="ctrl-row">
+              <label>Familia Tipográfica</label>
+              <select id="sel-body-font" class="taller-select">
+                <option value="system-ui, -apple-system, sans-serif">Sans-Serif (Moderna)</option>
+                <option value="'Times New Roman', Times, serif">Times New Roman (APA)</option>
+                <option value="Georgia, Cambria, serif">Georgia (Académica)</option>
+                <option value="'Fira Code', monospace">Monospace (Técnica)</option>
+              </select>
+            </div>
+            <div class="ctrl-row-inline">
+              <label>Sangría de Párrafo</label>
+              <input type="range" id="rng-indent" min="0" max="2.5" step="0.1" value="1.27" />
+              <span id="lbl-indent" style="font-size: 0.75rem;">1.27cm</span>
+            </div>
+            <div class="ctrl-row-inline">
+              <label>Interlineado</label>
+              <input type="range" id="rng-line-height" min="1.2" max="2.0" step="0.05" value="1.65" />
+              <span id="lbl-line-height" style="font-size: 0.75rem;">1.65</span>
+            </div>
+          </div>
+
+          <!-- Encabezado H1 -->
+          <div class="taller-section">
+            <span class="taller-section-title">Encabezado H1</span>
+            <div class="ctrl-row-inline">
+              <label>Color</label>
+              <input type="color" id="col-h1" value="#15803d" class="taller-input" />
+            </div>
+            <div class="ctrl-row-inline">
+              <label>Tamaño (pt)</label>
+              <input type="range" id="rng-h1-size" min="14" max="32" step="1" value="20" />
+              <span id="lbl-h1-size" style="font-size: 0.75rem;">20pt</span>
+            </div>
+            <div class="ctrl-row">
+              <label>Alineación</label>
+              <select id="sel-h1-align" class="taller-select">
+                <option value="left">Izquierda</option>
+                <option value="center">Centrado</option>
+                <option value="right">Derecha</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Encabezado H2 -->
+          <div class="taller-section">
+            <span class="taller-section-title">Encabezado H2</span>
+            <div class="ctrl-row-inline">
+              <label>Color</label>
+              <input type="color" id="col-h2" value="#0f766e" class="taller-input" />
+            </div>
+            <div class="ctrl-row-inline">
+              <label>Tamaño (pt)</label>
+              <input type="range" id="rng-h2-size" min="12" max="26" step="1" value="16" />
+              <span id="lbl-h2-size" style="font-size: 0.75rem;">16pt</span>
+            </div>
+          </div>
+
+          <!-- Acciones de Guardado -->
+          <button id="btn-export-json" class="taller-btn-action">
+            Copiar Tokens en JSON
+          </button>
+        </div>
+      </aside>
+
+      <!-- LIENZO DE PRUEBAS: 5 HOJAS A4 -->
+      <main class="taller-viewport">
+        <!-- HOJA 1: CARÁTULA FORMAL -->
+        <div class="a4-sheet" id="sheet-1">
+          <span class="sheet-header-badge">Página 1: Portada</span>
+          <div style="display: flex; flex-direction: column; justify-content: space-between; height: 100%; text-align: center;">
+            <div>
+              <h2 style="font-size: 13pt; margin: 0; text-transform: uppercase;">Universidad Nacional de Ingeniería</h2>
+              <p style="font-size: 10.5pt; margin: 0.2rem 0; font-weight: 600;">Facultad de Ingeniería Mecánica</p>
+            </div>
+
+            <div style="margin: 1rem auto;">
+              <img src="/assets/logos/logo-uni.png" alt="Escudo UNI" style="max-height: 130px; object-fit: contain;" />
+            </div>
+
+            <div>
+              <h1 style="font-size: 15pt; text-transform: uppercase; margin: 0.5rem 0;">Informe Técnico de Calibración Editorial</h1>
+              <p style="font-size: 10.5pt; font-style: italic; margin: 0;">Análisis Estructural y Armonización Visual del Sistema</p>
+            </div>
+
+            <table style="width: 80%; margin: 1.5rem auto; border: none; font-size: 9.5pt;">
+              <tr>
+                <td style="text-align: left; font-weight: 700; border: none;">AUTOR:</td>
+                <td style="text-align: right; border: none;">OWIN RENATO PAREDES TELLO</td>
+              </tr>
+              <tr>
+                <td style="text-align: left; font-weight: 700; border: none;">CÓDIGO:</td>
+                <td style="text-align: right; border: none;">20152554C</td>
+              </tr>
+              <tr>
+                <td style="text-align: left; font-weight: 700; border: none;">DOCENTE:</td>
+                <td style="text-align: right; border: none;">ING. CARLOS MENDOZA</td>
+              </tr>
+            </table>
+
+            <div>
+              <p style="font-size: 9.5pt; font-weight: 700; margin: 0;">LIMA — PERÚ</p>
+              <p style="font-size: 9.5pt; margin: 0;">2026</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- HOJA 2: ÍNDICE GENERAL -->
+        <div class="a4-sheet" id="sheet-2">
+          <span class="sheet-header-badge">Página 2: Índice</span>
+          <h2 style="text-align: center; font-size: 14pt; margin-top: 0;">ÍNDICE GENERAL</h2>
+          <div style="display: flex; flex-direction: column; gap: 0.65rem; font-size: 10pt; margin-top: 1.5rem;">
+            <div style="display: flex; justify-content: space-between;">
+              <span style="font-weight: 700;">1. INTRODUCCIÓN Y JERARQUÍA TIPOGRÁFICA</span>
+              <span style="border-bottom: 1px dotted #64748b; flex: 1; margin: 0 0.5rem;"></span>
+              <span>3</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding-left: 1.25rem;">
+              <span>1.1 Demostración de Encabezados H2</span>
+              <span style="border-bottom: 1px dotted #64748b; flex: 1; margin: 0 0.5rem;"></span>
+              <span>3</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding-left: 2rem;">
+              <span style="font-style: italic;">1.1.1 Subnivel Profundo H3</span>
+              <span style="border-bottom: 1px dotted #64748b; flex: 1; margin: 0 0.5rem;"></span>
+              <span>3</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="font-weight: 700;">2. MATRICES, TABLAS Y TAREAS</span>
+              <span style="border-bottom: 1px dotted #64748b; flex: 1; margin: 0 0.5rem;"></span>
+              <span>4</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="font-weight: 700;">3. ARTEFACTOS TÉCNICOS, SHIKI Y MERMAID</span>
+              <span style="border-bottom: 1px dotted #64748b; flex: 1; margin: 0 0.5rem;"></span>
+              <span>5</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- HOJA 3: PROSA Y ENCABEZADOS -->
+        <div class="a4-sheet" id="sheet-3">
+          <span class="sheet-header-badge">Página 3: Jerarquía</span>
+          <div class="markdown-body">
+            <h1 class="dyn-h1">1. Encabezado Principal H1</h1>
+            <p>
+              Este párrafo evalúa la sangría de primera línea y el flujo del texto justificado. Al redactar informes técnicos, el texto debe fluir sin ríos exagerados de espacios intermedios y con proporciones tipográficas armónicas.
+            </p>
+            <h2 class="dyn-h2">1.1 Subtítulo de Sección H2</h2>
+            <p>
+              En este fragmento se prueba texto en <strong>negrita de alto contraste</strong>, <em>cursiva suave</em>, <del>texto tachado</del> y <code>código en línea</code> sin que altere la altura de la línea.
+            </p>
+            <h3>1.1.1 Subtítulo Nivel H3</h3>
+            <h4>1.1.1.1 Subtítulo Nivel H4</h4>
+            <h5>Subtítulo Nivel H5</h5>
+            <h6>Subtítulo Nivel H6</h6>
+            <blockquote>
+              Esta es una cita en bloque de más de cuarenta palabras. Su sangría izquierda y estilo tipográfico deben distinguirse inmediatamente de la prosa regular sin sobrecargar la página.
+            </blockquote>
+          </div>
+        </div>
+
+        <!-- HOJA 4: TABLAS Y CHECKBOXES -->
+        <div class="a4-sheet" id="sheet-4">
+          <span class="sheet-header-badge">Página 4: Tablas</span>
+          <div class="markdown-body">
+            <h2>2. Tablas Formales APA y Listas</h2>
+            <p>A continuación se evalúa el comportamiento de tablas sin bordes verticales:</p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Expresión Matemática</th>
+                  <th>Unidad S.I.</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Tensión</td>
+                  <td>V = I \cdot R</td>
+                  <td>Voltio (V)</td>
+                </tr>
+                <tr>
+                  <td>Potencia Activa</td>
+                  <td>P = \sqrt{3} V_L I_L \cos\theta</td>
+                  <td>Vatio (W)</td>
+                </tr>
+              </tbody>
+            </table>
+            <ul class="contains-task-list" style="margin-top: 1.5rem;">
+              <li class="task-list-item">
+                <input type="checkbox" checked disabled /> Tarea completada y validada en el diseño
+              </li>
+              <li class="task-list-item">
+                <input type="checkbox" disabled /> Tarea pendiente sujeta a revisión
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- HOJA 5: CÓDIGO Y MERMAID -->
+        <div class="a4-sheet" id="sheet-5">
+          <span class="sheet-header-badge">Página 5: Código y Diagramas</span>
+          <div class="markdown-body">
+            <h2>3. Bloque Shiki y Diagramas</h2>
+            <div class="code-block-wrapper">
+              <div class="code-toolbar">
+                <span class="code-lang-tag">PYTHON</span>
+                <button class="copy-code-btn" type="button">Copiar</button>
+              </div>
+              <pre class="astro-code" style="background-color: var(--shiki-light-bg, #2b0000); color: var(--shiki-light, #f8f8f2);"><code><span class="line"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">calcular_eficiencia</span>(p_in, p_out):</span>
+<span class="line">    <span style="color: #ff79c6;">return</span> (p_out / p_in) * <span style="color: #bd93f9;">100.0</span></span></code></pre>
+            </div>
+            <div class="mermaid-native" style="margin-top: 1.5rem; text-align: center; border: 1px solid #e2e8f0; padding: 1rem; border-radius: 6px;">
+              <span style="font-size: 0.8rem; font-family: monospace; color: #64748b;">[Diagrama Vectorial Renderizado]</span>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- CONTROLADOR REACTIVO DEL TALLER -->
+    <script>
+      const root = document.documentElement;
+
+      // Sincronización de controles
+      document.getElementById('col-h1')?.addEventListener('input', (e) => {
+        const val = (e.target as HTMLInputElement).value;
+        root.style.setProperty('--test-h1-color', val);
+      });
+
+      document.getElementById('rng-h1-size')?.addEventListener('input', (e) => {
+        const val = (e.target as HTMLInputElement).value;
+        root.style.setProperty('--test-h1-size', `${val}pt`);
+        document.getElementById('lbl-h1-size')!.textContent = `${val}pt`;
+      });
+
+      document.getElementById('sel-h1-align')?.addEventListener('change', (e) => {
+        const val = (e.target as HTMLSelectElement).value;
+        root.style.setProperty('--test-h1-align', val);
+      });
+
+      document.getElementById('col-h2')?.addEventListener('input', (e) => {
+        const val = (e.target as HTMLInputElement).value;
+        root.style.setProperty('--test-h2-color', val);
+      });
+
+      document.getElementById('rng-h2-size')?.addEventListener('input', (e) => {
+        const val = (e.target as HTMLInputElement).value;
+        root.style.setProperty('--test-h2-size', `${val}pt`);
+        document.getElementById('lbl-h2-size')!.textContent = `${val}pt`;
+      });
+
+      document.getElementById('sel-body-font')?.addEventListener('change', (e) => {
+        const val = (e.target as HTMLSelectElement).value;
+        root.style.setProperty('--test-font', val);
+      });
+
+      document.getElementById('rng-indent')?.addEventListener('input', (e) => {
+        const val = (e.target as HTMLInputElement).value;
+        root.style.setProperty('--test-para-indent', `${val}cm`);
+        document.getElementById('lbl-indent')!.textContent = `${val}cm`;
+      });
+
+      document.getElementById('rng-line-height')?.addEventListener('input', (e) => {
+        const val = (e.target as HTMLInputElement).value;
+        root.style.setProperty('--test-line-height', val);
+        document.getElementById('lbl-line-height')!.textContent = val;
+      });
+
+      // Exportar configuración a JSON
+      document.getElementById('btn-export-json')?.addEventListener('click', () => {
+        const exportedConfig = {
+          tipografia: {
+            fuenteCuerpo: (document.getElementById('sel-body-font') as HTMLSelectElement).value,
+            interlineado: (document.getElementById('rng-line-height') as HTMLInputElement).value,
+            sangria: `${(document.getElementById('rng-indent') as HTMLInputElement).value}cm`
+          },
+          encabezados: {
+            h1: {
+              color: (document.getElementById('col-h1') as HTMLInputElement).value,
+              tamano: `${(document.getElementById('rng-h1-size') as HTMLInputElement).value}pt`,
+              alineacion: (document.getElementById('sel-h1-align') as HTMLSelectElement).value
+            },
+            h2: {
+              color: (document.getElementById('col-h2') as HTMLInputElement).value,
+              tamano: `${(document.getElementById('rng-h2-size') as HTMLInputElement).value}pt`
+            }
+          }
+        };
+
+        navigator.clipboard.writeText(JSON.stringify(exportedConfig, null, 2));
+        alert('¡Configuración copiada al portapapeles en formato JSON!');
+      });
+    </script>
+  </body>
+</html>

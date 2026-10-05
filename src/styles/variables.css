@@ -1,6 +1,6 @@
 /* src/styles/variables.css */
 /* ==========================================================
-   VARIABLES GLOBALES Y SEPARACIÓN DE TIPOGRAFÍAS
+   1. VARIABLES ESTRUCTURALES Y RESET BASE
    ========================================================== */
 :root {
   --header-height: 60px;
@@ -8,183 +8,80 @@
   --right-panel-width: 240px;
   --max-grid-width: 1600px;
   --font-size: 16px;
-  
-  /* CONTENCIÓN TIPOGRÁFICA */
-  --ui-font: system-ui, -apple-system, sans-serif; 
-  --doc-font: system-ui, -apple-system, sans-serif; 
+
+  /* Contención Tipográfica */
+  --ui-font: system-ui, -apple-system, sans-serif;
+  --doc-font: system-ui, -apple-system, sans-serif;
+  --title-font: system-ui, -apple-system, sans-serif;
   --doc-line-height: 1.6;
 
-  /* TAMAÑOS DE ENCABEZADOS (H6 nunca menor a 1rem) */
+  /* Escala de Títulos (Fallback estructural) */
   --h1-size: 2.2rem;
   --h2-size: 1.8rem;
   --h3-size: 1.5rem;
   --h4-size: 1.25rem;
   --h5-size: 1.1rem;
   --h6-size: 1rem;
-}
 
-/* ==========================================================
-   1. ESTILO MODERNO (Azules corporativos y Neón)
-   ========================================================== */
-html[data-estilo="moderno"] {
-  --doc-font: system-ui, -apple-system, sans-serif;
-  --doc-line-height: 1.6;
-}
+  /* Tokens de Acento Global (Reemplazan colores fijos) */
+  --accent-color: #8b5cf6;
+  --accent-hover: #7c3aed;
+  --accent-subtle: rgba(139, 92, 246, 0.12);
+  --accent-border: rgba(139, 92, 246, 0.25);
 
-html[data-estilo="moderno"][data-modo="claro"] {
+  /* Fallback Modo Claro por defecto */
   --bg-color: #ffffff;
-  --text-color: #1e293b;
-  --border-color: #cbd5e1;
   --header-bg: #f8fafc;
-
-  /* Color Coding */
-  --color-h1: #15803d; 
-  --color-h2: #0f766e; 
-  --color-h3: #0369a1; 
-  --color-h4: #4338ca; 
-  --color-h5: #7e22ce; 
-  --color-h6: #be123c; 
-  
-  --color-negrita: #0f172a;
+  --card-bg: #f1f5f9;
+  --border-color: #cbd5e1;
+  --text-color: #0f172a;
+  --text-muted: #64748b;
+  --color-negrita: #020617;
   --color-cursiva: #16a34a;
   --color-negrita-cursiva: #9333ea;
   --color-tachado: #94a3b8;
-  
   --color-codigo-inline: #c2410c;
   --bg-codigo-inline: rgba(234, 88, 12, 0.08);
   --color-math: #b45309;
+  --link-color: #2563eb;
+  --link-hover: #1d4ed8;
+
+  --color-h1: #15803d;
+  --color-h2: #0f766e;
+  --color-h3: #1d4ed8;
+  --color-h4: #4338ca;
+  --color-h5: #6d28d9;
+  --color-h6: #475569;
 }
 
-html[data-estilo="moderno"][data-modo="oscuro"] {
+/* Fallback Modo Oscuro por defecto */
+html[data-modo="oscuro"] {
   --bg-color: #0f172a;
-  --text-color: #f1f5f9;
-  --border-color: #334155;
   --header-bg: #1e293b;
-
-  /* Color Coding */
-  --color-h1: #4ade80;
-  --color-h2: #2dd4bf;
-  --color-h3: #38bdf8;
-  --color-h4: #818cf8;
-  --color-h5: #c084fc;
-  --color-h6: #fb7185;
-  
+  --card-bg: #1e293b;
+  --border-color: #334155;
+  --text-color: #f8fafc;
+  --text-muted: #94a3b8;
   --color-negrita: #ffffff;
   --color-cursiva: #a3e635;
   --color-negrita-cursiva: #c084fc;
   --color-tachado: #64748b;
-  
   --color-codigo-inline: #fb923c;
   --bg-codigo-inline: rgba(251, 146, 60, 0.15);
   --color-math: #facc15;
+  --link-color: #60a5fa;
+  --link-hover: #93c5fd;
+
+  --color-h1: #4ade80;
+  --color-h2: #2dd4bf;
+  --color-h3: #60a5fa;
+  --color-h4: #818cf8;
+  --color-h5: #a78bfa;
+  --color-h6: #94a3b8;
 }
 
 /* ==========================================================
-   2. ESTILO ACADÉMICO (Crema/Marrón sepia)
-   ========================================================== */
-html[data-estilo="academico"] {
-  --doc-font: "Times New Roman", Times, serif;
-  --doc-line-height: 1.8;
-}
-
-html[data-estilo="academico"][data-modo="claro"] {
-  --bg-color: #fdfbf7; 
-  --text-color: #2c221e; 
-  --border-color: #e7e0d3;
-  --header-bg: #f4efdf;
-
-  /* Color Coding */
-  --color-h1: #451a03;
-  --color-h2: #78350f;
-  --color-h3: #92400e;
-  --color-h4: #b45309;
-  --color-h5: #d97706;
-  --color-h6: #f59e0b;
-  
-  --color-negrita: #000000;
-  --color-cursiva: #4d7c0f;
-  --color-negrita-cursiva: #4338ca;
-  --color-tachado: #a8a29e;
-  
-  --color-codigo-inline: #9a3412;
-  --bg-codigo-inline: rgba(154, 52, 18, 0.08);
-  --color-math: #1e3a8a;
-}
-
-html[data-estilo="academico"][data-modo="oscuro"] {
-  --bg-color: #1c1815; 
-  --text-color: #f3efe6; 
-  --border-color: #38302b;
-  --header-bg: #26211d;
-
-  /* Color Coding */
-  --color-h1: #fef3c7;
-  --color-h2: #fde68a;
-  --color-h3: #fcd34d;
-  --color-h4: #fbbf24;
-  --color-h5: #f59e0b;
-  --color-h6: #d97706;
-  
-  --color-negrita: #ffffff;
-  --color-cursiva: #bef264;
-  --color-negrita-cursiva: #818cf8;
-  --color-tachado: #78716c;
-  
-  --color-codigo-inline: #fdba74;
-  --bg-codigo-inline: rgba(253, 186, 116, 0.15);
-  --color-math: #93c5fd;
-}
-
-/* ==========================================================
-   3. ESTILO MINIMALISTA (Blanco y negro puro)
-   ========================================================== */
-html[data-estilo="minimalista"] {
-  --doc-font: "Courier New", Courier, monospace;
-  --doc-line-height: 1.5;
-}
-
-html[data-estilo="minimalista"][data-modo="claro"] {
-  --bg-color: #ffffff;
-  --text-color: #000000;
-  --border-color: #d4d4d4;
-  --header-bg: #fafafa;
-
-  /* Color Coding Monocromático */
-  --color-h1: #000; --color-h2: #000; --color-h3: #000;
-  --color-h4: #000; --color-h5: #000; --color-h6: #000;
-  
-  --color-negrita: #000;
-  --color-cursiva: #000;
-  --color-negrita-cursiva: #000;
-  --color-tachado: #a3a3a3;
-  
-  --color-codigo-inline: #000;
-  --bg-codigo-inline: #f5f5f5;
-  --color-math: #000;
-}
-
-html[data-estilo="minimalista"][data-modo="oscuro"] {
-  --bg-color: #000000; 
-  --text-color: #ffffff; 
-  --border-color: #262626;
-  --header-bg: #0a0a0a;
-
-  /* Color Coding Monocromático Inverso */
-  --color-h1: #fff; --color-h2: #fff; --color-h3: #fff;
-  --color-h4: #fff; --color-h5: #fff; --color-h6: #fff;
-  
-  --color-negrita: #fff;
-  --color-cursiva: #fff;
-  --color-negrita-cursiva: #fff;
-  --color-tachado: #525252;
-  
-  --color-codigo-inline: #fff;
-  --bg-codigo-inline: #262626;
-  --color-math: #fff;
-}
-
-/* ==========================================================
-   APLICACIÓN ESTRUCTURAL ESTRICTA
+   2. APLICACIÓN ESTRUCTURAL ESTRICTA
    ========================================================== */
 body {
   margin: 0;
@@ -194,7 +91,7 @@ body {
   font-size: var(--font-size);
   height: 100vh;
   overflow: hidden;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 .main-content {
@@ -206,9 +103,9 @@ body {
 }
 
 .main-content article a:not(.mermaid-native *):not(pre *) {
-  color: #a78bfa !important;
+  color: var(--link-color) !important;
   text-decoration: none;
-  border-bottom: 1.5px solid rgba(167, 139, 250, 0.4);
+  border-bottom: 1.5px solid var(--accent-border);
   font-weight: 500;
   transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
   padding: 0 2px;
@@ -216,98 +113,22 @@ body {
 }
 
 .main-content article a:not(.mermaid-native *):not(pre *):hover {
-  color: #c4b5fd !important;
-  background-color: rgba(139, 92, 246, 0.15);
-  border-bottom-color: #8b5cf6;
+  color: var(--link-hover) !important;
+  background-color: var(--accent-subtle);
+  border-bottom-color: var(--accent-color);
 }
 
-html[data-modo="claro"] .main-content article a:not(.mermaid-native *):not(pre *) {
-  color: #7c3aed !important;
-  border-bottom-color: rgba(124, 58, 237, 0.4);
-}
-
-html[data-modo="claro"] .main-content article a:not(.mermaid-native *):not(pre *):hover {
-  color: #6d28d9 !important;
-  background-color: rgba(124, 58, 237, 0.08);
-  border-bottom-color: #7c3aed;
-}
-
-/* --- TAMAÑOS DE TEXTO --- */
+/* Tamaños de texto dinámicos */
 html[data-texto="pequeno"] { --font-size: 14px; }
 html[data-texto="estandar"] { --font-size: 16px; }
 html[data-texto="grande"] { --font-size: 18px; }
 
-/* --- ANCHURAS DE LECTURA --- */
-html[data-ancho="ancho"] { 
-  --content-max-width: 1400px; 
-  --content-padding: 2rem 4rem; 
+/* Anchuras de lectura */
+html[data-ancho="ancho"] {
+  --content-max-width: 1400px;
+  --content-padding: 2rem 4rem;
 }
-html[data-ancho="normal"] { 
-  --content-max-width: 800px;  
-  --content-padding: 2rem 3rem; 
-}
-
-/* ==========================================================
-   MATRIZ DE VARIABLES PARA IMPRESIÓN Y EXPORTACIÓN PDF
-   ========================================================== */
-
-/* 1. ESTILO INFORME / FORMATO APA 7 (Normativa Estricta Calibrada) */
-html[data-estilo="informe"] {
-  --print-page-padding: 2.54cm;       /* Margen de 1 pulgada en los 4 lados */
-  --print-font-size: 12pt;            /* Tamaño estándar APA para papel */
-  --print-line-height: 1.8;           /* Interlineado de lectura formal */
-  --print-para-indent: 1.27cm;        /* Sangría de primera línea reglamentaria */
-  --print-font-family: 'Times New Roman', Times, serif;
-  --print-cover-display: flex;
-
-  /* Escala tipográfica formal de títulos */
-  --print-h1-size: 14pt;
-  --print-h2-size: 13pt;
-  --print-h3-size: 12pt;
-  --print-h4-size: 12pt;
-}
-
-/* 2. ESTILO ACADÉMICO (Papers y Guías) */
-html[data-estilo="academico"] {
-  --print-page-padding: 2cm 1.8cm;
-  --print-font-size: 11pt;
-  --print-line-height: 1.5;
-  --print-para-indent: 0.8cm;
-  --print-font-family: 'Georgia', 'Cambria', serif;
-  --print-cover-display: none;
-
-  --print-h1-size: 16pt;
-  --print-h2-size: 13pt;
-  --print-h3-size: 11.5pt;
-  --print-h4-size: 11pt;
-}
-
-/* 3. ESTILO MODERNO (Documentación de Software) */
-html[data-estilo="moderno"] {
-  --print-page-padding: 1.6cm 1.4cm;
-  --print-font-size: 10.5pt;
-  --print-line-height: 1.45;
-  --print-para-indent: 0;
-  --print-font-family: system-ui, -apple-system, sans-serif;
-  --print-cover-display: none;
-
-  --print-h1-size: 18pt;
-  --print-h2-size: 14pt;
-  --print-h3-size: 12pt;
-  --print-h4-size: 11pt;
-}
-
-/* 4. ESTILO MINIMALISTA */
-html[data-estilo="minimalista"] {
-  --print-page-padding: 1.2cm 1.2cm;
-  --print-font-size: 10pt;
-  --print-line-height: 1.4;
-  --print-para-indent: 0;
-  --print-font-family: ui-monospace, 'Menlo', 'Consolas', monospace;
-  --print-cover-display: none;
-
-  --print-h1-size: 15pt;
-  --print-h2-size: 13pt;
-  --print-h3-size: 11pt;
-  --print-h4-size: 10pt;
+html[data-ancho="normal"] {
+  --content-max-width: 800px;
+  --content-padding: 2rem 3rem;
 }

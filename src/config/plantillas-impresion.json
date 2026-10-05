@@ -1,0 +1,86 @@
+{
+  "informe-uni": {
+    "id": "informe-uni",
+    "nombre": "Informe UNI (APA 7 Formal)",
+    "descripcion": "Márgenes reglamentarios de 2.54 cm, doble espacio, carátula e índice completos.",
+    "pagina": {
+      "formato": "A4",
+      "margenSuperior": "2.54cm",
+      "margenInferior": "2.54cm",
+      "margenIzquierdo": "2.54cm",
+      "margenDerecho": "2.54cm"
+    },
+    "parrafo": {
+      "sangriaPrimeraLinea": "1.27cm",
+      "sangriaFrancesa": "-1.27cm",
+      "interlineado": "1.8",
+      "alineacion": "justify",
+      "espacioEntreParrafos": "0.85rem"
+    },
+    "tipografia": {
+      "tamanoCuerpo": "12pt",
+      "fuentePapel": "'Times New Roman', Times, serif"
+    },
+    "estructura": {
+      "mostrarCaratula": true,
+      "mostrarIndice": true,
+      "saltoPaginaAntesDeH1": true
+    }
+  },
+  "paper-ieee": {
+    "id": "paper-ieee",
+    "nombre": "Artículo Técnico / IEEE",
+    "descripcion": "Márgenes estrechos de 1.8 cm, interlineado compacto y sin carátula separada.",
+    "pagina": {
+      "formato": "A4",
+      "margenSuperior": "1.8cm",
+      "margenInferior": "1.8cm",
+      "margenIzquierdo": "1.8cm",
+      "margenDerecho": "1.8cm"
+    },
+    "parrafo": {
+      "sangriaPrimeraLinea": "0.6cm",
+      "sangriaFrancesa": "0cm",
+      "interlineado": "1.45",
+      "alineacion": "justify",
+      "espacioEntreParrafos": "0.6rem"
+    },
+    "tipografia": {
+      "tamanoCuerpo": "10pt",
+      "fuentePapel": "system-ui, -apple-system, sans-serif"
+    },
+    "estructura": {
+      "mostrarCaratula": false,
+      "mostrarIndice": false,
+      "saltoPaginaAntesDeH1": false
+    }
+  },
+  "apunte-compacto": {
+    "id": "apunte-compacto",
+    "nombre": "Apunte Compacto (Resumen)",
+    "descripcion": "Máximo aprovechamiento de hoja, sin sangrías y márgenes mínimos.",
+    "pagina": {
+      "formato": "A4",
+      "margenSuperior": "1.2cm",
+      "margenInferior": "1.2cm",
+      "margenIzquierdo": "1.2cm",
+      "margenDerecho": "1.2cm"
+    },
+    "parrafo": {
+      "sangriaPrimeraLinea": "0cm",
+      "sangriaFrancesa": "0cm",
+      "interlineado": "1.35",
+      "alineacion": "left",
+      "espacioEntreParrafos": "0.5rem"
+    },
+    "tipografia": {
+      "tamanoCuerpo": "10pt",
+      "fuentePapel": "system-ui, -apple-system, sans-serif"
+    },
+    "estructura": {
+      "mostrarCaratula": false,
+      "mostrarIndice": false,
+      "saltoPaginaAntesDeH1": false
+    }
+  }
+}

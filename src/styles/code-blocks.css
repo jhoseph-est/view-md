@@ -93,24 +93,39 @@
   color: #ffffff !important;
 }
 
-/* 4. Reset y fondos de bloques <pre> */
+/* ==========================================================
+   4. COMPORTAMIENTO NATIVO DE SHIKI DUAL (RED / SOLARIZED)
+   ========================================================== */
+
+/* Shiki aplica su propio fondo y color de texto automáticamente */
 .main-content pre.astro-code {
   margin: 0 !important;
   padding: 1.25rem 1.4rem !important;
   border: none !important;
   border-radius: 0 !important;
   overflow-x: auto !important;
-  tab-size: 4;
+  tab-size: 4 !important;
 }
 
-html[data-modo="oscuro"] pre.astro-code {
-  background-color: var(--shiki-dark-bg, #0f172a) !important;
-}
-
+/* En modo claro: Shiki usa las variables del tema light ('red') */
 html[data-modo="claro"] pre.astro-code {
-  background-color: var(--shiki-light-bg, #f8fafc) !important;
+  background-color: var(--shiki-light-bg) !important;
+  color: var(--shiki-light) !important;
+}
+html[data-modo="claro"] pre.astro-code code span {
+  color: var(--shiki-light) !important;
 }
 
+/* En modo oscuro: Shiki usa las variables del tema dark ('solarized-dark') */
+html[data-modo="oscuro"] pre.astro-code {
+  background-color: var(--shiki-dark-bg) !important;
+  color: var(--shiki-dark) !important;
+}
+html[data-modo="oscuro"] pre.astro-code code span {
+  color: var(--shiki-dark) !important;
+}
+
+/* Reset del contenedor de código para que no herede colores ajenos */
 .code-block-wrapper pre code,
 .main-content pre.astro-code code,
 .main-content pre code {
@@ -120,16 +135,16 @@ html[data-modo="claro"] pre.astro-code {
   padding: 0 !important;
   box-shadow: none !important;
   font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace !important;
-  font-size: 0.85rem;
-  line-height: 1.6;
+  font-size: 0.85rem !important;
+  line-height: 1.6 !important;
   white-space: pre !important;
   word-break: normal !important;
   overflow-wrap: normal !important;
-  display: block;
+  display: block !important;
 }
 
 .main-content pre code .line {
-  display: inline-block;
-  min-width: 100%;
-  box-sizing: border-box;
+  display: inline-block !important;
+  min-width: 100% !important;
+  box-sizing: border-box !important;
 }

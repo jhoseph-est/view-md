@@ -1,5 +1,4 @@
 /* src/styles/layout.css */
-
 /* ==========================================================
    1. RESET Y VARIABLES GLOBALES
    ========================================================== */
@@ -162,8 +161,8 @@ body {
 
 .act-btn:hover {
   opacity: 1;
-  background: rgba(139, 92, 246, 0.15);
-  color: #8b5cf6;
+  background: var(--accent-subtle);
+  color: var(--accent-color);
 }
 
 html:not(.no-left-panel)[data-active-pane="pane-explorer"] #act-explorer,
@@ -173,9 +172,9 @@ html:not(.no-toc) #act-toc,
 html:not(.no-meta) #act-meta,
 .act-btn.active {
   opacity: 1;
-  background: rgba(139, 92, 246, 0.2);
-  color: #8b5cf6;
-  border-left: 2px solid #8b5cf6;
+  background: var(--accent-subtle);
+  color: var(--accent-color);
+  border-left: 2px solid var(--accent-color);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
 
@@ -211,7 +210,7 @@ html.no-left-panel .left-sidebar-panel {
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.05em;
-  color: #8b5cf6;
+  color: var(--accent-color);
   text-transform: uppercase;
   flex-shrink: 0;
 }
@@ -318,20 +317,17 @@ html.no-meta #sec-meta {
   opacity: 0.7;
   margin-bottom: 2rem;
 }
+
 .breadcrumbs a {
   color: inherit;
   text-decoration: none;
 }
+
 .breadcrumbs a:hover {
-  color: #8b5cf6;
+  color: var(--accent-color);
 }
 
-.markdown-body h1,
-.markdown-body h2,
-.markdown-body h3,
-.markdown-body h4,
-.markdown-body h5,
-.markdown-body h6 {
+.markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4, .markdown-body h5, .markdown-body h6 {
   scroll-margin-top: 1.5rem;
 }
 
@@ -340,16 +336,15 @@ html.no-meta #sec-meta {
    ========================================================== */
 :root {
   --pagefind-ui-scale: 0.85;
-  --pagefind-ui-primary: #8b5cf6;
+  --pagefind-ui-primary: var(--accent-color);
   --pagefind-ui-text: var(--text-color);
   --pagefind-ui-background: var(--header-bg);
   --pagefind-ui-border: var(--border-color);
-  --pagefind-ui-tag: rgba(139, 92, 246, 0.15);
+  --pagefind-ui-tag: var(--accent-subtle);
   --pagefind-ui-border-radius: var(--radius-md);
 }
 
-.pagefind-ui__search-icon,
-.pagefind-ui__search-clear {
+.pagefind-ui__search-icon, .pagefind-ui__search-clear {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
@@ -369,9 +364,9 @@ html.no-meta #sec-meta {
 }
 
 .pagefind-ui__search-input:focus {
-  border-color: #8b5cf6 !important;
+  border-color: var(--accent-color) !important;
   outline: none !important;
-  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2) !important;
+  box-shadow: 0 0 0 2px var(--accent-subtle) !important;
 }
 
 .pagefind-ui__form::before {
@@ -390,7 +385,7 @@ html.no-meta #sec-meta {
 }
 
 .pagefind-ui__result-link {
-  color: #a78bfa !important;
+  color: var(--accent-color) !important;
   font-weight: 600;
 }
 
@@ -400,100 +395,8 @@ html.no-meta #sec-meta {
   font-size: 0.85rem;
 }
 
-/* ==========================================================
-   4. ESTILO DE PANTALLA: INFORME APA (WEB REACTIVO AL MODO)
-   ========================================================== */
-
-/* --- VARIABLES BASE (MODO CLARO POR DEFECTO) --- */
-html[data-estilo="informe"] {
-  --content-font: "Times New Roman", Times, "Liberation Serif", serif;
-  --title-font: "Times New Roman", Times, "Liberation Serif", serif;
-  --line-height: 1.8;
-  --bg-color: #ffffff;
-  --text-color: #0f172a;
-  --header-bg: #f8fafc;
-  --border-color: #e2e8f0;
-}
-
-/* --- VARIABLES MODO OSCURO --- */
-html[data-estilo="informe"][data-modo="oscuro"] {
-  --bg-color: #0f172a;
-  --text-color: #f1f5f9;
-  --header-bg: #1e293b;
-  --border-color: #334155;
-}
-
-/* Tipografía formal en el texto */
-html[data-estilo="informe"] .markdown-body {
-  font-family: var(--content-font);
-  line-height: var(--line-height);
-  font-size: 1.05rem;
-}
-
-html[data-estilo="informe"] .markdown-body h1,
-html[data-estilo="informe"] .markdown-body h2,
-html[data-estilo="informe"] .markdown-body h3,
-html[data-estilo="informe"] .markdown-body h4 {
-  font-family: var(--title-font);
-  letter-spacing: normal;
-}
-
-/* --- APLICACIÓN DEL MODO OSCURO EN PANTALLA --- */
-html[data-estilo="informe"][data-modo="oscuro"],
-html[data-estilo="informe"][data-modo="oscuro"] body,
-html[data-estilo="informe"][data-modo="oscuro"] .layout-grid,
-html[data-estilo="informe"][data-modo="oscuro"] .main-content,
-html[data-estilo="informe"][data-modo="oscuro"] #document-view,
-html[data-estilo="informe"][data-modo="oscuro"] .markdown-body {
-  background-color: var(--bg-color) !important;
-  color: var(--text-color) !important;
-}
-
-html[data-estilo="informe"][data-modo="oscuro"] .markdown-body h1,
-html[data-estilo="informe"][data-modo="oscuro"] .markdown-body h2,
-html[data-estilo="informe"][data-modo="oscuro"] .markdown-body h3,
-html[data-estilo="informe"][data-modo="oscuro"] .markdown-body h4,
-html[data-estilo="informe"][data-modo="oscuro"] .markdown-body strong {
-  color: #ffffff !important;
-}
-
-html[data-estilo="informe"][data-modo="oscuro"] .markdown-body p,
-html[data-estilo="informe"][data-modo="oscuro"] .markdown-body li {
-  color: #cbd5e1 !important;
-}
-
-/* --- APLICACIÓN DEL MODO CLARO EN PANTALLA --- */
-html[data-estilo="informe"][data-modo="claro"],
-html[data-estilo="informe"][data-modo="claro"] body,
-html[data-estilo="informe"][data-modo="claro"] .layout-grid,
-html[data-estilo="informe"][data-modo="claro"] .main-content,
-html[data-estilo="informe"][data-modo="claro"] #document-view,
-html[data-estilo="informe"][data-modo="claro"] .markdown-body {
-  background-color: var(--bg-color) !important;
-  color: var(--text-color) !important;
-}
-
-html[data-estilo="informe"][data-modo="claro"] .markdown-body h1,
-html[data-estilo="informe"][data-modo="claro"] .markdown-body h2,
-html[data-estilo="informe"][data-modo="claro"] .markdown-body h3,
-html[data-estilo="informe"][data-modo="claro"] .markdown-body h4,
-html[data-estilo="informe"][data-modo="claro"] .markdown-body strong {
-  color: #0f172a !important;
-}
-
-html[data-estilo="informe"][data-modo="claro"] .markdown-body p,
-html[data-estilo="informe"][data-modo="claro"] .markdown-body li {
-  color: #334155 !important;
-}
-
-/* Párrafos en pantalla */
-html[data-estilo="informe"] .markdown-body p {
-  margin: 0 0 1.25rem 0;
-  text-align: left;
-}
-
-/* Citas */
-html[data-estilo="informe"] .markdown-body blockquote:not([data-callout]) {
+/* Citas y divisores generales */
+.markdown-body blockquote:not([data-callout]) {
   border-left: 3px solid var(--border-color);
   padding-left: 1.25rem;
   margin: 1.5rem 0;
@@ -501,8 +404,7 @@ html[data-estilo="informe"] .markdown-body blockquote:not([data-callout]) {
   opacity: 0.9;
 }
 
-/* Separador '---' en pantalla */
-html[data-estilo="informe"] .markdown-body hr {
+.markdown-body hr {
   border: none !important;
   border-top: 1px dashed var(--border-color) !important;
   margin: 3.5rem auto !important;
@@ -511,33 +413,7 @@ html[data-estilo="informe"] .markdown-body hr {
 }
 
 /* ==========================================================
-   PROTECCIÓN DE MERMAID Y KATEX EN PANTALLA (SIN DEFORMAR)
-   ========================================================== */
-html[data-estilo="informe"] .mermaid-wrapper {
-  margin: 2rem auto !important;
-  text-align: center !important;
-}
-
-html[data-estilo="informe"] .mermaid-wrapper svg {
-  height: auto !important;
-  font-family: var(--ui-font) !important;
-}
-
-html[data-estilo="informe"] .katex-display {
-  display: block !important;
-  text-align: center !important;
-  margin: 1.5rem auto !important;
-}
-
-html[data-estilo="informe"][data-modo="oscuro"] {
-  --accent-color: #93c5fd;
-}
-html[data-estilo="informe"][data-modo="claro"] {
-  --accent-color: #1d4ed8;
-}
-
-/* ==========================================================
-   5. ESTRATEGIA MÓVIL (< 768px)
+   4. ESTRATEGIA MÓVIL (< 768px)
    ========================================================== */
 .mobile-bottom-bar, .mobile-drawer {
   display: none;
@@ -548,11 +424,7 @@ html[data-estilo="informe"][data-modo="claro"] {
     height: auto !important;
     overflow-y: auto !important;
     overflow-x: hidden !important;
-    scroll-behavior: auto !important;
-    overscroll-behavior-y: auto !important;
-    -webkit-overflow-scrolling: touch !important;
   }
-
   body {
     width: 100% !important;
     max-width: 100vw !important;
@@ -562,11 +434,9 @@ html[data-estilo="informe"][data-modo="claro"] {
     overflow-x: hidden !important;
     position: relative !important;
     display: block !important;
-    scroll-behavior: auto !important;
     margin: 0 !important;
     padding-bottom: 56px !important;
   }
-
   .layout-grid {
     display: block !important;
     width: 100% !important;
@@ -576,13 +446,11 @@ html[data-estilo="informe"][data-modo="claro"] {
     position: relative !important;
     overflow: visible !important;
   }
-
   .activity-bar,
   .left-sidebar-panel,
   .independent-panel {
     display: none !important;
   }
-
   .main-content {
     position: relative !important;
     inset: auto !important;
@@ -591,12 +459,10 @@ html[data-estilo="informe"][data-modo="claro"] {
     height: auto !important;
     min-height: auto !important;
     overflow: visible !important;
-    scroll-behavior: auto !important;
     padding: 1.25rem 1rem 2rem 1rem !important;
     box-sizing: border-box !important;
     overflow-x: hidden !important;
   }
-
   .content-wrapper {
     width: 100% !important;
     max-width: 100% !important;
@@ -605,7 +471,6 @@ html[data-estilo="informe"][data-modo="claro"] {
     margin: 0 !important;
     overflow-x: hidden !important;
   }
-
   .mobile-bottom-bar {
     display: flex !important;
     position: fixed !important;
@@ -615,18 +480,11 @@ html[data-estilo="informe"][data-modo="claro"] {
     height: 56px !important;
     background: var(--header-bg) !important;
     border-top: 1px solid var(--border-color) !important;
-    z-index: 2000 !important; 
+    z-index: 2000 !important;
     justify-content: space-around !important;
     align-items: center !important;
     backdrop-filter: blur(8px) !important;
   }
-
-  .layout-grid.zen-active ~ .mobile-bottom-bar,
-  .layout-grid.zen-active ~ .mobile-drawer,
-  .layout-grid.zen-active ~ .mobile-drawer-backdrop {
-    display: none !important;
-  }
-
   .m-btn {
     background: transparent !important;
     border: none !important;
@@ -642,30 +500,26 @@ html[data-estilo="informe"][data-modo="claro"] {
     flex: 1 !important;
     height: 100% !important;
   }
-
   .m-btn.active {
     opacity: 1 !important;
-    color: #8b5cf6 !important;
+    color: var(--accent-color) !important;
   }
-
   .mobile-drawer-backdrop {
     display: none;
     position: fixed !important;
-    inset: 0 0 56px 0 !important; 
+    inset: 0 0 56px 0 !important;
     background: rgba(0, 0, 0, 0.5) !important;
     z-index: 1500 !important;
   }
-
   .mobile-drawer-backdrop.active {
     display: block !important;
   }
-
   .mobile-drawer {
     display: flex !important;
     flex-direction: column !important;
     position: fixed !important;
     left: 0 !important;
-    bottom: 56px !important; 
+    bottom: 56px !important;
     width: 100vw !important;
     height: 65vh !important;
     max-height: 450px !important;
@@ -679,11 +533,9 @@ html[data-estilo="informe"][data-modo="claro"] {
     overflow: visible !important;
     box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
   }
-
   .mobile-drawer.open {
     transform: translateY(0) !important;
   }
-
   .drawer-handle {
     width: 36px !important;
     height: 4px !important;
@@ -691,20 +543,17 @@ html[data-estilo="informe"][data-modo="claro"] {
     border-radius: 4px !important;
     margin: 10px auto 4px auto !important;
   }
-
   .drawer-header {
     padding: 0.5rem 1rem 0.75rem 1rem !important;
     border-bottom: 1px solid var(--border-color) !important;
   }
-
   .drawer-header h3 {
     margin: 0 !important;
     font-size: 0.85rem !important;
-    color: #8b5cf6 !important;
+    color: var(--accent-color) !important;
     text-transform: uppercase !important;
     letter-spacing: 0.05em !important;
   }
-
   .drawer-body {
     flex: 1 !important;
     overflow-y: auto !important;

@@ -1,0 +1,56 @@
+{
+  "comunes": {
+    "fuente": "system-ui, -apple-system, sans-serif",
+    "tamanoFuente": "13px",
+    "fondoTransparente": true,
+    "curvaLinea": "basis"
+  },
+  "flowchart": {
+    "nodoFondo": "#1e293b",
+    "nodoBorde": "#38bdf8",
+    "nodoTexto": "#f8fafc",
+    "lineaColor": "#38bdf8",
+    "etiquetaFondo": "#0f172a",
+    "clusterFondo": "rgba(30, 41, 59, 0.5)",
+    "clusterBorde": "#475569"
+  },
+  "sequence": {
+    "actorFondo": "#1e293b",
+    "actorBorde": "#38bdf8",
+    "actorTexto": "#f8fafc",
+    "lineaColor": "#38bdf8",
+    "senalTexto": "#f8fafc",
+    "notaFondo": "#4c1d95",
+    "notaBorde": "#a855f7",
+    "notaTexto": "#f8fafc"
+  },
+  "gantt": {
+    "anchoPorDefecto": 1200,
+    "alturaBarra": 28,
+    "espacioBarra": 8,
+    "colorCompletado": "#10b981",
+    "colorActivo": "#38bdf8",
+    "colorCritico": "#ef4444"
+  },
+  "er": {
+    "cabeceraFondo": "#0f172a",
+    "cabeceraTexto": "#f8fafc",
+    "entidadBorde": "#38bdf8",
+    "filaImparFondo": "#1e293b",
+    "filaParFondo": "#0f172a",
+    "lineaColor": "#38bdf8"
+  },
+  "gitGraph": {
+    "ramas": ["#38bdf8", "#a855f7", "#10b981", "#f59e0b"],
+    "etiquetaCommitTexto": "#f8fafc",
+    "etiquetaCommitFondo": "#1e293b"
+  },
+  "quadrant": {
+    "q1Fondo": "rgba(56, 189, 248, 0.15)",
+    "q2Fondo": "rgba(16, 185, 129, 0.15)",
+    "q3Fondo": "rgba(244, 63, 94, 0.15)",
+    "q4Fondo": "rgba(234, 179, 8, 0.15)",
+    "lineaDivision": "#38bdf8",
+    "textoColor": "#f8fafc"
+  }
+}

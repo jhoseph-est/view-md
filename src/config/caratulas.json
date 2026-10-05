@@ -1,0 +1,48 @@
+{
+  "uni-oficial": {
+    "id": "uni-oficial",
+    "nombre": "Oficial UNI (Informe / Tesis)",
+    "descripcion": "Membrete superior jerárquico, escudo centrado, autores a dos columnas y pie formal.",
+    "mostrarPortada": true,
+    "logo": {
+      "ruta": "/assets/logos/logo-uni.png",
+      "altoMaximoMm": 45,
+      "margenVertical": "1.5rem"
+    },
+    "membrete": {
+      "institucion": "UNIVERSIDAD NACIONAL DE INGENIERÍA",
+      "facultad": "FACULTAD DE INGENIERÍA MECÁNICA",
+      "escuela": "Escuela Profesional de Ingeniería Mecánica",
+      "tamanoInstitucion": "14pt",
+      "tamanoFacultad": "11pt",
+      "tamanoEscuela": "10pt"
+    },
+    "titulo": {
+      "tamano": "15pt",
+      "peso": "800",
+      "transformacion": "uppercase",
+      "interlineado": "1.3"
+    },
+    "subtitulo": {
+      "tamano": "10.5pt",
+      "estilo": "italic"
+    },
+    "autores": {
+      "anchoTabla": "85%",
+      "tamanoFuente": "9.5pt",
+      "alineacionEtiqueta": "left",
+      "alineacionValor": "right"
+    },
+    "pie": {
+      "ciudad": "LIMA — PERÚ",
+      "tamanoFuente": "9.5pt",
+      "peso": "700"
+    }
+  },
+  "paper-sin-portada": {
+    "id": "paper-sin-portada",
+    "nombre": "Sin Carátula (Paper / Monografía Breve)",
+    "descripcion": "El documento arranca de inmediato con el título y el cuerpo del texto en la página 1.",
+    "mostrarPortada": false
+  }
+}

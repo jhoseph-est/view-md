@@ -1,5 +1,6 @@
 ---
 // src/components/LeftSidebar.astro
+import estilosDisponibles from '../config/estilos-base.json';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { formatName } from '../utils/fileTree';
 import { sortDocs } from '../utils/fileTree';
@@ -131,12 +132,11 @@ const explorerHTML = buildExplorerHTML(fileTree);
       </div>
 
       <div class="settings-group">
-        <label for="pref-select-estilo" class="settings-label">Estilo tipográfico</label>
-        <select id="pref-select-estilo" class="settings-select">
-          <option value="moderno">Moderno</option>
-          <option value="academico">Académico</option>
-          <option value="minimalista">Minimalista</option>
-          <option value="informe">Informe APA</option>
+        <label for="pref-select-estilo" class="settings-label">Estilo Visual</label>
+        <select id="pref-select-estilo" class="settings-select" data-setting="estilo">
+          {Object.entries(estilosDisponibles).map(([id, config]) => (
+            <option value={id}>{config.nombre}</option>
+          ))}
         </select>
       </div>
 

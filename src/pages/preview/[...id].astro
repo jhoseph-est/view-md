@@ -5,6 +5,7 @@ import { generateDocPaths } from '../../utils/fileTree';
 import ReportCover from '../../components/ReportCover.astro';
 import ReportToc from '../../components/ReportToc.astro';
 import '../../styles/base.css';
+import plantillasImpresion from '../../config/plantillas-impresion.json';
 
 export async function getStaticPaths() {
   const allDocs = await getCollection('docs');
@@ -23,6 +24,13 @@ const docData = props.doc.data;
 const estiloInicial = docData.theme || (docData.tipo === 'informe' ? 'informe' : 'moderno');
 const tieneCoverInicial = docData.theme === 'informe' || docData.tipo === 'informe';
 const tieneTocInicial = docData.mostrarIndice !== false;
+
+// Plantilla por defecto según el tipo de documento
+const plantillaInicialKey = (docData.theme === 'informe' || docData.tipo === 'informe') 
+  ? 'informe-uni' 
+  : 'apunte-compacto';
+
+const plantillasJsonString = JSON.stringify(plantillasImpresion);
 ---
 
 <!DOCTYPE html>
@@ -31,10 +39,8 @@ const tieneTocInicial = docData.mostrarIndice !== false;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vista Previa Editorial - {docData.title}</title>
-
-    <!-- Paged.js Script Manual (Sin polyfill automático) -->
+    <!-- Paged.js Script Manual -->
     <script src="https://unpkg.com/pagedjs/dist/paged.polyfill.js" is:inline></script>
-
     <style is:global>
       /* 1. RESET AISLADO DE LA PANTALLA */
       html, body {
@@ -46,14 +52,12 @@ const tieneTocInicial = docData.mostrarIndice !== false;
         background-color: #1a1d21 !important;
         font-family: system-ui, -apple-system, sans-serif !important;
       }
-
       .preview-app-container {
         display: flex;
         width: 100vw;
         height: 100vh;
         overflow: hidden;
       }
-
       /* 2. PANEL LATERAL FIJO */
       .sidebar-panel {
         width: 320px;
@@ -66,7 +70,6 @@ const tieneTocInicial = docData.mostrarIndice !== false;
         box-sizing: border-box;
         z-index: 100;
       }
-
       .panel-header {
         padding: 1rem 1.25rem;
         border-bottom: 1px solid #282f3a;
@@ -74,7 +77,6 @@ const tieneTocInicial = docData.mostrarIndice !== false;
         justify-content: space-between;
         align-items: center;
       }
-
       .panel-header h2 {
         font-size: 0.85rem;
         font-weight: 700;
@@ -83,7 +85,6 @@ const tieneTocInicial = docData.mostrarIndice !== false;
         color: #a78bfa;
         text-transform: uppercase;
       }
-
       .btn-close {
         background: #202630;
         border: 1px solid #333d4d;
@@ -93,7 +94,6 @@ const tieneTocInicial = docData.mostrarIndice !== false;
         font-size: 0.75rem;
         cursor: pointer;
       }
-
       .panel-content {
         flex: 1;
         overflow-y: auto;
@@ -103,13 +103,11 @@ const tieneTocInicial = docData.mostrarIndice !== false;
         gap: 1.2rem;
         box-sizing: border-box;
       }
-
       .ctrl-block {
         display: flex;
         flex-direction: column;
         gap: 0.45rem;
       }
-
       .ctrl-block label {
         font-size: 0.72rem;
         font-weight: 600;
@@ -118,7 +116,6 @@ const tieneTocInicial = docData.mostrarIndice !== false;
         display: flex;
         justify-content: space-between;
       }
-
       .ctrl-block select {
         background-color: #0b0d10;
         border: 1px solid #282f3a;
@@ -129,13 +126,11 @@ const tieneTocInicial = docData.mostrarIndice !== false;
         width: 100%;
         box-sizing: border-box;
       }
-
       .ctrl-block input[type="range"] {
         accent-color: #8b5cf6;
         width: 100%;
         margin: 0.2rem 0;
       }
-
       .toggle-row {
         display: flex;
         align-items: center;
@@ -143,20 +138,17 @@ const tieneTocInicial = docData.mostrarIndice !== false;
         font-size: 0.8rem;
         color: #cbd5e1;
       }
-
       .toggle-row input[type="checkbox"] {
         accent-color: #8b5cf6;
         cursor: pointer;
         width: 16px;
         height: 16px;
       }
-
       .panel-footer {
         padding: 1rem 1.25rem;
         border-top: 1px solid #282f3a;
         background: #0d0f13;
       }
-
       .btn-export {
         width: 100%;
         background: #8b5cf6;
@@ -172,11 +164,9 @@ const tieneTocInicial = docData.mostrarIndice !== false;
         justify-content: center;
         gap: 0.5rem;
       }
-
       .btn-export:hover {
         background: #7c3aed;
       }
-
       /* 3. LIENZO VIRTUAL PARA HOJAS PAGED.JS */
       .viewport-canvas {
         flex: 1;
@@ -190,12 +180,9 @@ const tieneTocInicial = docData.mostrarIndice !== false;
         background-color: #1a1d21;
         box-sizing: border-box;
       }
-
-      /* Contenedor fuente oculto: Paged.js lee de aquí y genera las hojas en #render-output */
       #paged-source {
         display: none;
       }
-
       /* 4. HOJAS GENERADAS AUTOMÁTICAMENTE POR PAGED.JS */
       .pagedjs_pages {
         display: flex;
@@ -204,26 +191,22 @@ const tieneTocInicial = docData.mostrarIndice !== false;
         gap: 2.5rem;
         margin-bottom: 4rem;
       }
-
       .pagedjs_page {
         background: #ffffff !important;
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) !important;
         box-sizing: border-box;
       }
-
       .pagedjs_pagebox {
         color: #0f172a !important;
       }
-
       .pagedjs_pagebox * {
         color: #0f172a !important;
       }
-
       .pagedjs_pagebox p {
         text-align: justify;
         margin-bottom: 0.85rem;
+        text-indent: var(--dyn-indent, 0);
       }
-
       .pagedjs_pagebox table {
         width: 100% !important;
         border-collapse: collapse !important;
@@ -231,29 +214,23 @@ const tieneTocInicial = docData.mostrarIndice !== false;
         border-top: 1.5pt solid #000000 !important;
         border-bottom: 1.5pt solid #000000 !important;
       }
-
       .pagedjs_pagebox th {
         border-bottom: 1pt solid #000000 !important;
         padding: 0.45rem 0.6rem !important;
         font-weight: 700 !important;
       }
-
       .pagedjs_pagebox td {
         border: none !important;
         padding: 0.45rem 0.6rem !important;
       }
-
-      /* Saltos de página explícitos para Carátula e Índice */
       .page-cover {
         break-after: page;
         page-break-after: always;
       }
-
       .page-toc {
         break-after: page;
         page-break-after: always;
       }
-
       .pagedjs_pagebox hr {
         break-before: page;
         page-break-before: always;
@@ -262,35 +239,28 @@ const tieneTocInicial = docData.mostrarIndice !== false;
         margin: 0;
         border: none;
       }
-
       .is-hidden {
         display: none !important;
       }
-
-      /* 5. IMPRESIÓN FÍSICA */
       @media print {
         body {
           background: transparent !important;
           overflow: visible !important;
           height: auto !important;
         }
-
         .sidebar-panel {
           display: none !important;
         }
-
         .viewport-canvas {
           padding: 0 !important;
           background: transparent !important;
           overflow: visible !important;
           height: auto !important;
         }
-
         .pagedjs_pages {
           gap: 0 !important;
           margin: 0 !important;
         }
-
         .pagedjs_page {
           box-shadow: none !important;
         }
@@ -298,22 +268,20 @@ const tieneTocInicial = docData.mostrarIndice !== false;
     </style>
   </head>
   <body>
-    <div class="preview-app-container">
+    <div class="preview-app-container" data-plantillas={plantillasJsonString}>
       <!-- BARRA LATERAL -->
       <aside class="sidebar-panel">
         <div class="panel-header">
           <h2>Ajustes de Impresión</h2>
           <button class="btn-close" onclick="window.close()">✕ Cerrar</button>
         </div>
-
         <div class="panel-content">
           <div class="ctrl-block">
-            <label>Estilo / Formato Base</label>
-            <select id="sel-estilo">
-              <option value="informe">Informe APA 7 (Formal)</option>
-              <option value="academico">Académico (Sepia / Serif)</option>
-              <option value="moderno">Moderno (Ingeniería / Sans)</option>
-              <option value="minimalista">Minimalista (Monospace)</option>
+            <label>Plantilla de Impresión</label>
+            <select id="sel-plantilla">
+              {Object.entries(plantillasImpresion).map(([id, p]) => (
+                <option value={id} selected={id === plantillaInicialKey}>{p.nombre}</option>
+              ))}
             </select>
           </div>
 
@@ -381,19 +349,14 @@ const tieneTocInicial = docData.mostrarIndice !== false;
 
       <!-- LIENZO DE PAGINACIÓN -->
       <main class="viewport-canvas">
-        <!-- Destino donde Paged.js inyectará las páginas A4 físicas -->
         <div id="render-output"></div>
-
-        <!-- Fuente original leída por Paged.js -->
         <div id="paged-source">
           <div class={`page-cover ${!tieneCoverInicial ? 'is-hidden' : ''}`} id="sec-cover">
             <ReportCover data={docData} />
           </div>
-
           <div class={`page-toc ${!tieneTocInicial ? 'is-hidden' : ''}`} id="sec-toc">
             <ReportToc headings={headings} />
           </div>
-
           <article class="markdown-body">
             <Content />
           </article>
@@ -412,43 +375,93 @@ const tieneTocInicial = docData.mostrarIndice !== false;
       }
 
       document.addEventListener('DOMContentLoaded', async () => {
-        // 1. Renderizar diagramas antes del corte de hojas
         await renderMermaid(false, '#paged-source');
 
         const sourceEl = document.getElementById('paged-source');
         const outputEl = document.getElementById('render-output');
+        const container = document.querySelector('.preview-app-container') as HTMLElement | null;
+        
+        let plantillasData: Record<string, any> = {};
+        if (container?.dataset.plantillas) {
+          try {
+            plantillasData = JSON.parse(container.dataset.plantillas);
+          } catch (e) {
+            console.error('Error parseando plantillas JSON:', e);
+          }
+        }
 
         let isRendering = false;
 
-        // Función que invoca el motor de Paged.js de forma segura
         async function runPagination() {
           if (isRendering || !sourceEl || !outputEl) return;
           isRendering = true;
 
           outputEl.innerHTML = '<div style="color: #94a3b8; padding: 2rem;">Generando páginas...</div>';
 
-          // Clonar contenido limpio
           const clone = sourceEl.cloneNode(true) as HTMLElement;
           clone.style.display = 'block';
 
-          // Esperar a que Paged.js esté listo en window
           const pagedEngine = new window.Paged.Previewer();
-
           outputEl.innerHTML = '';
           await pagedEngine.preview(clone, [], outputEl);
 
           isRendering = false;
         }
 
-        // Ejecutar paginado inicial
         setTimeout(runPagination, 200);
 
-        // Controladores de la barra lateral con recálculo
         let debounceTimer: any = null;
         function updateAndRepaginate() {
           clearTimeout(debounceTimer);
           debounceTimer = setTimeout(runPagination, 300);
         }
+
+        // Listener para cambio de plantilla
+        document.getElementById('sel-plantilla')?.addEventListener('change', (e) => {
+          const target = e.target as HTMLSelectElement;
+          const p = plantillasData[target.value];
+          if (!p) return;
+
+          const root = document.documentElement;
+          if (p.pagina?.margenSuperior) {
+            root.style.setProperty('--dyn-margin-v', p.pagina.margenSuperior);
+            const lblV = document.getElementById('lbl-margin-v');
+            if (lblV) lblV.textContent = p.pagina.margenSuperior;
+          }
+          if (p.pagina?.margenIzquierdo) {
+            root.style.setProperty('--dyn-margin-h', p.pagina.margenIzquierdo);
+            const lblH = document.getElementById('lbl-margin-h');
+            if (lblH) lblH.textContent = p.pagina.margenIzquierdo;
+          }
+          if (p.tipografia?.tamanoCuerpo) {
+            root.style.setProperty('--dyn-font-size', p.tipografia.tamanoCuerpo);
+            const lblS = document.getElementById('lbl-font-size');
+            if (lblS) lblS.textContent = p.tipografia.tamanoCuerpo;
+          }
+          if (p.parrafo?.interlineado) {
+            root.style.setProperty('--dyn-line-height', p.parrafo.interlineado);
+            const lblL = document.getElementById('lbl-line-height');
+            if (lblL) lblL.textContent = p.parrafo.interlineado;
+          }
+          if (p.parrafo?.sangriaPrimeraLinea) {
+            root.style.setProperty('--dyn-indent', p.parrafo.sangriaPrimeraLinea);
+            const lblI = document.getElementById('lbl-indent');
+            if (lblI) lblI.textContent = p.parrafo.sangriaPrimeraLinea;
+          }
+
+          const chkCover = document.getElementById('chk-cover') as HTMLInputElement | null;
+          const chkToc = document.getElementById('chk-toc') as HTMLInputElement | null;
+          if (chkCover && p.estructura) {
+            chkCover.checked = p.estructura.mostrarCaratula;
+            document.getElementById('sec-cover')?.classList.toggle('is-hidden', !p.estructura.mostrarCaratula);
+          }
+          if (chkToc && p.estructura) {
+            chkToc.checked = p.estructura.mostrarIndice;
+            document.getElementById('sec-toc')?.classList.toggle('is-hidden', !p.estructura.mostrarIndice);
+          }
+
+          updateAndRepaginate();
+        });
 
         document.getElementById('chk-cover')?.addEventListener('change', (e) => {
           const target = e.target as HTMLInputElement;

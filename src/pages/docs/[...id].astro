@@ -4,8 +4,7 @@ import Base from '../../layouts/Base.astro';
 import GraphModal from '../../components/GraphModal.astro';
 import FolderView from '../../components/FolderView.astro';
 import { formatName, generateDocPaths } from '../../utils/fileTree';
-import ReportCover from '../../components/ReportCover.astro';
-import ReportToc from '../../components/ReportToc.astro';
+import DocReportHeader from '../../components/DocReportHeader.astro';
 
 export async function getStaticPaths() {
   const allDocs = await getCollection('docs');
@@ -54,20 +53,15 @@ if (props.type === 'folder' && props.folderPath === 'explorar') {
 <Base title={title} headings={headings} frontmatter={frontmatterConExtra}>
   <div class="doc-container">
     {props.type === 'file' ? (
-  <div id="document-view">
-    {/* Mostrar portada si el tema o tipo es informe */}
-    {(props.doc.data.theme === 'informe' || props.doc.data.tipo === 'informe') && (
-      <ReportCover data={props.doc.data} />
-    )}
-
-    {/* Mostrar índice formal si el tema o tipo es informe */}
-    {(props.doc.data.theme === 'informe' || props.doc.data.tipo === 'informe') && 
-      props.doc.data.mostrarIndice !== false && (
-      <ReportToc headings={headings} />
-    )}
-
+<div id="document-view">
     <article class="markdown-body" data-pagefind-body>
       <h1>{title}</h1>
+
+      {/* Si es informe, renderizamos la tarjeta compacta arriba del contenido */}
+      {(props.doc.data.theme === 'informe' || props.doc.data.tipo === 'informe') && (
+        <DocReportHeader data={props.doc.data} />
+      )}
+
       <Content />
     </article>
         

@@ -1,81 +1,75 @@
 /* src/styles/markdown.css */
-
 /* --- ESTILOS DE LECTURA DE MARKDOWN (AISLADOS) --- */
 .main-content article {
   color: var(--text-color);
   font-family: var(--doc-font);
   line-height: var(--doc-line-height);
 }
-.main-content::after, .sticky-panel::after { 
-  content: ""; 
-  display: block; 
-  height: 20vh; 
+
+.main-content::after, .sticky-panel::after {
+  content: "";
+  display: block;
+  height: 20vh;
 }
-.main-content img { 
-  max-width: 100%; 
-  height: auto; 
-  border-radius: 8px; 
-  display: block; 
-  margin: 2rem auto; 
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+
+.main-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+  margin: 2rem auto;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 /* ==========================================================
-   JERARQUÍA DE ENCABEZADOS (COLOR-CODING Y TAMAÑOS)
+   JERARQUÍA DE ENCABEZADOS (COLOR-CODING Y TAMAÑO)
    ========================================================== */
-.markdown-body h1 { color: var(--color-h1); font-size: var(--h1-size); font-weight: 800; }
-.markdown-body h2 { color: var(--color-h2); font-size: var(--h2-size); font-weight: 700; margin-top: 2rem; }
-.markdown-body h3 { color: var(--color-h3); font-size: var(--h3-size); font-weight: 600; margin-top: 1.75rem; }
-.markdown-body h4 { color: var(--color-h4); font-size: var(--h4-size); font-weight: 600; margin-top: 1.5rem; }
-.markdown-body h5 { color: var(--color-h5); font-size: var(--h5-size); font-weight: 600; margin-top: 1.25rem; }
-.markdown-body h6 { color: var(--color-h6); font-size: var(--h6-size); font-weight: 600; margin-top: 1rem; }
+.markdown-body h1 { color: var(--color-h1); font-size: var(--h1-size); font-weight: 800; font-family: var(--title-font); }
+.markdown-body h2 { color: var(--color-h2); font-size: var(--h2-size); font-weight: 700; margin-top: 2rem; font-family: var(--title-font); }
+.markdown-body h3 { color: var(--color-h3); font-size: var(--h3-size); font-weight: 600; margin-top: 1.75rem; font-family: var(--title-font); }
+.markdown-body h4 { color: var(--color-h4); font-size: var(--h4-size); font-weight: 600; margin-top: 1.5rem; font-family: var(--title-font); }
+.markdown-body h5 { color: var(--color-h5); font-size: var(--h5-size); font-weight: 600; margin-top: 1.25rem; font-family: var(--title-font); }
+.markdown-body h6 { color: var(--color-h6); font-size: var(--h6-size); font-weight: 600; margin-top: 1rem; font-family: var(--title-font); }
 
 /* ==========================================================
    ÉNFASIS Y FORMATO DE TEXTO (COLOR-CODING)
    ========================================================== */
-.markdown-body strong { 
-  color: var(--color-negrita); 
-  font-weight: 700; 
-}
-.markdown-body em { 
-  color: var(--color-cursiva); 
-  font-style: italic; 
-}
-.markdown-body strong em, 
-.markdown-body em strong { 
-  color: var(--color-negrita-cursiva); 
-}
-.markdown-body del, 
-.markdown-body s { 
-  color: var(--color-tachado); 
-  text-decoration-color: var(--color-tachado); 
+.markdown-body strong {
+  color: var(--color-negrita);
+  font-weight: 700;
 }
 
-/* Código en línea (inline code) */
-.markdown-body code:not([class*="language-"]) {
-  color: var(--color-codigo-inline);
-  background-color: var(--bg-codigo-inline);
-  padding: 0.2em 0.4em;
-  border-radius: 6px;
-  font-family: 'Fira Code', ui-monospace, monospace;
-  font-size: 0.85em;
+.markdown-body em {
+  color: var(--color-cursiva);
+  font-style: italic;
+}
+
+.markdown-body strong em,
+.markdown-body em strong {
+  color: var(--color-negrita-cursiva);
+}
+
+.markdown-body del,
+.markdown-body s {
+  color: var(--color-tachado);
+  text-decoration-color: var(--color-tachado);
+}
+
+/* Enlaces internos en Markdown */
+.main-content a.internal {
+  color: var(--text-color);
+  background: var(--accent-subtle);
+  border-bottom: 2px solid var(--accent-color);
+  text-decoration: none;
+  padding: 0 4px;
+  border-radius: 4px;
   font-weight: 500;
+  transition: all 0.2s ease;
 }
 
-/* Enlaces internos y externos en Markdown */
-.main-content a.internal { 
-  color: var(--text-color); 
-  background: rgba(139, 92, 246, 0.15); 
-  border-bottom: 2px solid #8b5cf6; 
-  text-decoration: none; 
-  padding: 0 4px; 
-  border-radius: 4px; 
-  font-weight: 500; 
-  transition: all 0.2s ease; 
-}
-.main-content a.internal:hover { 
-  background: #8b5cf6; 
-  color: #ffffff; 
+.main-content a.internal:hover {
+  background: var(--accent-color);
+  color: #ffffff;
 }
 
 /* ==========================================================
@@ -87,6 +81,7 @@
   margin: 1.5rem 0;
   -webkit-overflow-scrolling: touch;
 }
+
 .main-content article table {
   display: block;
   width: 100%;
@@ -97,25 +92,29 @@
   -webkit-overflow-scrolling: touch;
   margin: 1.5rem 0;
 }
-.main-content th, .main-content td { 
-  border: 1px solid var(--border-color); 
-  padding: 0.75rem 1rem; 
-  text-align: left; 
+
+.main-content th, .main-content td {
+  border: 1px solid var(--border-color);
+  padding: 0.75rem 1rem;
+  text-align: left;
 }
-.main-content th { 
-  background-color: rgba(139, 92, 246, 0.08); 
-  font-weight: 600; 
+
+.main-content th {
+  background-color: var(--accent-subtle);
+  font-weight: 600;
 }
-html[data-modo="oscuro"] .main-content th { 
-  background-color: rgba(255, 255, 255, 0.05); 
+
+html[data-modo="oscuro"] .main-content th {
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 /* ==========================================================
    ALINEACIÓN, SCROLL NATIVO Y COLOR PARA KaTeX
    ========================================================== */
 .main-content .katex {
-  color: var(--color-math); /* Color inyectado a las matemáticas */
+  color: var(--color-math);
 }
+
 .main-content .katex-display {
   display: block !important;
   width: 100% !important;
@@ -128,6 +127,7 @@ html[data-modo="oscuro"] .main-content th {
   -webkit-overflow-scrolling: touch;
   box-sizing: border-box;
 }
+
 .main-content .katex-display > .katex {
   display: inline-block !important;
   text-align: center !important;
@@ -135,10 +135,12 @@ html[data-modo="oscuro"] .main-content th {
   min-width: min-content !important;
   margin: 0 auto !important;
 }
+
 .main-content .katex-display .katex-html {
   white-space: nowrap !important;
   text-align: center !important;
 }
+
 .main-content .katex .array {
   display: inline-table !important;
 }
@@ -151,6 +153,7 @@ html[data-modo="oscuro"] .main-content th {
   box-sizing: border-box;
   scroll-padding-top: 100px;
 }
+
 @media (min-width: 769px) {
   .main-content {
     scroll-behavior: smooth;
@@ -165,6 +168,7 @@ html[data-modo="oscuro"] .main-content th {
   margin-left: 0 !important;
   padding-left: 0 !important;
 }
+
 .markdown-body li.task-list-item {
   display: flex !important;
   align-items: center !important;
@@ -172,14 +176,15 @@ html[data-modo="oscuro"] .main-content th {
   margin: 0.4rem 0 !important;
   font-family: var(--ui-font) !important;
 }
+
 .markdown-body input[type="checkbox"] {
   appearance: none;
   -webkit-appearance: none;
   width: 1.15rem;
   height: 1.15rem;
-  border: 1.5px solid var(--border-color, #64748b);
+  border: 1.5px solid var(--border-color);
   border-radius: 4px;
-  background-color: var(--header-bg, #1e293b);
+  background-color: var(--header-bg);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
@@ -188,13 +193,16 @@ html[data-modo="oscuro"] .main-content th {
   transition: all 0.2s ease;
   margin: 0 !important;
 }
+
 .markdown-body input[type="checkbox"]:hover {
-  border-color: #8b5cf6;
+  border-color: var(--accent-color);
 }
+
 .markdown-body input[type="checkbox"]:checked {
-  background-color: #8b5cf6 !important;
-  border-color: #8b5cf6 !important;
+  background-color: var(--accent-color) !important;
+  border-color: var(--accent-color) !important;
 }
+
 .markdown-body input[type="checkbox"]:checked::after {
   content: "";
   width: 4px;
@@ -205,8 +213,20 @@ html[data-modo="oscuro"] .main-content th {
   position: absolute;
   top: 1px;
 }
+
 .markdown-body li.task-list-item:has(input[type="checkbox"]:checked) {
   opacity: 0.75;
   text-decoration: line-through;
-  text-decoration-color: #8b5cf6;
+  text-decoration-color: var(--accent-color);
+}
+
+/* Código estrictamente en línea (no afecta a los bloques pre de Shiki) */
+.markdown-body :not(pre) > code {
+  color: var(--color-codigo-inline);
+  background-color: var(--bg-codigo-inline);
+  padding: 0.2em 0.4em;
+  border-radius: 6px;
+  font-family: 'Fira Code', ui-monospace, monospace;
+  font-size: 0.85em;
+  font-weight: 500;
 }

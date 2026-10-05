@@ -1,14 +1,9 @@
 /* src/styles/print.css */
-
 @media print {
-  /* 1. Hoja física con márgenes reglamentarios */
+  /* 1. Hoja física con márgenes por variable */
   @page {
     size: auto;
-    margin: var(--print-page-padding, 1.8cm 1.5cm) !important;
-  }
-
-  html[data-estilo="informe"] {
-    --print-page-padding: 2.54cm;
+    margin: var(--print-page-padding, 2.54cm) !important;
   }
 
   *, *::before, *::after {
@@ -30,32 +25,30 @@
   html, body {
     background-color: #ffffff !important;
     background: #ffffff !important;
-    color: #0f172a !important;
+    color: #000000 !important;
     margin: 0 !important;
     padding: 0 !important;
-    font-size: var(--print-font-size, 11pt) !important;
-    font-family: var(--print-font-family, system-ui, -apple-system, sans-serif) !important;
+    font-size: var(--print-font-size, 12pt) !important;
+    font-family: var(--print-font-family, 'Times New Roman', Times, serif) !important;
   }
 
   .content-wrapper, .markdown-body, #document-view {
     background: #ffffff !important;
-    color: #0f172a !important;
+    color: #000000 !important;
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
-    line-height: var(--print-line-height, 1.6) !important;
+    line-height: var(--print-line-height, 1.8) !important;
   }
 
-  /* ==========================================================
-     4. CARÁTULA E ÍNDICE APA (Ajuste milimétrico a 1 hoja A4)
-     ========================================================== */
+  /* 4. Carátula e Índice */
   .report-cover-page {
     box-sizing: border-box !important;
     width: 100% !important;
     height: 100% !important;
-    max-height: 220mm !important; /* Altura segura para encajar con los 2.54cm de @page */
-    display: flex !important;
+    max-height: 220mm !important;
+    display: var(--print-cover-display, flex) !important;
     flex-direction: column !important;
     justify-content: space-between !important;
     align-items: center !important;
@@ -64,20 +57,12 @@
     break-before: avoid !important;
     page-break-after: always !important;
     break-after: page !important;
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
     margin: 0 !important;
     padding: 0 !important;
     background: #ffffff !important;
     color: #000000 !important;
   }
 
-  .report-cover-page * {
-    background-color: transparent !important;
-    color: #000000 !important;
-  }
-
-  /* Contención del escudo para que no expulse el pie de página */
   .report-cover-page img,
   .report-cover-page svg {
     max-height: 48mm !important;
@@ -87,55 +72,6 @@
     display: block !important;
   }
 
-  /* Centrado de títulos y textos institucionales de portada */
-  .report-cover-page h1,
-  .report-cover-page h2,
-  .report-cover-page p,
-  .report-cover-page div {
-    text-align: center !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-  }
-
-  .report-cover-page h1 {
-    font-size: 14pt !important;
-    line-height: 1.3 !important;
-    margin: 0.4rem 0 !important;
-  }
-
-  .report-cover-page h2 {
-    font-size: 11pt !important;
-    margin: 0.2rem 0 !important;
-  }
-
-  /* Tabla de integrantes centrada en la hoja pero con columnas alineadas */
-  .report-cover-page table,
-  .report-cover-page .author-row,
-  .report-cover-page .members-list,
-  .report-cover-page [class*="integrante"],
-  .report-cover-page [class*="member"] {
-    width: 85% !important;
-    max-width: 500px !important;
-    margin: 0.5rem auto !important;
-    border: none !important;
-  }
-
-  .report-cover-page td,
-  .report-cover-page th {
-    border: none !important;
-    padding: 0.15rem 0.5rem !important;
-    font-size: 9.5pt !important;
-  }
-
-  .report-cover-page td:first-child {
-    text-align: left !important;
-  }
-
-  .report-cover-page td:last-child {
-    text-align: right !important;
-  }
-
-  /* Índice formal: arranca en hoja nueva y termina con salto obligatorio */
   .report-toc-page {
     box-sizing: border-box !important;
     width: 100% !important;
@@ -148,101 +84,42 @@
     color: #000000 !important;
   }
 
-  .report-toc-page h1,
-  .report-toc-page h2,
-  .report-toc-page .toc-title {
-    text-align: center !important;
-    font-size: 14pt !important;
-    font-weight: bold !important;
-    margin-bottom: 1.5rem !important;
-  }
-
-  /* ==========================================================
-     5. TÍTULOS Y ENCABEZADOS (APA 7 CENTRADO)
-     ========================================================== */
+  /* 5. Títulos y Encabezados */
   h1, h2, h3, h4, h5, h6 {
     color: #000000 !important;
     page-break-after: avoid !important;
     break-after: avoid !important;
   }
 
-  /* En estilo informe / APA 7: Títulos principales centrados */
-  html[data-estilo="informe"] .markdown-body h1,
-  html[data-estilo="informe"] .markdown-body h2:first-of-type {
-    font-size: 13.5pt !important;
+  .markdown-body h1 {
+    font-size: var(--print-h1-size, 14pt) !important;
     text-align: center !important;
     margin-top: 1.25rem !important;
-    margin-bottom: 0.85rem !important;
     font-weight: bold !important;
   }
 
-  /* Si un h2 actúa como encabezado de sección principal */
-  html[data-estilo="informe"] .markdown-body h2 {
-    font-size: 12.5pt !important;
+  .markdown-body h2 {
+    font-size: var(--print-h2-size, 13pt) !important;
     text-align: left !important;
     margin-top: 1.2rem !important;
-    margin-bottom: 0.5rem !important;
     font-weight: bold !important;
   }
 
-  html[data-estilo="informe"] .markdown-body h3 {
-    font-size: 11.5pt !important;
+  .markdown-body h3 {
+    font-size: var(--print-h3-size, 12pt) !important;
     text-align: left !important;
     font-style: italic !important;
   }
 
-  /* Salto de página para la sección de Referencias */
-  html[data-estilo="informe"] .markdown-body h1[id*="referencia"],
-  html[data-estilo="informe"] .markdown-body h2[id*="referencia"],
-  html[data-estilo="informe"] #referencias,
-  html[data-estilo="informe"] #references {
-    page-break-before: always !important;
-    break-before: page !important;
-    text-align: center !important;
-    margin-top: 0 !important;
-    padding-top: 0.5rem !important;
-  }
-
-  /* 6. Párrafos y Listas */
+  /* Párrafos y Sangría */
   .markdown-body p {
     color: #000000 !important;
     margin-bottom: 0.85rem !important;
-    text-indent: var(--print-para-indent, 0) !important;
-  }
-
-  html[data-estilo="informe"] .markdown-body p {
-    text-indent: 1.27cm !important;
+    text-indent: var(--print-para-indent, 1.27cm) !important;
     text-align: justify !important;
   }
 
-  .markdown-body ul,
-  .markdown-body ol {
-    padding-left: 2rem !important;
-    margin-bottom: 0.85rem !important;
-  }
-
-  .markdown-body li {
-    text-indent: 0 !important;
-    margin-bottom: 0.35rem !important;
-    color: #000000 !important;
-  }
-
-  .markdown-body li p {
-    text-indent: 0 !important;
-    display: inline !important;
-  }
-
-  /* Sangría francesa para la sección de Referencias */
-  html[data-estilo="informe"] [id*="referencia"] ~ ul li,
-  html[data-estilo="informe"] [id*="referencia"] ~ p.citation,
-  html[data-estilo="informe"] .references li {
-    text-indent: -1.27cm !important;
-    padding-left: 1.27cm !important;
-    margin-bottom: 0.75rem !important;
-    text-align: left !important;
-  }
-
-  /* 7. Tablas APA */
+  /* Tablas APA */
   table {
     width: 100% !important;
     border-collapse: collapse !important;
@@ -268,7 +145,7 @@
     border: none !important;
   }
 
-  /* 8. Código Shiki y Mermaid */
+  /* Bloques de Código */
   pre.astro-code {
     background-color: #f8fafc !important;
     border: 1px solid #e2e8f0 !important;
@@ -276,10 +153,7 @@
     break-inside: avoid !important;
   }
 
-  pre.astro-code code span {
-    color: var(--shiki-light, #0f172a) !important;
-  }
-
+  /* Mermaid */
   .mermaid-wrapper {
     max-width: 100% !important;
     border: 1px solid #e2e8f0 !important;
@@ -307,7 +181,7 @@
     text-align: left !important;
   }
 
-  /* 9. Saltos explícitos con '---' */
+  /* Salto explícito con --- */
   hr {
     display: block !important;
     border: none !important;
