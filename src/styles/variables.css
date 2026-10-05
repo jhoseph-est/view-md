@@ -246,3 +246,68 @@ html[data-ancho="normal"] {
   --content-max-width: 800px;  
   --content-padding: 2rem 3rem; 
 }
+
+/* ==========================================================
+   MATRIZ DE VARIABLES PARA IMPRESIÓN Y EXPORTACIÓN PDF
+   ========================================================== */
+
+/* 1. ESTILO INFORME / FORMATO APA 7 (Normativa Estricta Calibrada) */
+html[data-estilo="informe"] {
+  --print-page-padding: 2.54cm;       /* Margen de 1 pulgada en los 4 lados */
+  --print-font-size: 12pt;            /* Tamaño estándar APA para papel */
+  --print-line-height: 1.8;           /* Interlineado de lectura formal */
+  --print-para-indent: 1.27cm;        /* Sangría de primera línea reglamentaria */
+  --print-font-family: 'Times New Roman', Times, serif;
+  --print-cover-display: flex;
+
+  /* Escala tipográfica formal de títulos */
+  --print-h1-size: 14pt;
+  --print-h2-size: 13pt;
+  --print-h3-size: 12pt;
+  --print-h4-size: 12pt;
+}
+
+/* 2. ESTILO ACADÉMICO (Papers y Guías) */
+html[data-estilo="academico"] {
+  --print-page-padding: 2cm 1.8cm;
+  --print-font-size: 11pt;
+  --print-line-height: 1.5;
+  --print-para-indent: 0.8cm;
+  --print-font-family: 'Georgia', 'Cambria', serif;
+  --print-cover-display: none;
+
+  --print-h1-size: 16pt;
+  --print-h2-size: 13pt;
+  --print-h3-size: 11.5pt;
+  --print-h4-size: 11pt;
+}
+
+/* 3. ESTILO MODERNO (Documentación de Software) */
+html[data-estilo="moderno"] {
+  --print-page-padding: 1.6cm 1.4cm;
+  --print-font-size: 10.5pt;
+  --print-line-height: 1.45;
+  --print-para-indent: 0;
+  --print-font-family: system-ui, -apple-system, sans-serif;
+  --print-cover-display: none;
+
+  --print-h1-size: 18pt;
+  --print-h2-size: 14pt;
+  --print-h3-size: 12pt;
+  --print-h4-size: 11pt;
+}
+
+/* 4. ESTILO MINIMALISTA */
+html[data-estilo="minimalista"] {
+  --print-page-padding: 1.2cm 1.2cm;
+  --print-font-size: 10pt;
+  --print-line-height: 1.4;
+  --print-para-indent: 0;
+  --print-font-family: ui-monospace, 'Menlo', 'Consolas', monospace;
+  --print-cover-display: none;
+
+  --print-h1-size: 15pt;
+  --print-h2-size: 13pt;
+  --print-h3-size: 11pt;
+  --print-h4-size: 10pt;
+}

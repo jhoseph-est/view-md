@@ -177,493 +177,564 @@ const hasSlides = frontmatter.slides === true ? 'true' : 'false';
       <div class="drawer-body" id="mobile-settings-content"></div>
     </div>
 
-  <script>
-    import { renderMermaid } from '../utils/mermaidViewer';
-    import { exportarAPDF } from '../utils/pdfExporter';
+    <script>
+      import { renderMermaid } from '../utils/mermaidViewer';
 
-    declare global {
-      interface Window {
-        PagefindUI: any;
-      }
-    }
-
-    let pagefindLoadingPromise: Promise<void> | null = null;
-    function loadPagefindAssets(): Promise<void> {
-      if (window.PagefindUI) return Promise.resolve();
-      if (pagefindLoadingPromise) return pagefindLoadingPromise;
-
-      pagefindLoadingPromise = new Promise((resolve, reject) => {
-        const link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = '/pagefind/pagefind-ui.css';
-        document.head.appendChild(link);
-
-        const script = document.createElement('script');
-        script.src = '/pagefind/pagefind-ui.js';
-        script.onload = () => resolve();
-        script.onerror = (err) => reject(err);
-        document.head.appendChild(script);
-      });
-
-      return pagefindLoadingPromise;
-    }
-
-    function initializeApp() {
-      renderMermaid(false, '.main-content');
-
-      // 3. Decoración interactiva para imágenes (Botón Copiar)
-      document.querySelectorAll('.main-content article img').forEach((imgNode) => {
-        const img = imgNode as HTMLImageElement;
-        if (img.closest('.img-interactive-wrapper')) return;
-
-        const wrapper = document.createElement('div');
-        wrapper.className = 'img-interactive-wrapper';
-
-        const toolbar = document.createElement('div');
-        toolbar.className = 'img-toolbar';
-
-        const copyBtn = document.createElement('button');
-        copyBtn.className = 'img-tool-btn';
-        copyBtn.innerHTML = `
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
-            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
-          </svg>
-          <span>Copiar</span>
-        `;
-
-        copyBtn.onclick = async () => {
-          try {
-            const response = await fetch(img.src);
-            const blob = await response.blob();
-            
-            if (blob.type.includes('png') || blob.type.includes('jpeg')) {
-              await navigator.clipboard.write([
-                new ClipboardItem({ [blob.type]: blob })
-              ]);
-            } else {
-              await navigator.clipboard.writeText(img.src);
-            }
-            copyBtn.classList.add('copied');
-            copyBtn.querySelector('span')!.textContent = '✓ Copiado';
-            setTimeout(() => {
-              copyBtn.classList.remove('copied');
-              copyBtn.querySelector('span')!.textContent = 'Copiar';
-            }, 1500);
-          } catch (e) {
-            await navigator.clipboard.writeText(img.src);
-            copyBtn.classList.add('copied');
-            copyBtn.querySelector('span')!.textContent = '✓ Enlace Copiado';
-            setTimeout(() => {
-              copyBtn.classList.remove('copied');
-              copyBtn.querySelector('span')!.textContent = 'Copiar';
-            }, 1500);
-          }
-        };
-
-        toolbar.appendChild(copyBtn);
-        img.parentNode?.insertBefore(wrapper, img);
-        wrapper.appendChild(img);
-        wrapper.appendChild(toolbar);
-      });
-      
-      const root = document.documentElement;
-      const mainGrid = document.getElementById('main-grid');
-
-      let isLeftOpen = localStorage.getItem('wiki-left-open') === 'true';
-      let showToc = localStorage.getItem('wiki-show-toc') === 'true';
-      let showMeta = localStorage.getItem('wiki-show-meta') === 'true';
-      let activePane = localStorage.getItem('wiki-active-pane') || 'pane-explorer';
-
-      let memLeft = localStorage.getItem('wiki-mem-left') === 'true';
-      let memToc = localStorage.getItem('wiki-mem-toc') === 'true';
-      let memMeta = localStorage.getItem('wiki-mem-meta') === 'true';
-
-      const actToc = document.getElementById('act-toc');
-      const actMeta = document.getElementById('act-meta');
-      const actCollapse = document.getElementById('act-collapse');
-      const actZen = document.getElementById('act-zen');
-      const btnExitZen = document.getElementById('btn-exit-zen');
-
-      const actExplorer = document.getElementById('act-explorer');
-      const actSearch = document.getElementById('act-search');
-      const actSettings = document.getElementById('act-settings');
-      const actPrint = document.getElementById('act-print');
-      const leftTitle = document.getElementById('left-panel-title');
-
-      const actSlides = document.getElementById('act-slides') as HTMLAnchorElement | null;
-      if (actSlides) {
-        const currentDocPath = window.location.pathname.replace(/^\/docs\/?/, '').replace(/\/$/, '');
-        actSlides.href = `/slides/${currentDocPath}`;
-      }
-
-      // Repoblado reactivo de cajones móviles
-      const mButtons = document.querySelectorAll('.m-btn[data-drawer]');
-      const drawers = document.querySelectorAll('.mobile-drawer');
-      const backdrop = document.getElementById('mobile-backdrop');
-      const mActZen = document.getElementById('m-act-zen');
-
-      if (mActZen) {
-        mActZen.onclick = toggleZenMode;
-      }
-
-      // 1. Explorador Móvil
-      const desktopExplorer = document.getElementById('pane-explorer');
-      const mobileExplorerTarget = document.getElementById('mobile-explorer-content');
-      if (desktopExplorer && mobileExplorerTarget && mobileExplorerTarget.children.length === 0) {
-        const clone = desktopExplorer.cloneNode(true) as HTMLElement;
-        clone.style.display = 'flex';
-        mobileExplorerTarget.appendChild(clone);
-      }
-
-      // 2. Buscador Móvil
-      async function initMobileSearch() {
-        const mobileSearchTarget = document.getElementById('mobile-search-content');
-        if (mobileSearchTarget && mobileSearchTarget.innerHTML.trim() === '') {
-          mobileSearchTarget.innerHTML = `<div style="padding: 0.5rem 0;" id="mobile-pagefind-container">Cargando buscador...</div>`;
-          await loadPagefindAssets();
-          mobileSearchTarget.innerHTML = `<div style="padding: 0.5rem 0;" id="mobile-pagefind-container"></div>`;
-          new window.PagefindUI({ 
-            element: "#mobile-pagefind-container", 
-            showSubResults: true,
-            resetStyles: false,
-            ranking: {
-              termFrequency: 0.2,
-              pageLength: 0.75,
-              termSaturation: 1.4
-            }
-          });
+      declare global {
+        interface Window {
+          PagefindUI: any;
         }
       }
 
-      // 3. Índice Móvil (TOC)
-      const mobileTocTarget = document.getElementById('mobile-toc-content');
-      const desktopTocBody = document.getElementById('toc-body') || document.querySelector('.toc-body');
-      if (mobileTocTarget) {
-        mobileTocTarget.innerHTML = '';
-        if (desktopTocBody && desktopTocBody.innerHTML.trim() !== '') {
-          const clone = desktopTocBody.cloneNode(true) as HTMLElement;
-          mobileTocTarget.appendChild(clone);
-        } else {
-          mobileTocTarget.innerHTML = `<p class="empty-note" style="opacity:0.6; padding: 1rem;">Esta página no contiene subtítulos.</p>`;
-        }
-      }
+      let pagefindLoadingPromise: Promise<void> | null = null;
+      function loadPagefindAssets(): Promise<void> {
+        if (window.PagefindUI) return Promise.resolve();
+        if (pagefindLoadingPromise) return pagefindLoadingPromise;
 
-      // 4. Metadatos Móvil
-      const mobileMetaTarget = document.getElementById('mobile-meta-content');
-      const desktopMetaBody = document.querySelector('.bottom-meta .panel-body') || document.querySelector('.meta-body');
-      if (mobileMetaTarget) {
-        mobileMetaTarget.innerHTML = '';
-        if (desktopMetaBody && desktopMetaBody.innerHTML.trim() !== '') {
-          const clone = desktopMetaBody.cloneNode(true) as HTMLElement;
-          mobileMetaTarget.appendChild(clone);
-        } else {
-          mobileMetaTarget.innerHTML = `<p class="empty-note" style="opacity:0.6; padding: 1rem;">No hay metadatos disponibles para esta vista.</p>`;
-        }
-      }
+        pagefindLoadingPromise = new Promise((resolve, reject) => {
+          const link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.href = '/pagefind/pagefind-ui.css';
+          document.head.appendChild(link);
 
-      // 5. Ajustes Móvil
-      const mobileSettingsTarget = document.getElementById('mobile-settings-content');
-      const desktopSettings = document.getElementById('pane-settings');
-      if (mobileSettingsTarget && desktopSettings && mobileSettingsTarget.children.length === 0) {
-        const clone = desktopSettings.cloneNode(true) as HTMLElement;
-        clone.style.display = 'flex';
-        clone.querySelectorAll('select').forEach((sel, idx) => {
-          sel.removeAttribute('id');
-          if (idx === 0) sel.setAttribute('data-setting', 'modo');
-          else if (idx === 1) sel.setAttribute('data-setting', 'estilo');
-          else if (idx === 2) sel.setAttribute('data-setting', 'texto');
-        });
-        mobileSettingsTarget.appendChild(clone);
-
-        const curModo = root.getAttribute('data-modo') || 'oscuro';
-        const curEstilo = root.getAttribute('data-estilo') || 'moderno';
-        const curTexto = root.getAttribute('data-texto') || 'estandar';
-        
-        desktopSettings.querySelectorAll('select').forEach((sel, idx) => {
-          if (idx === 0) sel.setAttribute('data-setting', 'modo');
-          else if (idx === 1) sel.setAttribute('data-setting', 'estilo');
-          else if (idx === 2) sel.setAttribute('data-setting', 'texto');
+          const script = document.createElement('script');
+          script.src = '/pagefind/pagefind-ui.js';
+          script.onload = () => resolve();
+          script.onerror = (err) => reject(err);
+          document.head.appendChild(script);
         });
 
-        mobileSettingsTarget.querySelectorAll('select').forEach((sel) => {
-          const selectEl = sel as HTMLSelectElement;
-          const settingType = selectEl.getAttribute('data-setting');
-          if (settingType === 'modo') selectEl.value = curModo;
-          if (settingType === 'estilo') selectEl.value = curEstilo;
-          if (settingType === 'texto') selectEl.value = curTexto;
-        });
+        return pagefindLoadingPromise;
       }
 
-      function closeAllDrawers() {
-        drawers.forEach(d => d.classList.remove('open'));
-        backdrop?.classList.remove('active');
-        mButtons.forEach(b => b.classList.remove('active'));
-      }
-
-      mButtons.forEach(node => {
-        const btn = node as HTMLElement;
-        btn.onclick = () => {
-          const drawerId = btn.getAttribute('data-drawer');
-          const targetDrawer = drawerId ? document.getElementById(drawerId) : null;
-          const isOpen = targetDrawer?.classList.contains('open');
-          closeAllDrawers();
-          if (!isOpen && targetDrawer) {
-            if (drawerId === 'm-drawer-search') {
-              initMobileSearch();
-            }
-            targetDrawer.classList.add('open');
-            backdrop?.classList.add('active');
-            btn.classList.add('active');
-          }
-        };
-      });
-
-      if (backdrop) {
-        backdrop.onclick = closeAllDrawers;
-      }
-
-      function syncUI(save = true) {
-        root.classList.toggle('no-left-panel', !isLeftOpen);
-        root.classList.toggle('no-toc', !showToc);
-        root.classList.toggle('no-meta', !showMeta);
-
-        if (isLeftOpen) {
-          root.setAttribute('data-active-pane', activePane);
-          if (leftTitle) {
-            if (activePane === 'pane-explorer') leftTitle.textContent = 'EXPLORADOR';
-            if (activePane === 'pane-search') {
-              leftTitle.textContent = 'BUSCAR';
-              initSearch();
-            }
-            if (activePane === 'pane-settings') leftTitle.textContent = 'AJUSTES';
-          }
-        } else {
-          root.removeAttribute('data-active-pane');
-        }
-
-        const anyActive = isLeftOpen || showToc || showMeta;
-        if (actCollapse) actCollapse.classList.toggle('active', anyActive);
-
-        if (save) {
-          localStorage.setItem('wiki-left-open', isLeftOpen.toString());
-          localStorage.setItem('wiki-show-toc', showToc.toString());
-          localStorage.setItem('wiki-show-meta', showMeta.toString());
-          localStorage.setItem('wiki-active-pane', activePane);
-        }
-      }
-
-      async function initSearch() {
-        const container = document.getElementById('inline-pagefind-container');
-        if (container && container.innerHTML.trim() === '') {
-          container.innerHTML = '<span style="opacity: 0.5; font-size: 0.85rem;">Cargando motor de búsqueda...</span>';
-          await loadPagefindAssets();
-          container.innerHTML = '';
-          new window.PagefindUI({ 
-            element: "#inline-pagefind-container", 
-            showSubResults: true,
-            resetStyles: false,
-            ranking: {
-              termFrequency: 0.2,
-              pageLength: 0.75,
-              termSaturation: 1.4
-            }
-          });
-        }
-        setTimeout(() => container?.querySelector('input')?.focus(), 80);
-      }
-
-      if (actCollapse) {
-        actCollapse.onclick = () => {
-          const anyActive = isLeftOpen || showToc || showMeta;
-          if (anyActive) {
-            memLeft = isLeftOpen;
-            memToc = showToc;
-            memMeta = showMeta;
-            localStorage.setItem('wiki-mem-left', memLeft.toString());
-            localStorage.setItem('wiki-mem-toc', memToc.toString());
-            localStorage.setItem('wiki-mem-meta', memMeta.toString());
-            isLeftOpen = false;
-            showToc = false;
-            showMeta = false;
-          } else {
-            if (!memLeft && !memToc && !memMeta) {
-              isLeftOpen = true;
-            } else {
-              isLeftOpen = memLeft;
-              showToc = memToc;
-              showMeta = memMeta;
-            }
-          }
-          syncUI();
-        };
-      }
-
-      if (document.fullscreenElement && mainGrid) {
-        mainGrid.classList.add('zen-active');
-      }
-
-      function toggleZenMode() {
-        if (!document.fullscreenElement) {
-          document.documentElement.requestFullscreen().then(() => {
-            mainGrid?.classList.add('zen-active');
-          }).catch(() => {});
-        } else {
-          document.exitFullscreen().catch(() => {});
-        }
-      }
-
-      if (actZen) actZen.onclick = toggleZenMode;
-      if (btnExitZen) {
-        btnExitZen.onclick = () => {
-          if (document.fullscreenElement) {
-            document.exitFullscreen().catch(() => {});
-          } else {
-            mainGrid?.classList.remove('zen-active');
-          }
-        };
-      }
-
-      document.addEventListener('fullscreenchange', () => {
-        if (!document.fullscreenElement) {
-          mainGrid?.classList.remove('zen-active');
-        } else {
-          mainGrid?.classList.add('zen-active');
-        }
-      });
-
-      if (actExplorer) {
-        actExplorer.onclick = () => {
-          if (isLeftOpen && activePane === 'pane-explorer') {
-            isLeftOpen = false;
-          } else {
-            isLeftOpen = true;
-            activePane = 'pane-explorer';
-          }
-          syncUI();
-        };
-      }
-
-      if (actSearch) {
-        actSearch.onclick = () => {
-          if (isLeftOpen && activePane === 'pane-search') {
-            isLeftOpen = false;
-          } else {
-            isLeftOpen = true;
-            activePane = 'pane-search';
-          }
-          syncUI();
-        };
-      }
-
-      if (actSettings) {
-        actSettings.onclick = () => {
-          if (isLeftOpen && activePane === 'pane-settings') {
-            isLeftOpen = false;
-          } else {
-            isLeftOpen = true;
-            activePane = 'pane-settings';
-          }
-          syncUI();
-        };
-      }
-
-      if (actToc) actToc.onclick = () => { showToc = !showToc; syncUI(); };
-      if (actMeta) actMeta.onclick = () => { showMeta = !showMeta; syncUI(); };
-      if (actPrint) {
-        actPrint.onclick = () => {
+      async function imprimirDocumentoAislado() {
+        const originalContent = document.querySelector('#document-view') || document.querySelector('.markdown-body');
+        if (!originalContent) {
           window.print();
-        };
+          return;
+        }
+
+        const estilo = document.documentElement.getAttribute('data-estilo') || 'moderno';
+
+        // 1. Clonar contenido y fijar URLs absolutas en imágenes
+        const contentClone = originalContent.cloneNode(true) as HTMLElement;
+        contentClone.querySelectorAll('img').forEach((img) => {
+          if (img.src) img.setAttribute('src', img.src);
+        });
+
+        // 2. Crear iframe invisible
+        const iframe = document.createElement('iframe');
+        iframe.style.position = 'fixed';
+        iframe.style.top = '-10000px';
+        iframe.style.left = '-10000px';
+        iframe.style.width = '1000px';
+        iframe.style.height = '1000px';
+        iframe.style.border = 'none';
+        document.body.appendChild(iframe);
+
+        const doc = iframe.contentDocument || iframe.contentWindow?.document;
+        if (!doc) {
+          iframe.remove();
+          window.print();
+          return;
+        }
+
+        // 3. Tomar todas las hojas de estilo del sitio (variables.css, print.css, KaTeX, etc.)
+        let estilosHTML = '';
+        document.querySelectorAll('link[rel="stylesheet"], style').forEach((node) => {
+          estilosHTML += node.outerHTML;
+        });
+
+        // 4. Escribir documento ligero
+        doc.open();
+        doc.write(`
+          <!DOCTYPE html>
+          <html lang="es" data-modo="claro" data-estilo="${estilo}">
+            <head>
+              <meta charset="utf-8" />
+              <title>${document.title}</title>
+              ${estilosHTML}
+            </head>
+            <body>
+              <div class="content-wrapper">
+                <div class="markdown-body">
+                  ${contentClone.innerHTML}
+                </div>
+              </div>
+            </body>
+          </html>
+        `);
+        doc.close();
+
+        // 5. Esperar carga de fuentes KaTeX y disparar impresión
+        if (iframe.contentWindow?.document?.fonts) {
+          await iframe.contentWindow.document.fonts.ready;
+        }
+
+        setTimeout(() => {
+          iframe.contentWindow?.focus();
+          iframe.contentWindow?.print();
+          setTimeout(() => {
+            iframe.remove();
+          }, 1500);
+        }, 250);
       }
 
-      syncUI(false);
-    }
+      function initializeApp() {
+        renderMermaid(false, '.main-content');
 
-    document.addEventListener('change', (e) => {
-      const target = e.target as HTMLElement;
-      if (!(target instanceof HTMLSelectElement)) return;
-      const html = document.documentElement;
-      const val = target.value;
-      const settingType = target.getAttribute('data-setting') || target.id.toLowerCase();
+        // Decoración interactiva para imágenes (Botón Copiar)
+        document.querySelectorAll('.main-content article img').forEach((imgNode) => {
+          const img = imgNode as HTMLImageElement;
+          if (img.closest('.img-interactive-wrapper')) return;
 
-      if (settingType.includes('theme') || settingType.includes('modo') || settingType === 'modo') {
-        html.setAttribute('data-modo', val);
-        localStorage.setItem('pref-modo', val);
-        window.dispatchEvent(new Event('theme-changed'));
-      } else if (settingType.includes('style') || settingType.includes('estilo') || settingType === 'estilo') {
-        html.setAttribute('data-estilo', val);
-        localStorage.setItem('pref-estilo', val);
-        window.dispatchEvent(new Event('theme-changed'));
-      } else if (settingType.includes('size') || settingType.includes('texto') || settingType === 'texto') {
-        html.setAttribute('data-texto', val);
-        localStorage.setItem('pref-texto', val);
+          const wrapper = document.createElement('div');
+          wrapper.className = 'img-interactive-wrapper';
+
+          const toolbar = document.createElement('div');
+          toolbar.className = 'img-toolbar';
+
+          const copyBtn = document.createElement('button');
+          copyBtn.className = 'img-tool-btn';
+          copyBtn.innerHTML = `
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+              <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+            </svg>
+            <span>Copiar</span>
+          `;
+
+          copyBtn.onclick = async () => {
+            try {
+              const response = await fetch(img.src);
+              const blob = await response.blob();
+              
+              if (blob.type.includes('png') || blob.type.includes('jpeg')) {
+                await navigator.clipboard.write([
+                  new ClipboardItem({ [blob.type]: blob })
+                ]);
+              } else {
+                await navigator.clipboard.writeText(img.src);
+              }
+              copyBtn.classList.add('copied');
+              copyBtn.querySelector('span')!.textContent = '✓ Copiado';
+              setTimeout(() => {
+                copyBtn.classList.remove('copied');
+                copyBtn.querySelector('span')!.textContent = 'Copiar';
+              }, 1500);
+            } catch (e) {
+              await navigator.clipboard.writeText(img.src);
+              copyBtn.classList.add('copied');
+              copyBtn.querySelector('span')!.textContent = '✓ Enlace Copiado';
+              setTimeout(() => {
+                copyBtn.classList.remove('copied');
+                copyBtn.querySelector('span')!.textContent = 'Copiar';
+              }, 1500);
+            }
+          };
+
+          toolbar.appendChild(copyBtn);
+          img.parentNode?.insertBefore(wrapper, img);
+          wrapper.appendChild(img);
+          wrapper.appendChild(toolbar);
+        });
+        
+        const root = document.documentElement;
+        const mainGrid = document.getElementById('main-grid');
+
+        let isLeftOpen = localStorage.getItem('wiki-left-open') === 'true';
+        let showToc = localStorage.getItem('wiki-show-toc') === 'true';
+        let showMeta = localStorage.getItem('wiki-show-meta') === 'true';
+        let activePane = localStorage.getItem('wiki-active-pane') || 'pane-explorer';
+
+        let memLeft = localStorage.getItem('wiki-mem-left') === 'true';
+        let memToc = localStorage.getItem('wiki-mem-toc') === 'true';
+        let memMeta = localStorage.getItem('wiki-mem-meta') === 'true';
+
+        const actToc = document.getElementById('act-toc');
+        const actMeta = document.getElementById('act-meta');
+        const actCollapse = document.getElementById('act-collapse');
+        const actZen = document.getElementById('act-zen');
+        const btnExitZen = document.getElementById('btn-exit-zen');
+
+        const actExplorer = document.getElementById('act-explorer');
+        const actSearch = document.getElementById('act-search');
+        const actSettings = document.getElementById('act-settings');
+        const actPrint = document.getElementById('act-print');
+        const leftTitle = document.getElementById('left-panel-title');
+
+        const actSlides = document.getElementById('act-slides') as HTMLAnchorElement | null;
+        if (actSlides) {
+          const currentDocPath = window.location.pathname.replace(/^\/docs\/?/, '').replace(/\/$/, '');
+          actSlides.href = `/slides/${currentDocPath}`;
+        }
+
+        // Repoblado reactivo de cajones móviles
+        const mButtons = document.querySelectorAll('.m-btn[data-drawer]');
+        const drawers = document.querySelectorAll('.mobile-drawer');
+        const backdrop = document.getElementById('mobile-backdrop');
+        const mActZen = document.getElementById('m-act-zen');
+
+        if (mActZen) {
+          mActZen.onclick = toggleZenMode;
+        }
+
+        // 1. Explorador Móvil
+        const desktopExplorer = document.getElementById('pane-explorer');
+        const mobileExplorerTarget = document.getElementById('mobile-explorer-content');
+        if (desktopExplorer && mobileExplorerTarget && mobileExplorerTarget.children.length === 0) {
+          const clone = desktopExplorer.cloneNode(true) as HTMLElement;
+          clone.style.display = 'flex';
+          mobileExplorerTarget.appendChild(clone);
+        }
+
+        // 2. Buscador Móvil
+        async function initMobileSearch() {
+          const mobileSearchTarget = document.getElementById('mobile-search-content');
+          if (mobileSearchTarget && mobileSearchTarget.innerHTML.trim() === '') {
+            mobileSearchTarget.innerHTML = `<div style="padding: 0.5rem 0;" id="mobile-pagefind-container">Cargando buscador...</div>`;
+            await loadPagefindAssets();
+            mobileSearchTarget.innerHTML = `<div style="padding: 0.5rem 0;" id="mobile-pagefind-container"></div>`;
+            new window.PagefindUI({ 
+              element: "#mobile-pagefind-container", 
+              showSubResults: true,
+              resetStyles: false,
+              ranking: {
+                termFrequency: 0.2,
+                pageLength: 0.75,
+                termSaturation: 1.4
+              }
+            });
+          }
+        }
+
+        // 3. Índice Móvil (TOC)
+        const mobileTocTarget = document.getElementById('mobile-toc-content');
+        const desktopTocBody = document.getElementById('toc-body') || document.querySelector('.toc-body');
+        if (mobileTocTarget) {
+          mobileTocTarget.innerHTML = '';
+          if (desktopTocBody && desktopTocBody.innerHTML.trim() !== '') {
+            const clone = desktopTocBody.cloneNode(true) as HTMLElement;
+            mobileTocTarget.appendChild(clone);
+          } else {
+            mobileTocTarget.innerHTML = `<p class="empty-note" style="opacity:0.6; padding: 1rem;">Esta página no contiene subtítulos.</p>`;
+          }
+        }
+
+        // 4. Metadatos Móvil
+        const mobileMetaTarget = document.getElementById('mobile-meta-content');
+        const desktopMetaBody = document.querySelector('.bottom-meta .panel-body') || document.querySelector('.meta-body');
+        if (mobileMetaTarget) {
+          mobileMetaTarget.innerHTML = '';
+          if (desktopMetaBody && desktopMetaBody.innerHTML.trim() !== '') {
+            const clone = desktopMetaBody.cloneNode(true) as HTMLElement;
+            mobileMetaTarget.appendChild(clone);
+          } else {
+            mobileMetaTarget.innerHTML = `<p class="empty-note" style="opacity:0.6; padding: 1rem;">No hay metadatos disponibles para esta vista.</p>`;
+          }
+        }
+
+        // 5. Ajustes Móvil
+        const mobileSettingsTarget = document.getElementById('mobile-settings-content');
+        const desktopSettings = document.getElementById('pane-settings');
+        if (mobileSettingsTarget && desktopSettings && mobileSettingsTarget.children.length === 0) {
+          const clone = desktopSettings.cloneNode(true) as HTMLElement;
+          clone.style.display = 'flex';
+          clone.querySelectorAll('select').forEach((sel, idx) => {
+            sel.removeAttribute('id');
+            if (idx === 0) sel.setAttribute('data-setting', 'modo');
+            else if (idx === 1) sel.setAttribute('data-setting', 'estilo');
+            else if (idx === 2) sel.setAttribute('data-setting', 'texto');
+          });
+          mobileSettingsTarget.appendChild(clone);
+
+          const curModo = root.getAttribute('data-modo') || 'oscuro';
+          const curEstilo = root.getAttribute('data-estilo') || 'moderno';
+          const curTexto = root.getAttribute('data-texto') || 'estandar';
+          
+          desktopSettings.querySelectorAll('select').forEach((sel, idx) => {
+            if (idx === 0) sel.setAttribute('data-setting', 'modo');
+            else if (idx === 1) sel.setAttribute('data-setting', 'estilo');
+            else if (idx === 2) sel.setAttribute('data-setting', 'texto');
+          });
+
+          mobileSettingsTarget.querySelectorAll('select').forEach((sel) => {
+            const selectEl = sel as HTMLSelectElement;
+            const settingType = selectEl.getAttribute('data-setting');
+            if (settingType === 'modo') selectEl.value = curModo;
+            if (settingType === 'estilo') selectEl.value = curEstilo;
+            if (settingType === 'texto') selectEl.value = curTexto;
+          });
+        }
+
+        function closeAllDrawers() {
+          drawers.forEach(d => d.classList.remove('open'));
+          backdrop?.classList.remove('active');
+          mButtons.forEach(b => b.classList.remove('active'));
+        }
+
+        mButtons.forEach(node => {
+          const btn = node as HTMLElement;
+          btn.onclick = () => {
+            const drawerId = btn.getAttribute('data-drawer');
+            const targetDrawer = drawerId ? document.getElementById(drawerId) : null;
+            const isOpen = targetDrawer?.classList.contains('open');
+            closeAllDrawers();
+            if (!isOpen && targetDrawer) {
+              if (drawerId === 'm-drawer-search') {
+                initMobileSearch();
+              }
+              targetDrawer.classList.add('open');
+              backdrop?.classList.add('active');
+              btn.classList.add('active');
+            }
+          };
+        });
+
+        if (backdrop) {
+          backdrop.onclick = closeAllDrawers;
+        }
+
+        function syncUI(save = true) {
+          root.classList.toggle('no-left-panel', !isLeftOpen);
+          root.classList.toggle('no-toc', !showToc);
+          root.classList.toggle('no-meta', !showMeta);
+
+          if (isLeftOpen) {
+            root.setAttribute('data-active-pane', activePane);
+            if (leftTitle) {
+              if (activePane === 'pane-explorer') leftTitle.textContent = 'EXPLORADOR';
+              if (activePane === 'pane-search') {
+                leftTitle.textContent = 'BUSCAR';
+                initSearch();
+              }
+              if (activePane === 'pane-settings') leftTitle.textContent = 'AJUSTES';
+            }
+          } else {
+            root.removeAttribute('data-active-pane');
+          }
+
+          const anyActive = isLeftOpen || showToc || showMeta;
+          if (actCollapse) actCollapse.classList.toggle('active', anyActive);
+
+          if (save) {
+            localStorage.setItem('wiki-left-open', isLeftOpen.toString());
+            localStorage.setItem('wiki-show-toc', showToc.toString());
+            localStorage.setItem('wiki-show-meta', showMeta.toString());
+            localStorage.setItem('wiki-active-pane', activePane);
+          }
+        }
+
+        async function initSearch() {
+          const container = document.getElementById('inline-pagefind-container');
+          if (container && container.innerHTML.trim() === '') {
+            container.innerHTML = '<span style="opacity: 0.5; font-size: 0.85rem;">Cargando motor de búsqueda...</span>';
+            await loadPagefindAssets();
+            container.innerHTML = '';
+            new window.PagefindUI({ 
+              element: "#inline-pagefind-container", 
+              showSubResults: true,
+              resetStyles: false,
+              ranking: {
+                termFrequency: 0.2,
+                pageLength: 0.75,
+                termSaturation: 1.4
+              }
+            });
+          }
+          setTimeout(() => container?.querySelector('input')?.focus(), 80);
+        }
+
+        if (actCollapse) {
+          actCollapse.onclick = () => {
+            const anyActive = isLeftOpen || showToc || showMeta;
+            if (anyActive) {
+              memLeft = isLeftOpen;
+              memToc = showToc;
+              memMeta = showMeta;
+              localStorage.setItem('wiki-mem-left', memLeft.toString());
+              localStorage.setItem('wiki-mem-toc', memToc.toString());
+              localStorage.setItem('wiki-mem-meta', memMeta.toString());
+              isLeftOpen = false;
+              showToc = false;
+              showMeta = false;
+            } else {
+              if (!memLeft && !memToc && !memMeta) {
+                isLeftOpen = true;
+              } else {
+                isLeftOpen = memLeft;
+                showToc = memToc;
+                showMeta = memMeta;
+              }
+            }
+            syncUI();
+          };
+        }
+
+        if (document.fullscreenElement && mainGrid) {
+          mainGrid.classList.add('zen-active');
+        }
+
+        function toggleZenMode() {
+          if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().then(() => {
+              mainGrid?.classList.add('zen-active');
+            }).catch(() => {});
+          } else {
+            document.exitFullscreen().catch(() => {});
+          }
+        }
+
+        if (actZen) actZen.onclick = toggleZenMode;
+        if (btnExitZen) {
+          btnExitZen.onclick = () => {
+            if (document.fullscreenElement) {
+              document.exitFullscreen().catch(() => {});
+            } else {
+              mainGrid?.classList.remove('zen-active');
+            }
+          };
+        }
+
+        document.addEventListener('fullscreenchange', () => {
+          if (!document.fullscreenElement) {
+            mainGrid?.classList.remove('zen-active');
+          } else {
+            mainGrid?.classList.add('zen-active');
+          }
+        });
+
+        if (actExplorer) {
+          actExplorer.onclick = () => {
+            if (isLeftOpen && activePane === 'pane-explorer') {
+              isLeftOpen = false;
+            } else {
+              isLeftOpen = true;
+              activePane = 'pane-explorer';
+            }
+            syncUI();
+          };
+        }
+
+        if (actSearch) {
+          actSearch.onclick = () => {
+            if (isLeftOpen && activePane === 'pane-search') {
+              isLeftOpen = false;
+            } else {
+              isLeftOpen = true;
+              activePane = 'pane-search';
+            }
+            syncUI();
+          };
+        }
+
+        if (actSettings) {
+          actSettings.onclick = () => {
+            if (isLeftOpen && activePane === 'pane-settings') {
+              isLeftOpen = false;
+            } else {
+              isLeftOpen = true;
+              activePane = 'pane-settings';
+            }
+            syncUI();
+          };
+        }
+
+        if (actToc) actToc.onclick = () => { showToc = !showToc; syncUI(); };
+        if (actMeta) actMeta.onclick = () => { showMeta = !showMeta; syncUI(); };
+
+        // Conexión del botón Imprimir a la función de iframe aislado
+        if (actPrint) {
+          actPrint.onclick = () => {
+            imprimirDocumentoAislado();
+          };
+        }
+
+        syncUI(false);
       }
 
-      document.querySelectorAll('select').forEach((sel) => {
-        const other = sel as HTMLSelectElement;
-        if (other !== target) {
-          const otherType = other.getAttribute('data-setting') || other.id.toLowerCase();
-          if (otherType === settingType ||
-              (settingType.includes('modo') && otherType.includes('modo')) ||
-              (settingType.includes('estilo') && otherType.includes('estilo')) ||
-              (settingType.includes('texto') && otherType.includes('texto'))) {
-            other.value = val;
+      document.addEventListener('change', (e) => {
+        const target = e.target as HTMLElement;
+        if (!(target instanceof HTMLSelectElement)) return;
+        const html = document.documentElement;
+        const val = target.value;
+        const settingType = target.getAttribute('data-setting') || target.id.toLowerCase();
+
+        if (settingType.includes('theme') || settingType.includes('modo') || settingType === 'modo') {
+          html.setAttribute('data-modo', val);
+          localStorage.setItem('pref-modo', val);
+          window.dispatchEvent(new Event('theme-changed'));
+        } else if (settingType.includes('style') || settingType.includes('estilo') || settingType === 'estilo') {
+          html.setAttribute('data-estilo', val);
+          localStorage.setItem('pref-estilo', val);
+          window.dispatchEvent(new Event('theme-changed'));
+        } else if (settingType.includes('size') || settingType.includes('texto') || settingType === 'texto') {
+          html.setAttribute('data-texto', val);
+          localStorage.setItem('pref-texto', val);
+        }
+
+        document.querySelectorAll('select').forEach((sel) => {
+          const other = sel as HTMLSelectElement;
+          if (other !== target) {
+            const otherType = other.getAttribute('data-setting') || other.id.toLowerCase();
+            if (otherType === settingType ||
+                (settingType.includes('modo') && otherType.includes('modo')) ||
+                (settingType.includes('estilo') && otherType.includes('estilo')) ||
+                (settingType.includes('texto') && otherType.includes('texto'))) {
+              other.value = val;
+            }
+          }
+        });
+      });
+
+      document.addEventListener('keydown', (e) => {
+        const actCollapse = document.getElementById('act-collapse');
+        if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
+          e.preventDefault();
+          actCollapse?.click();
+        } else if (e.altKey && e.key.toLowerCase() === 'z') {
+          e.preventDefault();
+          const mainGrid = document.getElementById('main-grid');
+          if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().then(() => mainGrid?.classList.add('zen-active')).catch(() => {});
+          } else {
+            document.exitFullscreen().catch(() => {});
           }
         }
       });
-    });
 
-    document.addEventListener('keydown', (e) => {
-      const actCollapse = document.getElementById('act-collapse');
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
-        e.preventDefault();
-        actCollapse?.click();
-      } else if (e.altKey && e.key.toLowerCase() === 'z') {
-        e.preventDefault();
-        const mainGrid = document.getElementById('main-grid');
-        if (!document.fullscreenElement) {
-          document.documentElement.requestFullscreen().then(() => mainGrid?.classList.add('zen-active')).catch(() => {});
-        } else {
-          document.exitFullscreen().catch(() => {});
-        }
-      }
-    });
+      document.addEventListener('click', async (e) => {
+        const target = e.target;
+        if (!(target instanceof HTMLElement)) return;
+        const btn = target.closest('.copy-code-btn');
+        if (!btn) return;
 
-    document.addEventListener('click', async (e) => {
-      const target = e.target;
-      if (!(target instanceof HTMLElement)) return;
-      const btn = target.closest('.copy-code-btn');
-      if (!btn) return;
+        const wrapper = btn.closest('.code-block-wrapper') as HTMLElement | null;
+        const text = wrapper?.dataset.sourceCode ||
+                    wrapper?.querySelector('pre code')?.textContent ||
+                    wrapper?.querySelector('pre')?.textContent ||
+                    '';
 
-      const wrapper = btn.closest('.code-block-wrapper') as HTMLElement | null;
-      
-      // Si es un bloque Mermaid o tiene sourceCode guardado, usa ese. De lo contrario, lee el pre/code normal.
-      const text = wrapper?.dataset.sourceCode ||
-                  wrapper?.querySelector('pre code')?.textContent ||
-                  wrapper?.querySelector('pre')?.textContent ||
-                  '';
+        if (!text) return;
 
-      if (!text) return;
+        await navigator.clipboard.writeText(text.trim());
+        btn.textContent = '  Copiado!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copiar';
+          btn.classList.remove('copied');
+        }, 1500);
+      });
 
-      await navigator.clipboard.writeText(text.trim());
-      btn.textContent = '  Copiado!';
-      btn.classList.add('copied');
-      setTimeout(() => {
-        btn.textContent = 'Copiar';
-        btn.classList.remove('copied');
-      }, 1500);
-    });
+      window.addEventListener('theme-changed', () => {
+        renderMermaid(true, '.main-content');
+      });
 
-    window.addEventListener('theme-changed', () => {
-      renderMermaid(true, '.main-content');
-    });
-
-    // Único listener oficial de ciclo de vida en Astro con ClientRouter
-    document.addEventListener('astro:page-load', initializeApp);
-    document.addEventListener('astro:after-swap', () => {
-      initializeApp();
-    });
-  </script>
+      document.addEventListener('astro:page-load', initializeApp);
+      document.addEventListener('astro:after-swap', () => {
+        initializeApp();
+      });
+    </script>
   </body>
 </html>
 
