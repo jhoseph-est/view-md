@@ -46,7 +46,7 @@ const dynamicThemeCss = generateThemeCss();
         html.setAttribute('data-estilo', estilo);
         html.setAttribute('data-texto', texto);
 
-        const leftOpen = localStorage.getItem('wiki-left-open') === 'true';
+        const leftOpen = localStorage.getItem('wiki-left-open') !== 'false';
         const showToc = localStorage.getItem('wiki-show-toc') === 'true';
         const showMeta = localStorage.getItem('wiki-show-meta') === 'true';
         const activePane = localStorage.getItem('wiki-active-pane') || 'pane-explorer';

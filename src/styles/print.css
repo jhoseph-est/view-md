@@ -12,13 +12,14 @@
     print-color-adjust: exact !important;
   }
 
-  /* 2. Ocultar interfaz y barras interactivas */
+  /* En src/styles/print.css dentro de @media print */
   .activity-bar, .left-sidebar-panel, .independent-panel,
   .mobile-bottom-bar, .mobile-drawer, .mobile-drawer-backdrop,
-  .breadcrumbs, .doc-nav, .nav-divider, .zen-exit-btn,
+  .breadcrumbs, .doc-nav, .nav-btn, .nav-divider, .zen-exit-btn,
   .copy-code-btn, .code-toolbar, .code-block-header, .code-dots,
   .img-toolbar, .mermaid-toolbar, .main-content::after, .sticky-panel::after {
     display: none !important;
+    visibility: hidden !important;
   }
 
   /* 3. Base blanca para impresión */

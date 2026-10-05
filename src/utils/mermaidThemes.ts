@@ -1,169 +1,213 @@
-// src/utils/themeInjector.ts
-import estilosBase from '../config/estilos-base.json';
-import componentes from '../config/componentes.json';
+// src/utils/mermaidThemes.ts
 
-interface HeadingConfig {
-  color?: string;
-  tamano?: string;
-  peso?: string | number;
-  alineacion?: string;
-  espaciadoSuperior?: string;
-  espaciadoInferior?: string;
-  interlineado?: string;
-  transformacion?: string;
-  bordeInferior?: string;
+function getCssVar(varName: string, fallback = ''): string {
+  if (typeof window === 'undefined') return fallback;
+  const val = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+  return val || fallback;
 }
 
-interface ThemePalette {
-  fondo?: string;
-  fondoCabecera?: string;
-  fondoTarjeta?: string;
-  fondoAtenuado?: string;
-  borde?: string;
-  bordeFuerte?: string;
-  texto?: string;
-  textoAtenuado?: string;
-  textoNegrita?: string;
-  textoCursiva?: string;
-  enlace?: string;
-  enlaceHover?: string;
-  acento?: string;
-  acentoHover?: string;
-  acentoTenue?: string;
-  acentoBorde?: string;
-  colorMatematica?: string;
-  encabezados?: Record<string, HeadingConfig>;
-}
+export function getThemeForDiagram(type: string): Record<string, any> {
+  // 1. Lectura directa de tokens del DOM
+  const nodeBg = getCssVar('--mm-node-bg');
+  const nodeBorder = getCssVar('--mm-node-border');
+  const lineColor = getCssVar('--mm-line-color');
+  const textColor = getCssVar('--mm-text-color');
+  const headerBg = getCssVar('--mm-header-bg');
+  const labelBg = getCssVar('--mm-label-bg');
+  const clusterBg = getCssVar('--mm-cluster-bg');
+  const clusterBorder = getCssVar('--mm-cluster-border');
 
-export function generateThemeCss(): string {
-  let css = ':root {\n';
+  const actorBg = getCssVar('--mm-actor-bg');
+  const actorBorder = getCssVar('--mm-actor-border');
+  const noteBg = getCssVar('--mm-note-bg');
+  const noteBorder = getCssVar('--mm-note-border');
 
-  // 1. INYECCIÓN DE COMPONENTES GLOBALES (componentes.json)
-  if (componentes) {
-    // Tarjeta de informe / cabecera web
-    const tj = componentes.tarjetaInforme;
-    if (tj) {
-      css += `  --report-card-bg: ${tj.fondo || 'rgba(255, 255, 255, 0.03)'};\n`;
-      css += `  --report-card-border: ${tj.borde || 'var(--border-color)'};\n`;
-      css += `  --report-card-radius: ${tj.radioBorde || '8px'};\n`;
-      css += `  --report-card-padding: ${tj.espaciadoInterno || '1rem 1.25rem'};\n`;
-      css += `  --report-banner-font: ${tj.fuenteBanner || 'var(--ui-font)'};\n`;
-      css += `  --report-banner-color: ${tj.colorBanner || 'var(--accent-color)'};\n`;
-      css += `  --report-subtitle-color: ${tj.colorSubtitulo || 'var(--text-color)'};\n`;
-      css += `  --report-label-color: ${tj.colorEtiqueta || 'var(--text-muted)'};\n`;
-      css += `  --report-value-color: ${tj.colorValor || 'var(--text-color)'};\n`;
-      css += `  --report-bullet-color: ${tj.vinetaColor || 'var(--accent-color)'};\n`;
-    }
+  const ganttDone = getCssVar('--mm-gantt-done');
+  const ganttActive = getCssVar('--mm-gantt-active');
+  const ganttCrit = getCssVar('--mm-gantt-crit');
 
-    // Citas formales (blockquote)
-    const ct = componentes.citas;
-    if (ct) {
-      css += `  --quote-border-w: ${ct.grosorBorde || '3px'};\n`;
-      css += `  --quote-border-style: ${ct.estiloBorde || 'solid'};\n`;
-      css += `  --quote-border-color: ${ct.colorBorde || 'var(--accent-color)'};\n`;
-      css += `  --quote-indent: ${ct.sangriaIzquierda || '1.25rem'};\n`;
-      css += `  --quote-font-style: ${ct.estiloFuente || 'italic'};\n`;
-      css += `  --quote-opacity: ${ct.opacidad || '0.9'};\n`;
-    }
+  const gitBranches = [
+    getCssVar('--mm-git-1'),
+    getCssVar('--mm-git-2'),
+    getCssVar('--mm-git-3'),
+    getCssVar('--mm-git-4')
+  ].filter(Boolean);
 
-    // Bloque de código Shiki / Wrapper
-    const cd = componentes.bloqueCodigo;
-    if (cd) {
-      css += `  --code-radius: ${cd.radioBorde || '8px'};\n`;
-      css += `  --code-border-w: ${cd.grosorBorde || '1px'};\n`;
-      css += `  --code-border-color: ${cd.colorBorde || 'var(--border-color)'};\n`;
-      css += `  --code-shadow: ${cd.sombra || 'none'};\n`;
-      css += `  --code-toolbar-bg: ${cd.fondoToolbar || 'rgba(15, 23, 42, 0.85)'};\n`;
-      css += `  --code-btn-color: ${cd.colorBotonCopiar || '#f8fafc'};\n`;
-      css += `  --code-btn-hover-color: ${cd.colorBotonCopiarHover || '#c4b5fd'};\n`;
-    }
+  const pieColors = [
+    getCssVar('--mm-pie-1'),
+    getCssVar('--mm-pie-2'),
+    getCssVar('--mm-pie-3')
+  ].filter(Boolean);
 
-    // Tablas APA y generales
-    const tb = componentes.tablas;
-    if (tb) {
-      css += `  --table-border-top-w: ${tb.grosorBordeSuperior || '1.5pt'};\n`;
-      css += `  --table-border-bottom-w: ${tb.grosorBordeInferior || '1.5pt'};\n`;
-      css += `  --table-border-header-w: ${tb.grosorBordeCabecera || '1pt'};\n`;
-      css += `  --table-header-bg: ${tb.fondoCabecera || 'transparent'};\n`;
-      css += `  --table-cell-padding: ${tb.paddingCeldas || '0.5rem 0.75rem'};\n`;
-      css += `  --table-font-size: ${tb.tamanoFuente || '0.95rem'};\n`;
-    }
-
-    // Fórmulas KaTeX
-    const kt = componentes.katex;
-    if (kt) {
-      css += `  --katex-glyph-color: ${kt.colorGlifo || 'var(--color-math)'};\n`;
-      css += `  --katex-display-scale: ${kt.escalaDisplay || '100%'};\n`;
-      css += `  --katex-display-margin: ${kt.margenVertical || '1.5rem'};\n`;
-    }
-  }
-
-  css += '}\n\n';
-
-  // 2. INYECCIÓN POR CADA ESTILO Y MODO (estilos-base.json)
-  const estilos = estilosBase as Record<string, any>;
-
-  for (const [estiloKey, config] of Object.entries(estilos)) {
-    const selectorEstilo = `[data-estilo="${estiloKey}"]`;
-
-    // Tipografía común al estilo
-    if (config.tipografia) {
-      css += `${selectorEstilo} {\n`;
-      css += `  --doc-font: ${config.tipografia.fuenteCuerpo || 'system-ui, sans-serif'};\n`;
-      css += `  --heading-font: ${config.tipografia.fuenteTitulos || 'system-ui, sans-serif'};\n`;
-      css += `  --line-height-base: ${config.tipografia.interlineado || '1.65'};\n`;
-      css += `}\n\n`;
-    }
-
-    // Modos Claro y Oscuro del estilo
-    for (const modo of ['claro', 'oscuro']) {
-      const p: ThemePalette = config[modo];
-      if (!p) continue;
-
-      const selectorCompleto = `html[data-estilo="${estiloKey}"][data-modo="${modo}"], ${selectorEstilo}[data-modo="${modo}"]`;
-
-      css += `${selectorCompleto} {\n`;
-      // Superficies y bordes
-      if (p.fondo) css += `  --bg-color: ${p.fondo};\n`;
-      if (p.fondoCabecera) css += `  --header-bg: ${p.fondoCabecera};\n`;
-      if (p.fondoTarjeta) css += `  --card-bg: ${p.fondoTarjeta};\n`;
-      if (p.fondoAtenuado) css += `  --bg-muted: ${p.fondoAtenuado};\n`;
-      if (p.borde) css += `  --border-color: ${p.borde};\n`;
-      if (p.bordeFuerte) css += `  --border-strong: ${p.bordeFuerte};\n`;
-
-      // Textos y acentos
-      if (p.texto) css += `  --text-color: ${p.texto};\n`;
-      if (p.textoAtenuado) css += `  --text-muted: ${p.textoAtenuado};\n`;
-      if (p.textoNegrita) css += `  --text-bold: ${p.textoNegrita};\n`;
-      if (p.textoCursiva) css += `  --text-italic: ${p.textoCursiva};\n`;
-      if (p.enlace) css += `  --link-color: ${p.enlace};\n`;
-      if (p.enlaceHover) css += `  --link-hover: ${p.enlaceHover};\n`;
-      if (p.acento) css += `  --accent-color: ${p.acento};\n`;
-      if (p.acentoHover) css += `  --accent-hover: ${p.acentoHover};\n`;
-      if (p.acentoTenue) css += `  --accent-subtle: ${p.acentoTenue};\n`;
-      if (p.acentoBorde) css += `  --accent-border: ${p.acentoBorde};\n`;
-      if (p.colorMatematica) css += `  --color-math: ${p.colorMatematica};\n`;
-
-      // Jerarquía H1 a H6 independiente y completa
-      if (p.encabezados) {
-        for (let i = 1; i <= 6; i++) {
-          const h = p.encabezados[`h${i}`];
-          if (!h) continue;
-          if (h.color) css += `  --h${i}-color: ${h.color};\n`;
-          if (h.tamano) css += `  --h${i}-size: ${h.tamano};\n`;
-          if (h.peso) css += `  --h${i}-weight: ${h.peso};\n`;
-          if (h.alineacion) css += `  --h${i}-align: ${h.alineacion};\n`;
-          if (h.espaciadoSuperior) css += `  --h${i}-margin-top: ${h.espaciadoSuperior};\n`;
-          if (h.espaciadoInferior) css += `  --h${i}-margin-bottom: ${h.espaciadoInferior};\n`;
-          if (h.interlineado) css += `  --h${i}-line-height: ${h.interlineado};\n`;
-          if (h.transformacion) css += `  --h${i}-transform: ${h.transformacion};\n`;
-          if (h.bordeInferior) css += `  --h${i}-border-bottom: ${h.bordeInferior};\n`;
+  // 2. Mapeo estructural según la tipología
+  switch (type) {
+    case 'flowchart':
+      return {
+        theme: 'base',
+        themeVariables: {
+          background: 'transparent',
+          primaryColor: nodeBg,
+          primaryTextColor: textColor,
+          primaryBorderColor: nodeBorder,
+          lineColor: lineColor,
+          textColor: textColor,
+          labelBoxBkgColor: labelBg,
+          labelBoxBorderColor: nodeBorder,
+          labelTextColor: textColor,
+          clusterBkg: clusterBg,
+          clusterBorder: clusterBorder,
+          edgeLabelBackground: labelBg
         }
-      }
+      };
 
-      css += `}\n\n`;
-    }
+    case 'sequence':
+      return {
+        theme: 'base',
+        themeVariables: {
+          background: 'transparent',
+          actorBkg: actorBg,
+          actorBorder: actorBorder,
+          actorTextColor: textColor,
+          actorLineColor: lineColor,
+          signalColor: lineColor,
+          signalTextColor: textColor,
+          labelBoxBkgColor: labelBg,
+          labelBoxBorderColor: nodeBorder,
+          labelTextColor: textColor,
+          noteBkgColor: noteBg,
+          noteBorderColor: noteBorder,
+          noteTextColor: textColor,
+          activationBkgColor: nodeBorder,
+          activationBorderColor: lineColor
+        }
+      };
+
+    case 'classDiagram':
+      return {
+        theme: 'base',
+        themeVariables: {
+          background: 'transparent',
+          primaryColor: nodeBg,
+          primaryTextColor: textColor,
+          primaryBorderColor: nodeBorder,
+          lineColor: lineColor,
+          textColor: textColor,
+          classText: textColor
+        }
+      };
+
+    case 'state':
+      return {
+        theme: 'base',
+        themeVariables: {
+          background: 'transparent',
+          labelColor: textColor,
+          altBackground: headerBg,
+          primaryColor: nodeBg,
+          primaryTextColor: textColor,
+          primaryBorderColor: nodeBorder,
+          lineColor: lineColor,
+          textColor: textColor
+        }
+      };
+
+    case 'er':
+      return {
+        theme: 'base',
+        themeVariables: {
+          background: 'transparent',
+          primaryColor: headerBg,
+          primaryTextColor: textColor,
+          primaryBorderColor: nodeBorder,
+          lineColor: lineColor,
+          rowRectOddBgColor: nodeBg,
+          rowRectEvenBgColor: headerBg,
+          textColor: textColor
+        }
+      };
+
+    case 'gantt':
+      return {
+        theme: 'base',
+        themeVariables: {
+          background: 'transparent',
+          textColor: textColor,
+          sectionBkgColor: 'transparent',
+          sectionBkgColor2: 'transparent',
+          taskBorderColor: nodeBorder,
+          taskBkgColor: nodeBg,
+          taskTextLightColor: textColor,
+          activeTaskBorderColor: ganttActive,
+          activeTaskBkgColor: ganttActive,
+          doneTaskBorderColor: ganttDone,
+          doneTaskBkgColor: ganttDone,
+          critBorderColor: ganttCrit,
+          critBkgColor: ganttCrit,
+          todayLineColor: ganttCrit,
+          gridColor: clusterBorder
+        }
+      };
+
+    case 'gitGraph':
+      return {
+        theme: 'base',
+        themeVariables: {
+          background: 'transparent',
+          gitBranchColours: gitBranches.length > 0 ? gitBranches : undefined,
+          commitLabelColor: textColor,
+          commitLabelBackground: nodeBg
+        }
+      };
+
+    case 'quadrant':
+      return {
+        theme: 'base',
+        themeVariables: {
+          background: 'transparent',
+          quadrant1Fill: getCssVar('--mm-q1'),
+          quadrant2Fill: getCssVar('--mm-q2'),
+          quadrant3Fill: getCssVar('--mm-q3'),
+          quadrant4Fill: getCssVar('--mm-q4'),
+          quadrant1TextFill: textColor,
+          quadrant2TextFill: textColor,
+          quadrant3TextFill: textColor,
+          quadrant4TextFill: textColor,
+          quadrantBorderColor: nodeBorder,
+          quadrantLineColor: lineColor,
+          quadrantPointFill: nodeBorder,
+          quadrantPointTextFill: textColor,
+          titleColor: textColor
+        }
+      };
+
+    case 'pie':
+      return {
+        theme: 'base',
+        themeVariables: {
+          background: 'transparent',
+          pie1: pieColors[0],
+          pie2: pieColors[1],
+          pie3: pieColors[2],
+          pieTitleTextColor: textColor,
+          pieSectionTextColor: textColor,
+          pieLegendTextColor: textColor,
+          pieStrokeColor: nodeBorder,
+          pieStrokeWidth: '1.5px'
+        }
+      };
+
+    case 'mindmap':
+    default:
+      return {
+        theme: 'base',
+        themeVariables: {
+          background: 'transparent',
+          primaryColor: nodeBg,
+          primaryTextColor: textColor,
+          primaryBorderColor: nodeBorder,
+          lineColor: lineColor,
+          textColor: textColor
+        }
+      };
   }
-
-  return css;
 }

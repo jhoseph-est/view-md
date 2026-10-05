@@ -331,3 +331,85 @@ html[data-estilo="minimalista"][data-modo="claro"] {
     max-height: none !important;
     min-height: auto !important;
 }
+
+/* src/styles/mermaid.css - Sección 2: MATRIZ DE VARIABLES */
+
+/* --- TEMA MODERNO (OSCURO) --- */
+html[data-estilo="moderno"][data-modo="oscuro"] {
+  --mm-node-bg: #1e293b;
+  --mm-node-border: #38bdf8;
+  --mm-line-color: #38bdf8;
+  --mm-text-color: #f8fafc;
+  --mm-header-bg: #0f172a;
+  --mm-label-bg: #0f172a;
+  --mm-cluster-bg: #0f172a;
+  --mm-cluster-border: #334155;
+
+  /* Sequence */
+  --mm-actor-bg: #1e293b;
+  --mm-actor-border: #38bdf8;
+  --mm-note-bg: #4c1d95;
+  --mm-note-border: #a855f7;
+
+  /* Gantt */
+  --mm-gantt-done: #10b981;
+  --mm-gantt-active: #38bdf8;
+  --mm-gantt-crit: #ef4444;
+
+  /* Quadrant */
+  --mm-quad-border: #38bdf8;
+  --mm-quad-line: #38bdf8;
+  --mm-q1: rgba(56, 189, 248, 0.15);
+  --mm-q2: rgba(16, 185, 129, 0.15);
+  --mm-q3: rgba(244, 63, 94, 0.15);
+  --mm-q4: rgba(234, 179, 8, 0.15);
+
+  /* Git & Pie */
+  --mm-git-1: #38bdf8;
+  --mm-git-2: #a855f7;
+  --mm-git-3: #10b981;
+  --mm-git-4: #f59e0b;
+  --mm-pie-1: #38bdf8;
+  --mm-pie-2: #10b981;
+  --mm-pie-3: #f59e0b;
+}
+
+/* --- TEMA MODERNO (CLARO) --- */
+html[data-estilo="moderno"][data-modo="claro"] {
+  --mm-node-bg: #f8fafc;
+  --mm-node-border: #0ea5e9;
+  --mm-line-color: #0284c7;
+  --mm-text-color: #0f172a;
+  --mm-header-bg: #e0f2fe;
+  --mm-label-bg: #ffffff;
+  --mm-cluster-bg: #f1f5f9;
+  --mm-cluster-border: #cbd5e1;
+
+  /* Sequence */
+  --mm-actor-bg: #f8fafc;
+  --mm-actor-border: #0ea5e9;
+  --mm-note-bg: #fdf4ff;
+  --mm-note-border: #c084fc;
+
+  /* Gantt */
+  --mm-gantt-done: #059669;
+  --mm-gantt-active: #0284c7;
+  --mm-gantt-crit: #dc2626;
+
+  /* Quadrant */
+  --mm-quad-border: #0ea5e9;
+  --mm-quad-line: #0ea5e9;
+  --mm-q1: rgba(14, 165, 233, 0.15);
+  --mm-q2: rgba(34, 197, 94, 0.15);
+  --mm-q3: rgba(239, 68, 68, 0.15);
+  --mm-q4: rgba(245, 158, 11, 0.15);
+
+  /* Git & Pie */
+  --mm-git-1: #0284c7;
+  --mm-git-2: #7c3aed;
+  --mm-git-3: #059669;
+  --mm-git-4: #d97706;
+  --mm-pie-1: #0284c7;
+  --mm-pie-2: #059669;
+  --mm-pie-3: #d97706;
+}

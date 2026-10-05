@@ -53,48 +53,49 @@ if (props.type === 'folder' && props.folderPath === 'explorar') {
 <Base title={title} headings={headings} frontmatter={frontmatterConExtra}>
   <div class="doc-container">
     {props.type === 'file' ? (
-<div id="document-view">
-    <article class="markdown-body" data-pagefind-body>
-      <h1>{title}</h1>
+    <div id="document-view">
+      <article class="markdown-body" data-pagefind-body>
+        <h1>{title}</h1>
 
-      {/* Si es informe, renderizamos la tarjeta compacta arriba del contenido */}
-      {(props.doc.data.theme === 'informe' || props.doc.data.tipo === 'informe') && (
-        <DocReportHeader data={props.doc.data} />
-      )}
-
-      <Content />
-    </article>
-        
-        {props.doc.data.tipo !== 'informe' && (
-          <>
-            <hr class="nav-divider" />
-            <div class="doc-nav">
-              {props.prev ? (
-                <a href={`/docs/${props.prev.id.replace(/\\/g, '/')}`} class="nav-btn prev">
-                  <span class="nav-label">&larr; Anterior</span>
-                  <span class="nav-title">{props.prev.data.title}</span>
-                </a>
-              ) : (
-                <div class="nav-btn disabled prev">
-                  <span class="nav-label">&larr; Anterior</span>
-                  <span class="nav-title">Inicio de sección</span>
-                </div>
-              )}
-              {props.next ? (
-                <a href={`/docs/${props.next.id.replace(/\\/g, '/')}`} class="nav-btn next">
-                  <span class="nav-label">Siguiente &rarr;</span>
-                  <span class="nav-title">{props.next.data.title}</span>
-                </a>
-              ) : (
-                <div class="nav-btn disabled next">
-                  <span class="nav-label">Siguiente &rarr;</span>
-                  <span class="nav-title">Fin de sección</span>
-                </div>
-              )}
-            </div>
-          </>
+        {/* Si se define mostrarCabecera o si hay integrantes/docente definidos */}
+        {(props.doc.data.mostrarCabecera || props.doc.data.integrantes || props.doc.data.institucion) && (
+          <DocReportHeader data={props.doc.data} />
         )}
-      </div>
+
+        <Content />
+      </article>
+
+      {/* Navegación inferior con su propio switch */}
+      {props.doc.data.mostrarNav !== false && (
+        <>
+          <hr class="nav-divider" />
+          <div class="doc-nav">
+            {props.prev ? (
+              <a href={`/docs/${props.prev.id.replace(/\\/g, '/')}`} class="nav-btn prev">
+                <span class="nav-label">&larr; Anterior</span>
+                <span class="nav-title">{props.prev.data.title}</span>
+              </a>
+            ) : (
+              <div class="nav-btn disabled prev">
+                <span class="nav-label">&larr; Anterior</span>
+                <span class="nav-title">Inicio de sección</span>
+              </div>
+            )}
+            {props.next ? (
+              <a href={`/docs/${props.next.id.replace(/\\/g, '/')}`} class="nav-btn next">
+                <span class="nav-label">Siguiente &rarr;</span>
+                <span class="nav-title">{props.next.data.title}</span>
+              </a>
+            ) : (
+              <div class="nav-btn disabled next">
+                <span class="nav-label">Siguiente &rarr;</span>
+                <span class="nav-title">Fin de sección</span>
+              </div>
+            )}
+          </div>
+        </>
+      )}
+    </div>
     ) : (
       <FolderView 
         linkVolver={linkVolver}

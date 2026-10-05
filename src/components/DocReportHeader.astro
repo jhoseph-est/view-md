@@ -1,50 +1,48 @@
 ---
 // src/components/DocReportHeader.astro
-export interface Integrante {
-  nombre: string;
-  codigo?: string;
-  rol?: string;
-}
-
 export interface Props {
-  data: {
-    institucion?: string;
-    facultad?: string;
-    escuela?: string;
-    docente?: string;
-    ciudad?: string;
-    anio?: string | number;
-    subtitulo?: string;
-    author?: string;
-    codigo?: string;
-    integrantes?: Integrante[];
-  };
+  data: Record<string, any>;
 }
 
 const { data } = Astro.props;
-const institucion = data.institucion || "UNIVERSIDAD NACIONAL DE INGENIERÍA";
-const facultad = data.facultad || "";
-const escuela = data.escuela || "";
-const docente = data.docente || "";
-const subtitulo = data.subtitulo || "";
+
+// Lista de claves que ya maneja el panel lateral derecho o la navegación interna
+const omitKeys = new Set([
+  'title', 'subtitulo', 'draft', 'slides', 'orden', 'mostrarIndice', 
+  'mostrarNav', 'mostrarCabecera', 'theme', 'plantilla', 'icon'
+]);
+
+const institucion = data.institucion || '';
+const facultad = data.facultad || '';
+const escuela = data.escuela || '';
+const subtitulo = data.subtitulo || '';
+
+// Filtrar propiedades adicionales no omitidas
+const extraEntries = Object.entries(data).filter(([k, v]) => {
+  if (omitKeys.has(k)) return false;
+  if (['institucion', 'facultad', 'escuela', 'docente', 'integrantes', 'author', 'codigo'].includes(k)) return false;
+  return v !== undefined && v !== null && v !== '';
+});
 ---
 
 <div class="doc-report-header">
-  <div class="header-banner">
-    <div class="inst-info">
-      <span class="inst-name">{institucion}</span>
-      {facultad && <span class="inst-dot">·</span><span class="faculty-name">{facultad}</span>}
-      {escuela && <span class="inst-dot">·</span><span class="school-name">{escuela}</span>}
+  {(institucion || facultad) && (
+    <div class="header-banner">
+      <div class="inst-info">
+        {institucion && <span class="inst-name">{institucion}</span>}
+        {facultad && <span class="inst-dot">·</span><span class="faculty-name">{facultad}</span>}
+        {escuela && <span class="inst-dot">·</span><span class="school-name">{escuela}</span>}
+      </div>
     </div>
-  </div>
+  )}
 
   {subtitulo && <p class="report-subtitle">{subtitulo}</p>}
 
   <div class="report-meta-grid">
-    {docente && (
+    {data.docente && (
       <div class="meta-item">
         <span class="meta-label">Docente:</span>
-        <span class="meta-value">{docente}</span>
+        <span class="meta-value">{data.docente}</span>
       </div>
     )}
 
@@ -54,13 +52,21 @@ const subtitulo = data.subtitulo || "";
         <span class="meta-value">{data.author} {data.codigo ? `(${data.codigo})` : ''}</span>
       </div>
     )}
+
+    {/* Renderizado dinámico de campos personalizados del YAML */}
+    {extraEntries.map(([key, val]) => (
+      <div class="meta-item">
+        <span class="meta-label">{key}:</span>
+        <span class="meta-value">{Array.isArray(val) ? val.join(', ') : String(val)}</span>
+      </div>
+    ))}
   </div>
 
   {data.integrantes && data.integrantes.length > 0 && (
     <div class="integrantes-container">
-      <span class="meta-label">Equipo / Integrantes:</span>
+      <span class="meta-label">Integrantes / Equipo:</span>
       <ul class="integrantes-list">
-        {data.integrantes.map((m: Integrante) => (
+        {data.integrantes.map((m: any) => (
           <li class="integrante-item">
             <span class="item-name">{m.nombre}</span>
             {m.codigo && <span class="item-code">({m.codigo})</span>}
@@ -74,9 +80,9 @@ const subtitulo = data.subtitulo || "";
 
 <style>
   .doc-report-header {
-    background-color: var(--report-card-bg, var(--card-bg, rgba(255, 255, 255, 0.03)));
-    border: var(--report-card-border-w, 1px) solid var(--report-card-border, var(--border-color));
-    border-radius: var(--report-card-radius, var(--radius-md, 8px));
+    background-color: var(--report-card-bg, rgba(255, 255, 255, 0.03));
+    border: 1px solid var(--report-card-border, var(--border-color));
+    border-radius: var(--report-card-radius, 8px);
     padding: var(--report-card-padding, 1rem 1.25rem);
     margin: 1rem 0 2rem 0;
     display: flex;
@@ -104,9 +110,7 @@ const subtitulo = data.subtitulo || "";
     gap: 0.35rem;
   }
 
-  .inst-dot {
-    opacity: 0.5;
-  }
+  .inst-dot { opacity: 0.5; }
 
   .report-subtitle {
     margin: 0;
@@ -119,7 +123,7 @@ const subtitulo = data.subtitulo || "";
   .report-meta-grid {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.5rem;
+    gap: 1.25rem;
     font-size: 0.82rem;
   }
 
@@ -177,16 +181,12 @@ const subtitulo = data.subtitulo || "";
     line-height: 1;
   }
 
-  .item-name {
-    font-weight: 600;
-  }
-
+  .item-name { font-weight: 600; }
   .item-code {
     font-family: 'Fira Code', monospace;
     font-size: 0.76rem;
     color: var(--text-muted);
   }
-
   .item-role {
     font-size: 0.75rem;
     color: var(--accent-color);
