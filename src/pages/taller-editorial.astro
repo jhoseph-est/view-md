@@ -1,11 +1,39 @@
 ---
 // src/pages/taller-editorial.astro
+import { getEntry, render } from 'astro:content';
 import '../styles/base.css';
 import { generateThemeCss } from '../utils/themeInjector';
 import estilosBase from '../config/estilos-base.json';
+import plantillasImpresion from '../config/plantillas-impresion.json';
+import caratulas from '../config/caratulas.json';
+import componentes from '../config/componentes.json';
+import diagramasMermaid from '../config/diagramas-mermaid.json';
 
 const dynamicCss = generateThemeCss();
-const defaultConfig = estilosBase.moderno;
+
+// Intento de carga del archivo de pruebas creado por el usuario
+let testDocEntry: any = null;
+let RenderedContent: any = null;
+let docData: any = {};
+
+try {
+  testDocEntry = await getEntry('docs', 'sistema/banco-pruebas');
+  if (testDocEntry) {
+    const rendered = await render(testDocEntry);
+    RenderedContent = rendered.Content;
+    docData = testDocEntry.data || {};
+  }
+} catch (e) {
+  // Manejo silencioso si aún no existe
+}
+
+const jsonState = {
+  estilosBase,
+  plantillasImpresion,
+  caratulas,
+  componentes,
+  diagramasMermaid,
+};
 ---
 
 <!DOCTYPE html>
@@ -13,527 +41,903 @@ const defaultConfig = estilosBase.moderno;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Taller Editorial y Calibración de Diseño</title>
+    <title>Taller Editorial — Estudio de Creación y Calibración</title>
     <style is:global set:html={dynamicCss}></style>
 
     <style is:global>
-      /* Reset para la mesa de trabajo */
+      * { box-sizing: border-box; }
       body {
         margin: 0 !important;
         padding: 0 !important;
         overflow: hidden !important;
-        background-color: #111418 !important;
-        font-family: system-ui, -apple-system, sans-serif !important;
+        background-color: #090b0e !important;
+        font-family: var(--ui-font, system-ui, sans-serif) !important;
+        color: #f1f5f9;
       }
 
-      .taller-layout {
+      .taller-container {
         display: flex;
         width: 100vw;
         height: 100vh;
         overflow: hidden;
       }
 
-      /* Inspector lateral */
+      /* INSPECTOR LATERAL */
       .taller-sidebar {
-        width: 360px;
-        min-width: 360px;
+        width: 420px;
+        min-width: 420px;
         height: 100vh;
-        background-color: #181d24;
-        border-right: 1px solid #28313d;
-        color: #f1f5f9;
+        background-color: #11151b;
+        border-right: 1px solid #1f2633;
         display: flex;
         flex-direction: column;
         z-index: 50;
       }
 
-      .taller-sidebar-header {
-        padding: 1rem 1.25rem;
-        border-bottom: 1px solid #28313d;
+      .sidebar-top {
+        padding: 0.8rem 1.1rem;
+        border-bottom: 1px solid #1f2633;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        background-color: #161b24;
       }
 
-      .taller-sidebar-header h2 {
-        font-size: 0.85rem;
-        font-weight: 700;
+      .sidebar-title {
+        font-size: 0.8rem;
+        font-weight: 800;
         letter-spacing: 0.05em;
         text-transform: uppercase;
-        color: #8b5cf6;
+        color: var(--accent-color, #8b5cf6);
         margin: 0;
       }
 
-      .taller-sidebar-body {
+      .btn-exit-taller {
+        color: #94a3b8;
+        font-size: 0.72rem;
+        text-decoration: none;
+        padding: 0.3rem 0.55rem;
+        border-radius: 4px;
+        border: 1px solid #273142;
+        transition: all 0.15s ease;
+      }
+      .btn-exit-taller:hover { background: rgba(255, 255, 255, 0.05); color: #fff; }
+
+      /* NAVEGACIÓN MODULAR */
+      .taller-nav-tabs {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        background: #0d1015;
+        border-bottom: 1px solid #1f2633;
+        padding: 0.2rem;
+        gap: 2px;
+      }
+
+      .tab-btn {
+        background: transparent;
+        border: none;
+        color: #94a3b8;
+        font-size: 0.67rem;
+        font-weight: 700;
+        padding: 0.55rem 0.2rem;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: all 0.15s ease;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .tab-btn:hover { background: rgba(255, 255, 255, 0.04); color: #e2e8f0; }
+      .tab-btn.is-active {
+        background: var(--accent-subtle, rgba(139, 92, 246, 0.18));
+        color: var(--accent-color, #8b5cf6);
+        box-shadow: inset 0 0 0 1px var(--accent-border, rgba(139, 92, 246, 0.35));
+      }
+
+      .sidebar-scroll-body {
         flex: 1;
         overflow-y: auto;
-        padding: 1.25rem;
+        padding: 1.1rem;
         display: flex;
         flex-direction: column;
-        gap: 1.25rem;
+        gap: 1.15rem;
       }
 
-      .taller-section {
-        background: #111418;
-        border: 1px solid #28313d;
+      .tab-panel { display: none; flex-direction: column; gap: 1.15rem; }
+      .tab-panel.is-active { display: flex; }
+
+      .preset-banner {
+        background: #141923;
+        border: 1px solid #232c3d;
+        border-left: 3px solid var(--accent-color, #8b5cf6);
+        padding: 0.65rem 0.85rem;
+        border-radius: 6px;
+      }
+      .preset-banner h3 {
+        margin: 0;
+        font-size: 0.76rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        color: #f1f5f9;
+      }
+      .preset-banner p { margin: 0.2rem 0 0 0; font-size: 0.68rem; color: #94a3b8; }
+
+      .control-box {
+        background: #131720;
+        border: 1px solid #202736;
         border-radius: 8px;
-        padding: 1rem;
+        padding: 0.9rem;
         display: flex;
         flex-direction: column;
-        gap: 0.75rem;
+        gap: 0.7rem;
       }
 
-      .taller-section-title {
-        font-size: 0.75rem;
-        font-weight: 700;
+      .control-box-title {
+        font-size: 0.71rem;
+        font-weight: 800;
         text-transform: uppercase;
         letter-spacing: 0.05em;
-        color: #94a3b8;
-        margin: 0 0 0.25rem 0;
+        color: #818cf8;
+        margin: 0;
       }
 
-      .ctrl-row {
-        display: flex;
-        flex-direction: column;
-        gap: 0.3rem;
-      }
-
-      .ctrl-row-inline {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .ctrl-row label, .ctrl-row-inline label {
-        font-size: 0.75rem;
-        color: #cbd5e1;
-      }
+      .ctrl-field { display: flex; flex-direction: column; gap: 0.25rem; }
+      .ctrl-field-inline { display: flex; justify-content: space-between; align-items: center; }
+      .ctrl-field label, .ctrl-field-inline label { font-size: 0.73rem; color: #cbd5e1; }
 
       .taller-input, .taller-select {
-        background: #181d24;
-        border: 1px solid #334155;
+        background: #0b0e13;
+        border: 1px solid #293447;
         color: #f8fafc;
         padding: 0.4rem 0.6rem;
-        border-radius: 6px;
-        font-size: 0.82rem;
+        border-radius: 5px;
+        font-size: 0.78rem;
+        outline: none;
       }
+      .taller-input:focus, .taller-select:focus { border-color: var(--accent-color, #8b5cf6); }
 
-      .taller-input[type="color"] {
-        padding: 0.1rem;
-        width: 44px;
-        height: 28px;
+      .taller-color-picker {
+        width: 36px;
+        height: 24px;
+        padding: 1px;
+        border: 1px solid #293447;
+        border-radius: 4px;
+        background: #0b0e13;
         cursor: pointer;
       }
 
-      .taller-btn-action {
+      .action-btn-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+        margin-top: 0.25rem;
+      }
+
+      .btn-taller-action {
         width: 100%;
-        background: #8b5cf6;
-        color: #ffffff;
         border: none;
-        padding: 0.7rem;
+        padding: 0.65rem;
         border-radius: 6px;
-        font-weight: 600;
-        font-size: 0.85rem;
+        font-weight: 700;
+        font-size: 0.77rem;
         cursor: pointer;
-        transition: background 0.15s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.4rem;
+        transition: opacity 0.15s ease;
       }
+      .btn-update { background: #222938; color: #cbd5e1; border: 1px solid #334155; }
+      .btn-update:hover { background: #2d374a; color: #fff; }
+      .btn-new-preset { background: var(--accent-color, #8b5cf6); color: #fff; }
+      .btn-new-preset:hover { opacity: 0.9; }
 
-      .taller-btn-action:hover {
-        background: #7c3aed;
-      }
-
-      /* Lienzo central */
+      /* LIENZO DE HOJAS */
       .taller-viewport {
         flex: 1;
         height: 100vh;
         overflow-y: auto;
-        padding: 2.5rem 1.5rem;
+        overflow-x: hidden;
+        padding: 2.5rem 2rem 5rem 2rem;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 3rem;
+        gap: 3.5rem;
+        background-color: #090b0e;
         box-sizing: border-box;
       }
 
-      /* Hoja física A4 estricta */
+      .sheet-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.6rem;
+      }
+
+      .sheet-header-title {
+        width: 210mm;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 0.5rem;
+      }
+
+      .sheet-badge {
+        font-size: 0.7rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #94a3b8;
+        background: #141923;
+        border: 1px solid #232c3d;
+        padding: 0.25rem 0.6rem;
+        border-radius: 4px;
+      }
+
       .a4-sheet {
         width: 210mm;
         min-height: 297mm;
         max-height: 297mm;
         height: 297mm;
-        background: #ffffff;
-        color: #0f172a;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+        background-color: #ffffff !important;
+        color: #0f172a !important;
+        box-shadow: 0 14px 40px rgba(0, 0, 0, 0.7);
         box-sizing: border-box;
-        padding: var(--test-margin, 2.54cm);
+        padding: var(--test-margin-v, 2.54cm) var(--test-margin-h, 2.54cm);
         overflow: hidden;
         position: relative;
         display: flex;
         flex-direction: column;
       }
 
-      .sheet-header-badge {
-        position: absolute;
-        top: 8px;
-        right: 12px;
-        font-size: 0.65rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        color: #94a3b8;
-        letter-spacing: 0.05em;
-      }
-
-      /* Variables dinámicas en caliente para la prueba */
+      /* VARIABLES REACTIVAS */
       :root {
+        --test-font-cuerpo: system-ui, -apple-system, sans-serif;
+        --test-font-titulos: system-ui, -apple-system, sans-serif;
+        --test-line-height: 1.65;
+        --test-para-indent: 1.27cm;
+        --test-para-align: justify;
+        --test-para-gap: 0.85rem;
+
         --test-h1-color: #15803d;
         --test-h1-size: 20pt;
         --test-h1-align: left;
         --test-h2-color: #0f766e;
         --test-h2-size: 16pt;
-        --test-para-indent: 1.27cm;
-        --test-line-height: 1.65;
-        --test-font: system-ui, -apple-system, sans-serif;
+        --test-h3-color: #1d4ed8;
+        --test-h3-size: 13pt;
+        --test-h4-color: #4338ca;
+        --test-h4-size: 11.5pt;
+        --test-h5-color: #6d28d9;
+        --test-h5-size: 10.5pt;
+        --test-h6-color: #475569;
+        --test-h6-size: 9.5pt;
       }
 
       .a4-sheet .markdown-body {
-        font-family: var(--test-font);
+        font-family: var(--test-font-cuerpo);
         line-height: var(--test-line-height);
+        color: #0f172a !important;
       }
 
       .a4-sheet .markdown-body p {
         text-indent: var(--test-para-indent);
-        margin-bottom: 0.85rem;
+        text-align: var(--test-para-align);
+        margin-bottom: var(--test-para-gap);
+        color: #0f172a !important;
       }
 
-      .a4-sheet h1.dyn-h1 {
-        color: var(--test-h1-color) !important;
-        font-size: var(--test-h1-size) !important;
-        text-align: var(--test-h1-align) !important;
-        margin-top: 0.5rem;
-      }
+      .dyn-h1 { color: var(--test-h1-color) !important; font-size: var(--test-h1-size) !important; font-family: var(--test-font-titulos); text-align: var(--test-h1-align) !important; font-weight: 800; }
+      .dyn-h2 { color: var(--test-h2-color) !important; font-size: var(--test-h2-size) !important; font-family: var(--test-font-titulos); font-weight: 700; }
+      .dyn-h3 { color: var(--test-h3-color) !important; font-size: var(--test-h3-size) !important; font-family: var(--test-font-titulos); font-weight: 600; }
+      .dyn-h4 { color: var(--test-h4-color) !important; font-size: var(--test-h4-size) !important; font-family: var(--test-font-titulos); font-weight: 600; }
+      .dyn-h5 { color: var(--test-h5-color) !important; font-size: var(--test-h5-size) !important; font-family: var(--test-font-titulos); font-weight: 600; }
+      .dyn-h6 { color: var(--test-h6-color) !important; font-size: var(--test-h6-size) !important; font-family: var(--test-font-titulos); font-weight: 600; }
 
-      .a4-sheet h2.dyn-h2 {
-        color: var(--test-h2-color) !important;
-        font-size: var(--test-h2-size) !important;
+      .empty-doc-placeholder {
+        padding: 3rem 1.5rem;
+        text-align: center;
+        border: 2px dashed #cbd5e1;
+        border-radius: 8px;
+        margin: auto;
+        color: #64748b;
       }
     </style>
   </head>
   <body>
-    <div class="taller-layout">
-      <!-- PANEL DE CONTROL -->
+    <div class="taller-container" id="taller-app" data-initial-state={JSON.stringify(jsonState)}>
+      <!-- PANEL INSPECTOR -->
       <aside class="taller-sidebar">
-        <div class="taller-sidebar-header">
-          <h2>Inspector de Diseño</h2>
-          <a href="/docs/explorar" style="color: #94a3b8; font-size: 0.75rem; text-decoration: none;">← Salir</a>
+        <div class="sidebar-top">
+          <h2 class="sidebar-title">Editor de Presets</h2>
+          <a href="/docs/explorar" class="btn-exit-taller">← Volver a Docs</a>
         </div>
 
-        <div class="taller-sidebar-body">
-          <!-- Modo de previsualización -->
-          <div class="taller-section">
-            <span class="taller-section-title">Modo de Visualización</span>
-            <div class="ctrl-row-inline">
-              <label for="sel-preview-mode">Simular Apariencia</label>
-              <select id="sel-preview-mode" class="taller-select">
-                <option value="claro">Modo Claro (Papel)</option>
-                <option value="oscuro">Modo Oscuro</option>
-              </select>
+        <nav class="taller-nav-tabs">
+          <button class="tab-btn is-active" data-target-tab="tab-base">1. Base</button>
+          <button class="tab-btn" data-target-tab="tab-print">2. Papel</button>
+          <button class="tab-btn" data-target-tab="tab-cover">3. Portada</button>
+          <button class="tab-btn" data-target-tab="tab-comp">4. Bloques</button>
+          <button class="tab-btn" data-target-tab="tab-mermaid">5. Mermaid</button>
+        </nav>
+
+        <div class="sidebar-scroll-body">
+          <!-- 1. MÓDULO: ESTILOS BASE -->
+          <div class="tab-panel is-active" id="tab-base">
+            <div class="preset-banner">
+              <h3>Estilos Web (estilos-base.json)</h3>
+              <p>Clona un estilo para crear un tema web totalmente nuevo.</p>
+            </div>
+
+            <div class="control-box">
+              <span class="control-box-title">Gestión de Presets Web</span>
+              <div class="ctrl-field">
+                <label>Clonar desde Preset</label>
+                <select id="sel-base-preset" class="taller-select">
+                  {Object.keys(estilosBase).map((k) => (
+                    <option value={k}>{k.toUpperCase()}</option>
+                  ))}
+                </select>
+              </div>
+              <div class="ctrl-field">
+                <label>ID del Nuevo Estilo (slug)</label>
+                <input type="text" id="txt-base-new-id" class="taller-input" placeholder="ej. ingenieria-dark" />
+              </div>
+            </div>
+
+            <div class="control-box">
+              <span class="control-box-title">Tipografía y Prosa</span>
+              <div class="ctrl-field">
+                <label>Fuente del Cuerpo</label>
+                <select id="sel-base-body-font" class="taller-select">
+                  <option value="system-ui, -apple-system, sans-serif">Sans-Serif (Moderna)</option>
+                  <option value="'Times New Roman', Times, serif">Times New Roman (APA)</option>
+                  <option value="Georgia, Cambria, serif">Georgia (Académica)</option>
+                  <option value="'Fira Code', monospace">Monospace (Técnica)</option>
+                </select>
+              </div>
+              <div class="ctrl-field">
+                <label>Fuente de Títulos</label>
+                <select id="sel-base-title-font" class="taller-select">
+                  <option value="system-ui, -apple-system, sans-serif">Sans-Serif (Moderna)</option>
+                  <option value="'Times New Roman', Times, serif">Times New Roman (APA)</option>
+                  <option value="Georgia, Cambria, serif">Georgia (Académica)</option>
+                </select>
+              </div>
+              <div class="ctrl-field-inline">
+                <label>Interlineado</label>
+                <input type="range" id="rng-base-lineheight" min="1.3" max="2.0" step="0.05" value="1.65" />
+                <span id="lbl-base-lineheight" style="font-size:0.72rem;">1.65</span>
+              </div>
+            </div>
+
+            <div class="control-box">
+              <span class="control-box-title">Jerarquía de Títulos (H1 - H6)</span>
+              <div class="ctrl-field">
+                <label>H1: Color / Tamaño / Alineación</label>
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <input type="color" id="col-base-h1" value="#15803d" class="taller-color-picker" />
+                  <input type="range" id="rng-base-h1" min="16" max="30" step="1" value="20" style="flex:1;" />
+                  <span id="lbl-base-h1" style="font-size:0.72rem; width:34px;">20pt</span>
+                  <select id="sel-base-h1-align" class="taller-select" style="padding:0.2rem 0.35rem; font-size:0.72rem;">
+                    <option value="left">Izq</option>
+                    <option value="center">Cen</option>
+                    <option value="right">Der</option>
+                  </select>
+                </div>
+              </div>
+              <div class="ctrl-field">
+                <label>H2: Color / Tamaño</label>
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <input type="color" id="col-base-h2" value="#0f766e" class="taller-color-picker" />
+                  <input type="range" id="rng-base-h2" min="13" max="24" step="1" value="16" style="flex:1;" />
+                  <span id="lbl-base-h2" style="font-size:0.72rem; width:34px;">16pt</span>
+                </div>
+              </div>
+              <div class="ctrl-field">
+                <label>H3: Color / Tamaño</label>
+                <div style="display:flex; align-items:center; gap:6px;">
+                  <input type="color" id="col-base-h3" value="#1d4ed8" class="taller-color-picker" />
+                  <input type="range" id="rng-base-h3" min="11" max="20" step="1" value="13" style="flex:1;" />
+                  <span id="lbl-base-h3" style="font-size:0.72rem; width:34px;">13pt</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="action-btn-group">
+              <button class="btn-taller-action btn-update" data-action="update" data-target="estilosBase">
+                Actualizar Preset Seleccionado
+              </button>
+              <button class="btn-taller-action btn-new-preset" data-action="create-new" data-target="estilosBase">
+                + Crear y Exportar Nuevo Preset
+              </button>
             </div>
           </div>
 
-          <!-- Párrafos y Prosa -->
-          <div class="taller-section">
-            <span class="taller-section-title">Cuerpo de Texto y Prosa</span>
-            <div class="ctrl-row">
-              <label>Familia Tipográfica</label>
-              <select id="sel-body-font" class="taller-select">
-                <option value="system-ui, -apple-system, sans-serif">Sans-Serif (Moderna)</option>
-                <option value="'Times New Roman', Times, serif">Times New Roman (APA)</option>
-                <option value="Georgia, Cambria, serif">Georgia (Académica)</option>
-                <option value="'Fira Code', monospace">Monospace (Técnica)</option>
-              </select>
+          <!-- 2. MÓDULO: PLANTILLAS DE IMPRESIÓN -->
+          <div class="tab-panel" id="tab-print">
+            <div class="preset-banner">
+              <h3>Plantillas de Papel (plantillas-impresion.json)</h3>
+              <p>Crea geometrías para libros, artículos o monografías A4.</p>
             </div>
-            <div class="ctrl-row-inline">
-              <label>Sangría de Párrafo</label>
-              <input type="range" id="rng-indent" min="0" max="2.5" step="0.1" value="1.27" />
-              <span id="lbl-indent" style="font-size: 0.75rem;">1.27cm</span>
+
+            <div class="control-box">
+              <span class="control-box-title">Gestión de Plantillas</span>
+              <div class="ctrl-field">
+                <label>Clonar desde Plantilla</label>
+                <select id="sel-print-preset" class="taller-select">
+                  {Object.entries(plantillasImpresion).map(([k, v]) => (
+                    <option value={k}>{v.nombre}</option>
+                  ))}
+                </select>
+              </div>
+              <div class="ctrl-field">
+                <label>ID de la Nueva Plantilla</label>
+                <input type="text" id="txt-print-new-id" class="taller-input" placeholder="ej. tesis-dos-columnas" />
+              </div>
             </div>
-            <div class="ctrl-row-inline">
-              <label>Interlineado</label>
-              <input type="range" id="rng-line-height" min="1.2" max="2.0" step="0.05" value="1.65" />
-              <span id="lbl-line-height" style="font-size: 0.75rem;">1.65</span>
+
+            <div class="control-box">
+              <span class="control-box-title">Márgenes Físicos</span>
+              <div class="ctrl-field-inline">
+                <label>Margen Superior / Inferior</label>
+                <input type="range" id="rng-print-mv" min="1.0" max="3.5" step="0.1" value="2.54" />
+                <span id="lbl-print-mv" style="font-size:0.72rem;">2.54cm</span>
+              </div>
+              <div class="ctrl-field-inline">
+                <label>Margen Izquierdo / Derecho</label>
+                <input type="range" id="rng-print-mh" min="1.0" max="3.5" step="0.1" value="2.54" />
+                <span id="lbl-print-mh" style="font-size:0.72rem;">2.54cm</span>
+              </div>
+            </div>
+
+            <div class="control-box">
+              <span class="control-box-title">Párrafo de Imprenta</span>
+              <div class="ctrl-field-inline">
+                <label>Sangría Primera Línea</label>
+                <input type="range" id="rng-print-indent" min="0" max="2.5" step="0.1" value="1.27" />
+                <span id="lbl-print-indent" style="font-size:0.72rem;">1.27cm</span>
+              </div>
+              <div class="ctrl-field">
+                <label>Alineación en Hoja</label>
+                <select id="sel-print-align" class="taller-select">
+                  <option value="justify">Justificado</option>
+                  <option value="left">Izquierda</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="action-btn-group">
+              <button class="btn-taller-action btn-update" data-action="update" data-target="plantillasImpresion">
+                Actualizar Plantilla Seleccionada
+              </button>
+              <button class="btn-taller-action btn-new-preset" data-action="create-new" data-target="plantillasImpresion">
+                + Crear y Exportar Nueva Plantilla
+              </button>
             </div>
           </div>
 
-          <!-- Encabezado H1 -->
-          <div class="taller-section">
-            <span class="taller-section-title">Encabezado H1</span>
-            <div class="ctrl-row-inline">
-              <label>Color</label>
-              <input type="color" id="col-h1" value="#15803d" class="taller-input" />
+          <!-- 3. MÓDULO: MODELOS DE CARÁTULA -->
+          <div class="tab-panel" id="tab-cover">
+            <div class="preset-banner">
+              <h3>Modelos de Portada (caratulas.json)</h3>
+              <p>Configura posición de elementos, escudo y alineaciones.</p>
             </div>
-            <div class="ctrl-row-inline">
-              <label>Tamaño (pt)</label>
-              <input type="range" id="rng-h1-size" min="14" max="32" step="1" value="20" />
-              <span id="lbl-h1-size" style="font-size: 0.75rem;">20pt</span>
+
+            <div class="control-box">
+              <span class="control-box-title">Gestión de Modelos</span>
+              <div class="ctrl-field">
+                <label>Clonar desde Modelo</label>
+                <select id="sel-cover-preset" class="taller-select">
+                  {Object.entries(caratulas).map(([k, v]) => (
+                    <option value={k}>{v.nombre}</option>
+                  ))}
+                </select>
+              </div>
+              <div class="ctrl-field">
+                <label>ID del Nuevo Modelo</label>
+                <input type="text" id="txt-cover-new-id" class="taller-input" placeholder="ej. portada-monografia" />
+              </div>
             </div>
-            <div class="ctrl-row">
-              <label>Alineación</label>
-              <select id="sel-h1-align" class="taller-select">
-                <option value="left">Izquierda</option>
-                <option value="center">Centrado</option>
-                <option value="right">Derecha</option>
-              </select>
+
+            <div class="control-box">
+              <span class="control-box-title">Estructura y Disposición</span>
+              <div class="ctrl-field">
+                <label>Alineación del Membrete</label>
+                <select id="sel-cover-align" class="taller-select">
+                  <option value="center">Centrado Formal</option>
+                  <option value="left">Alineado a la Izquierda</option>
+                </select>
+              </div>
+              <div class="ctrl-field">
+                <label>Formato de Integrantes</label>
+                <select id="sel-cover-authors-layout" class="taller-select">
+                  <option value="table">Tabla a Dos Columnas</option>
+                  <option value="list">Lista Vertical con Roles</option>
+                </select>
+              </div>
+              <div class="ctrl-field-inline">
+                <label>Altura del Escudo (mm)</label>
+                <input type="range" id="rng-cover-logo" min="25" max="65" step="1" value="45" />
+                <span id="lbl-cover-logo" style="font-size:0.72rem;">45mm</span>
+              </div>
+            </div>
+
+            <div class="action-btn-group">
+              <button class="btn-taller-action btn-update" data-action="update" data-target="caratulas">
+                Actualizar Modelo Seleccionado
+              </button>
+              <button class="btn-taller-action btn-new-preset" data-action="create-new" data-target="caratulas">
+                + Crear y Exportar Nuevo Modelo
+              </button>
             </div>
           </div>
 
-          <!-- Encabezado H2 -->
-          <div class="taller-section">
-            <span class="taller-section-title">Encabezado H2</span>
-            <div class="ctrl-row-inline">
-              <label>Color</label>
-              <input type="color" id="col-h2" value="#0f766e" class="taller-input" />
+          <!-- 4. MÓDULO: COMPONENTES Y CALLOUTS -->
+          <div class="tab-panel" id="tab-comp">
+            <div class="preset-banner">
+              <h3>Componentes y Artefactos (componentes.json)</h3>
+              <p>Personaliza callouts Obsidian, tablas y fórmulas KaTeX.</p>
             </div>
-            <div class="ctrl-row-inline">
-              <label>Tamaño (pt)</label>
-              <input type="range" id="rng-h2-size" min="12" max="26" step="1" value="16" />
-              <span id="lbl-h2-size" style="font-size: 0.75rem;">16pt</span>
+
+            <div class="control-box">
+              <span class="control-box-title">Callouts Obsidian</span>
+              <div class="ctrl-field-inline">
+                <label>Note ([!note])</label>
+                <input type="color" id="col-callout-note" value="#3b82f6" class="taller-color-picker" />
+              </div>
+              <div class="ctrl-field-inline">
+                <label>Tip ([!tip])</label>
+                <input type="color" id="col-callout-tip" value="#10b981" class="taller-color-picker" />
+              </div>
+              <div class="ctrl-field-inline">
+                <label>Warning ([!warning])</label>
+                <input type="color" id="col-callout-warn" value="#f59e0b" class="taller-color-picker" />
+              </div>
+              <div class="ctrl-field-inline">
+                <label>Danger ([!danger])</label>
+                <input type="color" id="col-callout-danger" value="#ef4444" class="taller-color-picker" />
+              </div>
+            </div>
+
+            <div class="control-box">
+              <span class="control-box-title">Tablas y KaTeX</span>
+              <div class="ctrl-field-inline">
+                <label>Grosor Línea Tabla APA</label>
+                <input type="range" id="rng-comp-table-border" min="1" max="3" step="0.5" value="1.5" />
+                <span id="lbl-comp-table-border" style="font-size:0.72rem;">1.5pt</span>
+              </div>
+              <div class="ctrl-field-inline">
+                <label>Escala KaTeX Display (%)</label>
+                <input type="range" id="rng-comp-katex-scale" min="85" max="125" step="5" value="100" />
+                <span id="lbl-comp-katex-scale" style="font-size:0.72rem;">100%</span>
+              </div>
+            </div>
+
+            <div class="action-btn-group">
+              <button class="btn-taller-action btn-new-preset" data-action="create-new" data-target="componentes">
+                Copiar componentes.json Actualizado
+              </button>
             </div>
           </div>
 
-          <!-- Acciones de Guardado -->
-          <button id="btn-export-json" class="taller-btn-action">
-            Copiar Tokens en JSON
-          </button>
+          <!-- 5. MÓDULO: DIAGRAMAS MERMAID -->
+          <div class="tab-panel" id="tab-mermaid">
+            <div class="preset-banner">
+              <h3>Tokens Mermaid (diagramas-mermaid.json)</h3>
+              <p>Calibra variables profundas para flowcharts, sequence y gantt.</p>
+            </div>
+
+            <div class="control-box">
+              <span class="control-box-title">Flowcharts & Clusters</span>
+              <div class="ctrl-field-inline">
+                <label>Fondo de Nodos</label>
+                <input type="color" id="col-mm-node-bg" value="#1e293b" class="taller-color-picker" />
+              </div>
+              <div class="ctrl-field-inline">
+                <label>Borde de Nodos</label>
+                <input type="color" id="col-mm-node-border" value="#38bdf8" class="taller-color-picker" />
+              </div>
+              <div class="ctrl-field-inline">
+                <label>Fondo de Subgrafos (Clusters)</label>
+                <input type="color" id="col-mm-cluster-bg" value="#0f172a" class="taller-color-picker" />
+              </div>
+            </div>
+
+            <div class="control-box">
+              <span class="control-box-title">Sequence Diagrams</span>
+              <div class="ctrl-field-inline">
+                <label>Fondo de Actores</label>
+                <input type="color" id="col-mm-actor-bg" value="#1e293b" class="taller-color-picker" />
+              </div>
+              <div class="ctrl-field-inline">
+                <label>Fondo de Notas</label>
+                <input type="color" id="col-mm-note-bg" value="#4c1d95" class="taller-color-picker" />
+              </div>
+              <div class="ctrl-field-inline">
+                <label>Borde de Notas</label>
+                <input type="color" id="col-mm-note-border" value="#a855f7" class="taller-color-picker" />
+              </div>
+            </div>
+
+            <div class="action-btn-group">
+              <button class="btn-taller-action btn-new-preset" data-action="create-new" data-target="diagramasMermaid">
+                Copiar diagramas-mermaid.json Actualizado
+              </button>
+            </div>
+          </div>
         </div>
       </aside>
 
-      <!-- LIENZO DE PRUEBAS: 5 HOJAS A4 -->
+      <!-- LIENZO CENTRAL -->
       <main class="taller-viewport">
-        <!-- HOJA 1: CARÁTULA FORMAL -->
-        <div class="a4-sheet" id="sheet-1">
-          <span class="sheet-header-badge">Página 1: Portada</span>
-          <div style="display: flex; flex-direction: column; justify-content: space-between; height: 100%; text-align: center;">
-            <div>
-              <h2 style="font-size: 13pt; margin: 0; text-transform: uppercase;">Universidad Nacional de Ingeniería</h2>
-              <p style="font-size: 10.5pt; margin: 0.2rem 0; font-weight: 600;">Facultad de Ingeniería Mecánica</p>
-            </div>
-
-            <div style="margin: 1rem auto;">
-              <img src="/assets/logos/logo-uni.png" alt="Escudo UNI" style="max-height: 130px; object-fit: contain;" />
-            </div>
-
-            <div>
-              <h1 style="font-size: 15pt; text-transform: uppercase; margin: 0.5rem 0;">Informe Técnico de Calibración Editorial</h1>
-              <p style="font-size: 10.5pt; font-style: italic; margin: 0;">Análisis Estructural y Armonización Visual del Sistema</p>
-            </div>
-
-            <table style="width: 80%; margin: 1.5rem auto; border: none; font-size: 9.5pt;">
-              <tr>
-                <td style="text-align: left; font-weight: 700; border: none;">AUTOR:</td>
-                <td style="text-align: right; border: none;">OWIN RENATO PAREDES TELLO</td>
-              </tr>
-              <tr>
-                <td style="text-align: left; font-weight: 700; border: none;">CÓDIGO:</td>
-                <td style="text-align: right; border: none;">20152554C</td>
-              </tr>
-              <tr>
-                <td style="text-align: left; font-weight: 700; border: none;">DOCENTE:</td>
-                <td style="text-align: right; border: none;">ING. CARLOS MENDOZA</td>
-              </tr>
-            </table>
-
-            <div>
-              <p style="font-size: 9.5pt; font-weight: 700; margin: 0;">LIMA — PERÚ</p>
-              <p style="font-size: 9.5pt; margin: 0;">2026</p>
-            </div>
+        <!-- HOJA 1: PORTADA -->
+        <div class="sheet-wrapper">
+          <div class="sheet-header-title">
+            <span class="sheet-badge">Página 1: Portada</span>
           </div>
-        </div>
-
-        <!-- HOJA 2: ÍNDICE GENERAL -->
-        <div class="a4-sheet" id="sheet-2">
-          <span class="sheet-header-badge">Página 2: Índice</span>
-          <h2 style="text-align: center; font-size: 14pt; margin-top: 0;">ÍNDICE GENERAL</h2>
-          <div style="display: flex; flex-direction: column; gap: 0.65rem; font-size: 10pt; margin-top: 1.5rem;">
-            <div style="display: flex; justify-content: space-between;">
-              <span style="font-weight: 700;">1. INTRODUCCIÓN Y JERARQUÍA TIPOGRÁFICA</span>
-              <span style="border-bottom: 1px dotted #64748b; flex: 1; margin: 0 0.5rem;"></span>
-              <span>3</span>
-            </div>
-            <div style="display: flex; justify-content: space-between; padding-left: 1.25rem;">
-              <span>1.1 Demostración de Encabezados H2</span>
-              <span style="border-bottom: 1px dotted #64748b; flex: 1; margin: 0 0.5rem;"></span>
-              <span>3</span>
-            </div>
-            <div style="display: flex; justify-content: space-between; padding-left: 2rem;">
-              <span style="font-style: italic;">1.1.1 Subnivel Profundo H3</span>
-              <span style="border-bottom: 1px dotted #64748b; flex: 1; margin: 0 0.5rem;"></span>
-              <span>3</span>
-            </div>
-            <div style="display: flex; justify-content: space-between;">
-              <span style="font-weight: 700;">2. MATRICES, TABLAS Y TAREAS</span>
-              <span style="border-bottom: 1px dotted #64748b; flex: 1; margin: 0 0.5rem;"></span>
-              <span>4</span>
-            </div>
-            <div style="display: flex; justify-content: space-between;">
-              <span style="font-weight: 700;">3. ARTEFACTOS TÉCNICOS, SHIKI Y MERMAID</span>
-              <span style="border-bottom: 1px dotted #64748b; flex: 1; margin: 0 0.5rem;"></span>
-              <span>5</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- HOJA 3: PROSA Y ENCABEZADOS -->
-        <div class="a4-sheet" id="sheet-3">
-          <span class="sheet-header-badge">Página 3: Jerarquía</span>
-          <div class="markdown-body">
-            <h1 class="dyn-h1">1. Encabezado Principal H1</h1>
-            <p>
-              Este párrafo evalúa la sangría de primera línea y el flujo del texto justificado. Al redactar informes técnicos, el texto debe fluir sin ríos exagerados de espacios intermedios y con proporciones tipográficas armónicas.
-            </p>
-            <h2 class="dyn-h2">1.1 Subtítulo de Sección H2</h2>
-            <p>
-              En este fragmento se prueba texto en <strong>negrita de alto contraste</strong>, <em>cursiva suave</em>, <del>texto tachado</del> y <code>código en línea</code> sin que altere la altura de la línea.
-            </p>
-            <h3>1.1.1 Subtítulo Nivel H3</h3>
-            <h4>1.1.1.1 Subtítulo Nivel H4</h4>
-            <h5>Subtítulo Nivel H5</h5>
-            <h6>Subtítulo Nivel H6</h6>
-            <blockquote>
-              Esta es una cita en bloque de más de cuarenta palabras. Su sangría izquierda y estilo tipográfico deben distinguirse inmediatamente de la prosa regular sin sobrecargar la página.
-            </blockquote>
-          </div>
-        </div>
-
-        <!-- HOJA 4: TABLAS Y CHECKBOXES -->
-        <div class="a4-sheet" id="sheet-4">
-          <span class="sheet-header-badge">Página 4: Tablas</span>
-          <div class="markdown-body">
-            <h2>2. Tablas Formales APA y Listas</h2>
-            <p>A continuación se evalúa el comportamiento de tablas sin bordes verticales:</p>
-            <table>
-              <thead>
-                <tr>
-                  <th>Variable</th>
-                  <th>Expresión Matemática</th>
-                  <th>Unidad S.I.</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Tensión</td>
-                  <td>V = I \cdot R</td>
-                  <td>Voltio (V)</td>
-                </tr>
-                <tr>
-                  <td>Potencia Activa</td>
-                  <td>P = \sqrt{3} V_L I_L \cos\theta</td>
-                  <td>Vatio (W)</td>
-                </tr>
-              </tbody>
-            </table>
-            <ul class="contains-task-list" style="margin-top: 1.5rem;">
-              <li class="task-list-item">
-                <input type="checkbox" checked disabled /> Tarea completada y validada en el diseño
-              </li>
-              <li class="task-list-item">
-                <input type="checkbox" disabled /> Tarea pendiente sujeta a revisión
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- HOJA 5: CÓDIGO Y MERMAID -->
-        <div class="a4-sheet" id="sheet-5">
-          <span class="sheet-header-badge">Página 5: Código y Diagramas</span>
-          <div class="markdown-body">
-            <h2>3. Bloque Shiki y Diagramas</h2>
-            <div class="code-block-wrapper">
-              <div class="code-toolbar">
-                <span class="code-lang-tag">PYTHON</span>
-                <button class="copy-code-btn" type="button">Copiar</button>
+          <article class="a4-sheet" id="sheet-1">
+            <div id="demo-cover-container" style="display:flex; flex-direction:column; justify-content:space-between; height:100%; text-align:center;">
+              <div id="demo-cover-header">
+                <h2 style="font-size:13pt; margin:0; text-transform:uppercase; font-weight:800;">
+                  {docData.institucion || "UNIVERSIDAD NACIONAL DE INGENIERÍA"}
+                </h2>
+                <p style="font-size:10.5pt; margin:0.25rem 0; font-weight:700; opacity:0.9;">
+                  {docData.facultad || "FACULTAD DE INGENIERÍA MECÁNICA"}
+                </p>
+                <p style="font-size:9.5pt; margin:0; opacity:0.8;">
+                  {docData.escuela || "Escuela Profesional de Ingeniería Mecánica"}
+                </p>
               </div>
-              <pre class="astro-code" style="background-color: var(--shiki-light-bg, #2b0000); color: var(--shiki-light, #f8f8f2);"><code><span class="line"><span style="color: #ff79c6;">def</span> <span style="color: #50fa7b;">calcular_eficiencia</span>(p_in, p_out):</span>
-<span class="line">    <span style="color: #ff79c6;">return</span> (p_out / p_in) * <span style="color: #bd93f9;">100.0</span></span></code></pre>
+
+              <div style="margin:1rem auto;">
+                <img id="demo-cover-logo" src={docData.logo || "/assets/logos/logo-uni.png"} alt="Escudo UNI" style="max-height:45mm; height:45mm; object-fit:contain;" />
+              </div>
+
+              <div>
+                <h1 style="font-size:15pt; text-transform:uppercase; margin:0.4rem 0; font-weight:800; line-height:1.3;">
+                  {docData.title || "TÍTULO DEL DOCUMENTO DE PRUEBA"}
+                </h1>
+                {docData.subtitulo && (
+                  <p style="font-size:10.5pt; font-style:italic; margin:0; opacity:0.85;">{docData.subtitulo}</p>
+                )}
+              </div>
+
+              <div id="demo-authors-wrapper">
+                <table id="demo-cover-table" style="width:85%; margin:1.5rem auto; border:none; font-size:9.5pt;">
+                  {docData.integrantes ? (
+                    docData.integrantes.map((m: any, idx: number) => (
+                      <tr>
+                        <td style="text-align:left; font-weight:700; border:none; padding:0.15rem 0.5rem;">
+                          {idx === 0 ? "INTEGRANTES:" : ""}
+                        </td>
+                        <td style="text-align:right; border:none; padding:0.15rem 0.5rem;">
+                          {m.nombre} {m.codigo ? `(${m.codigo})` : ''}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td style="text-align:left; font-weight:700; border:none; padding:0.15rem 0.5rem;">AUTOR:</td>
+                      <td style="text-align:right; border:none; padding:0.15rem 0.5rem;">USUARIO PRINCIPAL</td>
+                    </tr>
+                  )}
+                  {docData.docente && (
+                    <tr>
+                      <td style="text-align:left; font-weight:700; border:none; padding:0.15rem 0.5rem;">DOCENTE:</td>
+                      <td style="text-align:right; border:none; padding:0.15rem 0.5rem;">{docData.docente}</td>
+                    </tr>
+                  )}
+                </table>
+              </div>
+
+              <div>
+                <p style="font-size:9.5pt; font-weight:700; margin:0;">{docData.ciudad || "LIMA — PERÚ"}</p>
+                <p style="font-size:9.5pt; margin:0;">{docData.anio || "2026"}</p>
+              </div>
             </div>
-            <div class="mermaid-native" style="margin-top: 1.5rem; text-align: center; border: 1px solid #e2e8f0; padding: 1rem; border-radius: 6px;">
-              <span style="font-size: 0.8rem; font-family: monospace; color: #64748b;">[Diagrama Vectorial Renderizado]</span>
-            </div>
+          </article>
+        </div>
+
+        <!-- HOJAS 2 Y SIGUIENTES: CONTENIDO DEL MARKDOWN -->
+        <div class="sheet-wrapper">
+          <div class="sheet-header-title">
+            <span class="sheet-badge">Página 2+: Contenido del Documento</span>
           </div>
+          <article class="a4-sheet" id="sheet-content">
+            <div class="markdown-body">
+              {RenderedContent ? (
+                <RenderedContent />
+              ) : (
+                <div class="empty-doc-placeholder">
+                  <h3 style="margin-top:0;">Esperando archivo de pruebas...</h3>
+                  <p>Guarda tu archivo en: <code>src/content/docs/sistema/banco-pruebas.md</code></p>
+                  <p style="font-size:0.85rem;">En cuanto lo guardes, Astro compilará aquí todos tus títulos, callouts, tablas y diagramas reales.</p>
+                </div>
+              )}
+            </div>
+          </article>
         </div>
       </main>
     </div>
 
-    <!-- CONTROLADOR REACTIVO DEL TALLER -->
+    <!-- SCRIPT DE REACTIVIDAD Y PRESETS -->
     <script>
+      import { renderMermaid } from '../../src/utils/mermaidViewer';
+
       const root = document.documentElement;
+      const appEl = document.getElementById('taller-app');
+      let state: Record<string, any> = {};
 
-      // Sincronización de controles
-      document.getElementById('col-h1')?.addEventListener('input', (e) => {
-        const val = (e.target as HTMLInputElement).value;
-        root.style.setProperty('--test-h1-color', val);
+      if (appEl?.dataset.initialState) {
+        try {
+          state = JSON.parse(appEl.dataset.initialState);
+        } catch (e) {
+          console.error('Error parseando initial state:', e);
+        }
+      }
+
+      // Renderizar Mermaid si el documento tiene diagramas
+      document.addEventListener('DOMContentLoaded', () => {
+        renderMermaid(false, '#sheet-content');
       });
 
-      document.getElementById('rng-h1-size')?.addEventListener('input', (e) => {
-        const val = (e.target as HTMLInputElement).value;
-        root.style.setProperty('--test-h1-size', `${val}pt`);
-        document.getElementById('lbl-h1-size')!.textContent = `${val}pt`;
+      // 1. Navegación por pestañas
+      const tabBtns = document.querySelectorAll<HTMLButtonElement>('.tab-btn');
+      const tabPanels = document.querySelectorAll<HTMLElement>('.tab-panel');
+
+      tabBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          tabBtns.forEach((b) => b.classList.remove('is-active'));
+          tabPanels.forEach((p) => p.classList.remove('is-active'));
+          btn.classList.add('is-active');
+          const targetId = btn.getAttribute('data-target-tab');
+          if (targetId) {
+            document.getElementById(targetId)?.classList.add('is-active');
+          }
+        });
       });
 
-      document.getElementById('sel-h1-align')?.addEventListener('change', (e) => {
-        const val = (e.target as HTMLSelectElement).value;
-        root.style.setProperty('--test-h1-align', val);
+      // 2. Reactividad en vivo: Tipografía y jerarquía
+      document.getElementById('sel-base-body-font')?.addEventListener('change', (e) => {
+        root.style.setProperty('--test-font-cuerpo', (e.target as HTMLSelectElement).value);
       });
-
-      document.getElementById('col-h2')?.addEventListener('input', (e) => {
-        const val = (e.target as HTMLInputElement).value;
-        root.style.setProperty('--test-h2-color', val);
+      document.getElementById('sel-base-title-font')?.addEventListener('change', (e) => {
+        root.style.setProperty('--test-font-titulos', (e.target as HTMLSelectElement).value);
       });
-
-      document.getElementById('rng-h2-size')?.addEventListener('input', (e) => {
-        const val = (e.target as HTMLInputElement).value;
-        root.style.setProperty('--test-h2-size', `${val}pt`);
-        document.getElementById('lbl-h2-size')!.textContent = `${val}pt`;
-      });
-
-      document.getElementById('sel-body-font')?.addEventListener('change', (e) => {
-        const val = (e.target as HTMLSelectElement).value;
-        root.style.setProperty('--test-font', val);
-      });
-
-      document.getElementById('rng-indent')?.addEventListener('input', (e) => {
-        const val = (e.target as HTMLInputElement).value;
-        root.style.setProperty('--test-para-indent', `${val}cm`);
-        document.getElementById('lbl-indent')!.textContent = `${val}cm`;
-      });
-
-      document.getElementById('rng-line-height')?.addEventListener('input', (e) => {
+      document.getElementById('rng-base-lineheight')?.addEventListener('input', (e) => {
         const val = (e.target as HTMLInputElement).value;
         root.style.setProperty('--test-line-height', val);
-        document.getElementById('lbl-line-height')!.textContent = val;
+        document.getElementById('lbl-base-lineheight')!.textContent = val;
       });
 
-      // Exportar configuración a JSON
-      document.getElementById('btn-export-json')?.addEventListener('click', () => {
-        const exportedConfig = {
-          tipografia: {
-            fuenteCuerpo: (document.getElementById('sel-body-font') as HTMLSelectElement).value,
-            interlineado: (document.getElementById('rng-line-height') as HTMLInputElement).value,
-            sangria: `${(document.getElementById('rng-indent') as HTMLInputElement).value}cm`
-          },
-          encabezados: {
-            h1: {
-              color: (document.getElementById('col-h1') as HTMLInputElement).value,
-              tamano: `${(document.getElementById('rng-h1-size') as HTMLInputElement).value}pt`,
-              alineacion: (document.getElementById('sel-h1-align') as HTMLSelectElement).value
-            },
-            h2: {
-              color: (document.getElementById('col-h2') as HTMLInputElement).value,
-              tamano: `${(document.getElementById('rng-h2-size') as HTMLInputElement).value}pt`
-            }
-          }
-        };
+      // H1 Reactivo
+      document.getElementById('col-base-h1')?.addEventListener('input', (e) => {
+        root.style.setProperty('--test-h1-color', (e.target as HTMLInputElement).value);
+      });
+      document.getElementById('rng-base-h1')?.addEventListener('input', (e) => {
+        const val = (e.target as HTMLInputElement).value;
+        root.style.setProperty('--test-h1-size', `${val}pt`);
+        document.getElementById('lbl-base-h1')!.textContent = `${val}pt`;
+      });
+      document.getElementById('sel-base-h1-align')?.addEventListener('change', (e) => {
+        root.style.setProperty('--test-h1-align', (e.target as HTMLSelectElement).value);
+      });
 
-        navigator.clipboard.writeText(JSON.stringify(exportedConfig, null, 2));
-        alert('¡Configuración copiada al portapapeles en formato JSON!');
+      // 3. Reactividad en vivo: Impresión y papel
+      document.getElementById('rng-print-mv')?.addEventListener('input', (e) => {
+        const val = (e.target as HTMLInputElement).value;
+        root.style.setProperty('--test-margin-v', `${val}cm`);
+        document.getElementById('lbl-print-mv')!.textContent = `${val}cm`;
+      });
+      document.getElementById('rng-print-mh')?.addEventListener('input', (e) => {
+        const val = (e.target as HTMLInputElement).value;
+        root.style.setProperty('--test-margin-h', `${val}cm`);
+        document.getElementById('lbl-print-mh')!.textContent = `${val}cm`;
+      });
+      document.getElementById('rng-print-indent')?.addEventListener('input', (e) => {
+        const val = (e.target as HTMLInputElement).value;
+        root.style.setProperty('--test-para-indent', `${val}cm`);
+        document.getElementById('lbl-print-indent')!.textContent = `${val}cm`;
+      });
+      document.getElementById('sel-print-align')?.addEventListener('change', (e) => {
+        root.style.setProperty('--test-para-align', (e.target as HTMLSelectElement).value);
+      });
+
+      // 4. Reactividad en vivo: Carátula
+      document.getElementById('rng-cover-logo')?.addEventListener('input', (e) => {
+        const val = (e.target as HTMLInputElement).value;
+        const logo = document.getElementById('demo-cover-logo');
+        if (logo) {
+          logo.style.maxHeight = `${val}mm`;
+          logo.style.height = `${val}mm`;
+        }
+        document.getElementById('lbl-cover-logo')!.textContent = `${val}mm`;
+      });
+
+      document.getElementById('sel-cover-align')?.addEventListener('change', (e) => {
+        const val = (e.target as HTMLSelectElement).value;
+        const header = document.getElementById('demo-cover-header');
+        if (header) header.style.textAlign = val;
+      });
+
+      // 5. MOTOR DE PRESETS: CREACIÓN Y ACTUALIZACIÓN ATÓMICA
+      document.querySelectorAll<HTMLButtonElement>('.btn-taller-action').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const action = btn.getAttribute('data-action');
+          const target = btn.getAttribute('data-target') as keyof typeof state;
+          if (!target || !state[target]) return;
+
+          let targetDict = state[target];
+          let keyToSave = '';
+
+          if (target === 'estilosBase') {
+            const basePresetKey = (document.getElementById('sel-base-preset') as HTMLSelectElement).value;
+            const newIdInput = (document.getElementById('txt-base-new-id') as HTMLInputElement).value.trim();
+            keyToSave = action === 'create-new' && newIdInput ? newIdInput.toLowerCase().replace(/\s+/g, '-') : basePresetKey;
+
+            const baseCloned = JSON.parse(JSON.stringify(targetDict[basePresetKey] || targetDict.moderno));
+            baseCloned.tipografia = {
+              ...baseCloned.tipografia,
+              fuenteCuerpo: (document.getElementById('sel-base-body-font') as HTMLSelectElement).value,
+              fuenteTitulos: (document.getElementById('sel-base-title-font') as HTMLSelectElement).value,
+              interlineado: (document.getElementById('rng-base-lineheight') as HTMLInputElement).value,
+            };
+            if (baseCloned.claro?.encabezados?.h1) {
+              baseCloned.claro.encabezados.h1.color = (document.getElementById('col-base-h1') as HTMLInputElement).value;
+              baseCloned.claro.encabezados.h1.tamano = `${(document.getElementById('rng-base-h1') as HTMLInputElement).value}pt`;
+            }
+            targetDict[keyToSave] = baseCloned;
+
+          } else if (target === 'plantillasImpresion') {
+            const printPresetKey = (document.getElementById('sel-print-preset') as HTMLSelectElement).value;
+            const newIdInput = (document.getElementById('txt-print-new-id') as HTMLInputElement).value.trim();
+            keyToSave = action === 'create-new' && newIdInput ? newIdInput.toLowerCase().replace(/\s+/g, '-') : printPresetKey;
+
+            const printCloned = JSON.parse(JSON.stringify(targetDict[printPresetKey] || targetDict['informe-uni']));
+            printCloned.id = keyToSave;
+            printCloned.pagina.margenSuperior = `${(document.getElementById('rng-print-mv') as HTMLInputElement).value}cm`;
+            printCloned.pagina.margenInferior = `${(document.getElementById('rng-print-mv') as HTMLInputElement).value}cm`;
+            printCloned.pagina.margenIzquierdo = `${(document.getElementById('rng-print-mh') as HTMLInputElement).value}cm`;
+            printCloned.pagina.margenDerecho = `${(document.getElementById('rng-print-mh') as HTMLInputElement).value}cm`;
+            printCloned.parrafo.sangriaPrimeraLinea = `${(document.getElementById('rng-print-indent') as HTMLInputElement).value}cm`;
+            printCloned.parrafo.alineacion = (document.getElementById('sel-print-align') as HTMLSelectElement).value;
+            targetDict[keyToSave] = printCloned;
+
+          } else if (target === 'caratulas') {
+            const coverPresetKey = (document.getElementById('sel-cover-preset') as HTMLSelectElement).value;
+            const newIdInput = (document.getElementById('txt-cover-new-id') as HTMLInputElement).value.trim();
+            keyToSave = action === 'create-new' && newIdInput ? newIdInput.toLowerCase().replace(/\s+/g, '-') : coverPresetKey;
+
+            const coverCloned = JSON.parse(JSON.stringify(targetDict[coverPresetKey] || targetDict['uni-oficial']));
+            coverCloned.id = keyToSave;
+            if (coverCloned.logo) {
+              coverCloned.logo.altoMaximoMm = parseInt((document.getElementById('rng-cover-logo') as HTMLInputElement).value, 10);
+            }
+            targetDict[keyToSave] = coverCloned;
+
+          } else if (target === 'componentes') {
+            targetDict.tablas.grosorBordeSuperior = `${(document.getElementById('rng-comp-table-border') as HTMLInputElement).value}pt`;
+            targetDict.tablas.grosorBordeInferior = `${(document.getElementById('rng-comp-table-border') as HTMLInputElement).value}pt`;
+            targetDict.katex.escalaDisplay = `${(document.getElementById('rng-comp-katex-scale') as HTMLInputElement).value}%`;
+          } else if (target === 'diagramasMermaid') {
+            targetDict.flowchart.nodoFondo = (document.getElementById('col-mm-node-bg') as HTMLInputElement).value;
+            targetDict.flowchart.nodoBorde = (document.getElementById('col-mm-node-border') as HTMLInputElement).value;
+            targetDict.flowchart.clusterFondo = (document.getElementById('col-mm-cluster-bg') as HTMLInputElement).value;
+            targetDict.sequence.actorFondo = (document.getElementById('col-mm-actor-bg') as HTMLInputElement).value;
+            targetDict.sequence.notaFondo = (document.getElementById('col-mm-note-bg') as HTMLInputElement).value;
+            targetDict.sequence.notaBorde = (document.getElementById('col-mm-note-border') as HTMLInputElement).value;
+          }
+
+          // Copiar JSON actualizado al portapapeles
+          navigator.clipboard.writeText(JSON.stringify(targetDict, null, 2));
+          const originalText = btn.textContent;
+          btn.textContent = action === 'create-new' ? `✓ Creado "${keyToSave}" y Copiado!` : `✓ Actualizado y Copiado!`;
+          setTimeout(() => {
+            btn.textContent = originalText;
+          }, 2000);
+        });
       });
     </script>
   </body>
