@@ -455,16 +455,13 @@ html.no-meta #sec-meta {
     display: none !important;
   }
   .main-content {
-    position: relative !important;
+    position: static !important;
     inset: auto !important;
     width: 100% !important;
-    max-width: 100vw !important;
     height: auto !important;
-    min-height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
     overflow: visible !important;
-    padding: 1.25rem 1rem 2rem 1rem !important;
-    box-sizing: border-box !important;
-    overflow-x: hidden !important;
   }
   .content-wrapper {
     width: 100% !important;

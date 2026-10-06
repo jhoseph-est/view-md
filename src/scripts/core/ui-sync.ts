@@ -1,6 +1,5 @@
 // src/scripts/core/ui-sync.ts
 import { initDesktopSearch } from './search';
-import { imprimirConIframeAislado } from '../../utils/printDoc';
 
 export function toggleZenMode(): void {
   const mainGrid = document.getElementById('main-grid');
@@ -152,7 +151,7 @@ export function initUiSync(): void {
 
   if (actPrint) {
     actPrint.onclick = () => {
-      imprimirConIframeAislado();
+      window.dispatchEvent(new CustomEvent('open-print-modal'));
     };
   }
 

@@ -9,6 +9,7 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { ClientRouter } from 'astro:transitions';
 import GlobalModal from '../components/GlobalModal.astro';
 import GraphModal from '../components/GraphModal.astro';
+import ModalImpresion from '../components/ModalImpresion.astro';
 import { generateThemeCss } from '../utils/themeInjector';
 
 const {
@@ -38,6 +39,9 @@ const dynamicThemeCss = generateThemeCss();
       data-astro-rerun
     />
     <style is:global set:html={dynamicThemeCss}></style>
+
+    <!-- Datos estáticos del frontmatter accesibles por el motor de impresión -->
+    <script type="application/json" id="doc-frontmatter-data" set:html={JSON.stringify(frontmatter)}></script>
 
     <script is:inline>
       (function () {
@@ -129,6 +133,7 @@ const dynamicThemeCss = generateThemeCss();
     
     <GlobalModal />
     <GraphModal />
+    <ModalImpresion />
 
     <!-- BARRA DE NAVEGACIÓN INFERIOR (MÓVIL < 768px) -->
     <nav class="mobile-bottom-bar" id="mobile-bottom-bar" aria-label="Navegación móvil">

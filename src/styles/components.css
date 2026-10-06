@@ -553,3 +553,182 @@ html[data-has-slides="true"] .slide-trigger-btn {
   font-style: italic; 
   margin: 0; 
 }
+
+/* ==========================================================
+   9. MODAL DE IMPRESIÓN FORMAL
+   ========================================================== */
+.print-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.print-modal-overlay.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.print-modal-card {
+  width: 90vw;
+  max-width: 580px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  transform: scale(0.96);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.print-modal-overlay.is-active .print-modal-card {
+  transform: scale(1);
+}
+
+.print-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.25rem 1.5rem;
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.print-modal-header h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  color: var(--accent-color, #8b5cf6);
+  font-family: var(--ui-font);
+}
+
+.print-modal-header p {
+  margin: 0.3rem 0 0 0;
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.btn-close-print-modal {
+  background: transparent;
+  border: none;
+  color: var(--text-color);
+  font-size: 1.1rem;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.15s;
+}
+
+.btn-close-print-modal:hover { opacity: 1; }
+
+.print-modal-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+  max-height: 65vh;
+  overflow-y: auto;
+}
+
+.print-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.print-field-group label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  opacity: 0.85;
+}
+
+.print-select {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background-color: var(--header-bg);
+  color: var(--text-color);
+  font-family: var(--ui-font);
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+.print-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.print-switches-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding: 0.5rem 0;
+}
+
+.print-switch-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.print-switch-label input[type="checkbox"] {
+  accent-color: var(--accent-color, #8b5cf6);
+  width: 1rem;
+  height: 1rem;
+}
+
+.print-range {
+  width: 100%;
+  accent-color: var(--accent-color, #8b5cf6);
+  cursor: pointer;
+}
+
+.print-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: var(--header-bg);
+  border-top: 1px solid var(--border-color);
+}
+
+.btn-cancel-print {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.btn-confirm-print {
+  background: var(--accent-color, #8b5cf6);
+  color: white;
+  border: none;
+  padding: 0.5rem 1.25rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  transition: opacity 0.15s;
+}
+
+.btn-confirm-print:hover { opacity: 0.9; }

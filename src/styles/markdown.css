@@ -8,11 +8,23 @@
   font-family: var(--doc-font);
 }
 
-.main-content::after,
-.sticky-panel::after {
-  content: "";
-  display: block;
-  height: 15vh;
+/* Solo para scroll holgado en pantalla web, nunca en papel */
+@media screen {
+  .main-content::after,
+  .sticky-panel::after {
+    content: "";
+    display: block;
+    height: 15vh;
+  }
+}
+
+@media print {
+  .main-content::after,
+  .sticky-panel::after {
+    display: none !important;
+    content: none !important;
+    height: 0 !important;
+  }
 }
 
 /* Espaciado de imágenes en lectura */

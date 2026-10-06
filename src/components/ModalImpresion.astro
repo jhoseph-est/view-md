@@ -1,0 +1,192 @@
+---
+// src/components/ModalImpresion.astro
+import estilosDisponibles from '../config/estilos-base.json';
+import plantillasDisponibles from '../config/plantillas-impresion.json';
+import caratulasDisponibles from '../config/caratulas.json';
+---
+
+<div id="print-config-modal" class="print-modal-overlay" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="print-modal-card">
+    <div class="print-modal-header">
+      <div class="header-info">
+        <h3>Configuración de Impresión</h3>
+        <p>Ajusta el estilo, carátula y geometría antes de enviar a papel o PDF (Modo Claro).</p>
+      </div>
+      <button type="button" class="btn-close-print-modal" id="btn-close-print-modal" aria-label="Cerrar modal">✕</button>
+    </div>
+
+    <div class="print-modal-body">
+      <!-- 1. Estilo Visual de Texto -->
+      <div class="print-field-group">
+        <label for="print-select-estilo">Estilo Visual</label>
+        <select id="print-select-estilo" class="print-select">
+          {Object.entries(estilosDisponibles).map(([id, config]) => (
+            <option value={id}>{config.nombre}</option>
+          ))}
+        </select>
+        <small id="print-tema-aviso" style="display:none; color: var(--accent-color); font-size: 0.75rem; margin-top: 2px;">
+          Fijado por el frontmatter del apunte.
+        </small>
+      </div>
+
+      <!-- 2. Plantilla de Párrafo -->
+      <div class="print-field-group">
+        <label for="print-select-plantilla">Plantilla de Párrafo y Sangría</label>
+        <select id="print-select-plantilla" class="print-select">
+          {Object.entries(plantillasDisponibles).map(([id, config]) => (
+            <option value={id}>{config.nombre}</option>
+          ))}
+        </select>
+      </div>
+
+      <!-- 3. Portada y Cierre (Mismo catálogo) -->
+      <div class="print-grid-2">
+        <div class="print-field-group">
+          <label for="print-select-caratula">Carátula (Portada)</label>
+          <select id="print-select-caratula" class="print-select">
+            <option value="ninguna">Sin carátula</option>
+            {Object.entries(caratulasDisponibles).map(([id, config]) => (
+              <option value={id}>{config.nombre}</option>
+            ))}
+          </select>
+        </div>
+
+        <div class="print-field-group">
+          <label for="print-select-cierre">Hoja de Cierre (Final)</label>
+          <select id="print-select-cierre" class="print-select">
+            <option value="ninguna">Sin cierre</option>
+            {Object.entries(caratulasDisponibles).map(([id, config]) => (
+              <option value={id}>{config.nombre}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <!-- 4. Switches de Estructura -->
+      <div class="print-switches-row">
+        <label class="print-switch-label">
+          <input type="checkbox" id="print-check-respeto" />
+          <span>Hoja de respeto (en blanco)</span>
+        </label>
+
+        <label class="print-switch-label">
+          <input type="checkbox" id="print-check-indice" checked />
+          <span>Incluir Índice Formal</span>
+        </label>
+      </div>
+
+      <!-- 5. Formato de Hoja y Márgenes -->
+      <div class="print-grid-2">
+        <div class="print-field-group">
+          <label for="print-select-formato">Tamaño de Hoja</label>
+          <select id="print-select-formato" class="print-select">
+            <option value="A4">A4 (210 × 297 mm)</option>
+            <option value="Carta">Carta (8.5 × 11 in)</option>
+          </select>
+        </div>
+
+        <div class="print-field-group">
+          <label for="print-range-margen">Márgenes Laterales (<span id="print-val-margen">2.54</span> cm)</label>
+          <input type="range" id="print-range-margen" min="1.0" max="3.5" step="0.1" value="2.54" class="print-range" />
+        </div>
+      </div>
+    </div>
+
+    <div class="print-modal-footer">
+      <button type="button" class="btn-cancel-print" id="btn-cancel-print">Cancelar</button>
+      <button type="button" class="btn-confirm-print" id="btn-confirm-print">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/>
+        </svg>
+        <span>Imprimir Documento</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { ejecutarImpresionAislada, type OpcionesImpresion } from '../utils/printDoc';
+
+  function setupPrintModal() {
+    const modal = document.getElementById('print-config-modal');
+    const closeBtn = document.getElementById('btn-close-print-modal');
+    const cancelBtn = document.getElementById('btn-cancel-print');
+    const confirmBtn = document.getElementById('btn-confirm-print');
+    const rangeMargen = document.getElementById('print-range-margen') as HTMLInputElement | null;
+    const valMargen = document.getElementById('print-val-margen');
+
+    if (!modal) return;
+
+    if (rangeMargen && valMargen) {
+      rangeMargen.oninput = () => {
+        valMargen.textContent = rangeMargen.value;
+      };
+    }
+
+    function cerrarModal() {
+      modal?.classList.remove('is-active');
+      modal?.setAttribute('aria-hidden', 'true');
+    }
+
+    if (closeBtn) closeBtn.onclick = cerrarModal;
+    if (cancelBtn) cancelBtn.onclick = cerrarModal;
+
+    modal.onclick = (e) => {
+      if (e.target === modal) cerrarModal();
+    };
+
+    // Escuchar el evento de apertura global
+    window.addEventListener('open-print-modal', () => {
+      const html = document.documentElement;
+      const temaForzado = html.getAttribute('data-tema-doc');
+      const estiloSelect = document.getElementById('print-select-estilo') as HTMLSelectElement | null;
+      const avisoTema = document.getElementById('print-tema-aviso');
+
+      if (estiloSelect) {
+        if (temaForzado) {
+          estiloSelect.value = temaForzado;
+          estiloSelect.disabled = true;
+          if (avisoTema) avisoTema.style.display = 'block';
+        } else {
+          estiloSelect.disabled = false;
+          estiloSelect.value = html.getAttribute('data-estilo') || 'moderno';
+          if (avisoTema) avisoTema.style.display = 'none';
+        }
+      }
+
+      modal.classList.add('is-active');
+      modal.setAttribute('aria-hidden', 'false');
+    });
+
+    if (confirmBtn) {
+      confirmBtn.onclick = async () => {
+        const estiloId = (document.getElementById('print-select-estilo') as HTMLSelectElement)?.value || 'moderno';
+        const plantillaId = (document.getElementById('print-select-plantilla') as HTMLSelectElement)?.value || 'informe-uni';
+        const caratulaId = (document.getElementById('print-select-caratula') as HTMLSelectElement)?.value || 'ninguna';
+        const cierreId = (document.getElementById('print-select-cierre') as HTMLSelectElement)?.value || 'ninguna';
+        const hojaRespeto = (document.getElementById('print-check-respeto') as HTMLInputElement)?.checked || false;
+        const mostrarIndice = (document.getElementById('print-check-indice') as HTMLInputElement)?.checked || false;
+        const formatoHoja = ((document.getElementById('print-select-formato') as HTMLSelectElement)?.value as 'A4' | 'Carta') || 'A4';
+        const margen = `${rangeMargen?.value || '2.54'}cm`;
+
+        const opts: OpcionesImpresion = {
+          estiloId,
+          plantillaId,
+          caratulaId,
+          cierreId,
+          hojaRespeto,
+          mostrarIndice,
+          formatoHoja,
+          margenSuperior: margen,
+          margenInferior: margen,
+          margenLateral: margen
+        };
+
+        cerrarModal();
+        await ejecutarImpresionAislada(opts);
+      };
+    }
+  }
+
+  document.addEventListener('astro:page-load', setupPrintModal);
+</script>

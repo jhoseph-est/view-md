@@ -2,47 +2,65 @@
   "uni-oficial": {
     "id": "uni-oficial",
     "nombre": "Oficial UNI (Informe / Tesis)",
-    "descripcion": "Membrete superior jerárquico, escudo centrado, autores a dos columnas y pie formal.",
-    "mostrarPortada": true,
+    "alineacion": "center",
     "logo": {
-      "ruta": "/assets/logos/logo-uni.png",
       "altoMaximoMm": 45,
-      "margenVertical": "1.5rem"
-    },
-    "membrete": {
-      "institucion": "UNIVERSIDAD NACIONAL DE INGENIERÍA",
-      "facultad": "FACULTAD DE INGENIERÍA MECÁNICA",
-      "escuela": "Escuela Profesional de Ingeniería Mecánica",
-      "tamanoInstitucion": "14pt",
-      "tamanoFacultad": "11pt",
-      "tamanoEscuela": "10pt"
+      "mostrar": true
     },
     "titulo": {
-      "tamano": "15pt",
-      "peso": "800",
-      "transformacion": "uppercase",
-      "interlineado": "1.3"
+      "tamanoPt": 14,
+      "transformacion": "uppercase"
     },
-    "subtitulo": {
-      "tamano": "10.5pt",
-      "estilo": "italic"
-    },
-    "autores": {
-      "anchoTabla": "85%",
-      "tamanoFuente": "9.5pt",
-      "alineacionEtiqueta": "left",
-      "alineacionValor": "right"
-    },
-    "pie": {
-      "ciudad": "LIMA — PERÚ",
-      "tamanoFuente": "9.5pt",
-      "peso": "700"
-    }
+    "mostrarDocente": true,
+    "mostrarIntegrantes": true,
+    "mostrarPie": true
   },
-  "paper-sin-portada": {
-    "id": "paper-sin-portada",
-    "nombre": "Sin Carátula (Paper / Monografía Breve)",
-    "descripcion": "El documento arranca de inmediato con el título y el cuerpo del texto en la página 1.",
-    "mostrarPortada": false
+  "clasica-centrada": {
+    "id": "clasica-centrada",
+    "nombre": "Monografía Clásica Centrada",
+    "alineacion": "center",
+    "logo": {
+      "altoMaximoMm": 35,
+      "mostrar": true
+    },
+    "titulo": {
+      "tamanoPt": 15,
+      "transformacion": "none"
+    },
+    "mostrarDocente": true,
+    "mostrarIntegrantes": true,
+    "mostrarPie": true
+  },
+  "contraportada-cierre": {
+    "id": "contraportada-cierre",
+    "nombre": "Contraportada Limpia (Cierre)",
+    "alineacion": "center",
+    "logo": {
+      "altoMaximoMm": 40,
+      "mostrar": true
+    },
+    "titulo": {
+      "tamanoPt": 12,
+      "transformacion": "uppercase"
+    },
+    "mostrarDocente": false,
+    "mostrarIntegrantes": false,
+    "mostrarPie": true
+  },
+  "solo-firmas": {
+    "id": "solo-firmas",
+    "nombre": "Hoja de Aprobación / Firmas",
+    "alineacion": "left",
+    "logo": {
+      "altoMaximoMm": 25,
+      "mostrar": false
+    },
+    "titulo": {
+      "tamanoPt": 11,
+      "transformacion": "uppercase"
+    },
+    "mostrarDocente": true,
+    "mostrarIntegrantes": true,
+    "mostrarPie": true
   }
 }
