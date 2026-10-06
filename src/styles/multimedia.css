@@ -150,8 +150,15 @@ html[data-modo="claro"] .reveal video {
   color: #ffffff !important;
 }
 
-/* 4. Aislamiento de SVG Embebidos */
-.main-content svg:not(.mermaid-viewport svg) {
+/* Aplica a SVGs genéricos del contenido */
+.main-content svg {
   max-width: 100%;
   height: auto;
+}
+
+/* Excepción directa e inmediata: restaurar los SVGs de diagramas y matemáticas */
+.mermaid-viewport svg,
+.katex svg {
+  max-width: none;
+  height: initial;
 }
