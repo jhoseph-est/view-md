@@ -3,7 +3,6 @@
 .main-content article {
   color: var(--text-color);
   font-family: var(--doc-font);
-  line-height: var(--doc-line-height);
 }
 
 .main-content::after, .sticky-panel::after {
@@ -109,12 +108,18 @@ html[data-modo="oscuro"] .main-content th {
 }
 
 /* ==========================================================
-   ALINEACIÓN, SCROLL NATIVO Y COLOR PARA KaTeX
+   ESTILOS Y AISLAMIENTO DE KATEX / LATEX
    ========================================================== */
-.main-content .katex {
-  color: var(--color-math);
+
+/* Color y tamaño base de la fórmula (heredable a sus elementos hijos) */
+.main-content .katex,
+.katex {
+  color: var(--latex-color) !important;
+  font-size: var(--latex-font-size);
+  border-color: currentColor;
 }
 
+/* Contenedor en bloque ($$ ... $$) */
 .main-content .katex-display {
   display: block !important;
   width: 100% !important;
@@ -145,6 +150,18 @@ html[data-modo="oscuro"] .main-content th {
   display: inline-table !important;
 }
 
+/* Líneas de raíz cuadrada y fracciones respetan el color sin deformarse */
+.katex .sqrt > .vlist-t {
+  border-top-color: currentColor !important;
+}
+
+.katex .frac-line {
+  border-bottom-color: currentColor !important;
+}
+
+/* ==========================================================
+   ESTRUCTURA DEL CONTENEDOR PRINCIPAL
+   ========================================================== */
 .main-content {
   padding: var(--content-padding, 2rem 3rem);
   height: 100%;
@@ -220,7 +237,7 @@ html[data-modo="oscuro"] .main-content th {
   text-decoration-color: var(--accent-color);
 }
 
-/* Código estrictamente en línea (no afecta a los bloques pre de Shiki) */
+/* Código en línea (evita colisionar con bloques de Shiki) */
 .markdown-body :not(pre) > code {
   color: var(--color-codigo-inline);
   background-color: var(--bg-codigo-inline);
@@ -230,5 +247,3 @@ html[data-modo="oscuro"] .main-content th {
   font-size: 0.85em;
   font-weight: 500;
 }
-
-

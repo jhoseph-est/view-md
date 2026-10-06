@@ -1,8 +1,7 @@
 ---
 title: "SISTEMAS TERMODINÁMICOS Y DINÁMICA DE FLUIDOS COMPUTACIONAL"
 subtitulo: "Modelado multifísico de transferencia de calor, turbulencia y validación experimental"
-tipo: "informe"
-theme: "informe"
+mostrarCabecera: true
 plantilla: "informe-uni"
 institucion: "UNIVERSIDAD NACIONAL DE INGENIERÍA"
 facultad: "FACULTAD DE INGENIERÍA MECÁNICA"

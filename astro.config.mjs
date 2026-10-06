@@ -53,6 +53,7 @@ export default defineConfig({
         rehypeKatex,
         {
           strict: false,
+          output: 'htmlAndMathml'
         },
       ],
     ],
