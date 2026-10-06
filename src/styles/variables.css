@@ -1,6 +1,7 @@
 /* src/styles/variables.css */
+
 /* ==========================================================
-   1. TOKENS GLOBALES Y VARIABLES POR DEFECTO (MODO CLARO)
+   1. TOKENS GLOBALES Y VARIABLES BASE (MODO CLARO)
    ========================================================== */
 :root {
   /* Dimensiones de Interfaz */
@@ -13,30 +14,63 @@
   --radius-md: 10px;
   --radius-lg: 14px;
 
-  /* Contención Tipográfica */
+  /* Contención Tipográfica General */
   --ui-font: system-ui, -apple-system, sans-serif;
   --doc-font: system-ui, -apple-system, sans-serif;
   --title-font: system-ui, -apple-system, sans-serif;
   --code-font: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  --doc-line-height: 1.6;
+  --doc-line-height: 1.65;
+  --para-indent: 0cm;
+  --para-align: left;
 
-  /* Escala de Títulos */
-  --h1-size: 2.2rem;
-  --h2-size: 1.8rem;
-  --h3-size: 1.5rem;
-  --h4-size: 1.25rem;
-  --h5-size: 1.1rem;
-  --h6-size: 1rem;
-
-  /* Colores de Títulos */
+  /* --------------------------------------------------------
+     ENCABEZADOS INDEPENDIENTES (H1 a H6)
+     -------------------------------------------------------- */
+  /* H1 */
+  --font-h1: var(--title-font);
   --color-h1: #15803d;
-  --color-h2: #0f766e;
-  --color-h3: #1d4ed8;
-  --color-h4: #4338ca;
-  --color-h5: #6d28d9;
-  --color-h6: #475569;
+  --h1-size: 2.2rem;
+  --align-h1: left;
+  --border-h1: 1px solid var(--border-color);
 
-  /* Superficies y Textos Base */
+  /* H2 */
+  --font-h2: var(--title-font);
+  --color-h2: #0f766e;
+  --h2-size: 1.8rem;
+  --align-h2: left;
+  --border-h2: none;
+
+  /* H3 */
+  --font-h3: var(--title-font);
+  --color-h3: #1d4ed8;
+  --h3-size: 1.5rem;
+  --align-h3: left;
+  --border-h3: none;
+
+  /* H4 */
+  --font-h4: var(--title-font);
+  --color-h4: #4338ca;
+  --h4-size: 1.25rem;
+  --align-h4: left;
+  --border-h4: none;
+
+  /* H5 */
+  --font-h5: var(--title-font);
+  --color-h5: #6d28d9;
+  --h5-size: 1.1rem;
+  --align-h5: left;
+  --border-h5: none;
+
+  /* H6 */
+  --font-h6: var(--title-font);
+  --color-h6: #475569;
+  --h6-size: 1.0rem;
+  --align-h6: left;
+  --border-h6: none;
+
+  /* --------------------------------------------------------
+     SUPERFICIES Y TEXTOS BASE
+     -------------------------------------------------------- */
   --bg-color: #ffffff;
   --header-bg: #f8fafc;
   --card-bg: #f1f5f9;
@@ -60,11 +94,114 @@
   --link-color: #2563eb;
   --link-hover: #1d4ed8;
 
-  /* Bloques de Código */
+  /* --------------------------------------------------------
+     FÓRMULAS MATEMÁTICAS (KaTeX)
+     -------------------------------------------------------- */
+  --color-math: var(--text-color);
+  --color-math-block-bg: rgba(0, 0, 0, 0.02);
+  --color-math-border: transparent;
+
+  /* --------------------------------------------------------
+     TOKENS INDEPENDIENTES PARA MERMAID (MODO CLARO)
+     -------------------------------------------------------- */
+  /* Comunes y Fallbacks */
+  --mm-font-family: var(--doc-font);
+  --mm-font-size: 13px;
+  --mm-node-bg: #f8fafc;
+  --mm-node-border: #0ea5e9;
+  --mm-line-color: #0284c7;
+  --mm-text-color: #0f172a;
+  --mm-header-bg: #e0f2fe;
+  --mm-label-bg: #ffffff;
+  --mm-cluster-bg: #f1f5f9;
+  --mm-cluster-border: #cbd5e1;
+
+  /* 1. Flowchart */
+  --mm-flow-bg: var(--mm-node-bg);
+  --mm-flow-border: var(--mm-node-border);
+  --mm-flow-text: var(--mm-text-color);
+  --mm-flow-line: var(--mm-line-color);
+  --mm-flow-label-bg: var(--mm-label-bg);
+  --mm-flow-cluster-bg: var(--mm-cluster-bg);
+  --mm-flow-cluster-border: var(--mm-cluster-border);
+
+  /* 2. Sequence */
+  --mm-seq-actor-bg: #f8fafc;
+  --mm-seq-actor-border: #0ea5e9;
+  --mm-seq-actor-text: var(--mm-text-color);
+  --mm-seq-line: #0284c7;
+  --mm-seq-signal-text: var(--mm-text-color);
+  --mm-seq-note-bg: #fdf4ff;
+  --mm-seq-note-border: #c084fc;
+  --mm-seq-note-text: var(--mm-text-color);
+  --mm-seq-activation-bg: #e0f2fe;
+  --mm-seq-activation-border: #0284c7;
+
+  /* 3. Class Diagram */
+  --mm-class-bg: var(--mm-node-bg);
+  --mm-class-border: var(--mm-node-border);
+  --mm-class-text: var(--mm-text-color);
+  --mm-class-line: var(--mm-line-color);
+
+  /* 4. State Diagram */
+  --mm-state-bg: var(--mm-node-bg);
+  --mm-state-border: var(--mm-node-border);
+  --mm-state-text: var(--mm-text-color);
+  --mm-state-line: var(--mm-line-color);
+  --mm-state-alt-bg: var(--mm-header-bg);
+
+  /* 5. Entity Relationship (ER) */
+  --mm-er-header-bg: #e0f2fe;
+  --mm-er-border: #0ea5e9;
+  --mm-er-row-odd: #ffffff;
+  --mm-er-row-even: #f8fafc;
+  --mm-er-text: var(--mm-text-color);
+  --mm-er-line: #0284c7;
+
+  /* 6. Gantt */
+  --mm-gantt-text: var(--mm-text-color);
+  --mm-gantt-task-bg: var(--mm-node-bg);
+  --mm-gantt-task-border: var(--mm-node-border);
+  --mm-gantt-active: #0284c7;
+  --mm-gantt-done: #059669;
+  --mm-gantt-crit: #dc2626;
+  --mm-gantt-grid: var(--mm-cluster-border);
+
+  /* 7. GitGraph */
+  --mm-git-1: #0284c7;
+  --mm-git-2: #7c3aed;
+  --mm-git-3: #059669;
+  --mm-git-4: #d97706;
+  --mm-git-commit-label-text: var(--mm-text-color);
+  --mm-git-commit-label-bg: var(--mm-node-bg);
+
+  /* 8. Quadrant Chart */
+  --mm-quad-border: #0ea5e9;
+  --mm-quad-line: #0ea5e9;
+  --mm-quad-point-fill: #0ea5e9;
+  --mm-quad-point-text: var(--mm-text-color);
+  --mm-quad-text: var(--mm-text-color);
+  --mm-q1: rgba(14, 165, 233, 0.15);
+  --mm-q2: rgba(34, 197, 94, 0.15);
+  --mm-q3: rgba(239, 68, 68, 0.15);
+  --mm-q4: rgba(245, 158, 11, 0.15);
+
+  /* 9. Pie Chart */
+  --mm-pie-1: #0284c7;
+  --mm-pie-2: #059669;
+  --mm-pie-3: #d97706;
+  --mm-pie-border: var(--mm-node-border);
+  --mm-pie-text: var(--mm-text-color);
+
+  /* 10. Mindmap */
+  --mm-mindmap-bg: var(--mm-node-bg);
+  --mm-mindmap-border: var(--mm-node-border);
+  --mm-mindmap-text: var(--mm-text-color);
+  --mm-mindmap-line: var(--mm-line-color);
+
+  /* Citas, Bloques de Código y Callouts */
   --code-border-color: #334155;
   --code-toolbar-bg: rgba(15, 23, 42, 0.85);
-
-  /* Callouts Tokens */
   --callout-note: #0284c7;
   --callout-info: #0284c7;
   --callout-todo: #2563eb;
@@ -75,35 +212,13 @@
   --callout-danger: #dc2626;
   --callout-example: #9333ea;
   --callout-quote: #64748b;
-
-  /* Parámetros de Impresión / Hoja Dinámica */
-  --print-page-padding: 2.54cm;
-  --print-font-size: 11pt;
-  --print-font-family: system-ui, -apple-system, sans-serif;
-  --print-line-height: 1.6;
-  --print-para-indent: 0cm;
-  --print-para-align: left; /* 'justify' o 'left' según la plantilla */
-
-  --print-h1-size: 16pt;
-  --print-h2-size: 13pt;
-  --print-h3-size: 12pt;
-
-  /* Tablas en Impresión (Libre: APA, rejilla o minimalista) */
-  --print-table-border-top: 1.5pt solid #000000;
-  --print-table-border-bottom: 1.5pt solid #000000;
-  --print-table-border-cells: none; /* '1px solid #000' si es cuadrícula completa */
-  --print-table-header-bg: transparent;
-
-  /* Código y Multimedia en Web */
-  --table-border: var(--border-color);
-  --table-header-bg: var(--accent-subtle);
-  --code-radius: var(--radius-md, 8px);
 }
 
 /* ==========================================================
-   2. OVERRIDES POR DEFECTO (MODO OSCURO)
+   2. OVERRIDES INDEPENDIENTES (MODO OSCURO)
    ========================================================== */
 html[data-modo="oscuro"] {
+  /* Superficies y Textos */
   --bg-color: #0f172a;
   --header-bg: #1e293b;
   --card-bg: #1e293b;
@@ -111,22 +226,120 @@ html[data-modo="oscuro"] {
   --text-color: #f8fafc;
   --text-muted: #94a3b8;
 
+  /* Énfasis */
   --color-negrita: #ffffff;
   --color-cursiva: #a3e635;
   --color-negrita-cursiva: #c084fc;
   --color-tachado: #64748b;
   --color-codigo-inline: #fb923c;
   --bg-codigo-inline: rgba(251, 146, 60, 0.15);
-
   --link-color: #60a5fa;
   --link-hover: #93c5fd;
 
+  /* Encabezados en Modo Oscuro */
   --color-h1: #4ade80;
   --color-h2: #2dd4bf;
   --color-h3: #60a5fa;
   --color-h4: #818cf8;
   --color-h5: #a78bfa;
   --color-h6: #94a3b8;
+
+  /* KaTeX */
+  --color-math: #f8fafc;
+  --color-math-block-bg: rgba(255, 255, 255, 0.03);
+
+  /* Mermaid (Modo Oscuro) */
+  --mm-node-bg: #1e293b;
+  --mm-node-border: #38bdf8;
+  --mm-line-color: #38bdf8;
+  --mm-text-color: #f8fafc;
+  --mm-header-bg: #0f172a;
+  --mm-label-bg: #0f172a;
+  --mm-cluster-bg: #0f172a;
+  --mm-cluster-border: #334155;
+
+  /* 1. Flowchart */
+  --mm-flow-bg: #1e293b;
+  --mm-flow-border: #38bdf8;
+  --mm-flow-text: #f8fafc;
+  --mm-flow-line: #38bdf8;
+  --mm-flow-label-bg: #0f172a;
+  --mm-flow-cluster-bg: #0f172a;
+  --mm-flow-cluster-border: #334155;
+
+  /* 2. Sequence */
+  --mm-seq-actor-bg: #1e293b;
+  --mm-seq-actor-border: #38bdf8;
+  --mm-seq-actor-text: #f8fafc;
+  --mm-seq-line: #38bdf8;
+  --mm-seq-signal-text: #f8fafc;
+  --mm-seq-note-bg: #4c1d95;
+  --mm-seq-note-border: #a855f7;
+  --mm-seq-note-text: #f8fafc;
+  --mm-seq-activation-bg: #38bdf8;
+  --mm-seq-activation-border: #38bdf8;
+
+  /* 3. Class Diagram */
+  --mm-class-bg: #1e293b;
+  --mm-class-border: #38bdf8;
+  --mm-class-text: #f8fafc;
+  --mm-class-line: #38bdf8;
+
+  /* 4. State Diagram */
+  --mm-state-bg: #1e293b;
+  --mm-state-border: #38bdf8;
+  --mm-state-text: #f8fafc;
+  --mm-state-line: #38bdf8;
+  --mm-state-alt-bg: #0f172a;
+
+  /* 5. Entity Relationship (ER) */
+  --mm-er-header-bg: #0f172a;
+  --mm-er-border: #38bdf8;
+  --mm-er-row-odd: #0f172a;
+  --mm-er-row-even: #1e293b;
+  --mm-er-text: #f8fafc;
+  --mm-er-line: #38bdf8;
+
+  /* 6. Gantt */
+  --mm-gantt-text: #f8fafc;
+  --mm-gantt-task-bg: #1e293b;
+  --mm-gantt-task-border: #38bdf8;
+  --mm-gantt-active: #38bdf8;
+  --mm-gantt-done: #10b981;
+  --mm-gantt-crit: #ef4444;
+  --mm-gantt-grid: #334155;
+
+  /* 7. GitGraph */
+  --mm-git-1: #38bdf8;
+  --mm-git-2: #a855f7;
+  --mm-git-3: #10b981;
+  --mm-git-4: #f59e0b;
+  --mm-git-commit-label-text: #f8fafc;
+  --mm-git-commit-label-bg: #1e293b;
+
+  /* 8. Quadrant Chart */
+  --mm-quad-border: #38bdf8;
+  --mm-quad-line: #38bdf8;
+  --mm-quad-point-fill: #38bdf8;
+  --mm-quad-point-text: #f8fafc;
+  --mm-quad-text: #f8fafc;
+  --mm-q1: rgba(56, 189, 248, 0.15);
+  --mm-q2: rgba(16, 185, 129, 0.15);
+  --mm-q3: rgba(244, 63, 94, 0.15);
+  --mm-q4: rgba(234, 179, 8, 0.15);
+
+  /* 9. Pie Chart */
+  --mm-pie-1: #38bdf8;
+  --mm-pie-2: #10b981;
+  --mm-pie-3: #f59e0b;
+  --mm-pie-border: #38bdf8;
+  --mm-pie-text: #f8fafc;
+
+  /* 10. Mindmap */
+  --mm-mindmap-bg: #1e293b;
+  --mm-mindmap-border: #38bdf8;
+  --mm-mindmap-text: #f8fafc;
+  --mm-mindmap-line: #38bdf8;
 
   /* Callouts en Modo Oscuro */
   --callout-note: #38bdf8;
@@ -141,16 +354,7 @@ html[data-modo="oscuro"] {
   --callout-quote: #94a3b8;
 }
 
-/* Modificadores de Densidad y Ancho */
+/* Densidad de Fuente (Escala rem de raíz) */
 html[data-texto="pequeno"] { --font-size: 14px; }
 html[data-texto="estandar"] { --font-size: 16px; }
 html[data-texto="grande"] { --font-size: 18px; }
-
-html[data-ancho="ancho"] {
-  --content-max-width: 1400px;
-  --content-padding: 2rem 4rem;
-}
-html[data-ancho="normal"] {
-  --content-max-width: 800px;
-  --content-padding: 2rem 3rem;
-}

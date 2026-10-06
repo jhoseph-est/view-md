@@ -2,6 +2,7 @@
 // src/layouts/Base.astro
 import '../styles/base.css';
 
+import EditorDiseno from '../components/EditorDiseno.astro';
 import ActivityBar from '../components/ActivityBar.astro';
 import LeftSidebar from '../components/LeftSidebar.astro';
 import RightSidebar from '../components/RightSidebar.astro';
@@ -134,7 +135,8 @@ const dynamicThemeCss = generateThemeCss();
     <GlobalModal />
     <GraphModal />
     <ModalImpresion />
-
+    <EditorDiseno />
+    
     <!-- BARRA DE NAVEGACIÓN INFERIOR (MÓVIL < 768px) -->
     <nav class="mobile-bottom-bar" id="mobile-bottom-bar" aria-label="Navegación móvil">
       <button class="m-btn active" data-drawer="m-drawer-explorer" title="Explorador">

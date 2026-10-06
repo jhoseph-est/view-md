@@ -1,0 +1,746 @@
+---
+// src/components/EditorDiseno.astro
+---
+
+<aside id="editor-diseno-drawer" class="editor-drawer" aria-hidden="true">
+  <!-- Cabecera del Inspector -->
+  <div class="editor-header">
+    <div class="editor-title-box">
+      <h3>Inspector de Diseño</h3>
+      <span class="editor-badge">Tokens en vivo</span>
+    </div>
+    <button type="button" id="btn-close-editor" class="editor-close-btn" aria-label="Cerrar Inspector">✕</button>
+  </div>
+
+  <div class="editor-body">
+    <!-- Pestañas de Áreas -->
+    <div class="editor-tabs">
+      <button type="button" class="tab-btn active" data-tab="tab-estilo">Estilos Web</button>
+      <button type="button" class="tab-btn" data-tab="tab-geometria">Párrafo</button>
+      <button type="button" class="tab-btn" data-tab="tab-caratula">Carátula / Cierre</button>
+    </div>
+
+    <!-- PESTAÑA 1: ESTILOS WEB -->
+    <div id="tab-estilo" class="tab-content active">
+      <div class="control-card">
+        <div class="control-row">
+          <label for="ed-style-name">Nombre del Tema</label>
+          <input type="text" id="ed-style-name" class="ed-input-text" value="Mi Tema Personalizado" />
+        </div>
+        <div class="control-row" style="margin-top: 0.5rem;">
+          <label>Modo a calibrar</label>
+          <div class="mode-switch-group">
+            <button type="button" class="mode-btn active" id="btn-mode-claro">Modo Claro</button>
+            <button type="button" class="mode-btn" id="btn-mode-oscuro">Modo Oscuro</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fuentes Globales Base -->
+      <div class="control-section-title">Tipografía General</div>
+      <div class="control-card">
+        <div class="control-row-col">
+          <label for="font-doc">Fuente del Cuerpo (Párrafo)</label>
+          <select id="font-doc" class="ed-select">
+            <option value="system-ui, -apple-system, sans-serif">Sans-Serif (Sistema: Segoe UI, Roboto)</option>
+            <option value="Georgia, Cambria, 'Times New Roman', serif">Serif Editorial (Georgia, Cambria)</option>
+            <option value="'Times New Roman', Times, serif">Serif Clásica (Times New Roman)</option>
+            <option value="'Fira Code', Consolas, monospace">Monospace (Fira Code, Código)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Jerarquía Tipográfica Granular (H1 y H2 como modelos) -->
+      <div class="control-section-title">Encabezados: Fuentes, Alineación y Rayita</div>
+      <div class="control-card">
+        <!-- CONTROL H1 -->
+        <div class="heading-block-editor">
+          <div class="heading-header-row">
+            <span class="heading-tag">H1</span>
+            <input type="color" id="col-h1" value="#15803d" title="Color H1" />
+            <div class="slider-field">
+              <input type="range" id="size-h1" min="1.4" max="3.0" step="0.05" value="2.2" />
+              <span class="slider-val" id="val-h1">2.2rem</span>
+            </div>
+          </div>
+
+          <div class="heading-sub-controls">
+            <!-- Selector de Fuente para H1 -->
+            <select id="font-h1" class="ed-mini-select" title="Tipo de Letra para H1">
+              <option value="var(--title-font)">Fuente por Defecto</option>
+              <option value="system-ui, -apple-system, sans-serif">Sans-Serif (Moderno)</option>
+              <option value="Georgia, Cambria, 'Times New Roman', serif">Serif (Editorial)</option>
+              <option value="'Times New Roman', Times, serif">Times New Roman (Formal)</option>
+              <option value="'Fira Code', monospace">Monospace (Técnico)</option>
+            </select>
+
+            <!-- Alineación H1 -->
+            <select id="align-h1" class="ed-mini-select" title="Alineación H1">
+              <option value="left">Izquierda</option>
+              <option value="center">Centro</option>
+              <option value="right">Derecha</option>
+            </select>
+
+            <!-- Rayita H1 -->
+            <label class="switch-field-mini">
+              <input type="checkbox" id="border-h1" checked />
+              <span>Rayita</span>
+            </label>
+          </div>
+        </div>
+
+        <hr style="border: 0.5px solid var(--border-color); margin: 0.6rem 0;" />
+
+        <!-- CONTROL H2 -->
+        <div class="heading-block-editor">
+          <div class="heading-header-row">
+            <span class="heading-tag">H2</span>
+            <input type="color" id="col-h2" value="#0f766e" title="Color H2" />
+            <div class="slider-field">
+              <input type="range" id="size-h2" min="1.2" max="2.4" step="0.05" value="1.8" />
+              <span class="slider-val" id="val-h2">1.8rem</span>
+            </div>
+          </div>
+
+          <div class="heading-sub-controls">
+            <!-- Selector de Fuente para H2 -->
+            <select id="font-h2" class="ed-mini-select" title="Tipo de Letra para H2">
+              <option value="var(--title-font)">Fuente por Defecto</option>
+              <option value="system-ui, -apple-system, sans-serif">Sans-Serif (Moderno)</option>
+              <option value="Georgia, Cambria, 'Times New Roman', serif">Serif (Editorial)</option>
+              <option value="'Times New Roman', Times, serif">Times New Roman (Formal)</option>
+              <option value="'Fira Code', monospace">Monospace (Técnico)</option>
+            </select>
+
+            <!-- Alineación H2 -->
+            <select id="align-h2" class="ed-mini-select" title="Alineación H2">
+              <option value="left">Izquierda</option>
+              <option value="center">Centro</option>
+              <option value="right">Derecha</option>
+            </select>
+
+            <!-- Rayita H2 -->
+            <label class="switch-field-mini">
+              <input type="checkbox" id="border-h2" />
+              <span>Rayita</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ecuaciones KaTeX y Resaltado -->
+      <div class="control-section-title">Ecuaciones KaTeX y Resaltado</div>
+      <div class="control-card grid-colors">
+        <div class="color-item">
+          <label for="col-katex">Color Glifo KaTeX</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-katex" value="#0f172a" />
+            <span class="color-hex" id="hex-katex">#0f172a</span>
+          </div>
+        </div>
+        <div class="color-item">
+          <label for="col-mark">Fondo Resaltado</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-mark" value="#eab308" />
+            <span class="color-hex" id="hex-mark">#eab308</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Superficies y Acentos -->
+      <div class="control-section-title">Superficies y Acentos</div>
+      <div class="control-card grid-colors">
+        <div class="color-item">
+          <label for="col-bg">Fondo Principal</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-bg" value="#ffffff" />
+            <span class="color-hex" id="hex-bg">#ffffff</span>
+          </div>
+        </div>
+        <div class="color-item">
+          <label for="col-header">Fondo Secundario</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-header" value="#f8fafc" />
+            <span class="color-hex" id="hex-header">#f8fafc</span>
+          </div>
+        </div>
+        <div class="color-item">
+          <label for="col-border">Bordes</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-border" value="#e2e8f0" />
+            <span class="color-hex" id="hex-border">#e2e8f0</span>
+          </div>
+        </div>
+        <div class="color-item">
+          <label for="col-accent">Color de Acento</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-accent" value="#8b5cf6" />
+            <span class="color-hex" id="hex-accent">#8b5cf6</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Textos y Énfasis -->
+      <div class="control-section-title">Colores de Prosa</div>
+      <div class="control-card grid-colors">
+        <div class="color-item">
+          <label for="col-text">Texto Base</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-text" value="#0f172a" />
+            <span class="color-hex" id="hex-text">#0f172a</span>
+          </div>
+        </div>
+        <div class="color-item">
+          <label for="col-bold">Negritas</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-bold" value="#020617" />
+            <span class="color-hex" id="hex-bold">#020617</span>
+          </div>
+        </div>
+        <div class="color-item">
+          <label for="col-italic">Cursivas</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-italic" value="#16a34a" />
+            <span class="color-hex" id="hex-italic">#16a34a</span>
+          </div>
+        </div>
+        <div class="color-item">
+          <label for="col-link">Enlaces</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-link" value="#2563eb" />
+            <span class="color-hex" id="hex-link">#2563eb</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Diagramas Mermaid Muestra -->
+      <div class="control-section-title">Mermaid: Colores por Diagrama</div>
+      <div class="control-card">
+        <div class="control-row">
+          <label><strong>Flowchart:</strong> Fondo Nodos</label>
+          <input type="color" id="col-mm-flow-bg" value="#f8fafc" />
+        </div>
+        <div class="control-row" style="margin-top: 0.4rem;">
+          <label><strong>Flowchart:</strong> Flechas / Bordes</label>
+          <input type="color" id="col-mm-flow-line" value="#0284c7" />
+        </div>
+        <hr style="border: 0.5px solid var(--border-color); margin: 0.4rem 0;" />
+        <div class="control-row">
+          <label><strong>ER Diagram:</strong> Cabecera Entidad</label>
+          <input type="color" id="col-mm-er-header" value="#e0f2fe" />
+        </div>
+        <div class="control-row" style="margin-top: 0.4rem;">
+          <label><strong>ER Diagram:</strong> Bordes / Líneas</label>
+          <input type="color" id="col-mm-er-border" value="#0ea5e9" />
+        </div>
+      </div>
+
+      <button type="button" class="btn-export-json" id="btn-export-estilo">
+        📋 Copiar JSON para estilos-base.json
+      </button>
+    </div>
+
+    <!-- PESTAÑA 2: GEOMETRÍA Y PÁRRAFOS -->
+    <div id="tab-geometria" class="tab-content">
+      <div class="control-card">
+        <div class="control-row">
+          <label for="ed-geo-name">Nombre de Plantilla</label>
+          <input type="text" id="ed-geo-name" class="ed-input-text" value="Formato Editorial Personalizado" />
+        </div>
+      </div>
+
+      <div class="control-section-title">Comportamiento del Párrafo</div>
+      <div class="control-card">
+        <div class="control-row-col">
+          <div class="label-with-val">
+            <label for="geo-indent">Sangría de Primera Línea</label>
+            <span id="val-indent">0 cm</span>
+          </div>
+          <input type="range" id="geo-indent" min="0.0" max="2.5" step="0.05" value="0" />
+        </div>
+
+        <div class="control-row-col" style="margin-top: 1rem;">
+          <div class="label-with-val">
+            <label for="geo-lineheight">Interlineado</label>
+            <span id="val-lineheight">1.65</span>
+          </div>
+          <input type="range" id="geo-lineheight" min="1.2" max="2.2" step="0.05" value="1.65" />
+        </div>
+
+        <div class="control-row" style="margin-top: 1rem;">
+          <label for="geo-align">Alineación de Texto</label>
+          <select id="geo-align" class="ed-select">
+            <option value="left">A la izquierda</option>
+            <option value="justify">Justificado</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="button" class="btn-export-json" id="btn-export-geometria">
+        📋 Copiar JSON para plantillas-impresion.json
+      </button>
+    </div>
+
+    <!-- PESTAÑA 3: CARÁTULAS Y CIERRES -->
+    <div id="tab-caratula" class="tab-content">
+      <div class="control-card">
+        <div class="control-row">
+          <label for="ed-cover-name">Nombre del Modelo</label>
+          <input type="text" id="ed-cover-name" class="ed-input-text" value="Carátula Formal Pro" />
+        </div>
+      </div>
+
+      <div class="control-section-title">Vista Previa en Vivo (Hoja Virtual)</div>
+      <div class="cover-preview-wrapper">
+        <div id="cover-live-canvas" class="cover-live-sheet"></div>
+      </div>
+
+      <div class="control-section-title">Diagramación de Elementos</div>
+      <div class="control-card">
+        <div class="control-row">
+          <label for="cov-align">Alineación General</label>
+          <select id="cov-align" class="ed-select">
+            <option value="center">Centrado</option>
+            <option value="left">Izquierda</option>
+          </select>
+        </div>
+
+        <div class="control-row-col" style="margin-top: 0.8rem;">
+          <div class="label-with-val">
+            <label for="cov-logosize">Alto Máximo de Logo</label>
+            <span id="val-logosize">40 mm</span>
+          </div>
+          <input type="range" id="cov-logosize" min="15" max="65" step="1" value="40" />
+        </div>
+
+        <div class="control-row-col" style="margin-top: 0.8rem;">
+          <div class="label-with-val">
+            <label for="cov-titlesize">Tamaño de Título</label>
+            <span id="val-titlesize">14 pt</span>
+          </div>
+          <input type="range" id="cov-titlesize" min="10" max="22" step="0.5" value="14" />
+        </div>
+
+        <div class="control-row" style="margin-top: 0.8rem;">
+          <label for="cov-transform">Transformación de Título</label>
+          <select id="cov-transform" class="ed-select">
+            <option value="uppercase">MAYÚSCULAS</option>
+            <option value="none">Normal / Tal cual</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="control-section-title">Bloques Visibles</div>
+      <div class="control-card">
+        <label class="switch-field">
+          <input type="checkbox" id="cov-show-logo" checked />
+          <span>Mostrar Escudo / Logotipo</span>
+        </label>
+        <label class="switch-field">
+          <input type="checkbox" id="cov-show-docente" checked />
+          <span>Mostrar Bloque de Docente</span>
+        </label>
+        <label class="switch-field">
+          <input type="checkbox" id="cov-show-integrantes" checked />
+          <span>Mostrar Bloque de Integrantes / Autor</span>
+        </label>
+        <label class="switch-field">
+          <input type="checkbox" id="cov-show-pie" checked />
+          <span>Mostrar Pie de Página (Ciudad / Año)</span>
+        </label>
+      </div>
+
+      <button type="button" class="btn-export-json" id="btn-export-caratula">
+        📋 Copiar JSON para caratulas.json
+      </button>
+    </div>
+  </div>
+</aside>
+
+<script>
+  function setupEditorDrawer() {
+    const drawer = document.getElementById('editor-diseno-drawer');
+    const closeBtn = document.getElementById('btn-close-editor');
+    const root = document.documentElement;
+    if (!drawer) return;
+
+    function toggleDrawer(open?: boolean) {
+      const isCurrentlyActive = drawer?.classList.contains('is-open');
+      const shouldOpen = open !== undefined ? open : !isCurrentlyActive;
+      
+      if (shouldOpen) {
+        drawer?.classList.add('is-open');
+        drawer?.setAttribute('aria-hidden', 'false');
+        updateCoverLivePreview();
+      } else {
+        drawer?.classList.remove('is-open');
+        drawer?.setAttribute('aria-hidden', 'true');
+      }
+    }
+
+    if (closeBtn) closeBtn.onclick = () => toggleDrawer(false);
+    window.addEventListener('toggle-editor-drawer', () => toggleDrawer());
+
+    // Pestañas
+    const tabs = drawer.querySelectorAll<HTMLButtonElement>('.tab-btn');
+    const contents = drawer.querySelectorAll<HTMLElement>('.tab-content');
+
+    tabs.forEach(btn => {
+      btn.onclick = () => {
+        tabs.forEach(b => b.classList.remove('active'));
+        contents.forEach(c => c.classList.remove('active'));
+
+        btn.classList.add('active');
+        const targetId = btn.getAttribute('data-tab');
+        if (targetId) {
+          document.getElementById(targetId)?.classList.add('active');
+          if (targetId === 'tab-caratula') updateCoverLivePreview();
+        }
+      };
+    });
+
+    // Conmutador Modo Claro / Oscuro
+    const btnClaro = document.getElementById('btn-mode-claro');
+    const btnOscuro = document.getElementById('btn-mode-oscuro');
+
+    btnClaro?.addEventListener('click', () => {
+      btnClaro.classList.add('active');
+      btnOscuro?.classList.remove('active');
+      root.setAttribute('data-modo', 'claro');
+      window.dispatchEvent(new Event('theme-changed'));
+    });
+
+    btnOscuro?.addEventListener('click', () => {
+      btnOscuro.classList.add('active');
+      btnClaro?.classList.remove('active');
+      root.setAttribute('data-modo', 'oscuro');
+      window.dispatchEvent(new Event('theme-changed'));
+    });
+
+    // --- TIPOGRAFÍAS REACTIVAS ---
+    const fontDoc = document.getElementById('font-doc') as HTMLSelectElement | null;
+    if (fontDoc) {
+      fontDoc.onchange = () => {
+        root.style.setProperty('--doc-font', fontDoc.value);
+      };
+    }
+
+    // Encabezados: Tipografía, Alineación y Rayita (Arquetipo replicable H1, H2, etc.)
+    ['h1', 'h2'].forEach(tag => {
+      const fontSel = document.getElementById(`font-${tag}`) as HTMLSelectElement | null;
+      if (fontSel) {
+        fontSel.onchange = () => {
+          root.style.setProperty(`--font-${tag}`, fontSel.value);
+        };
+      }
+
+      const alignSel = document.getElementById(`align-${tag}`) as HTMLSelectElement | null;
+      if (alignSel) {
+        alignSel.onchange = () => {
+          root.style.setProperty(`--align-${tag}`, alignSel.value);
+        };
+      }
+
+      const borderCheck = document.getElementById(`border-${tag}`) as HTMLInputElement | null;
+      if (borderCheck) {
+        borderCheck.onchange = () => {
+          root.style.setProperty(
+            `--border-${tag}`,
+            borderCheck.checked ? '1px solid var(--border-color)' : 'none'
+          );
+        };
+      }
+    });
+
+    // Sliders de fuentes
+    const sliderBindings = [
+      { id: 'size-h1', valId: 'val-h1', cssVar: '--h1-size', unit: 'rem' },
+      { id: 'size-h2', valId: 'val-h2', cssVar: '--h2-size', unit: 'rem' },
+      { id: 'geo-lineheight', valId: 'val-lineheight', cssVar: '--doc-line-height', unit: '' }
+    ];
+
+    sliderBindings.forEach(({ id, valId, cssVar, unit }) => {
+      const slider = document.getElementById(id) as HTMLInputElement | null;
+      const valSpan = document.getElementById(valId);
+      if (!slider || !valSpan) return;
+
+      slider.oninput = () => {
+        const val = `${slider.value}${unit}`;
+        valSpan.textContent = val;
+        root.style.setProperty(cssVar, val);
+      };
+    });
+
+    // Colores
+    const colorBindings = [
+      { id: 'col-bg', hexId: 'hex-bg', cssVar: '--bg-color' },
+      { id: 'col-header', hexId: 'hex-header', cssVar: '--header-bg' },
+      { id: 'col-border', hexId: 'hex-border', cssVar: '--border-color' },
+      { id: 'col-accent', hexId: 'hex-accent', cssVar: '--accent-color' },
+      { id: 'col-text', hexId: 'hex-text', cssVar: '--text-color' },
+      { id: 'col-bold', hexId: 'hex-bold', cssVar: '--color-negrita' },
+      { id: 'col-italic', hexId: 'hex-italic', cssVar: '--color-cursiva' },
+      { id: 'col-link', hexId: 'hex-link', cssVar: '--link-color' },
+      { id: 'col-h1', hexId: '', cssVar: '--color-h1' },
+      { id: 'col-h2', hexId: '', cssVar: '--color-h2' },
+      { id: 'col-katex', hexId: 'hex-katex', cssVar: '--color-math' },
+      { id: 'col-mark', hexId: 'hex-mark', cssVar: '--color-resaltado-bg' }
+    ];
+
+    colorBindings.forEach(({ id, hexId, cssVar }) => {
+      const input = document.getElementById(id) as HTMLInputElement | null;
+      const hexSpan = hexId ? document.getElementById(hexId) : null;
+      if (!input) return;
+
+      input.oninput = () => {
+        const val = input.value;
+        if (hexSpan) hexSpan.textContent = val;
+        root.style.setProperty(cssVar, cssVar === '--color-resaltado-bg' ? `${val}44` : val);
+        if (cssVar === '--accent-color') {
+          root.style.setProperty('--accent-subtle', `${val}22`);
+        }
+      };
+    });
+
+    // Mermaid reactivo con re-render inmediato
+    const colFlowBg = document.getElementById('col-mm-flow-bg') as HTMLInputElement | null;
+    if (colFlowBg) {
+      colFlowBg.oninput = () => {
+        root.style.setProperty('--mm-flow-bg', colFlowBg.value);
+        window.dispatchEvent(new Event('theme-changed'));
+      };
+    }
+
+    const colFlowLine = document.getElementById('col-mm-flow-line') as HTMLInputElement | null;
+    if (colFlowLine) {
+      colFlowLine.oninput = () => {
+        root.style.setProperty('--mm-flow-line', colFlowLine.value);
+        root.style.setProperty('--mm-flow-border', colFlowLine.value);
+        window.dispatchEvent(new Event('theme-changed'));
+      };
+    }
+
+    const colErHeader = document.getElementById('col-mm-er-header') as HTMLInputElement | null;
+    if (colErHeader) {
+      colErHeader.oninput = () => {
+        root.style.setProperty('--mm-er-header-bg', colErHeader.value);
+        window.dispatchEvent(new Event('theme-changed'));
+      };
+    }
+
+    const colErBorder = document.getElementById('col-mm-er-border') as HTMLInputElement | null;
+    if (colErBorder) {
+      colErBorder.oninput = () => {
+        root.style.setProperty('--mm-er-border', colErBorder.value);
+        root.style.setProperty('--mm-er-line', colErBorder.value);
+        window.dispatchEvent(new Event('theme-changed'));
+      };
+    }
+
+    // Sangría segura
+    const geoIndent = document.getElementById('geo-indent') as HTMLInputElement | null;
+    const valIndent = document.getElementById('val-indent');
+    if (geoIndent && valIndent) {
+      geoIndent.oninput = () => {
+        const val = `${geoIndent.value}cm`;
+        valIndent.textContent = val;
+        root.style.setProperty('--para-indent', val);
+      };
+    }
+
+    // Alineación de párrafos
+    const geoAlign = document.getElementById('geo-align') as HTMLSelectElement | null;
+    if (geoAlign) {
+      geoAlign.onchange = () => {
+        root.style.setProperty('--para-align', geoAlign.value);
+      };
+    }
+
+    // --- MOTOR DE PREVISUALIZACIÓN DE CARÁTULA ---
+    function updateCoverLivePreview() {
+      const canvas = document.getElementById('cover-live-canvas');
+      if (!canvas) return;
+
+      const dataScript = document.getElementById('doc-frontmatter-data');
+      let data: Record<string, any> = {};
+      if (dataScript) {
+        try { data = JSON.parse(dataScript.textContent || '{}'); } catch {}
+      }
+
+      const align = (document.getElementById('cov-align') as HTMLSelectElement)?.value || 'center';
+      const logoSize = parseInt((document.getElementById('cov-logosize') as HTMLInputElement)?.value || '40', 10);
+      const titleSizePt = parseFloat((document.getElementById('cov-titlesize') as HTMLInputElement)?.value || '14');
+      const titleTransform = (document.getElementById('cov-transform') as HTMLSelectElement)?.value || 'uppercase';
+
+      const showLogo = (document.getElementById('cov-show-logo') as HTMLInputElement)?.checked ?? true;
+      const showDocente = (document.getElementById('cov-show-docente') as HTMLInputElement)?.checked ?? true;
+      const showIntegrantes = (document.getElementById('cov-show-integrantes') as HTMLInputElement)?.checked ?? true;
+      const showPie = (document.getElementById('cov-show-pie') as HTMLInputElement)?.checked ?? true;
+
+      const scaleFactor = 0.42;
+      const previewLogoHeight = Math.max(12, Math.round(logoSize * scaleFactor * 1.5));
+      const previewTitleSize = Math.max(8, Math.round(titleSizePt * scaleFactor * 1.6));
+
+      const institucion = data.institucion || 'UNIVERSIDAD NACIONAL DE INGENIERÍA';
+      const facultad = data.facultad || 'FACULTAD DE INGENIERÍA MECÁNICA';
+      const escuela = data.escuela || 'Escuela Profesional';
+      const logo = data.logo || '';
+      const curso = data.curso || '';
+      const titulo = data.title || 'TÍTULO DEL DOCUMENTO';
+      const subtitulo = data.subtitulo || '';
+      const docente = data.docente || '';
+      const integrantes = data.integrantes || [];
+      const autor = data.author || '';
+      const ciudad = data.ciudad || 'LIMA — PERÚ';
+      const anio = data.anio || new Date().getFullYear();
+
+      let bloqueAutoria = '';
+      if (showIntegrantes && integrantes.length > 0) {
+        bloqueAutoria = `
+          <div style="font-size: 6pt; line-height: 1.3; margin: 2px 0;">
+            <strong>INTEGRANTES:</strong><br/>
+            ${integrantes.slice(0, 3).map((m: any) => `<span>• ${m.nombre}</span><br/>`).join('')}
+            ${integrantes.length > 3 ? `<span>... y ${integrantes.length - 3} más</span>` : ''}
+          </div>
+        `;
+      } else if (showIntegrantes && autor) {
+        bloqueAutoria = `<div style="font-size: 6.5pt;"><strong>AUTOR:</strong> ${autor}</div>`;
+      }
+
+      canvas.innerHTML = `
+        <div style="
+          width: 100%;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          text-align: ${align};
+          color: #000000;
+          font-family: var(--ui-font);
+          padding: 8px 12px;
+          box-sizing: border-box;
+        ">
+          <div style="border-bottom: 0.5px solid rgba(0,0,0,0.15); padding-bottom: 3px;">
+            <div style="font-size: 6.5pt; font-weight: 800; text-transform: uppercase;">${institucion}</div>
+            <div style="font-size: 5.5pt; font-weight: 600;">${facultad}</div>
+            <div style="font-size: 5pt; opacity: 0.8;">${escuela}</div>
+          </div>
+
+          ${showLogo ? `
+            <div style="text-align: center; margin: 4px auto;">
+              ${logo ? `<img src="${logo}" style="max-height: ${previewLogoHeight}px; height: auto; object-fit: contain;" />` 
+                     : `<div style="width: 28px; height: 28px; border: 1px dashed #64748b; margin: 0 auto; display: flex; align-items: center; justify-content: center; font-size: 5pt; color: #64748b;">LOGO</div>`}
+            </div>
+          ` : '<div></div>'}
+
+          <div style="margin: 4px 0;">
+            ${curso ? `<div style="font-size: 5.5pt; font-weight: 700; text-transform: uppercase; color: #475569;">${curso}</div>` : ''}
+            <div style="font-size: ${previewTitleSize}px; font-weight: 800; text-transform: ${titleTransform}; line-height: 1.2;">
+              ${titulo}
+            </div>
+            ${subtitulo ? `<div style="font-size: 5.5pt; font-style: italic; opacity: 0.85; margin-top: 2px;">${subtitulo}</div>` : ''}
+          </div>
+
+          <div>
+            ${showDocente && docente ? `<div style="font-size: 6pt; margin-bottom: 2px;"><strong>DOCENTE:</strong> ${docente}</div>` : ''}
+            ${bloqueAutoria}
+          </div>
+
+          ${showPie ? `
+            <div style="font-size: 5.5pt; border-top: 0.5px solid rgba(0,0,0,0.15); padding-top: 3px;">
+              ${ciudad ? `<span>${ciudad}</span> — ` : ''}<span>${anio}</span>
+            </div>
+          ` : '<div></div>'}
+        </div>
+      `;
+    }
+
+    ['cov-align', 'cov-transform', 'cov-show-logo', 'cov-show-docente', 'cov-show-integrantes', 'cov-show-pie'].forEach(id => {
+      document.getElementById(id)?.addEventListener('change', updateCoverLivePreview);
+    });
+
+    document.getElementById('cov-logosize')?.addEventListener('input', (e) => {
+      const val = (e.target as HTMLInputElement).value;
+      const lbl = document.getElementById('val-logosize');
+      if (lbl) lbl.textContent = `${val} mm`;
+      updateCoverLivePreview();
+    });
+
+    document.getElementById('cov-titlesize')?.addEventListener('input', (e) => {
+      const val = (e.target as HTMLInputElement).value;
+      const lbl = document.getElementById('val-titlesize');
+      if (lbl) lbl.textContent = `${val} pt`;
+      updateCoverLivePreview();
+    });
+
+    // Copiado JSON
+    function notificarCopiado(btn: HTMLButtonElement, textoOriginal: string) {
+      btn.textContent = '✓ ¡Copiado al Portapapeles!';
+      btn.style.backgroundColor = '#10b981';
+      setTimeout(() => {
+        btn.textContent = textoOriginal;
+        btn.style.backgroundColor = '';
+      }, 1800);
+    }
+
+    const btnExpEstilo = document.getElementById('btn-export-estilo') as HTMLButtonElement | null;
+    if (btnExpEstilo) {
+      btnExpEstilo.onclick = async () => {
+        const name = (document.getElementById('ed-style-name') as HTMLInputElement)?.value || 'Nuevo Estilo';
+        const id = name.toLowerCase().replace(/[^a-z0-9]/g, '-');
+        const modoActual = root.getAttribute('data-modo') || 'claro';
+
+        const jsonEstilo = {
+          [id]: {
+            id,
+            nombre: name,
+            tipografia: {
+              fuenteCuerpo: (document.getElementById('font-doc') as HTMLSelectElement)?.value || "system-ui, -apple-system, sans-serif",
+              fuenteTitulos: "system-ui, -apple-system, sans-serif",
+              tamanoBase: "16px",
+              interlineado: (document.getElementById('geo-lineheight') as HTMLInputElement)?.value || "1.65"
+            },
+            [modoActual]: {
+              acento: (document.getElementById('col-accent') as HTMLInputElement)?.value || "#8b5cf6",
+              acentoSubtle: `${(document.getElementById('col-accent') as HTMLInputElement)?.value || "#8b5cf6"}22`,
+              superficies: {
+                fondoPrincipal: (document.getElementById('col-bg') as HTMLInputElement)?.value || "#ffffff",
+                fondoSecundario: (document.getElementById('col-header') as HTMLInputElement)?.value || "#f8fafc",
+                fondoTarjetas: (document.getElementById('col-header') as HTMLInputElement)?.value || "#f8fafc",
+                borde: (document.getElementById('col-border') as HTMLInputElement)?.value || "#e2e8f0"
+              },
+              textos: {
+                principal: (document.getElementById('col-text') as HTMLInputElement)?.value || "#0f172a",
+                negrita: (document.getElementById('col-bold') as HTMLInputElement)?.value || "#020617",
+                cursiva: (document.getElementById('col-italic') as HTMLInputElement)?.value || "#16a34a",
+                enlace: (document.getElementById('col-link') as HTMLInputElement)?.value || "#2563eb",
+                math: (document.getElementById('col-katex') as HTMLInputElement)?.value || "#0f172a"
+              },
+              encabezados: {
+                h1: { 
+                  color: (document.getElementById('col-h1') as HTMLInputElement)?.value || "#15803d", 
+                  tamano: `${(document.getElementById('size-h1') as HTMLInputElement)?.value || "2.2"}rem`,
+                  fuente: (document.getElementById('font-h1') as HTMLSelectElement)?.value || "var(--title-font)",
+                  alineacion: (document.getElementById('align-h1') as HTMLSelectElement)?.value || "left",
+                  bordeInferior: (document.getElementById('border-h1') as HTMLInputElement)?.checked ?? true
+                },
+                h2: { 
+                  color: (document.getElementById('col-h2') as HTMLInputElement)?.value || "#0f766e", 
+                  tamano: `${(document.getElementById('size-h2') as HTMLInputElement)?.value || "1.8"}rem`,
+                  fuente: (document.getElementById('font-h2') as HTMLSelectElement)?.value || "var(--title-font)",
+                  alineacion: (document.getElementById('align-h2') as HTMLSelectElement)?.value || "left",
+                  bordeInferior: (document.getElementById('border-h2') as HTMLInputElement)?.checked ?? false
+                }
+              }
+            }
+          }
+        };
+
+        await navigator.clipboard.writeText(JSON.stringify(jsonEstilo, null, 2));
+        notificarCopiado(btnExpEstilo, '📋 Copiar JSON para estilos-base.json');
+      };
+    }
+  }
+
+  document.addEventListener('astro:page-load', setupEditorDrawer);
+</script>

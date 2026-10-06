@@ -36,7 +36,12 @@ export function initUiSync(): void {
   const actPrint = document.getElementById('act-print');
   const leftTitle = document.getElementById('left-panel-title');
   const actSlides = document.getElementById('act-slides') as HTMLAnchorElement | null;
-
+  const actDesign = document.getElementById('act-design');
+  if (actDesign) {
+    actDesign.onclick = () => {
+      window.dispatchEvent(new CustomEvent('toggle-editor-drawer'));
+    };
+  }
   if (actSlides) {
     const currentDocPath = window.location.pathname.replace(/^\/docs\/?/, '').replace(/\/$/, '');
     actSlides.href = `/slides/${currentDocPath}`;
@@ -217,6 +222,9 @@ export function setupGlobalUiListeners(): void {
     } else if (e.altKey && e.key.toLowerCase() === 'z') {
       e.preventDefault();
       toggleZenMode();
+    } else if (e.altKey && e.key.toLowerCase() === 'e') {
+      e.preventDefault();
+      window.dispatchEvent(new CustomEvent('toggle-editor-drawer'));
     }
   });
 }

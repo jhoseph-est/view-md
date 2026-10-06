@@ -93,7 +93,7 @@ $$
 Ecuación extendida para validación de scroll horizontal (evita rotura de layout):
 
 $$
-\frac{\partial^2 \psi}{\partial x^2} + \frac{\partial^2 \psi}{\partial y^2} + \frac{\partial^2 \psi}{\partial z^2} + \frac{2m}{\hbar^2} \left( E - V(x,y,z) - \frac{e^2}{4\pi\epsilon_0 \sqrt{x^2+y^2+z^2}} + \sum_{k=1}^{12} \alpha_k \beta_k \gamma_k \delta_k \right) \psi = 0 \tag{4}
+\frac{\partial^2 \psi}{\partial x^2} + \frac{\partial^2 \psi}{\partial y^2} + \frac{\partial^2 \psi}{\partial z^2} + \frac{2m}{\hbar^2} \left( E - V(x,y,z) - \frac{e^2}{4\pi\epsilon_0 \sqrt{x^2+y^2+z^2}} + \sum_{k=1}^{12} \alpha_k \beta_k \gamma_k \delta_k \right) \psi = 0 + \frac{\partial^2 \psi}{\partial x^2} + \frac{\partial^2 \psi}{\partial y^2} + \frac{\partial^2 \psi}{\partial z^2} + \frac{2m}{\hbar^2} \left( E - V(x,y,z) - \frac{e^2}{4\pi\epsilon_0 \sqrt{x^2+y^2+z^2}} + \sum_{k=1}^{12} \alpha_k \beta_k \gamma_k \delta_k \right) \psi = 0
 $$
 
 ---
