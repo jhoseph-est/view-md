@@ -1,4 +1,5 @@
 ---
+// src/pages/docs/[...id].astro
 import { getCollection, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import GraphModal from '../../components/GraphModal.astro';
@@ -12,6 +13,7 @@ export async function getStaticPaths() {
 }
 
 const props = Astro.props;
+
 let Content: any;
 let headings: any[] = [];
 let breadcrumbs: string[] = [];
@@ -38,6 +40,7 @@ if (props.type === 'file') {
 
 let linkVolver = "/";
 let textoVolver = "Inicio";
+
 if (props.type === 'folder' && props.folderPath === 'explorar') {
   linkVolver = "/";
   textoVolver = "Inicio";
@@ -56,16 +59,12 @@ if (props.type === 'folder' && props.folderPath === 'explorar') {
     <div id="document-view">
       <article class="markdown-body" data-pagefind-body>
         <h1>{title}</h1>
-
-        {/* Si se define mostrarCabecera o si hay integrantes/docente definidos */}
         {(props.doc.data.mostrarCabecera || props.doc.data.integrantes || props.doc.data.institucion) && (
           <DocReportHeader data={props.doc.data} />
         )}
-
         <Content />
       </article>
 
-      {/* Navegación inferior con su propio switch */}
       {props.doc.data.mostrarNav !== false && (
         <>
           <hr class="nav-divider" />
@@ -109,38 +108,3 @@ if (props.type === 'folder' && props.folderPath === 'explorar') {
   </div>
   <GraphModal />
 </Base>
-
-<style>
-  .doc-container {
-    width: 100%;
-  }
-  .nav-divider { 
-    margin: 4rem 0 2rem 0; 
-    border: none; 
-    border-top: 1px solid var(--border-color); 
-    opacity: 0.5; 
-  }
-  .doc-nav { 
-    display: grid; 
-    grid-template-columns: 1fr 1fr; 
-    gap: 1rem; 
-    margin-bottom: 2rem; 
-  }
-  .nav-btn { 
-    display: flex; 
-    flex-direction: column; 
-    padding: 1rem 1.5rem; 
-    border: 1px solid var(--border-color); 
-    border-radius: 8px; 
-    text-decoration: none; 
-    transition: all 0.2s ease; 
-    background: rgba(0,0,0,0.02); 
-    overflow: hidden; 
-  }
-  .nav-btn.next { align-items: flex-end; text-align: right; }
-  .nav-btn.prev { align-items: flex-start; text-align: left; }
-  a.nav-btn:hover { border-color: var(--text-color); background: var(--bg-color); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-  .nav-label { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.6; margin-bottom: 0.3rem; }
-  .nav-title { font-size: 1.1rem; font-weight: 600; color: var(--text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
-  .nav-btn.disabled { opacity: 0.4; cursor: not-allowed; background: transparent; }
-</style>

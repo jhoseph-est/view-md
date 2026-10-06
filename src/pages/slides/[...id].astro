@@ -6,6 +6,7 @@ import 'reveal.js/reveal.css';
 import 'reveal.js/theme/black.css';
 import 'reveal.js/plugin/highlight/monokai.css';
 import '../../styles/mermaid.css';
+import '../../styles/slides.css';
 
 export async function getStaticPaths() {
   const allDocs = await getCollection('docs');
@@ -33,180 +34,6 @@ const contentBody = doc.body || '';
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Presentación: {doc.data.title}</title>
-  <style is:global>
-    html, body {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background-color: #191919;
-    }
-    .reveal {
-      width: 100vw !important;
-      height: 100vh !important;
-    }
-    .reveal h1, .reveal h2, .reveal h3 { 
-      text-transform: none; 
-      color: #a78bfa; 
-      font-weight: bold; 
-      text-align: center;
-    }
-    .reveal p, .reveal li { 
-      font-size: 1.15em; 
-      line-height: 1.6; 
-    }
-    .reveal pre { 
-      width: 100%; 
-      max-height: 65vh; 
-      margin: 20px auto; 
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); 
-      border-radius: 8px; 
-    }
-    .reveal pre code { 
-      max-height: 65vh !important; 
-      overflow-y: auto !important; 
-      padding: 20px; 
-    }
-
-    /* ==============================================================
-       CONTENEDOR DE MERMAID EN SLIDES
-       ============================================================== */
-    .reveal .slide-mermaid-scroll-box {
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      width: 880px !important;
-      max-width: 90vw !important;
-      max-height: 52vh !important;
-      margin: 1.5rem auto !important;
-      padding: 1.25rem !important;
-      background: #141416 !important;
-      border: 1px solid rgba(255, 255, 255, 0.15) !important;
-      border-radius: 12px !important;
-      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6) !important;
-      overflow: hidden;
-      box-sizing: border-box !important;
-      text-align: center !important;
-      scrollbar-width: thin !important;
-      scrollbar-color: #8b5cf6 rgba(255, 255, 255, 0.08) !important;
-      pointer-events: auto !important;
-    }
-
-    /* Scroll activo solo con dimensiones forzadas o panorámicas */
-    .reveal .slide-mermaid-scroll-box.has-scroll {
-      overflow-x: auto !important;
-      overflow-y: auto !important;
-      display: block !important;
-    }
-
-    .reveal .slide-mermaid-scroll-box::-webkit-scrollbar {
-      width: 8px !important;
-      height: 8px !important;
-    }
-    .reveal .slide-mermaid-scroll-box::-webkit-scrollbar-thumb {
-      background: #8b5cf6 !important;
-      border-radius: 4px !important;
-    }
-
-    /* Ajuste de escala automático sin desbordamiento */
-    .reveal .slide-mermaid-scroll-box:not(.has-scroll) svg {
-      max-width: 100% !important;
-      max-height: 46vh !important;
-      width: auto !important;
-      height: auto !important;
-      display: block !important;
-      margin: 0 auto !important;
-    }
-
-    .reveal .slide-mermaid-scroll-box.has-scroll svg {
-      display: inline-block !important;
-      max-width: none !important;
-      height: auto !important;
-      margin: 0 auto !important;
-    }
-
-    /* ==============================================================
-       SOLUCIÓN A FÓRMULAS Y TEXTOS EN NODOS DE MERMAID
-       ============================================================== */
-    .reveal .slide-mermaid-scroll-box foreignObject {
-      overflow: visible !important;
-    }
-
-    /* Centrado flex para forzar que el contenido ocupe el centro exacto del nodo */
-    .reveal .slide-mermaid-scroll-box foreignObject > div {
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      width: 100% !important;
-      height: 100% !important;
-      margin: 0 !important;
-      padding: 0 !important;
-    }
-
-    .reveal .slide-mermaid-scroll-box foreignObject p,
-    .reveal .slide-mermaid-scroll-box foreignObject span,
-    .reveal .slide-mermaid-scroll-box .nodeLabel {
-      margin: 0 !important;
-      padding: 0 !important;
-      font-family: system-ui, -apple-system, sans-serif !important;
-      font-size: 13px !important;
-      line-height: normal !important;
-      color: #f8fafc !important;
-      display: inline-flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      white-space: normal !important;
-    }
-
-    /* Reset para MathJax dentro de los nodos */
-    .reveal .slide-mermaid-scroll-box mjx-container {
-      margin: 0 !important;
-      padding: 0 !important;
-      display: inline-block !important;
-      line-height: normal !important;
-    }
-
-    .reveal .slide-mermaid-scroll-box mjx-container[display="true"] {
-      margin: 0 !important;
-      display: inline-block !important;
-    }
-
-    .reveal .slide-mermaid-scroll-box text,
-    .reveal .slide-mermaid-scroll-box .label,
-    .reveal .slide-mermaid-scroll-box .edgeLabel {
-      font-family: system-ui, -apple-system, sans-serif !important;
-      font-size: 13px !important;
-      line-height: normal !important;
-      fill: #f8fafc !important;
-    }
-
-    /* Botón flotante para cerrar diapositiva */
-    .btn-exit {
-      position: fixed; 
-      top: 18px; 
-      left: 18px; 
-      z-index: 9999;
-      background: rgba(255, 255, 255, 0.1); 
-      color: white;
-      border: 1px solid rgba(255, 255, 255, 0.2); 
-      padding: 8px 16px;
-      border-radius: 8px; 
-      cursor: pointer; 
-      font-size: 0.85rem;
-      font-family: system-ui, sans-serif; 
-      text-decoration: none;
-      backdrop-filter: blur(5px); 
-      transition: all 0.2s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .btn-exit:hover { 
-      background: #ef4444; 
-      border-color: #ef4444; 
-    }
-  </style>
 </head>
 <body>
   <button onclick="window.close()" class="btn-exit" aria-label="Cerrar ventana">
@@ -246,7 +73,6 @@ const contentBody = doc.body || '';
     }
 
     async function initSlides() {
-      // 1. Proteger los bloques de Mermaid para que MathJax no los mutile antes de tiempo
       document.querySelectorAll('.reveal pre code').forEach((el) => {
         const txt = el.textContent || '';
         if (
@@ -370,7 +196,6 @@ const contentBody = doc.body || '';
             }
             scrollBox.innerHTML = svg;
 
-            // Bloquear que el scroll accidental cambie de slide
             scrollBox.addEventListener('wheel', (e: WheelEvent) => {
               if (scrollBox.classList.contains('has-scroll')) {
                 e.stopPropagation();
@@ -398,7 +223,6 @@ const contentBody = doc.body || '';
 
             pre.replaceWith(scrollBox);
 
-            // Re-renderizar KaTeX/MathJax dentro del SVG generado si contiene fórmulas
             if ((window as any).MathJax && (window as any).MathJax.typesetPromise) {
               await (window as any).MathJax.typesetPromise([scrollBox]);
             }

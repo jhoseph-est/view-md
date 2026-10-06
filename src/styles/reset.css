@@ -1,0 +1,45 @@
+/* src/styles/reset.css */
+
+/* 1. Box-sizing universal para elementos estándar */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* 2. Excepción estricta e inmutable para el motor matemático (KaTeX) */
+.katex,
+.katex * {
+  box-sizing: content-box !important;
+  line-height: normal !important;
+}
+
+/* 3. Normalización básica de medios */
+img,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 4. Barras de desplazamiento globales */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(150, 150, 150, 0.3) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(150, 150, 150, 0.3);
+  border-radius: 10px;
+}

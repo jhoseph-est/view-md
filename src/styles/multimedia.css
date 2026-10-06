@@ -150,15 +150,3 @@ html[data-modo="claro"] .reveal video {
   color: #ffffff !important;
 }
 
-/* Aplica a SVGs genéricos del contenido */
-.main-content svg {
-  max-width: 100%;
-  height: auto;
-}
-
-/* Excepción directa e inmediata: restaurar los SVGs de diagramas y matemáticas */
-.mermaid-viewport svg,
-.katex svg {
-  max-width: none;
-  height: initial;
-}

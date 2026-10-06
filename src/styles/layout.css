@@ -1,25 +1,8 @@
 /* src/styles/layout.css */
+
 /* ==========================================================
-   1. RESET Y ESTRUCTURA GLOBAL
+   1. ESTRUCTURA GLOBAL DE PANTALLA
    ========================================================== */
-* {
-  box-sizing: border-box;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(150, 150, 150, 0.3) transparent;
-}
-
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(150, 150, 150, 0.3);
-  border-radius: 10px;
-}
-
 html, body {
   margin: 0;
   padding: 0;
@@ -62,8 +45,6 @@ body {
   background-color: var(--accent-subtle);
   border-bottom-color: var(--accent-color);
 }
-
-/* (El resto de layout.css continúa idéntico: .layout-grid, sidebars, Pagefind, responsive móvil, etc.) */
 
 /* ==========================================================
    2. ESTRUCTURA PRINCIPAL (LAYOUT GRID Y PANELES WEB)
@@ -583,4 +564,130 @@ html.no-meta #sec-meta {
     overflow-x: hidden !important;
     -webkit-overflow-scrolling: touch !important;
   }
+}
+
+/* ==========================================================
+   5. LANDING PAGE (HERO SECTION)
+   ========================================================== */
+.hero-section {
+  text-align: center;
+  padding: 6rem 1rem 4rem 1rem;
+}
+
+.hero-icon {
+  font-size: 4rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.hero-section h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.hero-section p {
+  font-size: 1.2rem;
+  opacity: 0.7;
+  max-width: 600px;
+  margin: 0 auto 2.5rem auto;
+  line-height: 1.6;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  background: var(--accent-color, #8b5cf6);
+  color: white !important;
+  padding: 0.8rem 1.5rem;
+  border-radius: var(--radius-md, 8px);
+  text-decoration: none !important;
+  border-bottom: none !important;
+  font-weight: 600;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: inline-block;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
+  background-color: var(--accent-hover, #7c3aed) !important;
+}
+
+/* ==========================================================
+   6. NAVEGACIÓN Y CONTENEDOR DE DOCUMENTOS (/docs/[...id])
+   ========================================================== */
+.doc-container {
+  width: 100%;
+}
+
+.nav-divider {
+  margin: 4rem 0 2rem 0;
+  border: none;
+  border-top: 1px solid var(--border-color);
+  opacity: 0.5;
+}
+
+.doc-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.nav-btn {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  background: rgba(0, 0, 0, 0.02);
+  overflow: hidden;
+}
+
+.nav-btn.next {
+  align-items: flex-end;
+  text-align: right;
+}
+
+.nav-btn.prev {
+  align-items: flex-start;
+  text-align: left;
+}
+
+a.nav-btn:hover {
+  border-color: var(--text-color);
+  background: var(--bg-color);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.nav-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  opacity: 0.6;
+  margin-bottom: 0.3rem;
+}
+
+.nav-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.nav-btn.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: transparent;
 }
