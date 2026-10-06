@@ -10,7 +10,6 @@ function detectDiagramType(code: string): string {
       clean = clean.slice(yamlEndIndex + 3).trim();
     }
   }
-
   if (clean.startsWith('flowchart') || clean.startsWith('graph')) return 'flowchart';
   if (clean.startsWith('erDiagram')) return 'er';
   if (clean.startsWith('quadrantChart')) return 'quadrant';
@@ -60,11 +59,9 @@ function fixDarkNodeTextContrast(svgEl: SVGElement) {
   nodes.forEach((node) => {
     const rectOrPath = node.querySelector('rect, path, circle, polygon');
     if (!rectOrPath) return;
-
     const fillAttr = rectOrPath.getAttribute('fill') || '';
     const styleAttr = rectOrPath.getAttribute('style') || '';
     const combined = (fillAttr + styleAttr).toLowerCase();
-
     if (
       combined.includes('#1e1e1e') || 
       combined.includes('#000') || 
@@ -102,6 +99,14 @@ function attachMermaidControls(wrapper: HTMLElement, code: string) {
   const svg = wrapper.querySelector('svg') as SVGElement | null;
   const viewport = wrapper.querySelector('.mermaid-viewport') as HTMLElement | null;
 
+  let currentScale = 1;
+  const scaleStep = 0.15;
+  let isDragging = false;
+  let startX = 0;
+  let startY = 0;
+  let translateX = 0;
+  let translateY = 0;
+
   if (viewport) {
     viewport.addEventListener('wheel', (e) => {
       if (currentScale === 1) return;
@@ -114,14 +119,6 @@ function attachMermaidControls(wrapper: HTMLElement, code: string) {
   }
 
   if (!svg || !viewport) return;
-
-  let currentScale = 1;
-  const scaleStep = 0.15;
-  let isDragging = false;
-  let startX = 0;
-  let startY = 0;
-  let translateX = 0;
-  let translateY = 0;
 
   function updateTransform() {
     if (!svg) return;
@@ -213,7 +210,6 @@ export async function renderMermaid(forceReRender = false, targetSelector = '.ma
   codeBlocks.forEach((preNode) => {
     const pre = preNode as HTMLElement;
     if (pre.dataset.mermaidRegistered === 'true') return;
-
     const codeEl = pre.querySelector('code');
     const rawCode = (codeEl?.textContent || pre.textContent || '').trim();
     if (!rawCode) return;
@@ -268,15 +264,18 @@ export async function renderMermaid(forceReRender = false, targetSelector = '.ma
       .replace(/%%height:.*?%%/gi, '')
       .trim();
 
+    // 1. Detección estricta de init manual o frontmatter propio de Mermaid
     const hasCustomConfig = cleanCode.includes('%%{init') || cleanCode.startsWith('---');
     const isGantt = cleanCode.replace(/%%[\s\S]*?%%/g, '').trim().startsWith('gantt');
     const diagramType = detectDiagramType(cleanCode);
 
     let codeToRender = cleanCode;
+
+    // 2. Jerarquía de precedencia: Custom init > Tema del sitio > Base
     if (isGantt) {
       const numericWidth = widthMatch ? parseInt(widthMatch[1], 10) : 1200;
-      codeToRender = hasCustomConfig 
-        ? cleanCode 
+      codeToRender = hasCustomConfig
+        ? cleanCode
         : `%%{init: { 'gantt': { 'useWidth': ${numericWidth} } } }%%\n` + cleanCode;
     } else if (!hasCustomConfig) {
       const initConfig = getThemeForDiagram(diagramType);
@@ -285,11 +284,13 @@ export async function renderMermaid(forceReRender = false, targetSelector = '.ma
     }
 
     const renderId = `mermaid-render-${Date.now()}-${index}`;
+
     try {
       const { svg } = await mermaid.render(renderId, codeToRender);
       const tempContainer = document.createElement('div');
       tempContainer.innerHTML = svg;
       const svgEl = tempContainer.querySelector('svg');
+
       if (svgEl) {
         fixDarkNodeTextContrast(svgEl);
         if (parsedWidth) {

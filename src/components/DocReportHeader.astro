@@ -1,15 +1,22 @@
 ---
 // src/components/DocReportHeader.astro
+interface Integrante {
+  nombre: string;
+  codigo?: string;
+  rol?: string;
+}
+
 export interface Props {
   data: Record<string, any>;
 }
 
 const { data } = Astro.props;
 
-// Lista de claves que ya maneja el panel lateral derecho o la navegación interna
+// Claves que no deben mostrarse como metadatos sueltos
 const omitKeys = new Set([
   'title', 'subtitulo', 'draft', 'slides', 'orden', 'mostrarIndice', 
-  'mostrarNav', 'mostrarCabecera', 'theme', 'plantilla', 'icon'
+  'mostrarNav', 'mostrarCabecera', 'target', 'theme', 'plantilla', 
+  'caratula', 'icon', 'tags'
 ]);
 
 const institucion = data.institucion || '';
@@ -57,7 +64,13 @@ const extraEntries = Object.entries(data).filter(([k, v]) => {
     {extraEntries.map(([key, val]) => (
       <div class="meta-item">
         <span class="meta-label">{key}:</span>
-        <span class="meta-value">{Array.isArray(val) ? val.join(', ') : String(val)}</span>
+        <span class="meta-value">
+          {Array.isArray(val) 
+            ? val.join(', ') 
+            : typeof val === 'object' 
+              ? JSON.stringify(val) 
+              : String(val)}
+        </span>
       </div>
     ))}
   </div>
@@ -66,7 +79,7 @@ const extraEntries = Object.entries(data).filter(([k, v]) => {
     <div class="integrantes-container">
       <span class="meta-label">Integrantes / Equipo:</span>
       <ul class="integrantes-list">
-        {data.integrantes.map((m: any) => (
+        {data.integrantes.map((m: Integrante) => (
           <li class="integrante-item">
             <span class="item-name">{m.nombre}</span>
             {m.codigo && <span class="item-code">({m.codigo})</span>}

@@ -30,7 +30,7 @@ Este bloque evalúa el espaciado vertical, interlineado base y transformaciones 
 
 ## 1.1 Formato de Caracteres y Énfasis
 
-Texto regular con variaciones: **negrita de contraste**, *cursiva formal*, ***negrita cursiva***, <del>tachado correctivo</del>, <u>subrayado nativo</u>, ==resaltado==, `código inline monospaciado` y combinaciones numéricas como $H_2O$ y $X^{n+1}$.
+Texto regular con variaciones: **negrita de contraste**, *cursiva formal*, ***negrita cursiva***, <del>tachado correctivo</del>, <u>subrayado nativo</u>, <mark>resaltado</mark>, `código inline monospaciado` y combinaciones numéricas como $H_2O$ y $X^{n+1}$.
 
 ### Subnivel H3: Subsección Estructural
 Texto de párrafo demostrativo para evaluar alineación de márgenes y sangría de primera línea.

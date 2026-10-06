@@ -1,6 +1,11 @@
 /* src/styles/print.css */
+/* ==========================================================
+   DIRECTIVAS DE IMPRESIÓN Y EXPORTACIÓN A PDF
+   (100% DINÁMICO POR VARIABLES DE TALLER)
+   ========================================================== */
+
 @media print {
-  /* 1. Hoja física con márgenes por variable */
+  /* 1. Hoja física calibrada por variable */
   @page {
     size: auto;
     margin: var(--print-page-padding, 2.54cm) !important;
@@ -12,43 +17,59 @@
     print-color-adjust: exact !important;
   }
 
-  /* En src/styles/print.css dentro de @media print */
-  .activity-bar, .left-sidebar-panel, .independent-panel,
-  .mobile-bottom-bar, .mobile-drawer, .mobile-drawer-backdrop,
-  .breadcrumbs, .doc-nav, .nav-btn, .nav-divider, .zen-exit-btn,
-  .copy-code-btn, .code-toolbar, .code-block-header, .code-dots,
-  .img-toolbar, .mermaid-toolbar, .main-content::after, .sticky-panel::after {
+  /* 2. Ocultar interfaz y controles de pantalla */
+  .activity-bar,
+  .left-sidebar-panel,
+  .independent-panel,
+  .mobile-bottom-bar,
+  .mobile-drawer,
+  .mobile-drawer-backdrop,
+  .breadcrumbs,
+  .doc-nav,
+  .nav-btn,
+  .nav-divider,
+  .zen-exit-btn,
+  .copy-code-btn,
+  .code-toolbar,
+  .code-block-header,
+  .code-dots,
+  .img-toolbar,
+  .mermaid-toolbar,
+  .main-content::after,
+  .sticky-panel::after {
     display: none !important;
     visibility: hidden !important;
   }
 
-  /* 3. Base blanca para impresión */
-  html, body {
+  /* 3. Base limpia de papel */
+  html,
+  body {
     background-color: #ffffff !important;
     background: #ffffff !important;
     color: #000000 !important;
     margin: 0 !important;
     padding: 0 !important;
-    font-size: var(--print-font-size, 12pt) !important;
-    font-family: var(--print-font-family, 'Times New Roman', Times, serif) !important;
+    font-size: var(--print-font-size, 11pt) !important;
+    font-family: var(--print-font-family, system-ui, sans-serif) !important;
   }
 
-  .content-wrapper, .markdown-body, #document-view {
+  .content-wrapper,
+  .markdown-body,
+  #document-view {
     background: #ffffff !important;
     color: #000000 !important;
     width: 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
     padding: 0 !important;
-    line-height: var(--print-line-height, 1.8) !important;
+    line-height: var(--print-line-height, 1.6) !important;
   }
 
-  /* 4. Carátula e Índice */
+  /* 4. Carátula y Portada Dinámica */
   .report-cover-page {
     box-sizing: border-box !important;
     width: 100% !important;
-    height: 100% !important;
-    max-height: 220mm !important;
+    min-height: 230mm !important;
     display: var(--print-cover-display, flex) !important;
     flex-direction: column !important;
     justify-content: space-between !important;
@@ -66,13 +87,15 @@
 
   .report-cover-page img,
   .report-cover-page svg {
-    max-height: 48mm !important;
+    max-height: var(--print-logo-size, 45mm) !important;
     width: auto !important;
     object-fit: contain !important;
     margin: 0.5rem auto !important;
     display: block !important;
+    background: transparent !important;
   }
 
+  /* 5. Índice Formal */
   .report-toc-page {
     box-sizing: border-box !important;
     width: 100% !important;
@@ -85,7 +108,7 @@
     color: #000000 !important;
   }
 
-  /* 5. Títulos y Encabezados */
+  /* 6. Títulos */
   h1, h2, h3, h4, h5, h6 {
     color: #000000 !important;
     page-break-after: avoid !important;
@@ -93,42 +116,39 @@
   }
 
   .markdown-body h1 {
-    font-size: var(--print-h1-size, 14pt) !important;
-    text-align: center !important;
+    font-size: var(--print-h1-size, 16pt) !important;
+    text-align: var(--print-h1-align, left) !important;
     margin-top: 1.25rem !important;
     font-weight: bold !important;
   }
 
   .markdown-body h2 {
     font-size: var(--print-h2-size, 13pt) !important;
-    text-align: left !important;
     margin-top: 1.2rem !important;
     font-weight: bold !important;
   }
 
   .markdown-body h3 {
     font-size: var(--print-h3-size, 12pt) !important;
-    text-align: left !important;
-    font-style: italic !important;
   }
 
-  /* Párrafos y Sangría */
+  /* 7. Párrafos gobernados por el Taller */
   .markdown-body p {
     color: #000000 !important;
     margin-bottom: 0.85rem !important;
-    text-indent: var(--print-para-indent, 1.27cm) !important;
-    text-align: justify !important;
+    text-indent: var(--print-para-indent, 0cm) !important;
+    text-align: var(--print-para-align, left) !important;
   }
 
-  /* Tablas APA */
+  /* 8. Tablas configurables */
   table {
     width: 100% !important;
     border-collapse: collapse !important;
     margin: 1.5rem auto !important;
-    border-top: 1.5pt solid #000000 !important;
-    border-bottom: 1.5pt solid #000000 !important;
-    border-left: none !important;
-    border-right: none !important;
+    border-top: var(--print-table-border-top, 1px solid #000000) !important;
+    border-bottom: var(--print-table-border-bottom, 1px solid #000000) !important;
+    border-left: var(--print-table-border-cells, none) !important;
+    border-right: var(--print-table-border-cells, none) !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
     font-size: 10pt !important;
@@ -137,27 +157,37 @@
 
   th {
     border-bottom: 1pt solid #000000 !important;
+    border-left: var(--print-table-border-cells, none) !important;
+    border-right: var(--print-table-border-cells, none) !important;
     padding: 0.4rem 0.6rem !important;
     font-weight: bold !important;
+    background: var(--print-table-header-bg, transparent) !important;
   }
 
   td {
     padding: 0.4rem 0.6rem !important;
-    border: none !important;
+    border-top: var(--print-table-border-cells, none) !important;
+    border-bottom: var(--print-table-border-cells, none) !important;
+    border-left: var(--print-table-border-cells, none) !important;
+    border-right: var(--print-table-border-cells, none) !important;
   }
 
-  /* Bloques de Código */
+  /* 9. Bloques de Código */
   pre.astro-code {
     background-color: #f8fafc !important;
-    border: 1px solid #e2e8f0 !important;
+    border: 1px solid #cbd5e1 !important;
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
 
-  /* Mermaid */
+  pre.astro-code code span {
+    color: var(--shiki-light, inherit) !important;
+  }
+
+  /* 10. Diagramas Mermaid */
   .mermaid-wrapper {
     max-width: 100% !important;
-    border: 1px solid #e2e8f0 !important;
+    border: 1px solid #cbd5e1 !important;
     background: #ffffff !important;
     display: flex !important;
     justify-content: center !important;
@@ -176,13 +206,12 @@
   .mermaid-wrapper foreignObject p,
   .mermaid-wrapper foreignObject div,
   .callout p,
-  .katex-display,
   pre p {
     text-indent: 0 !important;
     text-align: left !important;
   }
 
-  /* Salto explícito con --- */
+  /* Separador explícito como salto de página */
   hr {
     display: block !important;
     border: none !important;

@@ -1,39 +1,38 @@
-// En src/content.config.ts
+// src/content.config.ts
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
 
 const docs = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/docs' }),
   schema: z.object({
+    // --- Metadatos Principales ---
     title: z.string(),
+    subtitulo: z.string().optional(),
     icon: z.string().optional(),
-    theme: z.string().optional(), // Ahora acepta cualquier ID de tema de tus JSONs
-    plantilla: z.string().optional(), // ID de plantilla de impresión (ej: informe-uni, paper-ieee)
-    date: z.coerce.date().optional(),
-    updated: z.coerce.date().optional(),
+    orden: z.number().optional(),
+    draft: z.boolean().default(false),
     author: z.string().optional(),
     tags: z.array(z.string()).optional(),
-    orden: z.number().optional(),
-    slides: z.boolean().optional(),
-    draft: z.boolean().default(false),
+    date: z.union([z.coerce.date(), z.string()]).optional(),
+    updated: z.union([z.coerce.date(), z.string()]).optional(),
 
-    // Metadatos de lectura / apuntes
-    curso: z.string().optional(),
-    ciclo: z.union([z.string(), z.number()]).optional(),
-    dificultad: z.string().optional(),
-    tiempoLectura: z.string().optional(),
-    referencia: z.string().optional(),
+    // --- Control de Temas y Plantillas (Conectados a los JSON) ---
+    theme: z.string().optional(),       // ID del tema web (estilos-base.json)
+    plantilla: z.string().optional(),   // ID de la plantilla de impresión (plantillas-impresion.json)
+    caratula: z.string().optional(),    // ID del modelo de carátula (caratulas.json)
+    slides: z.boolean().default(false), // Habilitar vista Reveal.js
 
-    // Campos académicos / técnicos
+    // --- Datos Académicos / Técnicos para Carátulas e Informes ---
     institucion: z.string().optional(),
     facultad: z.string().optional(),
     escuela: z.string().optional(),
-    logo: z.string().optional(),
-    subtitulo: z.string().optional(),
-    codigo: z.string().optional(),
     docente: z.string().optional(),
     ciudad: z.string().optional(),
     anio: z.union([z.string(), z.number()]).optional(),
+    logo: z.string().optional(),
+    codigo: z.string().optional(),
+
+    // --- Equipo / Integrantes ---
     integrantes: z.array(
       z.object({
         nombre: z.string(),
@@ -42,11 +41,21 @@ const docs = defineCollection({
       })
     ).optional(),
 
-    // Switches de interfaz
-    mostrarCabecera: z.boolean().optional(), // Switch para activar la tarjeta superior
+    // --- Metadatos de Estudio / Apuntes ---
+    curso: z.string().optional(),
+    ciclo: z.union([z.string(), z.number()]).optional(),
+    dificultad: z.string().optional(),
+    tiempoLectura: z.string().optional(),
+    referencia: z.string().optional(),
+
+    // --- Switches de Interfaz ---
+    // 'target' define si se muestra la tarjeta técnica en la web (DocReportHeader)
+    target: z.boolean().optional(),
+    // Fallback retrocompatible por si algún apunte viejo aún usa mostrarCabecera
+    mostrarCabecera: z.boolean().optional(),
     mostrarIndice: z.boolean().default(true),
-    mostrarNav: z.boolean().default(true) // Switch para ocultar doc-nav si lo deseas en web
-  }).passthrough() // .passthrough() permite que agregues cualquier propiedad extra en el YAML sin error
+    mostrarNav: z.boolean().default(true)
+  }).passthrough() // Permite campos extras libres en el frontmatter sin romper el build
 });
 
 export const collections = { docs };

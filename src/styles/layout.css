@@ -1,17 +1,11 @@
 /* src/styles/layout.css */
 /* ==========================================================
-   1. RESET Y VARIABLES GLOBALES
+   1. RESET Y ESTRUCTURA GLOBAL
    ========================================================== */
 * {
   box-sizing: border-box;
   scrollbar-width: thin;
   scrollbar-color: rgba(150, 150, 150, 0.3) transparent;
-}
-
-:root {
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
 }
 
 ::-webkit-scrollbar {
@@ -36,12 +30,40 @@ html, body {
   color: var(--text-color) !important;
   font-family: var(--ui-font) !important;
   font-size: var(--font-size);
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 body {
   display: flex;
   flex-direction: column;
 }
+
+/* Interacción y fluidez del contenedor de lectura */
+.main-content {
+  font-family: var(--doc-font);
+}
+
+.main-content :where(p, li, h1, h2, h3, blockquote):not(.mermaid-native *):not(pre *):not(.katex *) {
+  line-height: var(--doc-line-height);
+}
+
+.main-content article a:not(.mermaid-native *):not(pre *):not(.katex *) {
+  color: var(--link-color) !important;
+  text-decoration: none;
+  border-bottom: 1.5px solid var(--accent-border);
+  font-weight: 500;
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+  padding: 0 2px;
+  border-radius: 3px;
+}
+
+.main-content article a:not(.mermaid-native *):not(pre *):not(.katex *):hover {
+  color: var(--link-hover) !important;
+  background-color: var(--accent-subtle);
+  border-bottom-color: var(--accent-color);
+}
+
+/* (El resto de layout.css continúa idéntico: .layout-grid, sidebars, Pagefind, responsive móvil, etc.) */
 
 /* ==========================================================
    2. ESTRUCTURA PRINCIPAL (LAYOUT GRID Y PANELES WEB)

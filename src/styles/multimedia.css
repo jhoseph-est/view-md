@@ -1,24 +1,28 @@
 /* src/styles/multimedia.css */
 /* ==========================================================
-   REPRODUCTOR DE AUDIO NATIVO
+   REPRODUCTORES NATIVOS Y RECURSOS MULTIMEDIA
    ========================================================== */
-.main-content audio, .reveal audio {
+
+/* 1. Reproductor de Audio */
+.main-content audio,
+.reveal audio {
   display: block !important;
   width: 100% !important;
   max-width: 440px !important;
-  height: 44px !important;
+  height: 42px !important;
   margin: 1.5rem auto !important;
   background: transparent !important;
   border: none !important;
   outline: none !important;
   border-radius: 9999px !important;
   accent-color: var(--accent-color) !important;
-  box-shadow: 0 4px 20px var(--accent-subtle) !important;
-  transition: box-shadow 0.3s ease, transform 0.2s ease !important;
+  box-shadow: 0 4px 18px var(--accent-subtle) !important;
+  transition: box-shadow 0.25s ease, transform 0.2s ease !important;
 }
 
-.main-content audio:hover, .reveal audio:hover {
-  box-shadow: 0 6px 26px var(--accent-border) !important;
+.main-content audio:hover,
+.reveal audio:hover {
+  box-shadow: 0 6px 24px var(--accent-border) !important;
 }
 
 .main-content audio::-webkit-media-controls-panel,
@@ -27,20 +31,21 @@
 .reveal audio::-webkit-media-controls-enclosure {
   background-color: var(--header-bg) !important;
   border-radius: 9999px !important;
-  transition: background-color 0.25s ease;
 }
 
-html[data-modo="oscuro"] .main-content audio, html[data-modo="oscuro"] .reveal audio {
+html[data-modo="oscuro"] .main-content audio,
+html[data-modo="oscuro"] .reveal audio {
   color-scheme: dark !important;
 }
-html[data-modo="claro"] .main-content audio, html[data-modo="claro"] .reveal audio {
+
+html[data-modo="claro"] .main-content audio,
+html[data-modo="claro"] .reveal audio {
   color-scheme: light !important;
 }
 
-/* ==========================================================
-   REPRODUCTOR DE VIDEO NATIVO
-   ========================================================== */
-.main-content video, .reveal video {
+/* 2. Reproductor de Video */
+.main-content video,
+.reveal video {
   display: block !important;
   width: 100% !important;
   max-width: 720px !important;
@@ -56,42 +61,36 @@ html[data-modo="claro"] .main-content audio, html[data-modo="claro"] .reveal aud
   transition: border-color 0.25s ease, box-shadow 0.25s ease !important;
 }
 
-.main-content video:hover, .reveal video:hover {
+.main-content video:hover,
+.reveal video:hover {
   border-color: var(--accent-color) !important;
   box-shadow: 0 10px 30px var(--accent-subtle) !important;
 }
 
-html[data-modo="oscuro"] .main-content video, html[data-modo="oscuro"] .reveal video {
+html[data-modo="oscuro"] .main-content video,
+html[data-modo="oscuro"] .reveal video {
   color-scheme: dark !important;
 }
-html[data-modo="claro"] .main-content video, html[data-modo="claro"] .reveal video {
+
+html[data-modo="claro"] .main-content video,
+html[data-modo="claro"] .reveal video {
   color-scheme: light !important;
 }
 
-/* ==========================================================
-   CONTENEDOR DE IMÁGENES CON BOTÓN COPIAR
-   ========================================================== */
+/* 3. Contenedor de Imagen con Botón Copiar */
 .img-interactive-wrapper {
   position: relative;
-  display: inline-block;
-  width: auto;
-  max-width: 100%;
-  margin: 1.75rem auto;
-  text-align: center;
-  border-radius: var(--radius-md, 8px);
-  overflow: hidden;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-  border: 1px solid var(--border-color);
-  background: rgba(0, 0, 0, 0.05);
-}
-
-.main-content .img-interactive-wrapper, .reveal .img-interactive-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-left: auto;
-  margin-right: auto;
   width: fit-content;
+  max-width: 100%;
+  margin: 1.75rem auto;
+  border-radius: var(--radius-md, 8px);
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-color);
+  background: rgba(0, 0, 0, 0.04);
 }
 
 .img-interactive-wrapper img {
@@ -105,8 +104,8 @@ html[data-modo="claro"] .main-content video, html[data-modo="claro"] .reveal vid
 
 .img-toolbar {
   position: absolute;
-  top: 0.6rem;
-  right: 0.6rem;
+  top: 0.55rem;
+  right: 0.55rem;
   display: flex;
   gap: 0.35rem;
   opacity: 0;
@@ -114,9 +113,9 @@ html[data-modo="claro"] .main-content video, html[data-modo="claro"] .reveal vid
   transition: opacity 0.2s ease, transform 0.2s ease;
   background: var(--header-bg);
   border: 1px solid var(--border-color);
-  border-radius: 6px;
+  border-radius: var(--radius-sm, 6px);
   padding: 0.25rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
   z-index: 5;
 }
 
@@ -130,7 +129,7 @@ html[data-modo="claro"] .main-content video, html[data-modo="claro"] .reveal vid
   border: none;
   color: var(--text-color);
   cursor: pointer;
-  padding: 0.3rem 0.6rem;
+  padding: 0.25rem 0.55rem;
   border-radius: 4px;
   font-size: 0.72rem;
   font-family: var(--ui-font, system-ui);
@@ -149,4 +148,10 @@ html[data-modo="claro"] .main-content video, html[data-modo="claro"] .reveal vid
 .img-tool-btn.copied {
   background: #10b981 !important;
   color: #ffffff !important;
+}
+
+/* 4. Aislamiento de SVG Embebidos */
+.main-content svg:not(.mermaid-viewport svg) {
+  max-width: 100%;
+  height: auto;
 }

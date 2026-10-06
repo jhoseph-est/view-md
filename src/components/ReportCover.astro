@@ -1,302 +1,212 @@
 ---
 // src/components/ReportCover.astro
-export interface Integrante {
+import caratulasConfig from '../config/caratulas.json';
+
+interface Integrante {
   nombre: string;
   codigo?: string;
   rol?: string;
 }
 
-export interface CoverData {
-  title: string;
-  subtitulo?: string;
-  institucion?: string;
-  facultad?: string;
-  escuela?: string;
-  logo?: string;
-  author?: string;
-  codigo?: string;
-  docente?: string;
-  ciudad?: string;
-  anio?: string | number;
-  integrantes?: Integrante[];
-}
-
 interface Props {
-  data: CoverData;
+  data: {
+    title?: string;
+    subtitulo?: string;
+    institucion?: string;
+    facultad?: string;
+    escuela?: string;
+    docente?: string;
+    ciudad?: string;
+    anio?: string | number;
+    logo?: string;
+    caratula?: string;
+    integrantes?: Integrante[];
+    author?: string;
+    codigo?: string;
+  };
 }
 
-const { data } = Astro.props;
-const institucion = data.institucion || "UNIVERSIDAD NACIONAL DE INGENIERÍA";
-const facultad = data.facultad || "FACULTAD DE INGENIERÍA MECÁNICA";
-const escuela = data.escuela || "Escuela Profesional de Ingeniería Mecánica";
-const ciudad = data.ciudad || "LIMA-PERÚ";
-const anio = data.anio || new Date().getFullYear();
-const logoSrc = data.logo || "/assets/logos/logo-uni.png";
+const { data = {} } = Astro.props;
+
+// Obtener modelo de carátula o fallback
+const modeloId = data.caratula || 'uni-oficial';
+const modelo = (caratulasConfig as Record<string, any>)[modeloId] || (caratulasConfig as Record<string, any>)['uni-oficial'] || {};
+
+const logoPath = data.logo || modelo.logo?.ruta || "/assets/logos/logo-uni.png";
+const logoHeight = modelo.logo?.altoMaximoMm ? `${modelo.logo.altoMaximoMm}mm` : "45mm";
+const headerAlign = modelo.estructura?.alineacion || "center";
 ---
 
-<div class="report-cover-page">
-  <!-- 1. Membrete Superior -->
-  <header class="cover-header">
-    <h1 class="inst-title">{institucion}</h1>
-    {facultad && <h2 class="inst-subtitle">{facultad}</h2>}
-    {escuela && <h3 class="inst-career">{escuela}</h3>}
+<article class="report-cover-page">
+  <!-- 1. Membrete Institucional -->
+  <header class="cover-header" style={`text-align: ${headerAlign};`}>
+    <h2 class="inst-title">
+      {data.institucion || "UNIVERSIDAD NACIONAL DE INGENIERÍA"}
+    </h2>
+    <p class="inst-faculty">
+      {data.facultad || "FACULTAD DE INGENIERÍA MECÁNICA"}
+    </p>
+    <p class="inst-school">
+      {data.escuela || "Escuela Profesional de Ingeniería Mecánica"}
+    </p>
   </header>
 
   <!-- 2. Escudo / Logo Central -->
   <div class="cover-logo-container">
-    {logoSrc && (
-      <img src={logoSrc} alt={`Logo ${institucion}`} class="cover-logo-img" />
+    <img 
+      src={logoPath} 
+      alt="Escudo Institucional" 
+      style={`max-height: ${logoHeight}; height: ${logoHeight};`}
+      class="cover-logo-img"
+    />
+  </div>
+
+  <!-- 3. Título y Subtítulo del Documento -->
+  <div class="cover-title-container">
+    <h1 class="doc-main-title">
+      {data.title || "TÍTULO DEL DOCUMENTO"}
+    </h1>
+    {data.subtitulo && (
+      <p class="doc-subtitle">{data.subtitulo}</p>
     )}
   </div>
 
-  <!-- 3. Título del Informe -->
-  <div class="cover-report-title-box">
-    <h2 class="report-main-title">{data.title}</h2>
-    {data.subtitulo && <p class="report-sub-title">{data.subtitulo}</p>}
-  </div>
-
-  <!-- 4. Cuadro de Autores / Integrantes / Docente -->
-  <div class="cover-metadata-body">
-    {data.integrantes && data.integrantes.length > 0 ? (
-      <div class="meta-section">
-        <span class="meta-section-label">INTEGRANTES</span>
-        <div class="integrantes-list">
-          {data.integrantes.map((m: Integrante) => (
-            <div class="integrante-item">
-              <span class="integrante-name">{m.nombre}</span>
-              {m.codigo && <span class="integrante-code">{m.codigo}</span>}
-            </div>
-          ))}
-        </div>
-      </div>
-    ) : (
-      <>
-        {data.author && (
-          <div class="meta-section">
-            <span class="meta-section-label">AUTOR / PRACTICANTE</span>
-            <p class="meta-section-val author-val">{data.author}</p>
-          </div>
+  <!-- 4. Bloque de Integrantes / Autor / Docente -->
+  <div class="cover-metadata-container">
+    <table class="cover-meta-table">
+      <tbody>
+        {data.docente && (
+          <tr>
+            <td class="meta-label">DOCENTE:</td>
+            <td class="meta-value">{data.docente}</td>
+          </tr>
         )}
-        {data.codigo && (
-          <div class="meta-section">
-            <span class="meta-section-label">CÓDIGO</span>
-            <p class="meta-section-val">{data.codigo}</p>
-          </div>
-        )}
-      </>
-    )}
-
-    {data.docente && (
-      <div class="meta-section">
-        <span class="meta-section-label">DOCENTE</span>
-        <p class="meta-section-val">{data.docente}</p>
-      </div>
-    )}
-
-    <div class="meta-section inst-footer-ref">
-      <span class="meta-section-label">INSTITUCIÓN</span>
-      <p class="meta-section-val">{institucion}</p>
-    </div>
+        {data.integrantes && data.integrantes.length > 0 ? (
+          data.integrantes.map((m: Integrante, idx: number) => (
+            <tr>
+              <td class="meta-label">{idx === 0 ? "INTEGRANTES:" : ""}</td>
+              <td class="meta-value">
+                <span class="member-name">{m.nombre}</span>
+                {m.codigo && <span class="member-code"> ({m.codigo})</span>}
+                {m.rol && <span class="member-rol"> — <em>{m.rol}</em></span>}
+              </td>
+            </tr>
+          ))
+        ) : data.author ? (
+          <tr>
+            <td class="meta-label">AUTOR:</td>
+            <td class="meta-value">
+              {data.author} {data.codigo ? `(${data.codigo})` : ''}
+            </td>
+          </tr>
+        ) : null}
+      </tbody>
+    </table>
   </div>
 
-  <!-- 5. Pie de Carátula (Lugar y Año) -->
+  <!-- 5. Pie de Página (Ciudad y Año) -->
   <footer class="cover-footer">
-    <span class="city-name">{ciudad}</span>
-    <span class="year-val">{anio}</span>
+    <p class="city-text">{data.ciudad || "LIMA — PERÚ"}</p>
+    <p class="year-text">{data.anio || "2026"}</p>
   </footer>
-</div>
+</article>
 
 <style>
   .report-cover-page {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 230mm;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
     text-align: center;
-    min-height: 85vh;
-    padding: 3rem 2rem 2rem 2rem;
-    margin-bottom: 4rem;
-    box-sizing: border-box;
-    border: none !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    background: transparent !important;
-    background-color: transparent !important;
-    color: var(--text-color);
+    background: #ffffff;
+    color: #000000;
   }
-
-  .cover-header {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-  }
+  .cover-header { width: 100%; }
   .inst-title {
-    font-size: 1.35rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+    font-size: 13pt;
     margin: 0;
-    color: var(--text-color);
+    text-transform: uppercase;
+    font-weight: 800;
     line-height: 1.3;
   }
-  .inst-subtitle {
-    font-size: 1.05rem;
+  .inst-faculty {
+    font-size: 10.5pt;
+    margin: 0.3rem 0;
     font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    margin: 0;
-    opacity: 0.9;
-    color: var(--text-color);
   }
-  .inst-career {
-    font-size: 0.95rem;
-    font-weight: 600;
+  .inst-school {
+    font-size: 9.5pt;
     margin: 0;
-    opacity: 0.8;
+    opacity: 0.85;
   }
-
-  /* Contenedor del escudo: anula el marco interactivo de Base.astro */
   .cover-logo-container {
-    margin: 2rem 0; /* <-- CAMBIA ESTE 2rem a 1rem o 0.5rem para reducir el espacio del logo */
+    margin: 2rem auto;
     display: flex;
     justify-content: center;
     align-items: center;
   }
-
-  .cover-logo-container :global(.img-interactive-wrapper) {
-    border: none !important;
-    box-shadow: none !important;
-    background: transparent !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    border-radius: 0 !important;
-  }
-
-  .cover-logo-container :global(.img-toolbar) {
-    display: none !important;
-  }
-
-  /* Escudo limpio sin sombras de caja ni filtros */
   .cover-logo-img {
-    width: 160px;  /* <-- PRUEBA BAJAR ESTO (ej. 120px o 100px) */
-    height: 160px; /* <-- PRUEBA BAJAR ESTO (ej. 120px o 100px) */
     object-fit: contain;
-    filter: none !important;
-    box-shadow: none !important;
-    border: none !important;
-    border-radius: 0 !important;
-    background: transparent !important;
+    width: auto;
   }
-
-  html[data-modo="claro"] .cover-logo-img {
-    mix-blend-mode: multiply;
-  }
-
-  .cover-report-title-box {
-    margin: 1.5rem 0 2rem 0;
+  .cover-title-container {
+    margin: 1rem 0;
     max-width: 90%;
   }
-  .report-main-title {
-    font-size: 1.25rem;
-    font-weight: 800;
+  .doc-main-title {
+    font-size: 15pt;
     text-transform: uppercase;
-    line-height: 1.4;
-    letter-spacing: 0.04em;
-    margin: 0 0 0.5rem 0;
-    color: var(--text-color);
+    margin: 0.4rem 0;
+    font-weight: 800;
+    line-height: 1.3;
   }
-  .report-sub-title {
-    font-size: 0.95rem;
-    opacity: 0.75;
-    margin: 0;
+  .doc-subtitle {
+    font-size: 10.5pt;
     font-style: italic;
+    margin: 0.2rem 0 0 0;
+    opacity: 0.85;
   }
-
-  .cover-metadata-body {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+  .cover-metadata-container {
     width: 100%;
-    max-width: 480px;
+    margin-top: auto;
+    margin-bottom: 2rem;
   }
-  .meta-section {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
+  .cover-meta-table {
+    width: 85%;
+    margin: 0 auto;
+    border: none;
+    border-collapse: collapse;
+    font-size: 9.5pt;
   }
-  .meta-section-label {
-    font-size: 0.72rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    opacity: 0.65;
+  .cover-meta-table td {
+    border: none !important;
+    padding: 0.2rem 0.5rem;
   }
-  .meta-section-val {
-    font-size: 0.95rem;
-    font-weight: 600;
+  .meta-label {
+    text-align: left;
+    font-weight: 700;
+    width: 25%;
+    vertical-align: top;
+  }
+  .meta-value {
+    text-align: right;
+    vertical-align: top;
+  }
+  .member-rol { font-size: 0.85em; opacity: 0.85; }
+  .cover-footer {
+    width: 100%;
+    text-align: center;
+  }
+  .city-text {
+    font-size: 9.5pt;
+    font-weight: 700;
     margin: 0;
   }
-  .author-val {
-    text-transform: uppercase;
-    font-size: 1rem;
-  }
-
-  .integrantes-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    margin-top: 0.2rem;
-  }
-  .integrante-item {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.9rem;
-    border-bottom: 1px dotted var(--border-color);
-    padding-bottom: 0.2rem;
-  }
-  .integrante-name {
-    font-weight: 600;
-    text-align: left;
-  }
-  .integrante-code {
-    opacity: 0.8;
-    font-family: monospace;
-  }
-
-  .inst-footer-ref {
-    margin-top: 0.5rem;
-  }
-
-  .cover-footer {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin-top: 2rem;
-  }
-
-  @media print {
-    .report-cover-page {
-    page-break-after: always !important;
-    break-after: page !important;
-    min-height: 100vh !important;
-    height: 100% !important;
-    display: flex !important;
-    flex-direction: column !important;
-    justify-content: space-between !important;
-    margin: 0 !important;
-    padding: 0 !important;
-  }
-    .inst-title, .inst-subtitle, .report-main-title {
-      color: #000000 !important;
-    }
-    .cover-logo-img {
-      filter: none !important;
-      box-shadow: none !important;
-    }
+  .year-text {
+    font-size: 9.5pt;
+    margin: 0.15rem 0 0 0;
   }
 </style>

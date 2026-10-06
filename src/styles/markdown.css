@@ -1,37 +1,92 @@
 /* src/styles/markdown.css */
-/* --- ESTILOS DE LECTURA DE MARKDOWN (AISLADOS) --- */
+/* ==========================================================
+   PROSA Y JERARQUÍA EDITORIAL MARKDOWN
+   ========================================================== */
+
 .main-content article {
   color: var(--text-color);
   font-family: var(--doc-font);
 }
 
-.main-content::after, .sticky-panel::after {
+.main-content::after,
+.sticky-panel::after {
   content: "";
   display: block;
-  height: 20vh;
+  height: 15vh;
 }
 
-.main-content img {
+/* Espaciado de imágenes en lectura */
+.main-content article img {
   max-width: 100%;
   height: auto;
-  border-radius: 8px;
+  border-radius: var(--radius-md, 8px);
   display: block;
-  margin: 2rem auto;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  margin: 1.75rem auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* ==========================================================
-   JERARQUÍA DE ENCABEZADOS (COLOR-CODING Y TAMAÑO)
+   JERARQUÍA DE ENCABEZADOS (H1 - H6)
    ========================================================== */
-.markdown-body h1 { color: var(--color-h1); font-size: var(--h1-size); font-weight: 800; font-family: var(--title-font); }
-.markdown-body h2 { color: var(--color-h2); font-size: var(--h2-size); font-weight: 700; margin-top: 2rem; font-family: var(--title-font); }
-.markdown-body h3 { color: var(--color-h3); font-size: var(--h3-size); font-weight: 600; margin-top: 1.75rem; font-family: var(--title-font); }
-.markdown-body h4 { color: var(--color-h4); font-size: var(--h4-size); font-weight: 600; margin-top: 1.5rem; font-family: var(--title-font); }
-.markdown-body h5 { color: var(--color-h5); font-size: var(--h5-size); font-weight: 600; margin-top: 1.25rem; font-family: var(--title-font); }
-.markdown-body h6 { color: var(--color-h6); font-size: var(--h6-size); font-weight: 600; margin-top: 1rem; font-family: var(--title-font); }
+.markdown-body h1 {
+  color: var(--color-h1);
+  font-size: var(--h1-size);
+  font-weight: 800;
+  font-family: var(--title-font);
+  line-height: 1.25;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.markdown-body h2 {
+  color: var(--color-h2);
+  font-size: var(--h2-size);
+  font-weight: 700;
+  font-family: var(--title-font);
+  line-height: 1.3;
+  margin-top: 2rem;
+  margin-bottom: 0.85rem;
+}
+
+.markdown-body h3 {
+  color: var(--color-h3);
+  font-size: var(--h3-size);
+  font-weight: 600;
+  font-family: var(--title-font);
+  line-height: 1.35;
+  margin-top: 1.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.markdown-body h4 {
+  color: var(--color-h4);
+  font-size: var(--h4-size);
+  font-weight: 600;
+  font-family: var(--title-font);
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.markdown-body h5 {
+  color: var(--color-h5);
+  font-size: var(--h5-size);
+  font-weight: 600;
+  font-family: var(--title-font);
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.markdown-body h6 {
+  color: var(--color-h6);
+  font-size: var(--h6-size);
+  font-weight: 600;
+  font-family: var(--title-font);
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
 
 /* ==========================================================
-   ÉNFASIS Y FORMATO DE TEXTO (COLOR-CODING)
+   FORMATO DE CARACTERES Y ÉNFASIS
    ========================================================== */
 .markdown-body strong {
   color: var(--color-negrita);
@@ -54,27 +109,22 @@
   text-decoration-color: var(--color-tachado);
 }
 
-/* Enlaces internos en Markdown */
-.main-content a.internal {
-  color: var(--text-color);
-  background: var(--accent-subtle);
-  border-bottom: 2px solid var(--accent-color);
-  text-decoration: none;
-  padding: 0 4px;
-  border-radius: 4px;
+/* Código en línea */
+.markdown-body :not(pre) > code {
+  color: var(--color-codigo-inline);
+  background-color: var(--bg-codigo-inline);
+  padding: 0.2em 0.4em;
+  border-radius: var(--radius-sm, 6px);
+  font-family: var(--code-font);
+  font-size: 0.85em;
   font-weight: 500;
-  transition: all 0.2s ease;
-}
-
-.main-content a.internal:hover {
-  background: var(--accent-color);
-  color: #ffffff;
 }
 
 /* ==========================================================
-   SCROLL RESPONSIVO PARA TABLAS MARKDOWN
+   TABLAS RESPONSIVAS
    ========================================================== */
-.main-content table-container, .main-content table-wrapper {
+.main-content table-container,
+.main-content table-wrapper {
   width: 100%;
   overflow-x: auto;
   margin: 1.5rem 0;
@@ -82,105 +132,35 @@
 }
 
 .main-content article table {
-  display: block;
   width: 100%;
   max-width: 100%;
-  overflow-x: auto;
   border-collapse: collapse;
-  white-space: nowrap;
-  -webkit-overflow-scrolling: touch;
   margin: 1.5rem 0;
+  font-size: 0.92rem;
 }
 
-.main-content th, .main-content td {
+.main-content th,
+.main-content td {
   border: 1px solid var(--border-color);
-  padding: 0.75rem 1rem;
+  padding: 0.65rem 0.9rem;
   text-align: left;
 }
 
 .main-content th {
   background-color: var(--accent-subtle);
   font-weight: 600;
+  color: var(--text-color);
 }
 
 html[data-modo="oscuro"] .main-content th {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: rgba(255, 255, 255, 0.04);
 }
 
 /* ==========================================================
-   ESTILOS Y AISLAMIENTO DE KATEX / LATEX
+   LISTAS Y CHECKBOXES DE TAREAS
    ========================================================== */
-
-/* Color y tamaño base de la fórmula (heredable a sus elementos hijos) */
-.main-content .katex,
-.katex {
-  color: var(--latex-color) !important;
-  font-size: var(--latex-font-size);
-  border-color: currentColor;
-}
-
-/* Contenedor en bloque ($$ ... $$) */
-.main-content .katex-display {
-  display: block !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  overflow-x: auto !important;
-  overflow-y: hidden !important;
-  padding: 0.85rem 0.5rem !important;
-  margin: 1.5rem 0 !important;
-  text-align: center !important;
-  -webkit-overflow-scrolling: touch;
-  box-sizing: border-box;
-}
-
-.main-content .katex-display > .katex {
-  display: inline-block !important;
-  text-align: center !important;
-  max-width: 100% !important;
-  min-width: min-content !important;
-  margin: 0 auto !important;
-}
-
-.main-content .katex-display .katex-html {
-  white-space: nowrap !important;
-  text-align: center !important;
-}
-
-.main-content .katex .array {
-  display: inline-table !important;
-}
-
-/* Líneas de raíz cuadrada y fracciones respetan el color sin deformarse */
-.katex .sqrt > .vlist-t {
-  border-top-color: currentColor !important;
-}
-
-.katex .frac-line {
-  border-bottom-color: currentColor !important;
-}
-
-/* ==========================================================
-   ESTRUCTURA DEL CONTENEDOR PRINCIPAL
-   ========================================================== */
-.main-content {
-  padding: var(--content-padding, 2rem 3rem);
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-  box-sizing: border-box;
-  scroll-padding-top: 100px;
-}
-
-@media (min-width: 769px) {
-  .main-content {
-    scroll-behavior: smooth;
-  }
-}
-
-/* ==========================================================
-   MODIFICACIÓN DE DISEÑO PARA CHECKBOXES (ESTILO TAREAS)
-   ========================================================== */
-.markdown-body ul.contains-task-list, .markdown-body .task-list-item {
+.markdown-body ul.contains-task-list,
+.markdown-body .task-list-item {
   list-style: none !important;
   margin-left: 0 !important;
   padding-left: 0 !important;
@@ -190,15 +170,15 @@ html[data-modo="oscuro"] .main-content th {
   display: flex !important;
   align-items: center !important;
   gap: 0.6rem !important;
-  margin: 0.4rem 0 !important;
+  margin: 0.35rem 0 !important;
   font-family: var(--ui-font) !important;
 }
 
 .markdown-body input[type="checkbox"] {
   appearance: none;
   -webkit-appearance: none;
-  width: 1.15rem;
-  height: 1.15rem;
+  width: 1.1rem;
+  height: 1.1rem;
   border: 1.5px solid var(--border-color);
   border-radius: 4px;
   background-color: var(--header-bg);
@@ -209,6 +189,7 @@ html[data-modo="oscuro"] .main-content th {
   position: relative;
   transition: all 0.2s ease;
   margin: 0 !important;
+  flex-shrink: 0;
 }
 
 .markdown-body input[type="checkbox"]:hover {
@@ -232,18 +213,6 @@ html[data-modo="oscuro"] .main-content th {
 }
 
 .markdown-body li.task-list-item:has(input[type="checkbox"]:checked) {
-  opacity: 0.75;
+  opacity: 0.65;
   text-decoration: line-through;
-  text-decoration-color: var(--accent-color);
-}
-
-/* Código en línea (evita colisionar con bloques de Shiki) */
-.markdown-body :not(pre) > code {
-  color: var(--color-codigo-inline);
-  background-color: var(--bg-codigo-inline);
-  padding: 0.2em 0.4em;
-  border-radius: 6px;
-  font-family: 'Fira Code', ui-monospace, monospace;
-  font-size: 0.85em;
-  font-weight: 500;
 }

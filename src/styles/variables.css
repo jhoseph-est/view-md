@@ -1,21 +1,26 @@
 /* src/styles/variables.css */
 /* ==========================================================
-   1. VARIABLES ESTRUCTURALES Y RESET BASE
+   1. TOKENS GLOBALES Y VARIABLES POR DEFECTO (MODO CLARO)
    ========================================================== */
 :root {
+  /* Dimensiones de Interfaz */
   --header-height: 60px;
   --sidebar-width: 260px;
   --right-panel-width: 240px;
   --max-grid-width: 1600px;
   --font-size: 16px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
 
   /* Contención Tipográfica */
   --ui-font: system-ui, -apple-system, sans-serif;
   --doc-font: system-ui, -apple-system, sans-serif;
   --title-font: system-ui, -apple-system, sans-serif;
+  --code-font: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --doc-line-height: 1.6;
 
-  /* Escala de Títulos (Fallback estructural) */
+  /* Escala de Títulos */
   --h1-size: 2.2rem;
   --h2-size: 1.8rem;
   --h3-size: 1.5rem;
@@ -23,42 +28,81 @@
   --h5-size: 1.1rem;
   --h6-size: 1rem;
 
-  /* Tokens de Acento Global */
-  --accent-color: #8b5cf6;
-  --accent-hover: #7c3aed;
-  --accent-subtle: rgba(139, 92, 246, 0.12);
-  --accent-border: rgba(139, 92, 246, 0.25);
-
-  /* Fallback Modo Claro por defecto */
-  --bg-color: #ffffff;
-  --header-bg: #f8fafc;
-  --card-bg: #f1f5f9;
-  --border-color: #cbd5e1;
-  --text-color: #0f172a;
-  --text-muted: #64748b;
-  --color-negrita: #020617;
-  --color-cursiva: #16a34a;
-  --color-negrita-cursiva: #9333ea;
-  --color-tachado: #94a3b8;
-  --color-codigo-inline: #c2410c;
-  --bg-codigo-inline: rgba(234, 88, 12, 0.08);
-  
-  /* LaTeX / KaTeX (Unificado) */
-  --latex-color: #b45309;
-  --latex-font-size: 1.15em;
-
-  --link-color: #2563eb;
-  --link-hover: #1d4ed8;
-
+  /* Colores de Títulos */
   --color-h1: #15803d;
   --color-h2: #0f766e;
   --color-h3: #1d4ed8;
   --color-h4: #4338ca;
   --color-h5: #6d28d9;
   --color-h6: #475569;
+
+  /* Superficies y Textos Base */
+  --bg-color: #ffffff;
+  --header-bg: #f8fafc;
+  --card-bg: #f1f5f9;
+  --border-color: #cbd5e1;
+  --text-color: #0f172a;
+  --text-muted: #64748b;
+
+  /* Énfasis de Texto */
+  --color-negrita: #020617;
+  --color-cursiva: #16a34a;
+  --color-negrita-cursiva: #9333ea;
+  --color-tachado: #94a3b8;
+  --color-codigo-inline: #c2410c;
+  --bg-codigo-inline: rgba(234, 88, 12, 0.08);
+
+  /* Acentos y Enlaces */
+  --accent-color: #8b5cf6;
+  --accent-hover: #7c3aed;
+  --accent-subtle: rgba(139, 92, 246, 0.12);
+  --accent-border: rgba(139, 92, 246, 0.25);
+  --link-color: #2563eb;
+  --link-hover: #1d4ed8;
+
+  /* Bloques de Código */
+  --code-border-color: #334155;
+  --code-toolbar-bg: rgba(15, 23, 42, 0.85);
+
+  /* Callouts Tokens */
+  --callout-note: #0284c7;
+  --callout-info: #0284c7;
+  --callout-todo: #2563eb;
+  --callout-tip: #0891b2;
+  --callout-success: #16a34a;
+  --callout-question: #ea580c;
+  --callout-warning: #d97706;
+  --callout-danger: #dc2626;
+  --callout-example: #9333ea;
+  --callout-quote: #64748b;
+
+  /* Parámetros de Impresión / Hoja Dinámica */
+  --print-page-padding: 2.54cm;
+  --print-font-size: 11pt;
+  --print-font-family: system-ui, -apple-system, sans-serif;
+  --print-line-height: 1.6;
+  --print-para-indent: 0cm;
+  --print-para-align: left; /* 'justify' o 'left' según la plantilla */
+
+  --print-h1-size: 16pt;
+  --print-h2-size: 13pt;
+  --print-h3-size: 12pt;
+
+  /* Tablas en Impresión (Libre: APA, rejilla o minimalista) */
+  --print-table-border-top: 1.5pt solid #000000;
+  --print-table-border-bottom: 1.5pt solid #000000;
+  --print-table-border-cells: none; /* '1px solid #000' si es cuadrícula completa */
+  --print-table-header-bg: transparent;
+
+  /* Código y Multimedia en Web */
+  --table-border: var(--border-color);
+  --table-header-bg: var(--accent-subtle);
+  --code-radius: var(--radius-md, 8px);
 }
 
-/* Fallback Modo Oscuro por defecto */
+/* ==========================================================
+   2. OVERRIDES POR DEFECTO (MODO OSCURO)
+   ========================================================== */
 html[data-modo="oscuro"] {
   --bg-color: #0f172a;
   --header-bg: #1e293b;
@@ -66,16 +110,13 @@ html[data-modo="oscuro"] {
   --border-color: #334155;
   --text-color: #f8fafc;
   --text-muted: #94a3b8;
+
   --color-negrita: #ffffff;
   --color-cursiva: #a3e635;
   --color-negrita-cursiva: #c084fc;
   --color-tachado: #64748b;
   --color-codigo-inline: #fb923c;
   --bg-codigo-inline: rgba(251, 146, 60, 0.15);
-  
-  /* LaTeX / KaTeX Modo Oscuro */
-  --latex-color: #facc15;
-  --latex-font-size: 1.15em;
 
   --link-color: #60a5fa;
   --link-hover: #93c5fd;
@@ -86,52 +127,25 @@ html[data-modo="oscuro"] {
   --color-h4: #818cf8;
   --color-h5: #a78bfa;
   --color-h6: #94a3b8;
+
+  /* Callouts en Modo Oscuro */
+  --callout-note: #38bdf8;
+  --callout-info: #38bdf8;
+  --callout-todo: #60a5fa;
+  --callout-tip: #22d3ee;
+  --callout-success: #4ade80;
+  --callout-question: #fb923c;
+  --callout-warning: #fbbf24;
+  --callout-danger: #f87171;
+  --callout-example: #c084fc;
+  --callout-quote: #94a3b8;
 }
 
-/* ==========================================================
-   2. APLICACIÓN ESTRUCTURAL ESTRICTA
-   ========================================================== */
-body {
-  margin: 0;
-  background-color: var(--bg-color) !important;
-  color: var(--text-color) !important;
-  font-family: var(--ui-font) !important;
-  font-size: var(--font-size);
-  height: 100vh;
-  overflow: hidden;
-  transition: background-color 0.25s ease, color 0.25s ease;
-}
-
-.main-content {
-  font-family: var(--doc-font);
-}
-
-.main-content :where(p, li, h1, h2, h3, blockquote):not(.mermaid-native *):not(pre *):not(.katex *) {
-  line-height: var(--doc-line-height);
-}
-
-.main-content article a:not(.mermaid-native *):not(pre *):not(.katex *) {
-  color: var(--link-color) !important;
-  text-decoration: none;
-  border-bottom: 1.5px solid var(--accent-border);
-  font-weight: 500;
-  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
-  padding: 0 2px;
-  border-radius: 3px;
-}
-
-.main-content article a:not(.mermaid-native *):not(pre *):not(.katex *):hover {
-  color: var(--link-hover) !important;
-  background-color: var(--accent-subtle);
-  border-bottom-color: var(--accent-color);
-}
-
-/* Tamaños de texto dinámicos */
+/* Modificadores de Densidad y Ancho */
 html[data-texto="pequeno"] { --font-size: 14px; }
 html[data-texto="estandar"] { --font-size: 16px; }
 html[data-texto="grande"] { --font-size: 18px; }
 
-/* Anchuras de lectura */
 html[data-ancho="ancho"] {
   --content-max-width: 1400px;
   --content-padding: 2rem 4rem;

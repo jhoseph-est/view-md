@@ -1,0 +1,54 @@
+---
+// src/components/taller/PanelCaratula.astro
+interface Props {
+  caratulasList: Array<[string, any]>;
+}
+const { caratulasList = [] } = Astro.props;
+---
+<div class="tab-panel" id="tab-cover">
+  <div class="preset-banner">
+    <h3>Modelos de Portada (caratulas.json)</h3>
+    <p>Disposición y proporciones para informes y tesis.</p>
+  </div>
+
+  <div class="control-box">
+    <span class="control-box-title">Modelos de Portada</span>
+    <div class="ctrl-field">
+      <label>Modelo Base</label>
+      <select id="sel-cover-preset" class="taller-select">
+        {caratulasList.map(([k, v]: [string, any]) => (
+          <option value={k}>{v.nombre || k}</option>
+        ))}
+      </select>
+    </div>
+    <div class="ctrl-field">
+      <label>Nuevo ID</label>
+      <input type="text" id="txt-cover-new-id" class="taller-input" placeholder="ej. portada-personalizada" />
+    </div>
+  </div>
+
+  <div class="control-box">
+    <span class="control-box-title">Estructura Visual</span>
+    <div class="ctrl-field">
+      <label>Alineación de Membrete</label>
+      <select id="sel-cover-align" class="taller-select">
+        <option value="center">Centrado Formal</option>
+        <option value="left">Alineado a la Izquierda</option>
+      </select>
+    </div>
+    <div class="ctrl-field-inline">
+      <label>Altura del Escudo</label>
+      <input type="range" id="rng-cover-logo" min="25" max="65" step="1" value="45" />
+      <span id="lbl-cover-logo" class="val-badge">45mm</span>
+    </div>
+  </div>
+
+  <div class="action-btn-group">
+    <button class="btn-taller-action btn-update" data-action="update" data-target="caratulas">
+      Actualizar Modelo
+    </button>
+    <button class="btn-taller-action btn-new-preset" data-action="create-new" data-target="caratulas">
+      + Crear y Copiar Modelo
+    </button>
+  </div>
+</div>
