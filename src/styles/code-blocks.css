@@ -5,7 +5,7 @@
   position: relative !important;
   margin: 1.75rem 0;
   border-radius: var(--radius-md, 8px);
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--code-border-color);
   overflow: hidden;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   background: transparent !important;
@@ -50,7 +50,7 @@
   font-family: var(--ui-font, system-ui) !important;
   font-weight: 700 !important;
   letter-spacing: 0.05em !important;
-  color: var(--text-muted, #94a3b8) !important;
+  color: var(--code-lang-color, #94a3b8) !important;
   user-select: none !important;
   padding-right: 0.45rem !important;
   border-right: 1px solid rgba(255, 255, 255, 0.15) !important;
@@ -60,7 +60,7 @@
 
 .copy-code-btn {
   background: transparent !important;
-  color: #f8fafc !important;
+  color: var(--code-btn-copy-color, #f8fafc) !important;
   border: none !important;
   padding: 0.2rem 0.45rem !important;
   border-radius: 4px !important;
@@ -82,7 +82,7 @@
   color: #ffffff !important;
 }
 
-/* 3. Área interna de código (gestionada por Shiki) */
+/* 3. Área interna de código (Shiki) */
 .main-content pre.astro-code {
   margin: 0 !important;
   padding: 1.25rem 1.4rem !important;

@@ -1,0 +1,469 @@
+---
+// src/components/editor/TabEstilosWeb.astro
+---
+
+<div id="tab-estilo" class="tab-content active">
+  <!-- Datos del Tema -->
+  <div class="control-card">
+    <div class="control-row">
+      <label for="ed-style-name">Nombre del Tema</label>
+      <input type="text" id="ed-style-name" class="ed-input-text" value="Mi Tema Personalizado" />
+    </div>
+    <div class="control-row" style="margin-top: 0.5rem;">
+      <label>Modo a calibrar</label>
+      <div class="mode-switch-group">
+        <button type="button" class="mode-btn active" id="btn-mode-claro">Modo Claro</button>
+        <button type="button" class="mode-btn" id="btn-mode-oscuro">Modo Oscuro</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACORDEÓN 1: GENERAL & SUPERFICIES -->
+  <details class="editor-accordion" open>
+    <summary class="accordion-header">1. General & Superficies</summary>
+    <div class="accordion-body">
+      <div class="control-sub-title">Tipografías Base</div>
+      <div class="control-row-col">
+        <label for="font-doc">Fuente del Cuerpo (Párrafo)</label>
+        <select id="font-doc" class="ed-select">
+          <option value="system-ui, -apple-system, sans-serif">Sans-Serif (Sistema: Segoe UI, Roboto)</option>
+          <option value="Georgia, Cambria, 'Times New Roman', serif">Serif Editorial (Georgia, Cambria)</option>
+          <option value="'Times New Roman', Times, serif">Times New Roman (Clásica Formal)</option>
+          <option value="'Fira Code', Consolas, monospace">Monospace (Fira Code, Código)</option>
+        </select>
+      </div>
+      <div class="control-row-col">
+        <label for="font-title">Fuente General de Títulos</label>
+        <select id="font-title" class="ed-select">
+          <option value="system-ui, -apple-system, sans-serif">Sans-Serif (Moderno)</option>
+          <option value="Georgia, Cambria, 'Times New Roman', serif">Serif (Editorial)</option>
+          <option value="'Times New Roman', Times, serif">Times New Roman (Formal)</option>
+        </select>
+      </div>
+
+      <div class="control-sub-title" style="margin-top: 0.5rem;">Paleta de Superficies</div>
+      <div class="grid-colors">
+        <div class="color-item">
+          <label for="col-bg">Fondo Principal</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-bg" value="#ffffff" />
+            <span class="color-hex" id="hex-bg">#ffffff</span>
+          </div>
+        </div>
+        <div class="color-item">
+          <label for="col-header">Fondo Secundario</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-header" value="#f8fafc" />
+            <span class="color-hex" id="hex-header">#f8fafc</span>
+          </div>
+        </div>
+        <div class="color-item">
+          <label for="col-card">Fondo Tarjetas</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-card" value="#f1f5f9" />
+            <span class="color-hex" id="hex-card">#f1f5f9</span>
+          </div>
+        </div>
+        <div class="color-item">
+          <label for="col-border">Bordes Generales</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-border" value="#cbd5e1" />
+            <span class="color-hex" id="hex-border">#cbd5e1</span>
+          </div>
+        </div>
+        <div class="color-item">
+          <label for="col-accent">Color de Acento</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-accent" value="#8b5cf6" />
+            <span class="color-hex" id="hex-accent">#8b5cf6</span>
+          </div>
+        </div>
+        <div class="color-item">
+          <label for="col-link">Enlaces Web</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-link" value="#2563eb" />
+            <span class="color-hex" id="hex-link">#2563eb</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- ACORDEÓN 2: MARKDOWN & PROSA EDITORIAL -->
+  <details class="editor-accordion">
+    <summary class="accordion-header">2. Markdown & Prosa Editorial</summary>
+    <div class="accordion-body">
+      <!-- Párrafo Prosa -->
+      <div class="control-sub-title">Comportamiento del Párrafo</div>
+      <div class="control-row-col">
+        <div class="label-with-val">
+          <label for="geo-indent">Sangría Primera Línea</label>
+          <span id="val-indent">0 cm</span>
+        </div>
+        <input type="range" id="geo-indent" min="0.0" max="2.5" step="0.05" value="0" />
+      </div>
+      <div class="control-row-col">
+        <div class="label-with-val">
+          <label for="geo-lineheight">Interlineado</label>
+          <span id="val-lineheight">1.65</span>
+        </div>
+        <input type="range" id="geo-lineheight" min="1.2" max="2.2" step="0.05" value="1.65" />
+      </div>
+      <div class="control-row">
+        <label for="geo-align">Alineación de Texto</label>
+        <select id="geo-align" class="ed-select">
+          <option value="left">A la izquierda</option>
+          <option value="justify">Justificado</option>
+        </select>
+      </div>
+
+      <!-- Jerarquía H1 a H6 -->
+      <div class="control-sub-title" style="margin-top: 0.8rem;">Jerarquía H1 - H6 Granular</div>
+      {['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].map((tag, idx) => {
+        const defaultSizes = ['2.2', '1.8', '1.5', '1.25', '1.1', '1.0'];
+        const defaultColors = ['#15803d', '#0f766e', '#1d4ed8', '#4338ca', '#6d28d9', '#475569'];
+        return (
+          <div class="heading-block-editor">
+            <div class="heading-header-row">
+              <span class="heading-tag">{tag.toUpperCase()}</span>
+              <input type="color" id={`col-${tag}`} value={defaultColors[idx]} title={`Color ${tag.toUpperCase()}`} />
+              <div class="slider-field">
+                <input type="range" id={`size-${tag}`} min="0.8" max="3.0" step="0.05" value={defaultSizes[idx]} />
+                <span class="slider-val" id={`val-${tag}`}>{defaultSizes[idx]}rem</span>
+              </div>
+            </div>
+            <div class="heading-sub-controls">
+              <select id={`font-${tag}`} class="ed-mini-select" title={`Fuente ${tag.toUpperCase()}`}>
+                <option value="var(--title-font)">Heredar Título</option>
+                <option value="system-ui, -apple-system, sans-serif">Sans-Serif</option>
+                <option value="Georgia, Cambria, 'Times New Roman', serif">Serif Editorial</option>
+                <option value="'Times New Roman', Times, serif">Times New Roman</option>
+                <option value="'Fira Code', monospace">Monospace</option>
+              </select>
+              <select id={`align-${tag}`} class="ed-mini-select" title={`Alineación ${tag.toUpperCase()}`}>
+                <option value="left">Izquierda</option>
+                <option value="center">Centro</option>
+                <option value="right">Derecha</option>
+              </select>
+              <label class="switch-field-mini">
+                <input type="checkbox" id={`border-${tag}`} checked={tag === 'h1'} />
+                <span>Línea</span>
+              </label>
+            </div>
+          </div>
+        );
+      })}
+
+      <!-- Énfasis de Caracteres -->
+      <div class="control-sub-title" style="margin-top: 0.8rem;">Énfasis de Caracteres</div>
+      <div class="grid-colors">
+        <div class="color-item">
+          <label for="col-text">Texto Base</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-text" value="#0f172a" />
+            <span class="color-hex" id="hex-text">#0f172a</span>
+          </div>
+        </div>
+        <div class="color-item">
+          <label for="col-bold">Negritas</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-bold" value="#020617" />
+            <span class="color-hex" id="hex-bold">#020617</span>
+          </div>
+        </div>
+        <div class="color-item">
+          <label for="col-italic">Cursivas</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-italic" value="#16a34a" />
+            <span class="color-hex" id="hex-italic">#16a34a</span>
+          </div>
+        </div>
+        <div class="color-item">
+          <label for="col-bold-italic">Negrita-Cursiva</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-bold-italic" value="#9333ea" />
+            <span class="color-hex" id="hex-bold-italic">#9333ea</span>
+          </div>
+        </div>
+        <div class="color-item">
+          <label for="col-strike">Tachado</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-strike" value="#94a3b8" />
+            <span class="color-hex" id="hex-strike">#94a3b8</span>
+          </div>
+        </div>
+        <div class="color-item">
+          <label for="col-underline">Subrayado</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-underline" value="#0f172a" />
+            <span class="color-hex" id="hex-underline">#0f172a</span>
+          </div>
+        </div>
+        <div class="color-item">
+          <label for="col-code-inline">Código Inline</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-code-inline" value="#c2410c" />
+            <span class="color-hex" id="hex-code-inline">#c2410c</span>
+          </div>
+        </div>
+        <div class="color-item">
+          <label for="col-mark-bg">Fondo Resaltado</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-mark-bg" value="#eab308" />
+            <span class="color-hex" id="hex-mark-bg">#eab308</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- KaTeX Fórmulas -->
+      <div class="control-sub-title" style="margin-top: 0.8rem;">Ecuaciones KaTeX</div>
+      <div class="grid-colors">
+        <div class="color-item">
+          <label for="col-katex">Color Glifo Math</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-katex" value="#0f172a" />
+            <span class="color-hex" id="hex-katex">#0f172a</span>
+          </div>
+        </div>
+        <div class="color-item">
+          <label for="col-katex-bg">Fondo Bloque Display</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-katex-bg" value="#000000" />
+            <span class="color-hex" id="hex-katex-bg">#000000</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tablas -->
+      <div class="control-sub-title" style="margin-top: 0.8rem;">Tablas Editoriales</div>
+      <div class="grid-colors">
+        <div class="color-item">
+          <label for="col-table-border">Bordes de Celdas</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-table-border" value="#cbd5e1" />
+            <span class="color-hex" id="hex-table-border">#cbd5e1</span>
+          </div>
+        </div>
+        <div class="color-item">
+          <label for="col-table-th-bg">Fondo Cabecera TH</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-table-th-bg" value="#f8fafc" />
+            <span class="color-hex" id="hex-table-th-bg">#f8fafc</span>
+          </div>
+        </div>
+        <div class="color-item">
+          <label for="col-table-th-text">Texto Cabecera TH</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-table-th-text" value="#0f172a" />
+            <span class="color-hex" id="hex-table-th-text">#0f172a</span>
+          </div>
+        </div>
+        <div class="color-item">
+          <label for="col-table-row-even">Fila Par (Cebreado)</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-table-row-even" value="#ffffff" />
+            <span class="color-hex" id="hex-table-row-even">#ffffff</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Citas y Listas -->
+      <div class="control-sub-title" style="margin-top: 0.8rem;">Citas y Listas</div>
+      <div class="grid-colors">
+        <div class="color-item">
+          <label for="col-quote-border">Borde Lateral Cita</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-quote-border" value="#8b5cf6" />
+            <span class="color-hex" id="hex-quote-border">#8b5cf6</span>
+          </div>
+        </div>
+        <div class="color-item">
+          <label for="col-quote-text">Texto de Cita</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-quote-text" value="#0f172a" />
+            <span class="color-hex" id="hex-quote-text">#0f172a</span>
+          </div>
+        </div>
+        <div class="color-item">
+          <label for="col-list-bullet">Color de Viñetas</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-list-bullet" value="#8b5cf6" />
+            <span class="color-hex" id="hex-list-bullet">#8b5cf6</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- ACORDEÓN 3: BLOQUES DE CÓDIGO -->
+  <details class="editor-accordion">
+    <summary class="accordion-header">3. Bloques de Código Fuente</summary>
+    <div class="accordion-body">
+      <div class="grid-colors">
+        <div class="color-item">
+          <label for="col-code-border">Borde Marco Código</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-code-border" value="#cbd5e1" />
+            <span class="color-hex" id="hex-code-border">#cbd5e1</span>
+          </div>
+        </div>
+        <div class="color-item">
+          <label for="col-code-toolbar-bg">Fondo Píldora Toolbar</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-code-toolbar-bg" value="#0f172a" />
+            <span class="color-hex" id="hex-code-toolbar-bg">#0f172a</span>
+          </div>
+        </div>
+        <div class="color-item">
+          <label for="col-code-lang">Texto de Lenguaje</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-code-lang" value="#94a3b8" />
+            <span class="color-hex" id="hex-code-lang">#94a3b8</span>
+          </div>
+        </div>
+        <div class="color-item">
+          <label for="col-code-btn">Botón Copiar Código</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-code-btn" value="#f8fafc" />
+            <span class="color-hex" id="hex-code-btn">#f8fafc</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- ACORDEÓN 4: MERMAID ESPECÍFICO -->
+  <details class="editor-accordion">
+    <summary class="accordion-header">4. Mermaid: Colores por Diagrama</summary>
+    <div class="accordion-body">
+      <!-- Flowchart -->
+      <div class="control-sub-title">Flowchart (Diagrama de Flujo)</div>
+      <div class="grid-colors">
+        <div class="color-item">
+          <label for="col-mm-flow-bg">Fondo Nodos</label>
+          <input type="color" id="col-mm-flow-bg" value="#f8fafc" />
+        </div>
+        <div class="color-item">
+          <label for="col-mm-flow-border">Borde Nodos</label>
+          <input type="color" id="col-mm-flow-border" value="#0ea5e9" />
+        </div>
+        <div class="color-item">
+          <label for="col-mm-flow-line">Flechas / Conexiones</label>
+          <input type="color" id="col-mm-flow-line" value="#0284c7" />
+        </div>
+        <div class="color-item">
+          <label for="col-mm-flow-text">Texto Nodos</label>
+          <input type="color" id="col-mm-flow-text" value="#0f172a" />
+        </div>
+      </div>
+
+      <!-- Sequence -->
+      <div class="control-sub-title" style="margin-top: 0.8rem;">Sequence Diagram</div>
+      <div class="grid-colors">
+        <div class="color-item">
+          <label for="col-mm-seq-actor-bg">Fondo Actores</label>
+          <input type="color" id="col-mm-seq-actor-bg" value="#f8fafc" />
+        </div>
+        <div class="color-item">
+          <label for="col-mm-seq-actor-border">Borde Actores</label>
+          <input type="color" id="col-mm-seq-actor-border" value="#0ea5e9" />
+        </div>
+        <div class="color-item">
+          <label for="col-mm-seq-line">Línea de Vida</label>
+          <input type="color" id="col-mm-seq-line" value="#0284c7" />
+        </div>
+        <div class="color-item">
+          <label for="col-mm-seq-note-bg">Fondo Notas</label>
+          <input type="color" id="col-mm-seq-note-bg" value="#fdf4ff" />
+        </div>
+      </div>
+
+      <!-- ER Diagram -->
+      <div class="control-sub-title" style="margin-top: 0.8rem;">ER Diagram (Entidad-Relación)</div>
+      <div class="grid-colors">
+        <div class="color-item">
+          <label for="col-mm-er-header">Cabecera Entidad</label>
+          <input type="color" id="col-mm-er-header" value="#e0f2fe" />
+        </div>
+        <div class="color-item">
+          <label for="col-mm-er-border">Bordes Entidad</label>
+          <input type="color" id="col-mm-er-border" value="#0ea5e9" />
+        </div>
+        <div class="color-item">
+          <label for="col-mm-er-odd">Fila Impar</label>
+          <input type="color" id="col-mm-er-odd" value="#ffffff" />
+        </div>
+        <div class="color-item">
+          <label for="col-mm-er-even">Fila Par</label>
+          <input type="color" id="col-mm-er-even" value="#f8fafc" />
+        </div>
+      </div>
+
+      <!-- Gantt -->
+      <div class="control-sub-title" style="margin-top: 0.8rem;">Gantt Chart</div>
+      <div class="grid-colors">
+        <div class="color-item">
+          <label for="col-mm-gantt-done">Tarea Completada</label>
+          <input type="color" id="col-mm-gantt-done" value="#059669" />
+        </div>
+        <div class="color-item">
+          <label for="col-mm-gantt-active">Tarea Activa</label>
+          <input type="color" id="col-mm-gantt-active" value="#0284c7" />
+        </div>
+        <div class="color-item">
+          <label for="col-mm-gantt-crit">Tarea Crítica</label>
+          <input type="color" id="col-mm-gantt-crit" value="#dc2626" />
+        </div>
+      </div>
+
+      <!-- GitGraph -->
+      <div class="control-sub-title" style="margin-top: 0.8rem;">GitGraph (Ramas Git)</div>
+      <div class="grid-colors">
+        <div class="color-item">
+          <label for="col-mm-git-1">Rama 0 (Main)</label>
+          <input type="color" id="col-mm-git-1" value="#0284c7" />
+        </div>
+        <div class="color-item">
+          <label for="col-mm-git-2">Rama 1</label>
+          <input type="color" id="col-mm-git-2" value="#7c3aed" />
+        </div>
+        <div class="color-item">
+          <label for="col-mm-git-3">Rama 2</label>
+          <input type="color" id="col-mm-git-3" value="#059669" />
+        </div>
+        <div class="color-item">
+          <label for="col-mm-git-4">Rama 3</label>
+          <input type="color" id="col-mm-git-4" value="#d97706" />
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- ACORDEÓN 5: MULTIMEDIA -->
+  <details class="editor-accordion">
+    <summary class="accordion-header">5. Recursos Multimedia</summary>
+    <div class="accordion-body">
+      <div class="grid-colors">
+        <div class="color-item">
+          <label for="col-media-border">Borde Video e Imágenes</label>
+          <div class="color-picker-wrap">
+            <input type="color" id="col-media-border" value="#cbd5e1" />
+            <span class="color-hex" id="hex-media-border">#cbd5e1</span>
+          </div>
+        </div>
+      </div>
+      <div class="control-row-col" style="margin-top: 0.5rem;">
+        <div class="label-with-val">
+          <label for="media-radius">Radio de Borde Media</label>
+          <span id="val-media-radius">8px</span>
+        </div>
+        <input type="range" id="media-radius" min="0" max="24" step="1" value="8" />
+      </div>
+    </div>
+  </details>
+
+  <!-- Exportador -->
+  <button type="button" class="btn-export-json" id="btn-export-estilo">
+    📋 Copiar JSON para estilos-base.json
+  </button>
+</div>

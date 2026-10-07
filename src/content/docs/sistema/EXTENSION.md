@@ -3,7 +3,7 @@ title: "Guía de Extensión del Taller de Diseño"
 ---
 # Manual de Extensión: Sistema de Diseño e Inspector Reactivo
 
-Esta guía describe el ciclo de vida completo para incorporar nuevos parámetros visuales independientes (colores, fuentes, alineaciones, diagramas Mermaid) y el flujo de aplicación de temas bajo la arquitectura desacoplada del proyecto.
+Esta guía describe el ciclo de vida completo para incorporar nuevos parámetros visuales independientes (colores, fuentes, alineaciones, diagramas Mermaid y carátulas) y el flujo de aplicación de temas en la plataforma.
 
 ---
 
@@ -16,11 +16,11 @@ Añadir un nuevo control editable al sistema requiere conectar cinco capas en un
         │
 [2. CSS Componente]         ---> Aplica la variable al elemento (markdown.css, etc.)
         │
-[3. EditorDiseno.astro]     ---> Maqueta el control visual en el cajón inspector
+[3. TabEstilosWeb.astro]    ---> Maqueta el control dentro del acordeón correspondiente
         │
-[4. editor-diseno.ts]       ---> Escucha eventos y muta variables en el DOM
+[4. src/scripts/editor/]    ---> Escucha el evento en su módulo TS y muta el DOM
         │
-[5. Exportador JSON]        ---> Serializa el token para los archivos .json
+[5. Exportador JSON]        ---> Serializa el token para estilos-base.json o caratulas.json
 ```
 
 ---
@@ -57,9 +57,9 @@ Asegúrate de que la regla CSS correspondiente consuma la nueva variable:
 }
 ```
 
-### Paso 3: Agregar el control en la vista (`src/components/EditorDiseno.astro`)
+### Paso 3: Agregar el control en la vista (`src/components/editor/TabEstilosWeb.astro`)
 
-En la plantilla HTML del componente Astro, inserta la etiqueta del control en la pestaña correspondiente (ej. Pestaña 1):
+Dentro del acordeón correspondiente (ej. "3. Bloques de Código Fuente"), inserta el control:
 
 ```html
 <div class="color-item">
@@ -71,61 +71,65 @@ En la plantilla HTML del componente Astro, inserta la etiqueta del control en la
 </div>
 ```
 
-### Paso 4: Enlazar la reactividad en `src/scripts/core/editor-diseno.ts`
+### Paso 4: Enlazar la reactividad en el módulo TS correspondiente
 
-Abre el script modular del editor y registra el evento según la tipología del dato dentro de `setupEditorDrawer()`:
+Dependiendo de la naturaleza del parámetro, conéctalo en el archivo adecuado dentro de `src/scripts/editor/`:
 
-#### Caso A: Si es un Color (Pickers)
+#### Caso A: Parámetros de Markdown, Tablas, Código o Prosa (`src/scripts/editor/editor-markdown.ts`)
 
-Añade la definición al array `colorBindings`:
+Usa el helper `bindColor` dentro de `initMarkdownControls()`:
 
 ```typescript
-{ id: 'col-code-border', hexId: 'hex-code-border', cssVar: '--code-custom-border' }
+bindColor('col-code-border', 'hex-code-border', '--code-custom-border');
 ```
 
-#### Caso B: Si es una Escala o Slider Numérico
-
-Añade la definición al array `sliderBindings`:
+Si es un slider numérico de escala:
 
 ```typescript
-{ id: 'size-h3', valId: 'val-h3', cssVar: '--h3-size', unit: 'rem' }
-```
-
-#### Caso C: Si es un Selector (Fuentes o Alineaciones)
-
-Escribe el listener reactivo directo:
-
-```typescript
-const selectFont = document.getElementById('mi-select-id') as HTMLSelectElement | null;
-if (selectFont) {
-  selectFont.onchange = () => {
-    root.style.setProperty('--mi-token-css', selectFont.value);
+const sizeInput = document.getElementById('size-nuevo') as HTMLInputElement | null;
+const valSize = document.getElementById('val-nuevo');
+if (sizeInput && valSize) {
+  sizeInput.oninput = () => {
+    valSize.textContent = `${sizeInput.value}rem`;
+    root.style.setProperty('--nuevo-size', `${sizeInput.value}rem`);
   };
 }
 ```
 
-#### Caso D: Si es un Diagrama Mermaid
-
-Utiliza el helper `bindMermaidInput` o despacha el evento global para forzar el re-renderizado vectorial del SVG:
+Si es un selector tipográfico o de alineación:
 
 ```typescript
-bindMermaidInput('col-mm-flow-bg', ['--mm-flow-bg']);
-// O manualmente:
-const colFlow = document.getElementById('col-flow') as HTMLInputElement | null;
-if (colFlow) {
-  colFlow.oninput = () => {
-    root.style.setProperty('--mm-flow-bg', colFlow.value);
-    window.dispatchEvent(new Event('theme-changed'));
-  };
+const fontSelect = document.getElementById('font-nuevo') as HTMLSelectElement | null;
+if (fontSelect) {
+  fontSelect.onchange = () => root.style.setProperty('--font-nuevo', fontSelect.value);
 }
 ```
 
-### Paso 5: Incluir el parámetro en la función de exportación (`editor-diseno.ts`)
+#### Caso B: Diagramas Mermaid (`src/scripts/editor/editor-mermaid.ts`)
 
-Dentro del listener del botón `btnExpEstilo.onclick`, agrega la propiedad al JSON para que no se pierda al copiar:
+Usa el helper `bindMermaid` dentro de `initMermaidControls()` para mutar variables y refrescar el render vectorial de los SVG:
 
 ```typescript
-// Dentro del objeto jsonEstilo:
+bindMermaid('col-mm-nuevo', ['--mm-nuevo-token']);
+```
+
+#### Caso C: Carátula y Posicionamiento (`src/scripts/editor/editor-caratula.ts`)
+
+Añade el ID del nuevo control al array de listeners para disparar `updateCoverLivePreview()` automáticamente al cambiar:
+
+```typescript
+const ids = [
+  // ...otros IDs existentes...
+  'pos-nuevo-elemento'
+];
+```
+
+### Paso 5: Incluir el parámetro en la función de exportación (`src/scripts/editor/editor-core.ts`)
+
+Dentro del listener del botón `btnExpEstilo.onclick` (o `btnExpCov.onclick` para carátulas), incluye el valor para que persista al copiar el JSON:
+
+```typescript
+// Dentro de jsonEstilo en editor-core.ts:
 bloquesCodigo: {
   borde: (document.getElementById('col-code-border') as HTMLInputElement)?.value || "#cbd5e1"
 }
@@ -135,7 +139,7 @@ bloquesCodigo: {
 
 ## 3. Catálogo de Tipologías de Controles
 
-Usa estas plantillas HTML estándar dentro de `EditorDiseno.astro` para mantener consistencia:
+Plantillas estándar compatibles con el sistema de estilos de `editor-drawer.css`:
 
 ### 1. Control de Color Hexadecimal
 
@@ -181,31 +185,36 @@ Usa estas plantillas HTML estándar dentro de `EditorDiseno.astro` para mantener
   <input type="checkbox" id="id-check" checked />
   <span>Activar / Desactivar propiedad</span>
 </label>
-```
 
+```
 ---
 
 ## 4. Cómo Implementar un Nuevo Diseño en la Plataforma
 
-Una vez calibrados los colores, tipografías y márgenes con el Inspector de Diseño (`Alt + E`), el flujo para activarlo en todo el proyecto es el siguiente:
+Una vez calibrados los colores, tipografías y posiciones con el Inspector de Diseño (`Alt + E`), el flujo para activarlo en tu proyecto es el siguiente:
 
 ### Método 1: Guardar como Tema Permanente en el Proyecto
 
-1. En el Inspector (`Alt + E`), calibra tus parámetros.
+1. En el Inspector (`Alt + E`), calibra tus parámetros en la pestaña **Estilos Web & Prosa**.
 2. Haz clic en **📋 Copiar JSON para estilos-base.json**.
 3. Abre el archivo `src/config/estilos-base.json` en tu editor de código.
 4. Pega el nuevo bloque JSON junto a los temas existentes (`moderno`, `academico`, etc.).
-5. El nuevo tema aparecerá automáticamente disponible en los selectores de la barra lateral (`LeftSidebar.astro`) y en el modal de impresión (`ModalImpresion.astro`).
+5. El tema estará disponible de inmediato en los selectores globales de la barra lateral (`LeftSidebar.astro`) y en el modal de impresión (`ModalImpresion.astro`).
 
-### Método 2: Forzar un Tema Específico a un Apunte Individual
+### Método 2: Guardar un Nuevo Modelo de Carátula
 
-Si deseas que una página específica siempre use ese estilo sin importar la selección global del usuario, define su ID en el frontmatter del archivo `.md` o `.mdx`:
+1. En la pestaña **Carátula & Cierre**, ajusta la presencia de elementos, tamaños y ubicaciones.
+2. Haz clic en **📋 Copiar JSON para caratulas.json**.
+3. Abre `src/config/caratulas.json` y pega el nuevo objeto con su identificador único.
+
+### Método 3: Forzar un Tema o Carátula en un Documento Específico
+
+Si deseas que una página específica siempre utilice un diseño determinado de forma inmutable, declara sus identificadores en el frontmatter del archivo `.md` o `.mdx`:
 
 ```yaml
 ---
 title: "Título de la Monografía"
 theme: "nombre-de-tu-tema-nuevo"
-plantilla: "informe-uni"
-caratula: "uni-oficial"
+caratula: "modelo-caratula-nuevo"
 ---
 ```

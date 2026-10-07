@@ -1,0 +1,168 @@
+---
+// src/components/editor/TabCaratula.astro
+---
+
+<div id="tab-caratula" class="tab-content">
+  <!-- Datos del Modelo -->
+  <div class="control-card">
+    <div class="control-row">
+      <label for="ed-cover-name">Nombre del Modelo</label>
+      <input type="text" id="ed-cover-name" class="ed-input-text" value="Carátula Posicional Pro" />
+    </div>
+  </div>
+
+  <!-- LIENZO VIRTUAL EN TIEMPO REAL -->
+  <div class="control-sub-title">Vista Previa en Vivo (Hoja Virtual A4)</div>
+  <div class="cover-preview-wrapper">
+    <div id="cover-live-canvas" class="cover-live-sheet">
+      <!-- Renderizado reactivo absoluto desde editor-caratula.ts -->
+    </div>
+  </div>
+
+  <!-- CONTROLES DE POSICIONAMIENTO ABSOLUTO (PORCENTUAL) -->
+  <details class="editor-accordion" open>
+    <summary class="accordion-header">1. Membrete Institucional</summary>
+    <div class="accordion-body">
+      <label class="switch-field">
+        <input type="checkbox" id="cov-show-header" checked />
+        <span>Mostrar Membrete</span>
+      </label>
+      <div class="control-row-col">
+        <div class="label-with-val">
+          <label for="pos-y-header">Posición Vertical (Y)</label>
+          <span id="val-y-header">4%</span>
+        </div>
+        <input type="range" id="pos-y-header" min="0" max="30" step="1" value="4" />
+      </div>
+      <div class="control-row">
+        <label for="pos-align-header">Alineación</label>
+        <select id="pos-align-header" class="ed-mini-select">
+          <option value="center" selected>Centrado</option>
+          <option value="left">Izquierda</option>
+          <option value="right">Derecha</option>
+        </select>
+      </div>
+    </div>
+  </details>
+
+  <details class="editor-accordion" open>
+    <summary class="accordion-header">2. Escudo / Logotipo</summary>
+    <div class="accordion-body">
+      <label class="switch-field">
+        <input type="checkbox" id="cov-show-logo" checked />
+        <span>Mostrar Escudo / Logo</span>
+      </label>
+      <div class="control-row-col">
+        <div class="label-with-val">
+          <label for="pos-y-logo">Posición Vertical (Y)</label>
+          <span id="val-y-logo">22%</span>
+        </div>
+        <input type="range" id="pos-y-logo" min="10" max="60" step="1" value="22" />
+      </div>
+      <div class="control-row-col">
+        <div class="label-with-val">
+          <label for="cov-logosize">Alto Máximo Logo</label>
+          <span id="val-logosize">38 mm</span>
+        </div>
+        <input type="range" id="cov-logosize" min="15" max="65" step="1" value="38" />
+      </div>
+    </div>
+  </details>
+
+  <details class="editor-accordion" open>
+    <summary class="accordion-header">3. Título del Documento</summary>
+    <div class="accordion-body">
+      <label class="switch-field">
+        <input type="checkbox" id="cov-show-title" checked />
+        <span>Mostrar Título</span>
+      </label>
+      <div class="control-row-col">
+        <div class="label-with-val">
+          <label for="pos-y-title">Posición Vertical (Y)</label>
+          <span id="val-y-title">42%</span>
+        </div>
+        <input type="range" id="pos-y-title" min="20" max="75" step="1" value="42" />
+      </div>
+      <div class="control-row-col">
+        <div class="label-with-val">
+          <label for="cov-titlesize">Tamaño de Fuente</label>
+          <span id="val-titlesize">14 pt</span>
+        </div>
+        <input type="range" id="cov-titlesize" min="10" max="24" step="0.5" value="14" />
+      </div>
+      <div class="control-row">
+        <label for="cov-transform">Transformación</label>
+        <select id="cov-transform" class="ed-mini-select">
+          <option value="uppercase" selected>MAYÚSCULAS</option>
+          <option value="none">Normal</option>
+        </select>
+      </div>
+      <div class="control-row">
+        <label for="pos-align-title">Alineación</label>
+        <select id="pos-align-title" class="ed-mini-select">
+          <option value="center" selected>Centrado</option>
+          <option value="left">Izquierda</option>
+          <option value="right">Derecha</option>
+        </select>
+      </div>
+    </div>
+  </details>
+
+  <details class="editor-accordion" open>
+    <summary class="accordion-header">4. Docente y Autores / Integrantes</summary>
+    <div class="accordion-body">
+      <label class="switch-field">
+        <input type="checkbox" id="cov-show-docente" checked />
+        <span>Mostrar Docente</span>
+      </label>
+      <label class="switch-field">
+        <input type="checkbox" id="cov-show-integrantes" checked />
+        <span>Mostrar Integrantes</span>
+      </label>
+      <div class="control-row-col">
+        <div class="label-with-val">
+          <label for="pos-y-autores">Posición Vertical (Y)</label>
+          <span id="val-y-autores">64%</span>
+        </div>
+        <input type="range" id="pos-y-autores" min="40" max="88" step="1" value="64" />
+      </div>
+      <div class="control-row">
+        <label for="pos-align-autores">Alineación Bloque</label>
+        <select id="pos-align-autores" class="ed-mini-select">
+          <option value="center">Centrado</option>
+          <option value="left" selected>Alineado a la Izquierda</option>
+          <option value="right">Alineado a la Derecha</option>
+        </select>
+      </div>
+    </div>
+  </details>
+
+  <details class="editor-accordion" open>
+    <summary class="accordion-header">5. Pie de Página (Ciudad / Año)</summary>
+    <div class="accordion-body">
+      <label class="switch-field">
+        <input type="checkbox" id="cov-show-pie" checked />
+        <span>Mostrar Pie de Página</span>
+      </label>
+      <div class="control-row-col">
+        <div class="label-with-val">
+          <label for="pos-y-pie">Posición Vertical (Y)</label>
+          <span id="val-y-pie">92%</span>
+        </div>
+        <input type="range" id="pos-y-pie" min="75" max="96" step="1" value="92" />
+      </div>
+      <div class="control-row">
+        <label for="pos-align-pie">Alineación</label>
+        <select id="pos-align-pie" class="ed-mini-select">
+          <option value="center" selected>Centrado</option>
+          <option value="left">Izquierda</option>
+          <option value="right">Derecha</option>
+        </select>
+      </div>
+    </div>
+  </details>
+
+  <button type="button" class="btn-export-json" id="btn-export-caratula">
+    📋 Copiar JSON para caratulas.json
+  </button>
+</div>

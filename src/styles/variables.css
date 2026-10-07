@@ -19,6 +19,7 @@
   --doc-font: system-ui, -apple-system, sans-serif;
   --title-font: system-ui, -apple-system, sans-serif;
   --code-font: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --quote-font: Georgia, Cambria, 'Times New Roman', serif;
   --doc-line-height: 1.65;
   --para-indent: 0cm;
   --para-align: left;
@@ -83,8 +84,13 @@
   --color-cursiva: #16a34a;
   --color-negrita-cursiva: #9333ea;
   --color-tachado: #94a3b8;
+  --color-subrayado: var(--text-color);
   --color-codigo-inline: #c2410c;
   --bg-codigo-inline: rgba(234, 88, 12, 0.08);
+
+  /* Resaltado nativo (mark) */
+  --color-resaltado-bg: rgba(234, 179, 8, 0.25);
+  --color-resaltado-text: inherit;
 
   /* Acentos y Enlaces */
   --accent-color: #8b5cf6;
@@ -100,6 +106,37 @@
   --color-math: var(--text-color);
   --color-math-block-bg: rgba(0, 0, 0, 0.02);
   --color-math-border: transparent;
+
+  /* --------------------------------------------------------
+     TABLAS EDITORIALES
+     -------------------------------------------------------- */
+  --table-border-color: var(--border-color);
+  --table-th-bg: var(--accent-subtle);
+  --table-th-color: var(--text-color);
+  --table-row-even-bg: transparent;
+
+  /* --------------------------------------------------------
+     CITAS (BLOCKQUOTE) Y LISTAS
+     -------------------------------------------------------- */
+  --quote-border-color: var(--accent-color);
+  --quote-bg: transparent;
+  --quote-text-color: var(--text-color);
+  --list-bullet-color: var(--accent-color);
+
+  /* --------------------------------------------------------
+     BLOQUES DE CÓDIGO FUENTE
+     -------------------------------------------------------- */
+  --code-border-color: #cbd5e1;
+  --code-toolbar-bg: rgba(15, 23, 42, 0.85);
+  --code-lang-color: #94a3b8;
+  --code-btn-copy-color: #f8fafc;
+
+  /* --------------------------------------------------------
+     RECURSOS MULTIMEDIA
+     -------------------------------------------------------- */
+  --media-border-color: var(--border-color);
+  --media-radius: var(--radius-md, 8px);
+  --media-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 
   /* --------------------------------------------------------
      TOKENS INDEPENDIENTES PARA MERMAID (MODO CLARO)
@@ -199,9 +236,9 @@
   --mm-mindmap-text: var(--mm-text-color);
   --mm-mindmap-line: var(--mm-line-color);
 
-  /* Citas, Bloques de Código y Callouts */
-  --code-border-color: #334155;
-  --code-toolbar-bg: rgba(15, 23, 42, 0.85);
+  /* --------------------------------------------------------
+     CALLOUTS TOKENS
+     -------------------------------------------------------- */
   --callout-note: #0284c7;
   --callout-info: #0284c7;
   --callout-todo: #2563eb;
@@ -231,10 +268,14 @@ html[data-modo="oscuro"] {
   --color-cursiva: #a3e635;
   --color-negrita-cursiva: #c084fc;
   --color-tachado: #64748b;
+  --color-subrayado: #f8fafc;
   --color-codigo-inline: #fb923c;
   --bg-codigo-inline: rgba(251, 146, 60, 0.15);
   --link-color: #60a5fa;
   --link-hover: #93c5fd;
+
+  --color-resaltado-bg: rgba(234, 179, 8, 0.35);
+  --color-resaltado-text: #ffffff;
 
   /* Encabezados en Modo Oscuro */
   --color-h1: #4ade80;
@@ -247,6 +288,26 @@ html[data-modo="oscuro"] {
   /* KaTeX */
   --color-math: #f8fafc;
   --color-math-block-bg: rgba(255, 255, 255, 0.03);
+
+  /* Tablas */
+  --table-border-color: #334155;
+  --table-th-bg: rgba(255, 255, 255, 0.04);
+  --table-th-color: #f8fafc;
+  --table-row-even-bg: rgba(255, 255, 255, 0.015);
+
+  /* Citas y Listas */
+  --quote-border-color: #8b5cf6;
+  --quote-bg: rgba(255, 255, 255, 0.02);
+  --quote-text-color: #f8fafc;
+  --list-bullet-color: #a78bfa;
+
+  /* Código */
+  --code-border-color: #334155;
+  --code-toolbar-bg: rgba(15, 23, 42, 0.85);
+
+  /* Multimedia */
+  --media-border-color: #334155;
+  --media-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 
   /* Mermaid (Modo Oscuro) */
   --mm-node-bg: #1e293b;
@@ -354,7 +415,9 @@ html[data-modo="oscuro"] {
   --callout-quote: #94a3b8;
 }
 
-/* Densidad de Fuente (Escala rem de raíz) */
+/* ==========================================================
+   3. MODIFICADORES DE DENSIDAD DE TEXTO
+   ========================================================== */
 html[data-texto="pequeno"] { --font-size: 14px; }
 html[data-texto="estandar"] { --font-size: 16px; }
 html[data-texto="grande"] { --font-size: 18px; }

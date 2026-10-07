@@ -8,4 +8,5 @@
 @import "./code-blocks.css";
 @import "./multimedia.css";
 @import "./mermaid.css";
+@import "./editor-drawer.css"; /* <-- NUEVO: Estilos del Inspector y Acordeones */
 @import "./print.css";

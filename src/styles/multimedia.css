@@ -1,7 +1,4 @@
 /* src/styles/multimedia.css */
-/* ==========================================================
-   REPRODUCTORES NATIVOS Y RECURSOS MULTIMEDIA
-   ========================================================== */
 
 /* 1. Reproductor de Audio */
 .main-content audio,
@@ -52,9 +49,9 @@ html[data-modo="claro"] .reveal audio {
   max-height: 52vh !important;
   margin: 1.75rem auto !important;
   background-color: #000000 !important;
-  border: 1px solid var(--border-color) !important;
-  border-radius: var(--radius-md, 10px) !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25) !important;
+  border: 1px solid var(--media-border-color) !important;
+  border-radius: var(--media-radius, 10px) !important;
+  box-shadow: var(--media-shadow, 0 8px 24px rgba(0, 0, 0, 0.25)) !important;
   outline: none !important;
   object-fit: contain !important;
   accent-color: var(--accent-color) !important;
@@ -77,7 +74,7 @@ html[data-modo="claro"] .reveal video {
   color-scheme: light !important;
 }
 
-/* 3. Contenedor de Imagen con Botón Copiar */
+/* 3. Contenedor de Imagen con Barra */
 .img-interactive-wrapper {
   position: relative;
   display: flex;
@@ -86,10 +83,10 @@ html[data-modo="claro"] .reveal video {
   width: fit-content;
   max-width: 100%;
   margin: 1.75rem auto;
-  border-radius: var(--radius-md, 8px);
+  border-radius: var(--media-radius, 8px);
   overflow: hidden;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-  border: 1px solid var(--border-color);
+  box-shadow: var(--media-shadow, 0 6px 20px rgba(0, 0, 0, 0.2));
+  border: 1px solid var(--media-border-color);
   background: rgba(0, 0, 0, 0.04);
 }
 
@@ -149,4 +146,3 @@ html[data-modo="claro"] .reveal video {
   background: #10b981 !important;
   color: #ffffff !important;
 }
-

@@ -8,7 +8,7 @@
   font-family: var(--doc-font);
 }
 
-/* Solo para scroll holgado en pantalla web, nunca en papel */
+/* Scroll holgado en pantalla web */
 @media screen {
   .main-content::after,
   .sticky-panel::after {
@@ -36,7 +36,7 @@
   margin-bottom: 0.85rem;
 }
 
-/* Aislamiento estricto: los párrafos dentro de Mermaid, Callouts o Tablas nunca heredan sangría */
+/* Aislamiento estricto: sin sangría interna en diagramas, avisos o tablas */
 .markdown-body .mermaid p,
 .markdown-body .slide-mermaid-scroll-box p,
 .markdown-body blockquote[data-callout] p,
@@ -136,22 +136,6 @@
   overflow-y: hidden;
 }
 
-/* Formato de Caracteres y Énfasis */
-.markdown-body strong { color: var(--color-negrita); font-weight: 700; }
-.markdown-body em { color: var(--color-cursiva); font-style: italic; }
-.markdown-body strong em, .markdown-body em strong { color: var(--color-negrita-cursiva); }
-.markdown-body del, .markdown-body s { color: var(--color-tachado); text-decoration-color: var(--color-tachado); }
-
-/* Código en Línea */
-.markdown-body :not(pre) > code {
-  color: var(--color-codigo-inline);
-  background-color: var(--bg-codigo-inline);
-  padding: 0.2em 0.4em;
-  border-radius: var(--radius-sm, 6px);
-  font-family: var(--code-font);
-  font-size: 0.85em;
-  font-weight: 500;
-}
 /* ==========================================================
    FORMATO DE CARACTERES Y ÉNFASIS
    ========================================================== */
@@ -176,6 +160,19 @@
   text-decoration-color: var(--color-tachado);
 }
 
+.markdown-body u {
+  color: var(--color-subrayado);
+  text-decoration-color: var(--color-subrayado);
+}
+
+/* Resaltado nativo (==mark==) */
+.markdown-body mark {
+  background-color: var(--color-resaltado-bg);
+  color: var(--color-resaltado-text);
+  padding: 0.15em 0.35em;
+  border-radius: 3px;
+}
+
 /* Código en línea */
 .markdown-body :not(pre) > code {
   color: var(--color-codigo-inline);
@@ -188,7 +185,21 @@
 }
 
 /* ==========================================================
-   TABLAS RESPONSIVAS
+   CITAS (BLOCKQUOTE ESTÁNDAR)
+   ========================================================== */
+.markdown-body blockquote:not([data-callout]) {
+  border-left: 3.5px solid var(--quote-border-color);
+  background-color: var(--quote-bg);
+  color: var(--quote-text-color);
+  padding: 0.6rem 1.25rem;
+  margin: 1.5rem 0;
+  font-family: var(--quote-font, var(--doc-font));
+  font-style: italic;
+  border-radius: 0 var(--radius-sm, 6px) var(--radius-sm, 6px) 0;
+}
+
+/* ==========================================================
+   TABLAS RESPONSIVAS EDITORIALES
    ========================================================== */
 .main-content table-container,
 .main-content table-wrapper {
@@ -204,28 +215,38 @@
   border-collapse: collapse;
   margin: 1.5rem 0;
   font-size: 0.92rem;
+  border: 1px solid var(--table-border-color);
 }
 
 .main-content th,
 .main-content td {
-  border: 1px solid var(--border-color);
+  border: 1px solid var(--table-border-color);
   padding: 0.65rem 0.9rem;
   text-align: left;
 }
 
 .main-content th {
-  background-color: var(--accent-subtle);
-  font-weight: 600;
-  color: var(--text-color);
+  background-color: var(--table-th-bg);
+  color: var(--table-th-color);
+  font-weight: 700;
 }
 
-html[data-modo="oscuro"] .main-content th {
-  background-color: rgba(255, 255, 255, 0.04);
+.main-content tr:nth-child(even) td {
+  background-color: var(--table-row-even-bg);
 }
 
 /* ==========================================================
    LISTAS Y CHECKBOXES DE TAREAS
    ========================================================== */
+.markdown-body ul:not(.contains-task-list) > li::marker {
+  color: var(--list-bullet-color);
+}
+
+.markdown-body ol > li::marker {
+  color: var(--list-bullet-color);
+  font-weight: 600;
+}
+
 .markdown-body ul.contains-task-list,
 .markdown-body .task-list-item {
   list-style: none !important;
