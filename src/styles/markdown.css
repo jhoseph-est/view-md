@@ -199,66 +199,101 @@
 }
 
 /* ==========================================================
-   TABLAS RESPONSIVAS EDITORIALES
+   TABLAS RESPONSIVAS EDITORIALES CON SCROLL AISLADO
    ========================================================== */
 .main-content table-container,
 .main-content table-wrapper {
   width: 100%;
-  overflow-x: auto;
+  max-width: 100%;
+  overflow-x: auto !important;
   margin: 1.5rem 0;
   -webkit-overflow-scrolling: touch;
 }
 
-.main-content article table {
-  width: 100%;
-  max-width: 100%;
+/* Para tablas estándar generadas directamente por Markdown */
+.markdown-body table {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch;
   border-collapse: collapse;
   margin: 1.5rem 0;
   font-size: 0.92rem;
   border: 1px solid var(--table-border-color);
+  white-space: nowrap; /* Mantiene legibilidad y activa el scroll horizontal en móvil */
 }
 
-.main-content th,
-.main-content td {
+.markdown-body th,
+.markdown-body td {
   border: 1px solid var(--table-border-color);
   padding: 0.65rem 0.9rem;
   text-align: left;
 }
 
-.main-content th {
+.markdown-body th {
   background-color: var(--table-th-bg);
   color: var(--table-th-color);
   font-weight: 700;
 }
 
-.main-content tr:nth-child(even) td {
+.markdown-body tr:nth-child(even) td {
   background-color: var(--table-row-even-bg);
 }
 
 /* ==========================================================
-   LISTAS Y CHECKBOXES DE TAREAS
+   LISTAS ORDENADAS, DESORDENADAS Y TAREAS
    ========================================================== */
+.markdown-body ul:not(.contains-task-list) {
+  list-style-type: disc !important;
+  padding-left: 1.75rem !important; /* Espacio suficiente para no comerse las viñetas */
+  margin: 0.85rem 0 !important;
+}
+
+.markdown-body ol {
+  list-style-type: decimal !important; /* Asegura numeración 1, 2, 3 completa */
+  padding-left: 1.85rem !important; /* Espacio para que el número no se corte en pantalla */
+  margin: 0.85rem 0 !important;
+}
+
+.markdown-body ol ol {
+  list-style-type: lower-alpha !important; /* Subniveles a, b, c */
+  padding-left: 1.5rem !important;
+}
+
+.markdown-body ul ul,
+.markdown-body ol ul {
+  list-style-type: circle !important;
+  padding-left: 1.5rem !important;
+}
+
+.markdown-body li {
+  margin-bottom: 0.35rem;
+  line-height: var(--doc-line-height);
+}
+
 .markdown-body ul:not(.contains-task-list) > li::marker {
   color: var(--list-bullet-color);
 }
 
 .markdown-body ol > li::marker {
   color: var(--list-bullet-color);
-  font-weight: 600;
+  font-weight: 700;
 }
 
+/* Checkboxes de Tareas (Task Lists) */
 .markdown-body ul.contains-task-list,
 .markdown-body .task-list-item {
   list-style: none !important;
   margin-left: 0 !important;
-  padding-left: 0 !important;
+  padding-left: 0.2rem !important;
 }
 
 .markdown-body li.task-list-item {
   display: flex !important;
   align-items: center !important;
   gap: 0.6rem !important;
-  margin: 0.35rem 0 !important;
+  margin: 0.4rem 0 !important;
   font-family: var(--ui-font) !important;
 }
 
