@@ -1,5 +1,6 @@
 ---
-title: Introducción a estática
+title: "Introducción a estática"
+orden: 1
 ---
 ## ¿Qué es la estática?
 
@@ -30,4 +31,3 @@ D-->D2
 
 ## Momento central
 
-dasdaasd *dasda adsa dasdads* dasdasd **ahvsvad asdasd dasd** dasdasd dasd ***dasd asd asd asd asd*** dsaddasd  asd
