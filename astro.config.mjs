@@ -3,9 +3,9 @@ import { defineConfig } from 'astro/config';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import mdx from '@astrojs/mdx';
-import remarkObsidianCallout from 'remark-obsidian-callout';
 import remarkWikiLink from 'remark-wiki-link';
 import rehypeCodeBlock from './src/plugins/rehype-code-block.mjs';
+import remarkCallouts from './src/plugins/remark-callouts.mjs'; // <-- Plugin local
 
 export default defineConfig({
   output: 'static',
@@ -37,8 +37,8 @@ export default defineConfig({
       wrap: true,
     },
     remarkPlugins: [
-      remarkMath,
-      remarkObsidianCallout,
+      remarkMath,       // 1. Procesa primero las ecuaciones a nodos inlineMath
+      remarkCallouts,   // 2. Envuelve los callouts sin tocar la matemática
       [
         remarkWikiLink,
         {
