@@ -2,7 +2,6 @@
 title: tema 6
 ---
 
-# 6. Sucesiones y series / series de Taylor
 
 ## Fundamentos de sucesiones
 

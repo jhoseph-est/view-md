@@ -1,7 +1,6 @@
 ---
 title: Estructuras repetitivas (anidadas)
 ---
-# 5. Estructuras repetitivas – parte 2 (Anidadas)
 
 ## Uso de `break` y `continue`
 

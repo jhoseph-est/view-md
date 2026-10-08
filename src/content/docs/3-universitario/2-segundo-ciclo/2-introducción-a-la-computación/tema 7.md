@@ -1,7 +1,6 @@
 ---
 title: Arreglos
 ---
-# 7. Arreglos
 
 ## Arreglo de una dimensión
 

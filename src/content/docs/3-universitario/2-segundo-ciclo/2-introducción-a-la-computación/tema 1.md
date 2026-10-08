@@ -1,7 +1,6 @@
 ---
 title: Entorno de Python
 ---
-# 1. Entorno de Python
 
 ## Introducción a la programación
 

@@ -1,7 +1,6 @@
 ---
 title: Sistema de ecuaciones lineales
 ---
-# 2. Sistemas de ecuaciones lineales
 
 ## Introducción
 

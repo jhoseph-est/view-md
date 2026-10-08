@@ -1,7 +1,6 @@
 ---
 title: Estructura de control de decisión
 ---
-# 3. Estructura
 
 ## Operadores aritméticos, relacionales, lógicos
 

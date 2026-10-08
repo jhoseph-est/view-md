@@ -2,7 +2,6 @@
 title: tema 1
 ---
 
-# La antiderivada y métodos de integración
 
 ## Fundamento conceptual de la antiderivada
 

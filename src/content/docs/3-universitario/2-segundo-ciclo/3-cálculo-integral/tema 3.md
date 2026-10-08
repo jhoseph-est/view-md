@@ -2,7 +2,6 @@
 title: tema 3
 ---
 
-# 3. Integrales impropias
 
 ## Fundamento de las integrales impropias
 

@@ -1,7 +1,6 @@
 ---
 title: Componentes Microeconómicos
 ---
-# 2. Componentes Microeconómicos
 
 ## Impuestos
 

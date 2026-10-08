@@ -1,7 +1,6 @@
 ---
 title: Matrices y determinantes
 ---
-# 1. Matrices y determinantes
 
 ## Introducción
 

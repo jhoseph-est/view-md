@@ -1,7 +1,6 @@
 ---
 title: Aplicaciones de matrices, determinantes y sistemas de ecuaciones lineales
 ---
-# 3. Aplicaciones de matrices, determinantes y sistemas de ecuaciones lineales
 
 ## Introducción
 

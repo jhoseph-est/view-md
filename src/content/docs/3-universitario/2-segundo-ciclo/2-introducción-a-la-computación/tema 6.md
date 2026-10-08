@@ -1,7 +1,6 @@
 ---
 title: Funciones
 ---
-# 6. Funciones
 
 ## Tipos de parámetros: entrada y salida
 

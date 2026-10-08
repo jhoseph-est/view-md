@@ -1,7 +1,6 @@
 ---
 title: Estructuras repetitivas (básicas)
 ---
-# 4. Estructuras repetitivas – parte 1 (Básicas)
 
 ## Estructura repetitiva `for()`
 

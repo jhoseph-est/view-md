@@ -1,7 +1,6 @@
 ---
 title: Los Componentes Macroeconómicos en la Globalización y su Impacto en la Región y las Naciones
 ---
-# 4. Los Componentes Macroeconomía en la globalización y su impacto en la región y las naciones
 
 ## Sistema monetario
 

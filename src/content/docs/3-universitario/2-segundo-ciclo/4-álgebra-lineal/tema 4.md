@@ -1,7 +1,6 @@
 ---
 title: Espacios vectoriales
 ---
-# 4. Espacios vectoriales
 
 ## Introducción
 

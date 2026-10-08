@@ -1,7 +1,6 @@
 ---
 title: Componentes Macroeconómicos
 ---
-# 3. Componentes Macroeconómicos
 
 ## La contabilidad nacional
 

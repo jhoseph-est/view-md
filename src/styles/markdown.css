@@ -136,6 +136,12 @@
   overflow-y: hidden;
 }
 
+/* Herencia forzada de color para fórmulas inline ($...$) */
+html body .markdown-body :where(h1, h2, h3, h4, h5, h6, strong, em, del, s, u) .katex:not(.katex-display .katex),
+html body .markdown-body :where(h1, h2, h3, h4, h5, h6, strong, em, del, s, u) .katex:not(.katex-display .katex) * {
+  color: inherit !important;
+}
+
 /* ==========================================================
    FORMATO DE CARACTERES Y ÉNFASIS
    ========================================================== */
@@ -221,7 +227,7 @@
   margin: 1.5rem 0;
   font-size: 0.92rem;
   border: 1px solid var(--table-border-color);
-  white-space: nowrap; /* Mantiene legibilidad y activa el scroll horizontal en móvil */
+  white-space: nowrap;
 }
 
 .markdown-body th,
@@ -246,18 +252,18 @@
    ========================================================== */
 .markdown-body ul:not(.contains-task-list) {
   list-style-type: disc !important;
-  padding-left: 1.75rem !important; /* Espacio suficiente para no comerse las viñetas */
+  padding-left: 1.75rem !important;
   margin: 0.85rem 0 !important;
 }
 
 .markdown-body ol {
-  list-style-type: decimal !important; /* Asegura numeración 1, 2, 3 completa */
-  padding-left: 1.85rem !important; /* Espacio para que el número no se corte en pantalla */
+  list-style-type: decimal !important;
+  padding-left: 1.85rem !important;
   margin: 0.85rem 0 !important;
 }
 
 .markdown-body ol ol {
-  list-style-type: lower-alpha !important; /* Subniveles a, b, c */
+  list-style-type: lower-alpha !important;
   padding-left: 1.5rem !important;
 }
 

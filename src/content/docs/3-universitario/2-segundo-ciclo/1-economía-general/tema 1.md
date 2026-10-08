@@ -2,8 +2,6 @@
 title: Introducción a la economía y principales agentes económicos
 ---
 
-# 1. Introducción a la economía y principales agentes económicos
-
 ## Introducción a la Economía
 
 La economía se define formalmente como la ciencia social que estudia la asignación eficiente de recursos escasos para la satisfacción de necesidades humanas ilimitadas. Esta disciplina se fundamenta en el postulado de la escasez, el cual establece que la disponibilidad de factores productivos —tierra ($T$), trabajo ($L$), capital ($K$) y capacidad tecnológica ($A$)— es finita en comparación con las demandas de la sociedad.

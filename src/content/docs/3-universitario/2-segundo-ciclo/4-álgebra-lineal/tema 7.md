@@ -1,7 +1,6 @@
 ---
 title: Secciones cónicas
 ---
-# 7. Secciones cónicas
 
 ## Introducción
 

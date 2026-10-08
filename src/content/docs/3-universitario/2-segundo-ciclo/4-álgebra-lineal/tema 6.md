@@ -1,7 +1,7 @@
 ---
 title: Vectores, rectas y planos en R³
 ---
-# 6. Vectores, rectas y planos en $\mathbb{R}^3$
+# 6. Vectores, rectas y planos en $R^3$
 
 ## Introducción
 
@@ -16,11 +16,8 @@ El espacio $\mathbb{R}^3$ se define como el producto cartesiano $\mathbb{R} \tim
 Dadas las ternas $u = (u_1, u_2, u_3)$ y $v = (v_1, v_2, v_3)$ en $\mathbb{R}^3$:
 
 1. **Suma:** $u + v = (u_1 + v_1, u_2 + v_2, u_3 + v_3)$.
-    
 2. **Producto por escalar:** $\alpha u = (\alpha u_1, \alpha u_2, \alpha u_3)$, con $\alpha \in \mathbb{R}$.
-    
 3. **Igualdad:** $u = v$ si y solo si $u_i = v_i$ para $i=1, 2, 3$.
-    
 
 ## Espacio vectorial tridimensional
 
@@ -49,7 +46,9 @@ Cumple las propiedades de positividad, homogeneidad ($\|\alpha v\| = |\alpha| \c
 
 La distancia entre $P_1(x_1, y_1, z_1)$ y $P_2(x_2, y_2, z_2)$ es la norma del vector $\vec{P_1P_2}$:
 
-$$d(P_1, P_2) = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2 + (z_2 - z_1)^2}$$
+$$
+d(P_1, P_2) = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2 + (z_2 - z_1)^2}
+$$
 
 ## Segmento de recta y coordenadas del baricentro
 

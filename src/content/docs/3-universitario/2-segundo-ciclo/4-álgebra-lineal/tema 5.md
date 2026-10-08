@@ -1,7 +1,6 @@
 ---
 title: Vectores y rectas en R²
 ---
-# 5. Vectores y rectas en $\mathbb{R}^2$
 
 ## Introducción
 

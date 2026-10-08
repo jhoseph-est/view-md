@@ -1,7 +1,6 @@
 ---
 title: Programación secuencial
 ---
-# 2. Programación secuencial
 
 ## Los algoritmos y su importancia en el diseño de programación
 

@@ -2,7 +2,6 @@
 title: tema 5
 ---
 
-# 5. Ecuaciones diferenciales
 
 ## Fundamentos de las ecuaciones diferenciales
 

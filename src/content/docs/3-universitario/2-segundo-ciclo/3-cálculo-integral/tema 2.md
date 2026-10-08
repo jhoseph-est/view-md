@@ -2,7 +2,6 @@
 title: tema 2
 ---
 
-# 2. La integral definida
 
 ## Construcción conceptual de la integral definida
 

@@ -2,7 +2,6 @@
 title: tema 4
 ---
 
-# 4. Aplicaciones de la integral definida
 
 ## Áreas de regiones planas
 
