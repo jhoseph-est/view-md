@@ -125,12 +125,18 @@ export function setupEditorDrawer(): void {
               fondoTarjetas: (document.getElementById('col-card') as HTMLInputElement)?.value || "#f1f5f9",
               borde: (document.getElementById('col-border') as HTMLInputElement)?.value || "#cbd5e1"
             },
+            // Dentro de btnExpEstilo.onclick en src/scripts/editor/editor-core.ts
             textos: {
               principal: (document.getElementById('col-text') as HTMLInputElement)?.value || "#0f172a",
               negrita: (document.getElementById('col-bold') as HTMLInputElement)?.value || "#020617",
               cursiva: (document.getElementById('col-italic') as HTMLInputElement)?.value || "#16a34a",
               enlace: (document.getElementById('col-link') as HTMLInputElement)?.value || "#2563eb",
-              math: (document.getElementById('col-katex') as HTMLInputElement)?.value || "#0f172a"
+              math: (document.getElementById('col-katex') as HTMLInputElement)?.value || "#0f172a",
+              // Fondos translúcidos dinámicos calculados:
+              resaltadoBg: root.style.getPropertyValue('--color-resaltado-bg') || "rgba(234, 179, 8, 0.25)",
+              mathBlockBg: root.style.getPropertyValue('--color-math-block-bg') || "rgba(0, 0, 0, 0.02)",
+              quoteBg: root.style.getPropertyValue('--quote-bg') || "rgba(139, 92, 246, 0.05)",
+              tableRowEven: root.style.getPropertyValue('--table-row-even-bg') || "rgba(255, 255, 255, 0.015)"
             }
           }
         }

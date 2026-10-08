@@ -207,10 +207,37 @@
           </div>
         </div>
         <div class="color-item">
-          <label for="col-mark-bg">Fondo Resaltado</label>
+          <label for="col-mark-text">Texto Resaltado</label>
           <div class="color-picker-wrap">
-            <input type="color" id="col-mark-bg" value="#eab308" />
-            <span class="color-hex" id="hex-mark-bg">#eab308</span>
+            <input type="color" id="col-mark-text" value="#0f172a" />
+            <span class="color-hex" id="hex-mark-text">#0f172a</span>
+          </div>
+        </div>
+
+        <!-- FONDO RESALTADO CON TRANSLUCIDEZ INTEGRADA -->
+        <div class="color-item">
+          <label>Fondo Resaltado</label>
+          <div class="color-picker-wrap alpha-color-wrap" id="wrap-mark-bg">
+            <button type="button" class="swatch-btn" id="btn-swatch-mark-bg">
+              <span class="swatch-checker"></span>
+              <span class="swatch-fill" id="swatch-mark-bg" style="background-color: rgba(234, 179, 8, 0.25);"></span>
+            </button>
+            <span class="color-hex" id="hex-mark-bg">#eab308 (25%)</span>
+
+            <!-- Popup flotante integrado -->
+            <div class="alpha-popover" id="pop-mark-bg">
+              <div class="pop-row">
+                <label>Color</label>
+                <input type="color" id="col-mark-bg" value="#eab308" />
+              </div>
+              <div class="pop-row-col">
+                <div class="pop-header-val">
+                  <span>Opacidad</span>
+                  <span id="alpha-val-mark-bg">25%</span>
+                </div>
+                <input type="range" id="alpha-mark-bg" min="0" max="100" value="25" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -225,11 +252,30 @@
             <span class="color-hex" id="hex-katex">#0f172a</span>
           </div>
         </div>
+
+        <!-- FONDO DISPLAY CON TRANSLUCIDEZ INTEGRADA -->
         <div class="color-item">
-          <label for="col-katex-bg">Fondo Bloque Display</label>
-          <div class="color-picker-wrap">
-            <input type="color" id="col-katex-bg" value="#000000" />
-            <span class="color-hex" id="hex-katex-bg">#000000</span>
+          <label>Fondo Bloque Math</label>
+          <div class="color-picker-wrap alpha-color-wrap" id="wrap-katex-bg">
+            <button type="button" class="swatch-btn" id="btn-swatch-katex-bg">
+              <span class="swatch-checker"></span>
+              <span class="swatch-fill" id="swatch-katex-bg" style="background-color: rgba(0, 0, 0, 0.02);"></span>
+            </button>
+            <span class="color-hex" id="hex-katex-bg">#000000 (2%)</span>
+
+            <div class="alpha-popover" id="pop-katex-bg">
+              <div class="pop-row">
+                <label>Color</label>
+                <input type="color" id="col-katex-bg" value="#000000" />
+              </div>
+              <div class="pop-row-col">
+                <div class="pop-header-val">
+                  <span>Opacidad</span>
+                  <span id="alpha-val-katex-bg">2%</span>
+                </div>
+                <input type="range" id="alpha-katex-bg" min="0" max="100" value="2" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -258,11 +304,30 @@
             <span class="color-hex" id="hex-table-th-text">#0f172a</span>
           </div>
         </div>
+
+        <!-- FILA PAR CON TRANSLUCIDEZ INTEGRADA -->
         <div class="color-item">
-          <label for="col-table-row-even">Fila Par (Cebreado)</label>
-          <div class="color-picker-wrap">
-            <input type="color" id="col-table-row-even" value="#ffffff" />
-            <span class="color-hex" id="hex-table-row-even">#ffffff</span>
+          <label>Fila Par (Cebreado)</label>
+          <div class="color-picker-wrap alpha-color-wrap" id="wrap-table-row-even">
+            <button type="button" class="swatch-btn" id="btn-swatch-table-row-even">
+              <span class="swatch-checker"></span>
+              <span class="swatch-fill" id="swatch-table-row-even" style="background-color: rgba(255, 255, 255, 0.015);"></span>
+            </button>
+            <span class="color-hex" id="hex-table-row-even">#ffffff (1.5%)</span>
+
+            <div class="alpha-popover" id="pop-table-row-even">
+              <div class="pop-row">
+                <label>Color</label>
+                <input type="color" id="col-table-row-even" value="#ffffff" />
+              </div>
+              <div class="pop-row-col">
+                <div class="pop-header-val">
+                  <span>Opacidad</span>
+                  <span id="alpha-val-table-row-even">1.5%</span>
+                </div>
+                <input type="range" id="alpha-table-row-even" min="0" max="100" value="2" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -289,6 +354,32 @@
           <div class="color-picker-wrap">
             <input type="color" id="col-list-bullet" value="#8b5cf6" />
             <span class="color-hex" id="hex-list-bullet">#8b5cf6</span>
+          </div>
+        </div>
+
+        <!-- FONDO DE CITA CON TRANSLUCIDEZ INTEGRADA -->
+        <div class="color-item">
+          <label>Fondo de Cita</label>
+          <div class="color-picker-wrap alpha-color-wrap" id="wrap-quote-bg">
+            <button type="button" class="swatch-btn" id="btn-swatch-quote-bg">
+              <span class="swatch-checker"></span>
+              <span class="swatch-fill" id="swatch-quote-bg" style="background-color: rgba(139, 92, 246, 0.05);"></span>
+            </button>
+            <span class="color-hex" id="hex-quote-bg">#8b5cf6 (5%)</span>
+
+            <div class="alpha-popover" id="pop-quote-bg">
+              <div class="pop-row">
+                <label>Color</label>
+                <input type="color" id="col-quote-bg" value="#8b5cf6" />
+              </div>
+              <div class="pop-row-col">
+                <div class="pop-header-val">
+                  <span>Opacidad</span>
+                  <span id="alpha-val-quote-bg">5%</span>
+                </div>
+                <input type="range" id="alpha-quote-bg" min="0" max="100" value="5" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -336,7 +427,6 @@
   <details class="editor-accordion">
     <summary class="accordion-header">4. Mermaid: Colores por Diagrama</summary>
     <div class="accordion-body">
-      <!-- Flowchart -->
       <div class="control-sub-title">Flowchart (Diagrama de Flujo)</div>
       <div class="grid-colors">
         <div class="color-item">
@@ -357,7 +447,6 @@
         </div>
       </div>
 
-      <!-- Sequence -->
       <div class="control-sub-title" style="margin-top: 0.8rem;">Sequence Diagram</div>
       <div class="grid-colors">
         <div class="color-item">
@@ -378,7 +467,6 @@
         </div>
       </div>
 
-      <!-- ER Diagram -->
       <div class="control-sub-title" style="margin-top: 0.8rem;">ER Diagram (Entidad-Relación)</div>
       <div class="grid-colors">
         <div class="color-item">
@@ -399,7 +487,6 @@
         </div>
       </div>
 
-      <!-- Gantt -->
       <div class="control-sub-title" style="margin-top: 0.8rem;">Gantt Chart</div>
       <div class="grid-colors">
         <div class="color-item">
@@ -416,7 +503,6 @@
         </div>
       </div>
 
-      <!-- GitGraph -->
       <div class="control-sub-title" style="margin-top: 0.8rem;">GitGraph (Ramas Git)</div>
       <div class="grid-colors">
         <div class="color-item">
