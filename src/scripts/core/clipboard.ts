@@ -87,3 +87,34 @@ export function setupCodeCopyListener(): void {
     }, 1500);
   });
 }
+
+// Detecta archivos estáticos en /public/ (CAD, 3D, Comprimidos, PDF, etc.)
+export function setupStaticFileLinks(): void {
+  // Extensiones que se pueden previsualizar en pestaña nueva
+  const viewableExtensions = /\.(pdf)$/i;
+
+  // Extensiones de ingeniería, comprimidos y documentos que deben descargarse directamente
+  const downloadableExtensions = /\.(stl|obj|step|stp|dwg|dxf|ipt|iam|idw|sldprt|sldasm|rar|zip|7z|tar\.gz|csv|xlsx?|docx?)$/i;
+
+  const contentLinks = document.querySelectorAll<HTMLAnchorElement>('.main-content article a');
+
+  contentLinks.forEach((link) => {
+    const href = link.getAttribute('href') || '';
+
+    // Caso 1: Archivos CAD, 3D o Comprimidos -> Forzar descarga y evitar ClientRouter
+    if (downloadableExtensions.test(href)) {
+      link.setAttribute('data-astro-reload', 'true');
+      if (!link.hasAttribute('download')) {
+        link.setAttribute('download', '');
+      }
+    } 
+    // Caso 2: PDFs -> Abrir en nueva ventana/pestaña limpia
+    else if (viewableExtensions.test(href)) {
+      link.setAttribute('data-astro-reload', 'true');
+      if (!link.hasAttribute('target')) {
+        link.setAttribute('target', '_blank');
+        link.setAttribute('rel', 'noopener noreferrer');
+      }
+    }
+  });
+}

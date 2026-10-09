@@ -1,6 +1,6 @@
 // src/scripts/app.ts
 import { renderMermaid } from '../utils/mermaidViewer';
-import { initClipboard, setupCodeCopyListener } from './core/clipboard';
+import { initClipboard, setupCodeCopyListener, setupStaticFileLinks } from './core/clipboard';
 import { initMobileDrawers } from './core/mobile-drawers';
 import { initUiSync, setupGlobalUiListeners, toggleZenMode } from './core/ui-sync';
 
@@ -17,6 +17,7 @@ export async function bootstrapApp(): Promise<void> {
   initClipboard();
   initUiSync();
   initMobileDrawers(toggleZenMode);
+  setupStaticFileLinks();
 
   // 4. Configurar escuchadores globales persistentes
   setupCodeCopyListener();
