@@ -4,180 +4,127 @@ orden: 0
 ---
 
 ## Matrices y Determinantes
-- Definición.
-- Propiedades.
-- Álgebra de matrices cuadradas: potencias y polinomios de matrices.
-- Matrices escalonadas.
-- Matriz canónica por filas.
-- Equivalencia por filas y operaciones elementales entre filas.
-- Operaciones elementales entre columnas.
-- Matrices elementales.
-- Aplicaciones: Matrices invertibles.
-- Propiedades.
-- Matrices especiales: simétrica, anti simétrica, nilpotente, periódica, idempotente, involutiva, y ortogonal.
-- Determinantes.
-- Definición recursiva del determinante de una matriz empleando permutaciones.
-- Propiedades del determinante.
-- Menores y cofactores.
-- La expansión de Laplace.
-- Determinante de Vandermonde.
-- La adjunta de una matriz cuadrada.
-- Matriz inversa.
+- **Álgebra de matrices y transformaciones elementales**
+  - Definición formal, dimensiones y propiedades operativas de matrices.
+  - Álgebra de matrices cuadradas: multiplicación, potencias enteras y polinomios matriciales.
+  - Tipologías de matrices especiales: simétrica, antisimétrica, nilpotente, periódica, idempotente, involutiva y ortogonal.
+  - Matrices escalonadas y matriz canónica reducida por filas.
+  - Relación de equivalencia por filas y operaciones elementales por filas y columnas.
+  - Matrices elementales y aplicaciones a la invertibilidad de matrices: criterios y propiedades.
+- **Teoría de determinantes e inversión matricial**
+  - Definición formal y recursiva del determinante mediante permutaciones.
+  - Propiedades fundamentales de la función determinante.
+  - Menores complementarios, cofactores y cálculo por expansión de Laplace.
+  - Determinantes especiales: matriz y determinante de Vandermonde.
+  - Matriz adjunta clásica de una matriz cuadrada y cálculo analítico de la matriz inversa.
 
 ## Sistemas de Ecuaciones Lineales
-- Definición de sistema de ecuaciones lineales.
-- Matriz de un sistema de ecuaciones.
-- Sistema homogéneo y no homogéneo.
-- Solución particular, solución general.
-- Relación entre las soluciones generales.
-- Sistemas equivalentes.
-- Operaciones elementales entre ecuaciones.
-- Procedimiento para resolver un sistema de ecuaciones empleando operaciones elementales entre ecuaciones (método de eliminación Gaussiana).
-- El rango de una matriz.
-- Cálculo por medio de operaciones elementales entre filas y determinantes.
-- El rango y tipo de solución: Variables libres.
-- La regla de Cramer para resolver sistemas cuadrados de ecuaciones lineales.
-- La descomposición LU de matrices y su aplicación a la solución de sistemas de ecuaciones lineales.
+- **Estructura y clasificación de sistemas lineales**
+  - Definición analítica de un sistema de ecuaciones lineales y representación matricial ($A\mathbf{x} = \mathbf{b}$).
+  - Clasificación de sistemas: homogéneos y no homogéneos.
+  - Tipos de soluciones: solución general, solución particular y relación estructural entre soluciones.
+  - Equivalencia de sistemas y transformaciones mediante operaciones elementales entre ecuaciones.
+- **Métodos directos de resolución y análisis de compatibilidad**
+  - Algoritmo de eliminación Gaussiana y Gauss-Jordan.
+  - Concepto de rango de una matriz: determinación mediante operaciones elementales por filas y cálculo por determinantes (menores principales).
+  - Caracterización de tipos de solución según el rango y determinación de variables libres (Teorema de Rouché-Frobenius).
+  - Regla de Cramer para sistemas cuadrados compatibles determinados.
+  - Factorización y descomposición matricial $LU$ aplicada a la resolución de sistemas de ecuaciones lineales.
 
 ## Aplicaciones de Matrices, Determinantes y Sistemas de Ecuaciones Lineales (Valores y Vectores Propios)
-- Valores y vectores propios.
-- Propiedades.
-- Teorema de Cayley Hamilton.
-- Proceso de Ortogonalización de Gram Schmidt.
-- Diagonalización de matrices.
-- Matrices semejantes.
-- Diagonalización ortogonal de matrices simétricas.
-- Aplicación de sistemas de ecuaciones a problemas de contexto real.
+- **Espectro matricial y diagonalización**
+  - Definición de valores propios (autovalores), vectores propios (autovectores) y propiedades espectrales.
+  - Polinomio característico y Teorema de Cayley-Hamilton.
+  - Matrices semejantes y semejanza de matrices.
+  - Condiciones de diagonalización de matrices en bases propias.
+- **Ortogonalidad y simetría**
+  - Proceso de ortogonalización de Gram-Schmidt para obtención de bases ortonormales.
+  - Teorema espectral: diagonalización ortogonal de matrices simétricas reales.
+- **Modelado aplicado**
+  - Aplicación de sistemas de ecuaciones lineales y análisis matricial a problemas del contexto real.
 
 ## Espacios Vectoriales
-- Definición.
-- Propiedades.
-- Combinaciones lineales.
-- Dependencia e independencia lineal de vectores.
-- Propiedades.
-- Subespacios vectoriales. Teorema fundamental (caracterización de un subespacio).
-- Descripción de los subespacios: Implícita y paramétrica.
-- Conjuntos generadores de espacios.
-- Sistema de generadores.
-- Conjuntos equivalentes. Base y dimensión (espacio vectorial finito).
-- Teoremas y propiedades.
-- Cambio de base.
-- Operaciones con subespacios: Inclusión. Intersección y suma.
-- Suma directa de subespacios.
+- **Estructura algebraica de espacio y subespacio vectorial**
+  - Definición formal de espacio vectorial sobre un cuerpo, axiomas y propiedades algebraicas.
+  - Subespacios vectoriales: caracterización y teorema fundamental de subespacios.
+  - Formas de descripción de subespacios: representación implícita y ecuaciones paramétricas.
+- **Independencia lineal, bases y dimensión**
+  - Combinación lineal de vectores.
+  - Dependencia e independencia lineal: criterios y propiedades fundamentales.
+  - Sistemas de generadores, conjuntos equivalentes y espacios vectoriales de dimensión finita.
+  - Conceptos de base y dimensión: teoremas de completitud y unicidad.
+  - Matriz de cambio de base (matriz de transición) y transformación de coordenadas.
+- **Operaciones algebraicas con subespacios**
+  - Relación de inclusión entre subespacios.
+  - Intersección de subespacios y suma de subespacios.
+  - Suma directa de subespacios vectoriales y teorema de la dimensión de la suma.
 
 ## Vectores y Rectas en R2
-- Vectores en R2: Sistema de coordenadas bidimensional.
-- Operaciones con pares ordenados.
-- Espacio vectorial bidimensional real.
-- Representación geométrica de vectores.
-- Vector de posición.
-- Vector libre.
-- Vectores paralelos.
-- Norma de un vector.
-- Propiedades de la norma.
-- Distancia entre dos puntos.
-- Vectores en R2: Vector unitario.
-- Vectores ortogonales.
-- Producto escalar. Propiedades.
-- Angulo de inclinación de un vector.
-- Combinación lineal de vectores.
-- Vectores ortonormales.
-- Vectores linealmente dependientes e independientes.
-- Angulo entre dos vectores.
-- Proyección ortogonal.
-- Componente ortogonal de un vector.
-- Bisectriz de un ángulo.
-- Área de un paralelogramo y de un triángulo.
-- La Recta en R2: Definición.
-- Ecuaciones de la recta: vectorial, paramétrica, simétrica, normal, general e interceptos.
-- Distancia de un punto a una recta.
-- Segmento de recta.
-- División de un segmento en una razón dada.
-- Angulo de inclinación de la recta.
-- Pendiente de una recta.
-- Ecuación punto pendiente de una recta.
-- La Recta en R2: Rectas paralelas y ortogonales.
-- Intersección de rectas.
-- Familia de rectas.
-- Angulo entre dos rectas.
-- Área de un triángulo.
+- **Álgebra vectorial euclidiana en el plano**
+  - Sistema cartesiano bidimensional, operaciones con pares ordenados y espacio vectorial $\mathbb{R}^2$.
+  - Representación geométrica: vectores de posición, vectores libres, paralelismo y vectores colineales.
+  - Magnitud: norma euclidiana, propiedades de la norma y cálculo de distancia entre dos puntos.
+  - Normalización: vector unitario, vectores ortogonales y conjuntos ortonormales en $\mathbb{R}^2$.
+  - Dependencia e independencia lineal en el plano y combinaciones lineales.
+- **Geometría métrica en R2**
+  - Producto escalar: propiedades analíticas, ángulo de inclinación y ángulo entre dos vectores.
+  - Proyecciones geométricas: vector proyección ortogonal y componente ortogonal.
+  - Determinación de la bisectriz de un ángulo.
+  - Aplicaciones a áreas geométricas: área del paralelogramo y área del triángulo.
+- **La Recta en el plano**
+  - Definición geométrica y analítica de la recta en $\mathbb{R}^2$.
+  - Ecuaciones de la recta: vectorial, paramétrica, simétrica, normal, general (implícita) y forma simétrica por interceptos.
+  - Propiedades geométricas: ángulo de inclinación, pendiente y forma punto-pendiente.
+  - Segmentos: longitud, distancia entre punto y recta, y división de un segmento en una razón dada.
+  - Posiciones relativas: rectas paralelas, rectas ortogonales, ángulo entre dos rectas e intersección.
+  - Familias o haces de rectas y cálculo del área del triángulo determinado por rectas.
 
 ## Vectores, Rectas y Planos en R3
-- Vectores en R3: Sistema de coordenadas tridimensional.
-- Operaciones con ternas ordenadas.
-- Espacio vectorial tridimensional.
-- Vector tridimensional.
-- Operaciones con vectores tridimensionales.
-- Vector de posición.
-- Vector libre.
-- Norma de un vector. Propiedades.
-- Distancia entre dos puntos en R3.
-- Segmento de recta.
-- Coordenadas del baricentro.
-- Combinación lineal de vectores.
-- Dependencia e Independencia lineal de vectores.
-- Vectores fundamentales.
-- Producto escalar de vectores. Propiedades.
-- Vectores paralelos.
-- Vectores en R3: Puntos coloniales.
-- Proyección ortogonal.
-- Componente ortogonal.
-- Relación entre proyección y componente. Propiedades.
-- Angulo entre dos vectores.
-- Vectores unitarios.
-- Bisectriz de un ángulo.
-- Ángulos, cosenos y números directores de un vector.
-- Producto vectorial. Interpretación geométrica.
-- Triple producto escalar. Interpretación geométrica. Propiedades.
-- Volumen de un tetraedro.
-- La Recta en R3: Definición.
-- Ecuaciones de la recta: vectorial, paramétrica, simétrica, casos especiales.
-- Rectas paralelas y ortogonales.
-- Distancia entre dos rectas paralelas.
-- Distancia mínima entre dos rectas que se cruzan.
-- Angulo entre dos rectas.
-- Proyección ortogonal de un punto sobre una recta.
-- El Plano: Definición.
-- Ecuaciones del plano: vectorial, paramétrica, normal, general, incompletas.
-- Planos paralelos y ortogonales.
-- Intersección de planos.
-- Ecuación biplanar de la recta.
-- Intersección de un plano y una recta.
-- Familia de planos.
-- Posiciones relativas entre un plano y una recta.
-- Distancia de un punto a un plano.
-- Distancia entre dos planos paralelos.
-- Angulo entre recta y plano.
-- Angulo entre dos planos.
-- Proyección ortogonal de un punto sobre un plano.
-- Proyección ortogonal de una recta sobre un plano.
+- **Álgebra vectorial euclidiana en el espacio**
+  - Sistema cartesiano tridimensional, operaciones con ternas ordenadas y estructura de $\mathbb{R}^3$.
+  - Vectores en el espacio: vectores de posición, vectores libres, paralelismo y puntos colineales.
+  - Norma euclidiana en $\mathbb{R}^3$, propiedades métricas y distancia entre puntos.
+  - Segmentos rectilíneos y coordenadas del baricentro.
+  - Base canónica (vectores fundamentales), combinaciones lineales y dependencia/independencia lineal.
+- **Productos vectoriales y aplicaciones métricas espaciales**
+  - Producto escalar en $\mathbb{R}^3$: propiedades, ángulo entre vectores y vectores unitarios.
+  - Ángulos directores, cosenos directores y números directores de un vector.
+  - Proyección ortogonal, componente ortogonal y sus relaciones.
+  - Bisectriz de un ángulo en el espacio.
+  - Producto vectorial: propiedades analíticas, cálculo determinante e interpretación geométrica (área de superficies).
+  - Triple producto escalar (producto mixto): propiedades, interpretación del volumen del paralelepípedo y volumen del tetraedro.
+- **La Recta en el espacio**
+  - Definición y representaciones: ecuación vectorial, ecuaciones paramétricas, forma simétrica y casos especiales.
+  - Posiciones relativas y distancias: rectas paralelas, ortogonales y rectas que se cruzan en el espacio.
+  - Ángulo entre dos rectas, distancia entre rectas paralelas y distancia mínima entre rectas alabeadas.
+  - Proyección ortogonal de un punto sobre una recta en $\mathbb{R}^3$.
+- **El Plano en el espacio y relaciones afines**
+  - Definición geométrica del plano y vector normal.
+  - Ecuaciones del plano: vectorial, paramétrica, normal, general (cartesiana) y formas incompletas.
+  - Posiciones relativas entre planos: paralelismo, ortogonalidad, intersección de planos y familia (haz) de planos.
+  - Ecuación biplanar de la recta (recta como intersección de planos).
+  - Interacciones entre recta y plano: posiciones relativas, puntos de intersección y ángulo entre recta y plano.
+  - Métricas espaciales: distancia de un punto a un plano, distancia entre planos paralelos, proyección ortogonal de un punto sobre un plano y proyección ortogonal de una recta sobre un plano.
 
 ## Secciones Cónicas
-- La Circunferencia: Definición.
-- Ecuaciones de la circunferencia: ordinaria, general, casos particulares.
-- Ecuación de la recta tangente a una circunferencia.
-- Cuerda de contacto.
-- Familia de circunferencias.
-- Transformación de coordenadas: Traslación de ejes.
-- Rotación de ejes.
-- Traslación y Rotación de ejes.
-- La Parábola: Definición.
-- Elementos.
-- Ecuaciones de la Parábola: vectorial, cartesiana, general.
-- Ecuación de la recta tangente a una parábola.
-- Cuerda de contacto.
-- Recta normal a una parábola.
-- Propiedades de la parábola.
-- La Elipse: Definición.
-- Elementos.
-- Ecuaciones de la elipse: vectorial, cartesiana.
-- Ecuación de la recta tangente a una elipse.
-- Recta normal a una elipse.
-- Propiedades de la elipse.
-- La Hipérbola: Definición.
-- Elementos.
-- Asíntotas de una hipérbola.
-- Ecuaciones de la hipérbola: vectorial, cartesiana.
-- Hipérbolas conjugadas.
-- Ecuación de la recta tangente a una hipérbola.
-- Propiedades de la hipérbola.
+- **La Circunferencia**
+  - Definición geométrica como lugar geométrico y elementos característicos.
+  - Formas de la ecuación: ordinaria (canónica), general y casos particulares.
+  - Recta tangente a la circunferencia, cuerda de contacto y familias de circunferencias.
+- **Transformación de coordenadas cartesianas**
+  - Traslación de ejes coordenados.
+  - Rotación de ejes coordenados y eliminación de términos mixtos ($xy$).
+  - Transformación combinada: traslación y rotación simultánea de ejes.
+- **La Parábola**
+  - Definición geométrica, foco, directriz, vértice y lado recto.
+  - Representaciones analíticas: ecuación vectorial, forma cartesiana ordinaria y ecuación general.
+  - Recta tangente, recta normal, cuerda de contacto y propiedades ópticas/geométricas de la parábola.
+- **La Elipse**
+  - Definición geométrica como lugar geométrico, focos, vértices, ejes y excentricidad.
+  - Ecuaciones de la elipse: representación vectorial, cartesiana canónica y forma general.
+  - Recta tangente, recta normal y propiedades reflectivas y focales de la elipse.
+- **La Hipérbola**
+  - Definición geométrica como lugar geométrico, focos, vértices, eje transverso, conjugado y excentricidad.
+  - Ecuaciones de las asíntotas y ecuaciones analíticas de la hipérbola (vectorial, cartesiana y general).
+  - Hipérbolas equiláteras y relación con hipérbolas conjugadas.
+  - Recta tangente a una hipérbola y propiedades geométricas.

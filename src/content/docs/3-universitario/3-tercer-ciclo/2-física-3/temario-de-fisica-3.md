@@ -4,189 +4,210 @@ orden: 0
 ---
 
 ## Introducción y Ley de Coulomb
-- Breve reseña histórica sobre la electricidad.
-- Interacción eléctrica.
-- Carga eléctrica.
-- Propiedades: Atracción y repulsión, conservación, cuantización.
-- Formas de electrización: Por frotación, por conducción y por inducción.
-- El electroscopio.
-- Concepto de tierra.
-- Conductores y aislantes.
-- Ley de Coulomb.
-- Unidades en el Sistema Internacional (S.I.).
-- Alcance.
-- Balanza de torsión de Cavendish.
-- Principio de superposición.
-- Ley de Coulomb para distribuciones discretas y "continuas" de carga.
-- Problemas.
+- **Fundamentos de la electrostática y naturaleza de la carga**
+  - Breve reseña histórica sobre la electricidad.
+  - Carga eléctrica e interacción eléctrica: atracción y repulsión.
+  - Propiedades fundamentales: principio de conservación y cuantización de la carga.
+  - Formas y mecanismos de electrización: por frotación, por contacto/conducción y por inducción.
+- **Medición y comportamiento de cargas en materiales**
+  - Clasificación de materiales: conductores y aislantes (dieléctricos).
+  - El electroscopio y principios de detección electrostática.
+  - Concepto de puesta a tierra y transferencia de carga.
+- **Ley de Coulomb y formulación matemática**
+  - Enunciado cuantitativo, alcance y límites de validez de la Ley de Coulomb.
+  - Unidades electrostáticas en el Sistema Internacional (S.I.).
+  - Determinación experimental: balanza de torsión de Coulomb/Cavendish.
+  - Principio de superposición lineal.
+  - Fuerzas electrostáticas en sistemas de cargas:
+    - Distribuciones discretas de carga.
+    - Distribuciones continuas de carga (densidades lineal, superficial y volumétrica).
+- **Resolución de problemas y aplicaciones analíticas**
 
 ## Campo Eléctrico y Ley de Gauss
-- Concepto de campo eléctrico.
-- Intensidad del campo eléctrico.
-- Unidades en el SI.
-- Principio de superposición.
-- Intensidad del campo eléctrico de una distribución discreta y continua de cargas.
-- Aplicaciones: Cálculo de la intensidad del campo eléctrico para un alambre rectilíneo, anillo, disco, lámina plana infinita, cilindro.
-- Líneas de fuerza.
-- Características.
-- Densidad del número de líneas de fuerza.
-- Dipolo eléctrico.
-- Momento dipolar eléctrico.
-- Torque sobre un dipolo.
-- Energía de un dipolo eléctrico.
-- Ángulo sólido.
-- Propiedades.
-- Flujo del campo eléctrico.
-- Propiedades.
-- Ley de Gauss.
-- Aplicaciones: Cálculo de la intensidad del campo eléctrico de un alambre infinito, de una lámina no conductora infinita, de un cascarón esférico, de una esfera, de un cilindro.
-- Modelos nucleares de Thompson y Rutherford.
+- **Concepto y descripción vectorial del campo eléctrico**
+  - Definición física e intensidad del campo eléctrico ($\vec{E}$).
+  - Unidades en el S.I.
+  - Principio de superposición para campos eléctricos.
+  - Cálculo de la intensidad de campo eléctrico:
+    - Sistemas discretos de partículas cargadas.
+    - Distribuciones continuas de carga: alambre rectilíneo finito e infinito, anillo, disco circular, lámina plana infinita y cilindro cargado.
+- **Visualización y dipolo eléctrico**
+  - Líneas de fuerza electrostática: definición, propiedades y densidad geométrica de líneas.
+  - El dipolo eléctrico:
+    - Momento dipolar eléctrico ($\vec{p}$).
+    - Torque y fuerzas sobre un dipolo en un campo eléctrico uniforme y no uniforme.
+    - Energía potencial electrostática asociada al dipolo.
+- **Flujo eléctrico y Ley de Gauss**
+  - Concepto geométrico de ángulo sólido y sus propiedades.
+  - Definición matemática de flujo del campo eléctrico ($\Phi_E$) y propiedades de superficie cerrada.
+  - Formulación integral de la Ley de Gauss.
+  - Aplicaciones con alta simetría:
+    - Alambre rectilíneo infinito.
+    - Lámina infinita no conductora.
+    - Cascarón esférico conductor/no conductor.
+    - Esfera sólida cargada (uniforme y no uniforme).
+    - Cilindro infinito y coaxial.
+- **Aplicaciones atómicas**
+  - Comparativa de modelos nucleares clásicos bajo la perspectiva electrostática (modelos de Thomson y Rutherford).
 
 ## Potencial Eléctrico
-- Potencial eléctrico de una carga puntual fija.
-- Unidades en el SI.
-- Diferencia de potenciales eléctricos.
-- Superficies equipotenciales.
-- Curvas equipotenciales.
-- Características de las curvas equipotenciales.
-- Relación entre la intensidad del campo eléctrico y el potencial eléctrico.
-- Integral de línea.
-- Gradiente del potencial eléctrico.
-- Principio de superposición del potencial eléctrico.
-- Potencial eléctrico de distribuciones discreta y continua de cargas.
-- Aplicaciones: Cálculo del potencial eléctrico de un alambre infinito, de un anillo, de un disco y de una esfera.
-- Energía potencial electrostática de una carga puntual, y de distribuciones discreta y "continua" de cargas.
-- Propiedades de los cuerpos conductores.
-- Aplicaciones de la electrostática: Xerografía, Impresora Láser, Impresora a chorro de tinta, Separador electrostático de partículas.
+- **Potencial y diferencia de potencial electrostático**
+  - Definición de potencial eléctrico ($V$) generado por una carga puntual fija.
+  - Diferencia de potencial electrostático ($\Delta V$) y unidades en el S.I. (Voltio).
+  - Principio de superposición para potenciales escalares.
+- **Geometría del potencial y relación de campo**
+  - Superficies y curvas equipotenciales: características y propiedades ortogonales.
+  - Relación entre campo eléctrico y potencial:
+    - Formulación mediante integral de línea de camino.
+    - Relación diferencial: gradiente del potencial ($\vec{E} = -\vec{\nabla} V$).
+- **Cálculo del potencial en diferentes distribuciones**
+  - Potencial electrostático para distribuciones discretas.
+  - Potencial electrostático para distribuciones continuas:
+    - Alambre recto infinito.
+    - Anillo cargado sobre su eje.
+    - Disco uniformemente cargado.
+    - Esfera sólida y conductora.
+- **Energía electrostática y conductores en equilibrio**
+  - Energía potencial electrostática de cargas puntuales individuales y ensambles discretos.
+  - Energía de distribuciones continuas de carga.
+  - Propiedades electrostáticas de conductores en equilibrio electrostático (campo interno nulo, exceso de carga en superficie, blindaje electrostático).
+- **Aplicaciones tecnológicas e industriales de la electrostática**
+  - Xerografía y fotocopiado.
+  - Funcionamiento de la impresora láser.
+  - Impresoras a chorro de tinta (deflexión electrostática).
+  - Precipitadores y separadores electrostáticos de partículas industriales.
 
 ## Condensadores y Dieléctricos
-- Condensador.
-- Capacidad eléctrica.
-- Unidades en el SI.
-- Aplicaciones: Cálculo de la capacidad eléctrica de un condensador plano, de un esférico y de un cilíndrico.
-- Asociación de condensadores: En serie y paralelo.
-- Transformación estrella-triángulo.
-- Energía y densidad de energía de un condensador.
-- Fuerza entre armaduras de un condensador con carga constante y con diferencia de potencial constante.
-- Dieléctricos.
-- Tipos.
-- Capacidad eléctrica de condensadores con dieléctrico.
-- Polarización.
-- Vector polarización.
-- Ley de Gauss en dieléctricos.
-- Vector desplazamiento.
-- Energía y densidad de energía de un condensador con dieléctrico.
+- **Capacitancia y configuraciones fundamentales**
+  - Definición de condensador y concepto de capacidad eléctrica ($C$).
+  - Unidades en el S.I. (Faradio).
+  - Geometrías clásicas de condensadores al vacío:
+    - Condensador plano-paralelo.
+    - Condensador cilíndrico coaxial.
+    - Condensador esférico y concéntrico.
+- **Análisis de circuitos con condensadores**
+  - Métodos de asociación: agrupamiento en serie y en paralelo.
+  - Métodos de transformación topológica: red estrella-triángulo ($Y-\Delta$).
+- **Energía y fuerzas en sistemas electrostáticos**
+  - Energía almacenada en el campo electrostático de un condensador.
+  - Densidad volumétrica de energía eléctrica ($u_e$).
+  - Fuerza electrostática entre armaduras:
+    - Análisis bajo condición de carga constante (sistema aislado).
+    - Análisis bajo condición de diferencia de potencial constante (conectado a fuente).
+- **Dieléctricos y medios materiales**
+  - Clasificación y tipos de dieléctricos (polares y no polares).
+  - Efecto de los dieléctricos en la capacitancia y rigidez dieléctrica.
+  - Mecanismos de polarización atómica/molecular y vector de polarización ($\vec{P}$).
+  - Cargas ligadas de polarización superficial y volumétrica.
+  - Ley de Gauss generalizada en presencia de dieléctricos.
+  - Vector desplazamiento eléctrico ($\vec{D}$) y susceptibilidad/permitividad relativa.
+  - Balance de energía y densidad de energía en condensadores con medio dieléctrico.
 
 ## Corriente Eléctrica
-- Concepto de corriente eléctrica.
-- Intensidad de corriente eléctrica.
-- Unidades en el S.I.
-- Tipos de corriente eléctrica.
-- Vector densidad de corriente eléctrica.
-- Propiedades.
-- Conservación de la carga eléctrica.
-- Primera regla de Kirchhoff.
-- Ley de Ohm microscópica.
-- Conductividad.
-- Resistividad.
-- Ley de Ohm macroscópica.
-- Resistencia eléctrica.
-- Variación de la resistividad con la temperatura.
-- Fuerza electromotriz.
-- Propiedades.
-- Pilas.
-- Baterías.
-- Segunda regla de Kirchhoff.
-- Asociación de resistencias en serie y paralelo.
-- Transformación estrella-triángulo.
-- Puente de Wheatstone.
-- Potencia eléctrica.
-- Ley de Joule.
-- Amperímetro.
-- Voltímetro.
-- Galvanómetro.
-- Redes eléctricas.
-- Intercambio de energía en un circuito.
-- Resolución de una red por el método de las corrientes de malla.
-- Seguridad eléctrica.
-- Circuitos R-C.
-- Carga y descarga.
-- Ejemplos de aplicación.
-- Problemas.
+- **Fundamentos de la conducción eléctrica**
+  - Definición de corriente eléctrica e intensidad de corriente media e instantánea ($I$).
+  - Unidades en el S.I. (Amperio).
+  - Tipos y regímenes de corriente eléctrica.
+  - Vector densidad de corriente ($\vec{J}$) y velocidad de arrastre (deriva).
+  - Ecuación de continuidad y principio de conservación de la carga eléctrica.
+- **Propiedades resistivas y Ley de Ohm**
+  - Formulación microscópica de la Ley de Ohm ($\vec{J} = \sigma \vec{E}$).
+  - Conceptos de conductividad ($\sigma$) y resistividad eléctrica ($\rho$).
+  - Efecto térmico en materiales: variación de la resistividad con la temperatura.
+  - Formulación macroscópica de la Ley de Ohm ($V = IR$).
+  - Resistencia eléctrica: geometría, materiales y unidades (Ohmio).
+- **Fuentes, potencia y leyes de circuitos**
+  - Fuerza electromotriz (fem): concepto, propiedades y fuentes electroquímicas (pilas y baterías).
+  - Potencia eléctrica en elementos activos y pasivos.
+  - Ley de Joule y disipación térmica.
+  - Reglas de Kirchhoff:
+    - Primera regla: ley de nodos/corrientes.
+    - Segunda regla: ley de mallas/voltajes.
+- **Topologías de circuitos y métodos de análisis en corriente continua**
+  - Asociación de resistores: combinaciones en serie, paralelo y transformaciones estrella-triángulo ($Y-\Delta$).
+  - Métodos de medición: circuito en puente de Wheatstone.
+  - Instrumentos de medición eléctrica: galvanómetro de bobina móvil, amperímetro (resistencia shunt) y voltímetro (resistencia multiplicadora).
+  - Análisis sistemático de redes eléctricas: método matricial de corrientes de malla y balance de intercambio de energía.
+  - Normas de seguridad eléctrica y efectos fisiológicos de la corriente.
+- **Régimen transitorio en circuitos de corriente continua**
+  - Circuitos $R-C$ serie: proceso de carga y descarga de un capacitor.
+  - Constante de tiempo capacitiva ($\tau = RC$).
+  - Ejemplos prácticos, balance energético y problemas resueltos.
 
 ## Campo Magnético
-- Breve reseña histórica del magnetismo.
-- Imanes.
-- Tipos.
-- Campo magnético.
-- Inducción magnética.
-- Líneas de fuerza.
-- Geomagnetismo.
-- Relación de Lorentz.
-- Unidades en el S.I.
-- Movimiento de una partícula cargada en un campo magnético.
-- Aplicaciones: Ciclotrón.
-- Experimento de Thompson.
-- Fuerza y torque magnéticos sobre una espira rectangular.
-- Galvanómetro de D'Arsonval.
-- Motor eléctrico de corriente continua.
-- Dipolo magnético.
-- Torque sobre un dipolo.
-- Energía de un dipolo en un campo magnético.
-- Ley de Biot y Savart.
-- Propiedades de la inducción magnética.
-- Ley de Ampere.
-- Aplicaciones: Cálculo de la inducción magnética alrededor de un alambre rectilíneo infinito, espira circular, solenoide, toroide con corriente.
-- Fuerza entre dos conductores paralelos.
-- Experiencias de Oersted.
-- Flujo de la inducción magnética.
-- Unidades en el S.I.
-- Ley de la inducción electromagnética de Faraday.
-- Inducción por variación de la corriente primaria, por movimiento relativo del circuito primario y del circuito secundario.
-- Generador de corriente alterna.
-- Ejemplos de aplicación.
-- Ley de Lenz.
-- Corrientes de Foucault.
-- Autoinducción.
-- Auto inductancia.
-- Unidades en el S.I.
-- Cálculo de la auto inductancia de un solenoide y un toroide.
-- Energía y densidad de energía magnética.
-- Asociación de inductores: en serie y paralelo.
-- Circuitos R-L.
-- Bobina de encendido.
-- Inducción mutua.
-- Bobinas de inducción.
-- Transformadores.
-- Coeficiente de acoplamiento.
-- Materiales magnéticos.
-- Magnetización.
-- Vector magnetización.
-- Intensidad del campo magnético.
-- Problemas.
-- Diamagnetismo.
-- Teoría de Larmor.
-- Paramagnetismo.
-- Ferromagnetismo.
-- Histéresis magnética.
-- Imanes permanentes.
+- **Origen y fenomenología del magnetismo**
+  - Reseña histórica del magnetismo, imanes naturales y artificiales (tipos).
+  - Campo magnético ($\vec{B}$), vector inducción magnética y geomagnetismo terrestre.
+  - Líneas de inducción de campo magnético y sus características.
+  - Experiencias de Oersted: acoplamiento electro-magnético.
+- **Fuerza magnética y dinámica de partículas cargadas**
+  - Fuerza de Lorentz sobre partículas cargadas en movimiento ($\vec{F} = q(\vec{E} + \vec{v} \times \vec{B})$).
+  - Trayectorias de partículas cargadas en campos magnéticos uniformes: movimiento helicoidal y circular.
+  - Unidades en el S.I. (Tesla).
+  - Aplicaciones experimentales y tecnológicas:
+    - El ciclotrón y aceleración de partículas.
+    - Experimento de J.J. Thomson (medición de la relación carga-masa $e/m$).
+  - Fuerza y torque sobre conductores y espiras:
+    - Fuerza magnética sobre conductores con corriente.
+    - Torque magnético sobre espira rectangular.
+    - Principio del galvanómetro de D'Arsonval.
+    - Principio de funcionamiento del motor de corriente continua (DC).
+- **Momento magnético y leyes del campo magnetostático**
+  - Dipolo magnético: momento dipolar magnético ($\vec{\mu}$), torque y energía potencial en un campo magnético.
+  - Ley de Biot-Savart: cálculo de inducción magnética para corrientes estacionarias.
+  - Ley de Ampère: formulación integral y simetrías.
+  - Aplicaciones analíticas de Biot-Savart y Ampère:
+    - Alambre rectilíneo infinito con corriente.
+    - Espira circular sobre el eje.
+    - Solenoide ideal y real.
+    - Toroide con corriente.
+  - Interacción entre conductores paralelos y definición del amperio.
+  - Flujo magnético ($\Phi_B$) a través de superficies abiertas y cerradas (Ley de Gauss para el magnetismo).
+- **Inducción electromagnética**
+  - Ley de inducción de Faraday y mecanismos de inducción:
+    - Por variación temporal de corriente (primario/secundario).
+    - Por movimiento relativo de conductores (fem motriz).
+  - Ley de Lenz y sentido de las corrientes inducidas.
+  - Corrientes de Foucault (corrientes parásitas) y aplicaciones amortiguadoras.
+  - Generador elemental de corriente alterna y ejemplos de aplicación práctica.
+- **Inductancia y circuitos magnéticos**
+  - Autoinducción y concepto de autoinductancia ($L$): unidades en el S.I. (Henrio).
+  - Cálculo de inductancias: solenoide y toroide.
+  - Energía magnética y densidad volumétrica de energía ($u_m$).
+  - Asociación de inductores en serie y en paralelo.
+  - Circuitos $R-L$ en corriente continua: regímenes transitorios y constante de tiempo inductiva.
+  - Aplicaciones de alta tensión: bobina de encendido.
+  - Inducción mutua ($M$), bobinas acopladas, transformadores eléctricos ideales y coeficiente de acoplamiento magnético ($k$).
+- **Propiedades magnéticas de la materia**
+  - Magnetización de materiales y vector magnetización ($\vec{M}$).
+  - Vector intensidad de campo magnético ($\vec{H}$) y permeabilidad magnética.
+  - Clasificación de los materiales magnéticos:
+    - Diamagnetismo y teoría de precesión de Larmor.
+    - Paramagnetismo.
+    - Ferromagnetismo: dominios magnéticos, ciclo de histéresis magnética e imanes permanentes.
+- **Resolución integral de problemas y ejercicios cuantitativos**
 
 ## Corriente Alterna
-- Generación.
-- Circuitos: resistivo, capacitivo, inductivo.
-- Valor medio y eficaz.
-- Factor de forma.
-- Potencia instantánea.
-- Potencia media.
-- Potencia activa.
-- Factor de potencia.
-- Representación fasorial de magnitudes alternas.
-- Circuitos: resistivo, capacitivo, inductivo.
-- Impedancia.
-- Admitancia.
-- Conductancia.
-- Susceptancia.
-- Resonancia.
-- Potencia aparente, activa y reactiva.
-- Factor de potencia.
-- Corrección del factor de potencia.
+- **Generación y valores característicos de señales alternas**
+  - Principio físico de generación de fuerza electromotriz sinusoidal.
+  - Parámetros de ondas alternas: frecuencia, periodo, amplitud, valor instantáneo, valor medio y valor eficaz (RMS).
+  - Factor de forma de una onda alterna.
+  - Potencia instantánea, potencia media y potencia activa elemental.
+- **Respuesta de elementos pasivos y formulación fasorial**
+  - Representación fasorial de tensiones y corrientes senoidales en el plano complejo.
+  - Comportamiento de elementos elementales en C.A.:
+    - Circuito puramente resistivo ($R$): relación de fase.
+    - Circuito puramente capacitivo ($C$): reactancia capacitiva ($X_C$) y adelanto de corriente.
+    - Circuito puramente inductivo ($L$): reactancia inductiva ($X_L$) y retraso de corriente.
+- **Impedancia, admitancia y análisis de redes R-L-C**
+  - Definición de impedancia compleja ($\mathbf{Z} = R + jX$) y sus componentes.
+  - Definición de admitancia compleja ($\mathbf{Y} = G + jB$), conductancia ($G$) y susceptancia ($B$).
+  - Circuitos combinados $R-L-C$ serie y paralelo.
+  - Fenómeno de resonancia eléctrica: frecuencia de resonancia, ancho de banda y factor de calidad ($Q$).
+- **Potencia en corriente alterna y corrección del factor de potencia**
+  - Triángulo de potencias:
+    - Potencia activa ($P$, Watts).
+    - Potencia reactiva ($Q$, VAr).
+    - Potencia aparente ($S$, VA).
+  - Factor de potencia ($\cos\phi$) e implicancias técnico-económicas del desfase.
+  - Métodos de compensación y cálculo de bancos de condensadores para la corrección del factor de potencia.
