@@ -58,7 +58,6 @@ if (props.type === 'folder' && props.folderPath === 'explorar') {
     {props.type === 'file' ? (
     <div id="document-view">
       <article class="markdown-body" data-pagefind-body>
-        <h1>{title}</h1>
         {(props.doc.data.mostrarCabecera || props.doc.data.integrantes || props.doc.data.institucion) && (
           <DocReportHeader data={props.doc.data} />
         )}

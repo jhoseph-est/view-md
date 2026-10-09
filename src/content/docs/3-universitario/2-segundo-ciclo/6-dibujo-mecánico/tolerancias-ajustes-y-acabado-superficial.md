@@ -1,7 +1,7 @@
 ---
-title: Tolerancias, ajustes y acabado superficial
+title: "Tolerancias, ajustes y acabado superficial"
+orden: 2
 ---
-# 2. Tolerancias, ajustes y acabado superficial
 
 ## Tolerancias dimensionales: numéricas e ISO, cotas máxima, nominal, mínima, desviaciones.
 

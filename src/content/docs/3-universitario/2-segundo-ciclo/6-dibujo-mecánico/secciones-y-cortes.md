@@ -1,7 +1,7 @@
 ---
-title: Secciones y cortes
+title: "Secciones y cortes"
+orden: 1
 ---
-# 1. Secciones y cortes
 
 ## Prueba de entrada e introducción al curso.
 

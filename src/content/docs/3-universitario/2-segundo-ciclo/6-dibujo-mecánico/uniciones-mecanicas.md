@@ -1,7 +1,7 @@
 ---
-title: Uniones mecánicas
+title: "Uniones mecánicas"
+orden: 3
 ---
-# 3. Uniones mecánicas
 
 ## Uniones desmontables: roscadas, chavetas, lengüetas, pasadores, uniones estriadas, anillos de retención.
 

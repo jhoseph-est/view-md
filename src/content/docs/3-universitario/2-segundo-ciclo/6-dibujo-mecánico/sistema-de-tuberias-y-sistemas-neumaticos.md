@@ -1,7 +1,7 @@
 ---
-title: Sistema de tuberías y sistemas neumáticos
+title: "Sistema de tuberías y sistemas neumáticos"
+orden: 5
 ---
-# 5. Sistema de tuberías y sistemas neumáticos
 
 ## Tuberías: símbolos, representación isométrica, válvulas, código de colores.
 

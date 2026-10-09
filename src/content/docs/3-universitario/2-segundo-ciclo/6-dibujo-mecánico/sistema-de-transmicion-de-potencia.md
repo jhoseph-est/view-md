@@ -1,7 +1,7 @@
 ---
-title: Sistemas de transmisión de potencia - engranajes
+title: "Sistemas de transmisión de potencia - engranajes"
+orden: 4
 ---
-# 4. Sistemas de transmisión de potencia - engranajes
 
 ## Engranajes cilíndricos rectos y helicoidales: nomenclatura, dimensiones ISO.
 
