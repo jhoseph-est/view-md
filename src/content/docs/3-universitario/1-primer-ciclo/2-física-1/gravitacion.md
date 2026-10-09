@@ -1,6 +1,9 @@
 ---
-title: Gravitación
+title: "Gravitación"
+orden: 7
 ---
+# Gravitación
+
 ## Introducción
 La gravitación es la interacción fundamental que rige el movimiento de los cuerpos a escala macroscópica y astronómica. El estudio de la gravedad evolucionó de las observaciones empíricas de las órbitas planetarias hacia la formulación de una ley universal que describe la atracción entre masas.
 

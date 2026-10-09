@@ -1,8 +1,9 @@
 ---
-title: tema 3
-ciclo: 1
-curso: fisica-1
+title: "Estática"
+orden: 3
 ---
+# Estática
+
 ## Introducción
 
 En el análisis de ingeniería, la estática permite determinar las cargas internas y externas que actúan sobre las estructuras. Se basa en la premisa de que la suma de todas las fuerzas y momentos que actúan sobre un sistema es nula, garantizando la estabilidad mecánica.

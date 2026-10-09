@@ -1,6 +1,10 @@
 ---
-title: Dinámica de rotación
+title: "Dinámica de rotación"
+orden: 6
 ---
+
+# Dinámica de rotación
+
 ## Introducción
 La dinámica de rotación analiza el comportamiento de los cuerpos extensos (cuerpos rígidos) cuando estos rotan alrededor de un eje o experimentan movimientos combinados de traslación y rotación. En este contexto, la distribución de la masa respecto al eje de giro resulta tan crítica como la magnitud de la masa misma.
 

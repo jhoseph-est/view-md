@@ -1,8 +1,9 @@
 ---
-title: tema 1
+title: "filosofía, ética y política"
+orden: 1
 ---
 
-# 1. Filosofía, ética y política
+# Filosofía, ética y política
 
 ## El hombre y la filosofía
 

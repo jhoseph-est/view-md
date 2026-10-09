@@ -1,0 +1,105 @@
+---
+title: "temario de Dibujo Técnico - Geometría Descriptiva"
+orden: 0
+---
+
+## Introducción al Dibujo Técnico y a la Geometría Descriptiva
+- Introducción al curso.
+- Bibliografía a utilizar.
+- Número de Láminas y de Prácticas Calificadas.
+- LETRAS, NÚMEROS Y ESCALA: Letras, números a mano alzada.
+- Rotulación normalizada.
+- Escala: Definición.
+- Tipos de Escala empleados en la construcción de piezas industriales.
+- Lectura del escalímetro.
+- Construcciones Geométricas: Bisectriz de un ángulo.
+- Segmentos proporcionales.
+- Mediatriz de una recta.
+- Construcción de polígonos regulares.
+- Hexágono regular inscrito y circunscrito.
+- Elipse.
+- Construcciones Geométricas. Curvas tangente entre una recta y un arco, curva tangente a dos arcos.
+- Técnicas utilizadas en la construcción de llaves de máquinas: polígonos regulares inscritos y circunscritos.
+- Elipse.
+- Ejemplos de aplicación práctica.
+
+## Introducción al Dibujo Técnico Normalizado
+- Teoría del Dimensionado: Definición.
+- Línea de referencia, línea de cota, cabeza de flecha.
+- Técnicas de dimensionado más utilizadas en la industria.
+- Acotación de diámetros: casos que se presentan.
+- Acotación de radios: casos que se presentan.
+- Acotación de ángulos arcos y cuerdas.
+- Acotación de chaflanes.
+- Acotación de arcos concéntricos.
+- Acotación de piezas simétricas.
+- Proyección de un sólido.
+- Método para construir un isométrico de una pieza industrial.
+- Depurado en el Sistema ISOA y en el Sistema ISOE.
+- Método para determinar las vistas principales.
+- Técnicas de dimensionado considerando la secuencia de las tres vistas principales.
+- Cortes: Plano de corte.
+- Corte total en el Sistema ISOE.
+- Representación de la línea de corte.
+- Achulado de piezas Cortadas.
+- Selección del número de proyecciones necesarias.
+- Corte escalonado.
+- Representación de la línea de corte.
+- Selección de la vista en que debe realizarse el corte.
+
+## Relaciones espaciales de puntos, rectas y planos en tres dimensiones
+- El Punto
+- Aplicación de los principios de la proyección ortogonal a la geometría descriptiva: Depurado del punto.
+- Graficación de un punto por coordenadas.
+- Posiciones relativas de dos puntos.
+- Posiciones sucesivas de un punto o de sólidos.
+- Reglas de visibilidad.
+- La Recta
+- Posiciones particulares de una recta: horizontal, frontal, de perfil, vertical, normal y orto perfil.
+- Posiciones relativas entre dos rectas: Rectas que se cruzan, paralelas, y perpendiculares.
+- Orientación.
+- Verdadera magnitud.
+- Métodos: con vista auxiliar y diferencia de cotas.
+- Pendiente.
+- Vista de punta de la recta.
+- El Plano
+- Posiciones particulares de un plano: horizontal, frontal, de perfil, normal, vertical y orto perfil.
+- Rectas notables en el plano.
+- Orientación.
+- Inclinación de un plano.
+- Vista de canto de un plano oblicuo.
+- Inclinación de plano oblicuo.
+- Dimensión verdadera de un plano oblicuo.
+- Recta de máxima pendiente.
+- Intersección entre recta con plano y entre planos: Intersección: Recta oblicua y de perfil.
+- Métodos de solución: Plano de canto, plano cortante.
+- Reglas de visibilidad.
+- Intersecciones de dos planos.
+- Caso general y particular.
+- Métodos de solución: Vista auxiliar y plano cortante.
+- Reglas de visibilidad.
+- Paralelismo y Perpendicularidad.
+- Condiciones de paralelismo y perpendicularidad entre rectas y planos.
+- Por un punto trazar un plano perpendicular a una recta dada.
+- Plano mediatriz.
+- Por un punto trazar un plano perpendicular a un plano dado y paralelo a una recta dada.
+
+## Intersección y Desarrollo de Poliedros y Superficies
+- Intersección de poliedros.
+- Tipos de intersecciones y sistema de numeración.
+- Intersección de recta con poliedro: Prisma y Pirámide.
+- Método del plano cortante.
+- Intersección entre plano con poliedro.
+- Método del plano cortante.
+- Intersección de dos Prismas: Método del plano cortante.
+- Intersección de Pirámide y Prisma.
+- Método del plano cortante.
+- Desarrollo.
+- Método radial: Desarrollo de una Pirámide recta, oblicua truncada.
+- Desarrollo de un cono recto y cono oblicuo truncado.
+- Método de Líneas paralelas: Desarrollo de un prisma recto y oblicuo truncada.
+- Desarrollo de un cilindro recto y cilindro oblicuo truncado.
+- Método por triangulación.
+- Desarrollo de piezas de transición o adaptadores.
+- Desarrollo de la intersección de dos poliedros en posiciones particulares.
+- Desarrollo de la intersección de dos superficies en posiciones particulares.

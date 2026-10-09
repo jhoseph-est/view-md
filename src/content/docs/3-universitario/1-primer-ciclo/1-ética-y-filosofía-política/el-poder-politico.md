@@ -1,6 +1,9 @@
 ---
-title: El poder político
+title: "El poder político"
+orden: 2
 ---
+
+# El poder político
 ## Introducción
 
 El fenómeno del poder constituye el objeto central de la ciencia política y uno de los conceptos más complejos de la filosofía social. Su comprensión requiere un análisis que trascienda la mera coacción física para adentrarse en las estructuras de legitimidad, autoridad y organización institucional. El poder político no es una entidad estática, sino una relación dinámica de fuerzas que configura la distribución de recursos, la creación de normas y la dirección de la sociedad. En este apartado, se explorará desde su génesis teórica hasta su manifestación empírica en las organizaciones partidarias, con especial énfasis en el contexto republicano peruano.

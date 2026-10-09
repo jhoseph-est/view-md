@@ -1,6 +1,8 @@
 ---
-title: Dinámica de un sistema de partículas
+title: "Dinámica de un sistema de partículas"
+orden: 5
 ---
+# Dinámica de un sistema de partículas
 ## Introducción
 
 Un sistema de partículas es un conjunto de $n$ puntos materiales con masas $m_i$ que pueden interactuar mediante fuerzas internas o ser afectados por campos externos. La complejidad del sistema reside en que el movimiento de cada partícula está acoplado al de las demás, pero su comportamiento global puede simplificarse mediante el concepto de centro de masa.

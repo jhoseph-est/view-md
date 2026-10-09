@@ -1,8 +1,10 @@
 ---
-title: tema 2
-ciclo: 1
-curso: fisica-1
+title: "Cinemática de una partícula"
+orden: 2
 ---
+
+# Cinemática de una partícula
+
 ## Introducción
 
 En el nivel de Física I, el estudio se simplifica mediante el modelo de **partícula**, donde se desprecia la geometría del cuerpo para concentrar toda su masa en un punto matemático. Esto permite describir el movimiento traslacional puro, ignorando rotaciones internas o deformaciones.

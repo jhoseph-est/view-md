@@ -1,8 +1,10 @@
 ---
-title: tema 1
-ciclo: 1
-curso: fisica-1
+title: "Introducción a la Física, Mediciones y Vectores"
+orden: 1
 ---
+
+# Introducción a la Física, Mediciones y Vectores
+
 ## Introducción
 La física, como ciencia fundamental que estudia las propiedades de la materia, la energía, el espacio y el tiempo, constituye la base epistemológica y técnica de todas las ramas de la ingeniería. Su objetivo primordial es establecer leyes cuantitativas que gobiernan los fenómenos naturales, permitiendo la predicción y el control de sistemas físicos complejos mediante modelos matemáticos.
 

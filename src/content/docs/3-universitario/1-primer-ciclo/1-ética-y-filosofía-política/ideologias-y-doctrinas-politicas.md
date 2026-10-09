@@ -1,8 +1,9 @@
 ---
-title: tema 3
+title: "Ideologías y Doctrinas Políticas"
+orden: 3
 ---
 
-# 3. Ideologías y doctrinas políticas
+# Ideologías y doctrinas políticas
 
 ## Concepto de ideología
 

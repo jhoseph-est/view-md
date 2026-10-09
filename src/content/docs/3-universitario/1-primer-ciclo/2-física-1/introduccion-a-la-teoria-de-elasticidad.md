@@ -1,6 +1,8 @@
 ---
-title: Introducción a la teoría de elasticidad
+title: "Introducción a la teoría de elasticidad"
+orden: 8
 ---
+# Introducción a la teoría de elasticidad
 ## Introducción
 La teoría de la elasticidad estudia el comportamiento de los cuerpos deformables ante la aplicación de cargas externas. A diferencia de la mecánica del cuerpo rígido, aquí se reconoce que las fuerzas internas provocan desplazamientos relativos entre las partículas del sólido, alterando su geometría.
 

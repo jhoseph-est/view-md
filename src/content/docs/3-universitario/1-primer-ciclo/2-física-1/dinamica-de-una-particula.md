@@ -1,6 +1,8 @@
 ---
-title: Dinámica de una partícula
+title: "Dinámica de una partícula"
+orden: 4
 ---
+# Dinámica de una partícula
 ## Introducción
 
 El estudio de la dinámica de una partícula se fundamenta en la capacidad de cuantificar cómo la aplicación de una fuerza neta altera el estado de movimiento. Para ello, es imperativo definir la masa como una medida de la inercia, es decir, la resistencia de un cuerpo a cambiar su estado de reposo o movimiento.
