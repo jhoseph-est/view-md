@@ -1,0 +1,56 @@
+---
+title: "Campo Magnético"
+orden: 6
+---
+# Campo Magnético
+- **Origen y fenomenología del magnetismo**
+  - Reseña histórica del magnetismo, imanes naturales y artificiales (tipos).
+  - Campo magnético ($\vec{B}$), vector inducción magnética y geomagnetismo terrestre.
+  - Líneas de inducción de campo magnético y sus características.
+  - Experiencias de Oersted: acoplamiento electro-magnético.
+- **Fuerza magnética y dinámica de partículas cargadas**
+  - Fuerza de Lorentz sobre partículas cargadas en movimiento ($\vec{F} = q(\vec{E} + \vec{v} \times \vec{B})$).
+  - Trayectorias de partículas cargadas en campos magnéticos uniformes: movimiento helicoidal y circular.
+  - Unidades en el S.I. (Tesla).
+  - Aplicaciones experimentales y tecnológicas:
+    - El ciclotrón y aceleración de partículas.
+    - Experimento de J.J. Thomson (medición de la relación carga-masa $e/m$).
+  - Fuerza y torque sobre conductores y espiras:
+    - Fuerza magnética sobre conductores con corriente.
+    - Torque magnético sobre espira rectangular.
+    - Principio del galvanómetro de D'Arsonval.
+    - Principio de funcionamiento del motor de corriente continua (DC).
+- **Momento magnético y leyes del campo magnetostático**
+  - Dipolo magnético: momento dipolar magnético ($\vec{\mu}$), torque y energía potencial en un campo magnético.
+  - Ley de Biot-Savart: cálculo de inducción magnética para corrientes estacionarias.
+  - Ley de Ampère: formulación integral y simetrías.
+  - Aplicaciones analíticas de Biot-Savart y Ampère:
+    - Alambre rectilíneo infinito con corriente.
+    - Espira circular sobre el eje.
+    - Solenoide ideal y real.
+    - Toroide con corriente.
+  - Interacción entre conductores paralelos y definición del amperio.
+  - Flujo magnético ($\Phi_B$) a través de superficies abiertas y cerradas (Ley de Gauss para el magnetismo).
+- **Inducción electromagnética**
+  - Ley de inducción de Faraday y mecanismos de inducción:
+    - Por variación temporal de corriente (primario/secundario).
+    - Por movimiento relativo de conductores (fem motriz).
+  - Ley de Lenz y sentido de las corrientes inducidas.
+  - Corrientes de Foucault (corrientes parásitas) y aplicaciones amortiguadoras.
+  - Generador elemental de corriente alterna y ejemplos de aplicación práctica.
+- **Inductancia y circuitos magnéticos**
+  - Autoinducción y concepto de autoinductancia ($L$): unidades en el S.I. (Henrio).
+  - Cálculo de inductancias: solenoide y toroide.
+  - Energía magnética y densidad volumétrica de energía ($u_m$).
+  - Asociación de inductores en serie y en paralelo.
+  - Circuitos $R-L$ en corriente continua: regímenes transitorios y constante de tiempo inductiva.
+  - Aplicaciones de alta tensión: bobina de encendido.
+  - Inducción mutua ($M$), bobinas acopladas, transformadores eléctricos ideales y coeficiente de acoplamiento magnético ($k$).
+- **Propiedades magnéticas de la materia**
+  - Magnetización de materiales y vector magnetización ($\vec{M}$).
+  - Vector intensidad de campo magnético ($\vec{H}$) y permeabilidad magnética.
+  - Clasificación de los materiales magnéticos:
+    - Diamagnetismo y teoría de precesión de Larmor.
+    - Paramagnetismo.
+    - Ferromagnetismo: dominios magnéticos, ciclo de histéresis magnética e imanes permanentes.
+- **Resolución integral de problemas y ejercicios cuantitativos**

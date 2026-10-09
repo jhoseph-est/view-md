@@ -1,6 +1,8 @@
 ---
-title: Introducción a la economía y principales agentes económicos
+title: "Introducción a la economía y principales agentes económicos"
 ---
+
+# Introducción a la economía y principales agentes económicos
 
 ## Introducción a la Economía
 

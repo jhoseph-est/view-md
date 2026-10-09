@@ -1,0 +1,34 @@
+---
+title: "Corriente Eléctrica"
+orden: 5
+---
+# Corriente Eléctrica
+- **Fundamentos de la conducción eléctrica**
+  - Definición de corriente eléctrica e intensidad de corriente media e instantánea ($I$).
+  - Unidades en el S.I. (Amperio).
+  - Tipos y regímenes de corriente eléctrica.
+  - Vector densidad de corriente ($\vec{J}$) y velocidad de arrastre (deriva).
+  - Ecuación de continuidad y principio de conservación de la carga eléctrica.
+- **Propiedades resistivas y Ley de Ohm**
+  - Formulación microscópica de la Ley de Ohm ($\vec{J} = \sigma \vec{E}$).
+  - Conceptos de conductividad ($\sigma$) y resistividad eléctrica ($\rho$).
+  - Efecto térmico en materiales: variación de la resistividad con la temperatura.
+  - Formulación macroscópica de la Ley de Ohm ($V = IR$).
+  - Resistencia eléctrica: geometría, materiales y unidades (Ohmio).
+- **Fuentes, potencia y leyes de circuitos**
+  - Fuerza electromotriz (fem): concepto, propiedades y fuentes electroquímicas (pilas y baterías).
+  - Potencia eléctrica en elementos activos y pasivos.
+  - Ley de Joule y disipación térmica.
+  - Reglas de Kirchhoff:
+    - Primera regla: ley de nodos/corrientes.
+    - Segunda regla: ley de mallas/voltajes.
+- **Topologías de circuitos y métodos de análisis en corriente continua**
+  - Asociación de resistores: combinaciones en serie, paralelo y transformaciones estrella-triángulo ($Y-\Delta$).
+  - Métodos de medición: circuito en puente de Wheatstone.
+  - Instrumentos de medición eléctrica: galvanómetro de bobina móvil, amperímetro (resistencia shunt) y voltímetro (resistencia multiplicadora).
+  - Análisis sistemático de redes eléctricas: método matricial de corrientes de malla y balance de intercambio de energía.
+  - Normas de seguridad eléctrica y efectos fisiológicos de la corriente.
+- **Régimen transitorio en circuitos de corriente continua**
+  - Circuitos $R-C$ serie: proceso de carga y descarga de un capacitor.
+  - Constante de tiempo capacitiva ($\tau = RC$).
+  - Ejemplos prácticos, balance energético y problemas resueltos.
