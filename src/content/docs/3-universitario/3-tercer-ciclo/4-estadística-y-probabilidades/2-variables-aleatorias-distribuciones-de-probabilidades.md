@@ -11,9 +11,9 @@ Este documento desarrolla de forma formal cada uno de los puntos correspondiente
 
 ### Definición matemática de variable aleatoria y clasificación
 
-* **Variable aleatoria (**$X$**):** Es una función medible $X: \Omega \to \mathbb{R}$ que asigna un número real a cada resultado elemental de un espacio muestral $\Omega$.
+- **Variable aleatoria (**$X$**):** Es una función medible $X: \Omega \to \mathbb{R}$ que asigna un número real a cada resultado elemental de un espacio muestral $\Omega$.
 
-* **Clasificación:**
+- **Clasificación:**
 
   * *Discretas:* El conjunto de valores posibles es finito o infinito numerable.
 

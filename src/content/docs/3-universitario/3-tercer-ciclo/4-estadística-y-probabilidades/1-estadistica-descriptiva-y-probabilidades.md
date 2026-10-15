@@ -19,19 +19,12 @@ orden: 1
 
 ```mermaid
 flowchart
-a[variable]
-b[cualitativas]
-c[cuantitativas]
-b1[norminal]
-b2[ordinal]
-c1[discretas]
-c2[continuas]
-a-->b
-a-->c
-b-->b1
-b-->b2
-c-->c1
-c-->c2
+a[variable] ; b[cualitativas] ; c[cuantitativas]
+b1[norminal] ; b2[ordinal]
+c1[discretas] ; c2[continuas]
+a-->b ; a-->c
+b-->b1 ; b-->b2
+c-->c1 ; c-->c2
 ```
 
 ### Organización y presentación de datos: tablas de frecuencias unidimensionales y bidimensionales
