@@ -1,7 +1,6 @@
 ---
 title: El átomo mecano-cuántico y el sistema periódico
 ciclo: 1
-curso: quimica-1
 ---
 ## Introducción
 

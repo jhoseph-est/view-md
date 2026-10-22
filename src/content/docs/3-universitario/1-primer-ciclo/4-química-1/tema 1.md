@@ -1,7 +1,6 @@
 ---
 title: tema 1
 ciclo: 1
-curso: quimica-1
 ---
 ## Introducción
 
