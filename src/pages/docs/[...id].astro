@@ -59,19 +59,20 @@ if (props.type === 'folder' && props.folderPath === 'explorar') {
   <div class="doc-container">
     {props.type === 'file' ? (
     <div id="document-view">
-      <!-- Barra de herramientas superior: Copiar Markdown -->
+      <!-- Barra de herramientas superior: Descargar Markdown -->
       <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
         <button 
           type="button" 
-          id="btn-copiar-md" 
+          id="btn-descargar-md" 
           class="copy-code-btn" 
           style="display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.75rem; border-radius: 6px; cursor: pointer; border: 1px solid var(--border-color); background: var(--header-bg); color: var(--text-color);"
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
-            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
           </svg>
-          <span>Copiar Markdown (.md)</span>
+          <span>Descargar Markdown (.md)</span>
         </button>
       </div>
 
@@ -126,10 +127,10 @@ if (props.type === 'folder' && props.folderPath === 'explorar') {
   <GraphModal />
 
   {props.type === 'file' && (
-    <script define:vars={{ rawBody, frontmatter: props.doc.data }}>
-      const btn = document.getElementById('btn-copiar-md');
+    <script define:vars={{ rawBody, frontmatter: props.doc.data, docId: normalizedDocId }}>
+      const btn = document.getElementById('btn-descargar-md');
       if (btn) {
-        btn.addEventListener('click', async () => {
+        btn.addEventListener('click', () => {
           // Reconstruir el archivo completo con frontmatter YAML
           const yamlLines = Object.entries(frontmatter)
             .filter(([_, val]) => val !== undefined && val !== null)
@@ -138,12 +139,25 @@ if (props.type === 'folder' && props.folderPath === 'explorar') {
           const yamlString = `---\n${yamlLines.join('\n')}\n---\n\n`;
           const fullMarkdown = yamlString + rawBody;
 
-          await navigator.clipboard.writeText(fullMarkdown);
-          
+          // Generar el Blob y disparar la descarga en el navegador
+          const blob = new Blob([fullMarkdown], { type: 'text/markdown;charset=utf-8' });
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+
+          // Tomar el nombre del archivo actual limpio
+          const fileName = `${docId.split('/').pop() || 'documento'}.md`;
+
+          link.href = url;
+          link.download = fileName;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+
           const label = btn.querySelector('span');
           if (label) {
             const original = label.textContent;
-            label.textContent = '¡Copiado al Portapapeles!';
+            label.textContent = '¡Descargado!';
             btn.style.borderColor = '#10b981';
             btn.style.color = '#10b981';
             setTimeout(() => {

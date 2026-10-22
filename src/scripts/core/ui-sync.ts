@@ -37,17 +37,37 @@ export function initUiSync(): void {
   const leftTitle = document.getElementById('left-panel-title');
   const actSlides = document.getElementById('act-slides') as HTMLAnchorElement | null;
   const actDesign = document.getElementById('act-design');
+
   if (actDesign) {
-    actDesign.onclick = () => {
-      window.dispatchEvent(new CustomEvent('toggle-editor-drawer'));
+    actDesign.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const drawer = document.getElementById('editor-diseno-drawer');
+      if (drawer) {
+        drawer.classList.toggle('is-open');
+      }
     };
   }
-  if (actSlides) {
-    const currentDocPath = window.location.pathname.replace(/^\/docs\/?/, '').replace(/\/$/, '');
-    actSlides.href = `/slides/${currentDocPath}`;
+
+  // NUEVO: Función para actualizar dinámicamente el enlace de diapositivas según la ruta actual
+  function updateSlidesLink(): void {
+    if (!actSlides) return;
+    const currentPath = window.location.pathname;
+    if (currentPath.includes('/docs/')) {
+      const cleanDocPath = currentPath
+        .replace(/^\/docs\/?/, '')
+        .replace(/\/$/, '')
+        .replace(/\.(md|mdx)$/, '');
+      actSlides.href = `/slides/${cleanDocPath}`;
+      actSlides.style.display = 'flex';
+    } else {
+      actSlides.href = '#';
+    }
   }
 
   function syncUI(save = true): void {
+    updateSlidesLink(); // Actualizar slides cada vez que sincronice la UI
+
     root.classList.toggle('no-left-panel', !isLeftOpen);
     root.classList.toggle('no-toc', !showToc);
     root.classList.toggle('no-meta', !showMeta);
@@ -160,6 +180,10 @@ export function initUiSync(): void {
     };
   }
 
+  updateProfileLink: {
+    updateSlidesLink();
+  }
+
   syncUI(false);
 }
 
@@ -224,7 +248,10 @@ export function setupGlobalUiListeners(): void {
       toggleZenMode();
     } else if (e.altKey && e.key.toLowerCase() === 'e') {
       e.preventDefault();
-      window.dispatchEvent(new CustomEvent('toggle-editor-drawer'));
+      const drawer = document.getElementById('editor-diseno-drawer');
+      if (drawer) {
+        drawer.classList.toggle('is-open');
+      }
     }
   });
 }

@@ -14,10 +14,16 @@ export async function getStaticPaths() {
     (doc: CollectionEntry<'docs'>) => doc.data.draft !== true && doc.data.slides === true
   );
 
-  return slideDocs.map((doc: CollectionEntry<'docs'>) => ({
-    params: { id: doc.id.replace(/\\/g, '/') },
-    props: { doc },
-  }));
+  return slideDocs.map((doc: CollectionEntry<'docs'>) => {
+    const cleanId = doc.id
+      .replace(/\\/g, '/')
+      .replace(/\.(md|mdx)$/, '');
+
+    return {
+      params: { id: cleanId },
+      props: { doc },
+    };
+  });
 }
 
 interface Props {
@@ -29,7 +35,7 @@ const contentBody = doc.body || '';
 ---
 
 <!DOCTYPE html>
-<html lang="es" data-modo="oscuro">
+<html lang="es" data-modo="oscuro" data-estilo={doc.data.theme || 'moderno'}>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -167,16 +173,17 @@ const contentBody = doc.body || '';
 
           const hasCustomConfig = cleanCode.includes('%%{init') || cleanCode.startsWith('---');
           const isGantt = cleanCode.replace(/%%[\s\S]*?%%/g, '').trim().startsWith('gantt');
-          const diagramType = detectDiagramType(cleanCode);
 
           let codeToRender = cleanCode;
 
+          // Sincronización exacta con getThemeForDiagram para respetar el modo oscuro y colores web
           if (isGantt) {
             const numericWidth = widthMatch ? parseInt(widthMatch[1], 10) : 1200;
             codeToRender = hasCustomConfig 
               ? cleanCode 
               : `%%{init: { 'gantt': { 'useWidth': ${numericWidth} } } }%%\n` + cleanCode;
           } else if (!hasCustomConfig) {
+            const diagramType = detectDiagramType(cleanCode);
             const initConfig = getThemeForDiagram(diagramType);
             const generatedInit = `%%{init: ${JSON.stringify(initConfig)} }%%\n`;
             codeToRender = generatedInit + cleanCode;
@@ -227,8 +234,17 @@ const contentBody = doc.body || '';
               await (window as any).MathJax.typesetPromise([scrollBox]);
             }
           } catch (err) {
-            console.error('Error renderizando Mermaid en slide:', err);
-            pre.dataset.mermaidDone = 'false';
+            console.warn('Error renderizando Mermaid en slide, aplicando fallback limpio:', err);
+            try {
+              const { svg } = await mermaidInstance.render(renderId + '-fallback', cleanCode);
+              const fallbackBox = document.createElement('div');
+              fallbackBox.className = 'slide-mermaid-scroll-box has-scroll';
+              fallbackBox.innerHTML = svg;
+              pre.replaceWith(fallbackBox);
+            } catch (fallbackErr) {
+              console.error('Fallo crítico renderizando Mermaid en slide:', fallbackErr);
+              pre.dataset.mermaidDone = 'false';
+            }
           }
         }
 
@@ -255,4 +271,4 @@ const contentBody = doc.body || '';
     initSlides();
   </script>
 </body>
-</html>
+</html> 

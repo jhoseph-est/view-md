@@ -94,9 +94,13 @@ html, body {
   margin: 0 !important;
   padding: 0 !important;
 }
+
+/* CORREGIDO: Inclusión de .cluster-label para forzar color blanco en textos de subgráficos */
 .reveal .slide-mermaid-scroll-box foreignObject p,
 .reveal .slide-mermaid-scroll-box foreignObject span,
-.reveal .slide-mermaid-scroll-box .nodeLabel {
+.reveal .slide-mermaid-scroll-box .nodeLabel,
+.reveal .slide-mermaid-scroll-box .cluster-label span,
+.reveal .slide-mermaid-scroll-box .cluster-label p {
   margin: 0 !important;
   padding: 0 !important;
   font-family: system-ui, -apple-system, sans-serif !important;
@@ -108,6 +112,7 @@ html, body {
   justify-content: center !important;
   white-space: normal !important;
 }
+
 .reveal .slide-mermaid-scroll-box mjx-container {
   margin: 0 !important;
   padding: 0 !important;

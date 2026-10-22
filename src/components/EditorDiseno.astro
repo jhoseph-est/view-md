@@ -17,78 +17,24 @@ import TabEstilosWeb from './editor/TabEstilosWeb.astro';
   </div>
 </aside>
 
-<script is:inline>
-  // Delegación de clics global que sobrevive a ClientRouter y a transition:persist
-  (function () {
-    if (window.__editorToggleInitialized) return;
-    window.__editorToggleInitialized = true;
-
-    function toggleEditorDrawer() {
-      const drawer = document.getElementById('editor-diseno-drawer');
-      if (!drawer) return;
-
-      const isOpen = drawer.classList.contains('is-open');
-      if (isOpen) {
-        drawer.classList.remove('is-open');
-        drawer.setAttribute('aria-hidden', 'true');
-      } else {
-        drawer.classList.add('is-open');
-        drawer.setAttribute('aria-hidden', 'false');
-      }
-    }
-
-    // Escuchador global de clics en toda la ventana
-    document.addEventListener('click', (e) => {
-      const target = e.target;
-      if (!target || !(target instanceof Element)) return;
-
-      // Detecta clic en el botón de la paleta (o en su SVG/path interno)
-      if (target.closest('#act-design')) {
-        e.preventDefault();
-        e.stopPropagation();
-        toggleEditorDrawer();
-        return;
-      }
-
-      // Detecta clic en el botón X de cerrar
-      if (target.closest('#btn-close-editor')) {
-        e.preventDefault();
-        const drawer = document.getElementById('editor-diseno-drawer');
-        if (drawer) {
-          drawer.classList.remove('is-open');
-          drawer.setAttribute('aria-hidden', 'true');
-        }
-      }
-    });
-
-    // Atajo de teclado Alt + E
-    document.addEventListener('keydown', (e) => {
-      if (e.altKey && e.key.toLowerCase() === 'e') {
-        e.preventDefault();
-        toggleEditorDrawer();
-      }
-    });
-
-    // Escuchar el evento toggle-editor-drawer si viene de otros módulos
-    window.addEventListener('toggle-editor-drawer', toggleEditorDrawer);
-  })();
-</script>
-
 <script>
   import { setupEditorDrawer } from '../scripts/editor/editor-core';
 
-  function initControls() {
-    try {
-      setupEditorDrawer();
-    } catch (err) {
-      console.warn('Error inicializando controles secundarios del editor:', err);
+  function init() {
+    setupEditorDrawer();
+
+    const btnClose = document.getElementById('btn-close-editor');
+    if (btnClose) {
+      btnClose.onclick = () => {
+        document.getElementById('editor-diseno-drawer')?.classList.remove('is-open');
+      };
     }
   }
 
-  document.addEventListener('astro:page-load', initControls);
+  document.addEventListener('astro:page-load', init);
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initControls);
+    document.addEventListener('DOMContentLoaded', init);
   } else {
-    initControls();
+    init();
   }
 </script>
