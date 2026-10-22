@@ -1,7 +1,6 @@
 // src/scripts/editor/editor-core.ts
 import { initMarkdownControls } from './editor-markdown';
 import { initMermaidControls } from './editor-mermaid';
-import { initCaratulaControls, updateCoverLivePreview } from './editor-caratula';
 
 export function setupEditorDrawer(): void {
   const drawer = document.getElementById('editor-diseno-drawer');
@@ -9,15 +8,12 @@ export function setupEditorDrawer(): void {
   const root = document.documentElement;
   if (!drawer) return;
 
-  // 1. Abrir / Cerrar Drawer
   function toggleDrawer(open?: boolean): void {
     const isCurrentlyActive = drawer?.classList.contains('is-open');
     const shouldOpen = open !== undefined ? open : !isCurrentlyActive;
-
     if (shouldOpen) {
       drawer?.classList.add('is-open');
       drawer?.setAttribute('aria-hidden', 'false');
-      updateCoverLivePreview();
     } else {
       drawer?.classList.remove('is-open');
       drawer?.setAttribute('aria-hidden', 'true');
@@ -27,35 +23,15 @@ export function setupEditorDrawer(): void {
   if (closeBtn) closeBtn.onclick = () => toggleDrawer(false);
   window.addEventListener('toggle-editor-drawer', () => toggleDrawer());
 
-  // 2. Navegación por pestañas
-  const tabs = drawer.querySelectorAll<HTMLButtonElement>('.tab-btn');
-  const contents = drawer.querySelectorAll<HTMLElement>('.tab-content');
-
-  tabs.forEach(btn => {
-    btn.onclick = () => {
-      tabs.forEach(b => b.classList.remove('active'));
-      contents.forEach(c => c.classList.remove('active'));
-
-      btn.classList.add('active');
-      const targetId = btn.getAttribute('data-tab');
-      if (targetId) {
-        document.getElementById(targetId)?.classList.add('active');
-        if (targetId === 'tab-caratula') updateCoverLivePreview();
-      }
-    };
-  });
-
-  // 3. Conmutador de modo claro / oscuro
+  // Conmutador claro / oscuro
   const btnClaro = document.getElementById('btn-mode-claro');
   const btnOscuro = document.getElementById('btn-mode-oscuro');
-
   btnClaro?.addEventListener('click', () => {
     btnClaro.classList.add('active');
     btnOscuro?.classList.remove('active');
     root.setAttribute('data-modo', 'claro');
     window.dispatchEvent(new Event('theme-changed'));
   });
-
   btnOscuro?.addEventListener('click', () => {
     btnOscuro.classList.add('active');
     btnClaro?.classList.remove('active');
@@ -63,7 +39,7 @@ export function setupEditorDrawer(): void {
     window.dispatchEvent(new Event('theme-changed'));
   });
 
-  // 4. Superficies y Acentos Base
+  // Colores base
   const bindBaseColor = (id: string, hexId: string, cssVar: string) => {
     const input = document.getElementById(id) as HTMLInputElement | null;
     const hex = hexId ? document.getElementById(hexId) : null;
@@ -85,21 +61,11 @@ export function setupEditorDrawer(): void {
   bindBaseColor('col-accent', 'hex-accent', '--accent-color');
   bindBaseColor('col-link', 'hex-link', '--link-color');
 
-  // 5. Inicializar submódulos
+  // Inicializar solo lo que existe (Markdown y Mermaid)
   initMarkdownControls(root);
   initMermaidControls(root);
-  initCaratulaControls();
 
-  // 6. Exportadores a JSON
-  function notificarCopiado(btn: HTMLButtonElement, textoOriginal: string): void {
-    btn.textContent = '✓ ¡Copiado al Portapapeles!';
-    btn.style.backgroundColor = '#10b981';
-    setTimeout(() => {
-      btn.textContent = textoOriginal;
-      btn.style.backgroundColor = '';
-    }, 1800);
-  }
-
+  // Copiar JSON
   const btnExpEstilo = document.getElementById('btn-export-estilo') as HTMLButtonElement | null;
   if (btnExpEstilo) {
     btnExpEstilo.onclick = async () => {
@@ -125,61 +91,22 @@ export function setupEditorDrawer(): void {
               fondoTarjetas: (document.getElementById('col-card') as HTMLInputElement)?.value || "#f1f5f9",
               borde: (document.getElementById('col-border') as HTMLInputElement)?.value || "#cbd5e1"
             },
-            // Dentro de btnExpEstilo.onclick en src/scripts/editor/editor-core.ts
             textos: {
               principal: (document.getElementById('col-text') as HTMLInputElement)?.value || "#0f172a",
               negrita: (document.getElementById('col-bold') as HTMLInputElement)?.value || "#020617",
               cursiva: (document.getElementById('col-italic') as HTMLInputElement)?.value || "#16a34a",
               enlace: (document.getElementById('col-link') as HTMLInputElement)?.value || "#2563eb",
-              math: (document.getElementById('col-katex') as HTMLInputElement)?.value || "#0f172a",
-              // Fondos translúcidos dinámicos calculados:
-              resaltadoBg: root.style.getPropertyValue('--color-resaltado-bg') || "rgba(234, 179, 8, 0.25)",
-              mathBlockBg: root.style.getPropertyValue('--color-math-block-bg') || "rgba(0, 0, 0, 0.02)",
-              quoteBg: root.style.getPropertyValue('--quote-bg') || "rgba(139, 92, 246, 0.05)",
-              tableRowEven: root.style.getPropertyValue('--table-row-even-bg') || "rgba(255, 255, 255, 0.015)"
+              math: (document.getElementById('col-katex') as HTMLInputElement)?.value || "#0f172a"
             }
           }
         }
       };
 
       await navigator.clipboard.writeText(JSON.stringify(jsonEstilo, null, 2));
-      notificarCopiado(btnExpEstilo, '📋 Copiar JSON para estilos-base.json');
-    };
-  }
-
-  const btnExpCov = document.getElementById('btn-export-caratula') as HTMLButtonElement | null;
-  if (btnExpCov) {
-    btnExpCov.onclick = async () => {
-      const name = (document.getElementById('ed-cover-name') as HTMLInputElement)?.value || 'Nuevo Modelo';
-      const id = name.toLowerCase().replace(/[^a-z0-9]/g, '-');
-
-      const jsonCov = {
-        [id]: {
-          id,
-          nombre: name,
-          zonas: {
-            membrete: (document.getElementById('pos-header') as HTMLSelectElement)?.value || 'top-center',
-            logo: (document.getElementById('pos-logo') as HTMLSelectElement)?.value || 'mid-center',
-            titulo: (document.getElementById('pos-title') as HTMLSelectElement)?.value || 'mid-center',
-            autores: (document.getElementById('pos-autores') as HTMLSelectElement)?.value || 'mid-center',
-            pie: (document.getElementById('pos-pie') as HTMLSelectElement)?.value || 'bottom-center'
-          },
-          logo: {
-            altoMaximoMm: parseInt((document.getElementById('cov-logosize') as HTMLInputElement)?.value || '40', 10),
-            mostrar: (document.getElementById('cov-show-logo') as HTMLInputElement)?.checked ?? true
-          },
-          titulo: {
-            tamanoPt: parseFloat((document.getElementById('cov-titlesize') as HTMLInputElement)?.value || '14'),
-            transformacion: (document.getElementById('cov-transform') as HTMLSelectElement)?.value || 'uppercase'
-          },
-          mostrarDocente: (document.getElementById('cov-show-docente') as HTMLInputElement)?.checked ?? true,
-          mostrarIntegrantes: (document.getElementById('cov-show-integrantes') as HTMLInputElement)?.checked ?? true,
-          mostrarPie: (document.getElementById('cov-show-pie') as HTMLInputElement)?.checked ?? true
-        }
-      };
-
-      await navigator.clipboard.writeText(JSON.stringify(jsonCov, null, 2));
-      notificarCopiado(btnExpCov, '📋 Copiar JSON para caratulas.json');
+      btnExpEstilo.textContent = '✓ ¡Copiado!';
+      setTimeout(() => {
+        btnExpEstilo.textContent = '📋 Copiar JSON para estilos-base.json';
+      }, 1500);
     };
   }
 }

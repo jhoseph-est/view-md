@@ -1,38 +1,94 @@
 ---
 // src/components/EditorDiseno.astro
 import TabEstilosWeb from './editor/TabEstilosWeb.astro';
-import TabCaratula from './editor/TabCaratula.astro';
 ---
 
-<aside id="editor-diseno-drawer" class="editor-drawer" aria-hidden="true">
-  <!-- Cabecera del Inspector -->
+<aside class="editor-drawer" id="editor-diseno-drawer" aria-hidden="true">
   <div class="editor-header">
     <div class="editor-title-box">
-      <h3>Inspector de Diseño</h3>
-      <span class="editor-badge">Tokens en vivo</span>
+      <h3>Inspector de Estilos</h3>
+      <span class="editor-badge">En Vivo</span>
     </div>
-    <button type="button" id="btn-close-editor" class="editor-close-btn" aria-label="Cerrar Inspector">✕</button>
+    <button type="button" class="editor-close-btn" id="btn-close-editor" title="Cerrar Inspector">&times;</button>
   </div>
 
   <div class="editor-body">
-    <!-- Navegación de Pestañas -->
-    <div class="editor-tabs">
-      <button type="button" class="tab-btn active" data-tab="tab-estilo">Estilos Web & Prosa</button>
-      <button type="button" class="tab-btn" data-tab="tab-caratula">Carátula & Cierre</button>
-    </div>
-
-    <!-- Pestaña 1: Acordeones de Estilos -->
     <TabEstilosWeb />
-
-    <!-- Pestaña 2: Carátula y Lienzo Virtual -->
-    <TabCaratula />
   </div>
 </aside>
+
+<script is:inline>
+  // Delegación de clics global que sobrevive a ClientRouter y a transition:persist
+  (function () {
+    if (window.__editorToggleInitialized) return;
+    window.__editorToggleInitialized = true;
+
+    function toggleEditorDrawer() {
+      const drawer = document.getElementById('editor-diseno-drawer');
+      if (!drawer) return;
+
+      const isOpen = drawer.classList.contains('is-open');
+      if (isOpen) {
+        drawer.classList.remove('is-open');
+        drawer.setAttribute('aria-hidden', 'true');
+      } else {
+        drawer.classList.add('is-open');
+        drawer.setAttribute('aria-hidden', 'false');
+      }
+    }
+
+    // Escuchador global de clics en toda la ventana
+    document.addEventListener('click', (e) => {
+      const target = e.target;
+      if (!target || !(target instanceof Element)) return;
+
+      // Detecta clic en el botón de la paleta (o en su SVG/path interno)
+      if (target.closest('#act-design')) {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleEditorDrawer();
+        return;
+      }
+
+      // Detecta clic en el botón X de cerrar
+      if (target.closest('#btn-close-editor')) {
+        e.preventDefault();
+        const drawer = document.getElementById('editor-diseno-drawer');
+        if (drawer) {
+          drawer.classList.remove('is-open');
+          drawer.setAttribute('aria-hidden', 'true');
+        }
+      }
+    });
+
+    // Atajo de teclado Alt + E
+    document.addEventListener('keydown', (e) => {
+      if (e.altKey && e.key.toLowerCase() === 'e') {
+        e.preventDefault();
+        toggleEditorDrawer();
+      }
+    });
+
+    // Escuchar el evento toggle-editor-drawer si viene de otros módulos
+    window.addEventListener('toggle-editor-drawer', toggleEditorDrawer);
+  })();
+</script>
 
 <script>
   import { setupEditorDrawer } from '../scripts/editor/editor-core';
 
-  document.addEventListener('astro:page-load', () => {
-    setupEditorDrawer();
-  });
+  function initControls() {
+    try {
+      setupEditorDrawer();
+    } catch (err) {
+      console.warn('Error inicializando controles secundarios del editor:', err);
+    }
+  }
+
+  document.addEventListener('astro:page-load', initControls);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initControls);
+  } else {
+    initControls();
+  }
 </script>
