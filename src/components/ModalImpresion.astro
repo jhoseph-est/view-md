@@ -90,12 +90,19 @@ import estilosData from '../config/estilos-base.json';
       }
     }
 
-    // Manejador seguro para abrir el modal mediante eventos globales
     const handleOpenModal = () => toggleModal(true);
     
-    // Limpiamos listeners previos si existieran para evitar duplicados
     window.removeEventListener('open-print-modal', handleOpenModal);
     window.addEventListener('open-print-modal', handleOpenModal);
+
+    // Cerrar con Escape
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && modal?.classList.contains('is-active')) {
+        toggleModal(false);
+      }
+    };
+    document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
 
     if (btnClose) btnClose.onclick = () => toggleModal(false);
     if (btnCancel) btnCancel.onclick = () => toggleModal(false);
