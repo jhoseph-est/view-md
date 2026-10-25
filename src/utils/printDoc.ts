@@ -8,10 +8,13 @@ export interface OpcionesImpresion {
   margenLateral: string;
 }
 
-/** Dispara la impresión física aislando el DOM en un iframe limpio */
+/** Dispara la impresión física aislando el DOM en un iframe limpio y forzando modo claro */
 export async function ejecutarImpresionAislada(opts: OpcionesImpresion): Promise<void> {
-  const contentEl = document.querySelector('#document-view .markdown-body') || document.querySelector('.markdown-body');
-  if (!contentEl) return;
+  const contentEl = document.querySelector('#document-view .markdown-body') || document.querySelector('.markdown-body') || document.querySelector('.content-wrapper');
+  if (!contentEl) {
+    window.print();
+    return;
+  }
 
   const iframe = document.createElement('iframe');
   iframe.style.position = 'fixed';
@@ -52,14 +55,6 @@ export async function ejecutarImpresionAislada(opts: OpcionesImpresion): Promise
             -webkit-print-color-adjust: exact !important;
             box-sizing: border-box !important;
           }
-          .main-content::after,
-          .sticky-panel::after,
-          body::after,
-          html::after {
-            display: none !important;
-            content: none !important;
-            height: 0 !important;
-          }
           html, body {
             background-color: #ffffff !important;
             background: #ffffff !important;
@@ -67,56 +62,35 @@ export async function ejecutarImpresionAislada(opts: OpcionesImpresion): Promise
             margin: 0 !important;
             padding: 0 !important;
             width: 100% !important;
-            height: auto !important;
-            min-height: 100% !important;
-            overflow: visible !important;
             font-size: 11pt !important;
+            font-family: system-ui, -apple-system, sans-serif !important;
           }
           .content-wrapper, 
           .markdown-body, 
           #document-view {
             background: #ffffff !important;
             color: #000000 !important;
-            margin: 0 !important;
-            padding: 0 !important;
             width: 100% !important;
             max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
           }
-          .markdown-body h1,
-          .markdown-body h2,
-          .markdown-body h3,
-          .markdown-body h4,
-          .markdown-body h5,
-          .markdown-body h6 {
-            scroll-margin-top: 0 !important;
+          h1, h2, h3, h4, h5, h6 {
             color: #000000 !important;
             page-break-after: avoid !important;
             break-after: avoid !important;
           }
-          .markdown-body h1 {
-            margin-top: 1.2rem !important;
-            margin-bottom: 0.5rem !important;
-          }
-          .markdown-body h2 {
-            margin-top: 1rem !important;
-            margin-bottom: 0.4rem !important;
-          }
-          .markdown-body > *:first-child {
-            margin-top: 0 !important;
-            padding-top: 0 !important;
-          }
-          .markdown-body p {
+          p {
             color: #000000 !important;
-            margin-top: 0 !important;
-            margin-bottom: 0.65rem !important;
+            margin-bottom: 0.75rem !important;
+            line-height: 1.6 !important;
           }
-          /* Ocultar interfaz y barras */
-          .doc-report-header,
+          /* Ocultar elementos de interfaz en la copia impresa */
           .activity-bar, .left-sidebar-panel, .independent-panel,
           .mobile-bottom-bar, .mobile-drawer, .mobile-drawer-backdrop,
           .breadcrumbs, .doc-nav, .nav-divider, .zen-exit-btn,
           .copy-code-btn, .code-toolbar, .code-block-header, .img-toolbar,
-          .mermaid-toolbar, .editor-drawer {
+          .mermaid-toolbar, .editor-drawer, .btn-exit {
             display: none !important;
           }
           table {
@@ -124,11 +98,20 @@ export async function ejecutarImpresionAislada(opts: OpcionesImpresion): Promise
             border-collapse: collapse !important;
             margin: 1rem auto !important;
             page-break-inside: avoid !important;
+            break-inside: avoid !important;
+          }
+          th, td {
+            border: 1px solid #cbd5e1 !important;
+            padding: 0.5rem !important;
+            text-align: left !important;
           }
           pre.astro-code {
             background-color: #f8fafc !important;
             border: 1px solid #cbd5e1 !important;
             page-break-inside: avoid !important;
+            break-inside: avoid !important;
+            padding: 1rem !important;
+            border-radius: 6px !important;
           }
           .mermaid-wrapper {
             max-width: 100% !important;
@@ -138,7 +121,9 @@ export async function ejecutarImpresionAislada(opts: OpcionesImpresion): Promise
             justify-content: center !important;
             margin: 1rem 0 !important;
             page-break-inside: avoid !important;
+            break-inside: avoid !important;
           }
+          /* SALTO DE PÁGINA OBLIGATORIO CON --- (HR) */
           hr {
             display: block !important;
             border: none !important;
@@ -171,6 +156,6 @@ export async function ejecutarImpresionAislada(opts: OpcionesImpresion): Promise
     iframe.contentWindow?.print();
     setTimeout(() => {
       iframe.remove();
-    }, 1500);
-  }, 350);
+    }, 2000);
+  }, 500);
 }

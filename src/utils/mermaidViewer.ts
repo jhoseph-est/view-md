@@ -270,13 +270,24 @@ export async function renderMermaid(forceReRender = false, targetSelector = '.ma
 
     let codeToRender = cleanCode;
 
-    if (isGantt) {
-      const numericWidth = widthMatch ? parseInt(widthMatch[1], 10) : 1200;
-      codeToRender = hasCustomConfig
-        ? cleanCode
-        : `%%{init: { 'gantt': { 'useWidth': ${numericWidth} } } }%%\n` + cleanCode;
-    } else if (!hasCustomConfig) {
-      const initConfig = getThemeForDiagram(diagramType);
+    // Obtenemos la configuración base del tema global (JSON)
+    const baseConfig = getThemeForDiagram(diagramType);
+
+    if (!hasCustomConfig) {
+      let initConfig = { ...baseConfig };
+
+      // Si es Gantt, fusionamos el tema global con su propiedad de ancho
+      if (isGantt) {
+        const numericWidth = widthMatch ? parseInt(widthMatch[1], 10) : 1200;
+        initConfig = {
+          ...baseConfig,
+          gantt: {
+            ...(baseConfig.gantt || {}),
+            useWidth: numericWidth
+          }
+        };
+      }
+
       const generatedInit = `%%{init: ${JSON.stringify(initConfig)} }%%\n`;
       codeToRender = generatedInit + cleanCode;
     }

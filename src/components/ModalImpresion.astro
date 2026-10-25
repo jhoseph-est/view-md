@@ -73,42 +73,59 @@ import estilosData from '../config/estilos-base.json';
 <script>
   import { ejecutarImpresionAislada } from '../utils/printDoc';
 
-  const modal = document.getElementById('print-modal-overlay');
-  const btnClose = document.getElementById('btn-close-print-modal');
-  const btnCancel = document.getElementById('btn-cancel-print');
-  const btnConfirm = document.getElementById('btn-confirm-print');
+  function initPrintModal() {
+    const modal = document.getElementById('print-modal-overlay');
+    const btnClose = document.getElementById('btn-close-print-modal');
+    const btnCancel = document.getElementById('btn-cancel-print');
+    const btnConfirm = document.getElementById('btn-confirm-print');
 
-  function toggleModal(open: boolean) {
-    if (open) {
-      modal?.classList.add('is-active');
-      modal?.setAttribute('aria-hidden', 'false');
-    } else {
-      modal?.classList.remove('is-active');
-      modal?.setAttribute('aria-hidden', 'true');
+    function toggleModal(open: boolean) {
+      if (!modal) return;
+      if (open) {
+        modal.classList.add('is-active');
+        modal.setAttribute('aria-hidden', 'false');
+      } else {
+        modal.classList.remove('is-active');
+        modal.setAttribute('aria-hidden', 'true');
+      }
+    }
+
+    // Manejador seguro para abrir el modal mediante eventos globales
+    const handleOpenModal = () => toggleModal(true);
+    
+    // Limpiamos listeners previos si existieran para evitar duplicados
+    window.removeEventListener('open-print-modal', handleOpenModal);
+    window.addEventListener('open-print-modal', handleOpenModal);
+
+    if (btnClose) btnClose.onclick = () => toggleModal(false);
+    if (btnCancel) btnCancel.onclick = () => toggleModal(false);
+    
+    if (modal) {
+      modal.onclick = (e) => {
+        if (e.target === modal) toggleModal(false);
+      };
+    }
+
+    if (btnConfirm) {
+      btnConfirm.onclick = async () => {
+        const estiloId = (document.getElementById('p-estilo') as HTMLSelectElement)?.value || 'default';
+        const formatoHoja = ((document.getElementById('p-formato') as HTMLSelectElement)?.value || 'A4') as 'A4' | 'Carta';
+        const margenVert = (document.getElementById('p-margen-sup') as HTMLSelectElement)?.value || '1.8cm';
+        const margenLat = (document.getElementById('p-margen-lat') as HTMLSelectElement)?.value || '1.8cm';
+
+        toggleModal(false);
+
+        await ejecutarImpresionAislada({
+          estiloId,
+          formatoHoja,
+          margenSuperior: margenVert,
+          margenInferior: margenVert,
+          margenLateral: margenLat
+        });
+      };
     }
   }
 
-  window.addEventListener('open-print-modal', () => toggleModal(true));
-  btnClose?.addEventListener('click', () => toggleModal(false));
-  btnCancel?.addEventListener('click', () => toggleModal(false));
-  modal?.addEventListener('click', (e) => {
-    if (e.target === modal) toggleModal(false);
-  });
-
-  btnConfirm?.addEventListener('click', async () => {
-    const estiloId = (document.getElementById('p-estilo') as HTMLSelectElement)?.value || 'moderno';
-    const formatoHoja = ((document.getElementById('p-formato') as HTMLSelectElement)?.value || 'A4') as 'A4' | 'Carta';
-    const margenVert = (document.getElementById('p-margen-sup') as HTMLSelectElement)?.value || '1.8cm';
-    const margenLat = (document.getElementById('p-margen-lat') as HTMLSelectElement)?.value || '1.8cm';
-
-    toggleModal(false);
-
-    await ejecutarImpresionAislada({
-      estiloId,
-      formatoHoja,
-      margenSuperior: margenVert,
-      margenInferior: margenVert,
-      margenLateral: margenLat
-    });
-  });
+  document.addEventListener('astro:page-load', initPrintModal);
+  initPrintModal();
 </script>

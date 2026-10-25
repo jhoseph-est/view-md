@@ -36,18 +36,7 @@ export function initUiSync(): void {
   const actPrint = document.getElementById('act-print');
   const leftTitle = document.getElementById('left-panel-title');
   const actSlides = document.getElementById('act-slides') as HTMLAnchorElement | null;
-  const actDesign = document.getElementById('act-design');
 
-  if (actDesign) {
-    actDesign.onclick = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const drawer = document.getElementById('editor-diseno-drawer');
-      if (drawer) {
-        drawer.classList.toggle('is-open');
-      }
-    };
-  }
 
   // NUEVO: Función para actualizar dinámicamente el enlace de diapositivas según la ruta actual
   function updateSlidesLink(): void {
@@ -246,12 +235,6 @@ export function setupGlobalUiListeners(): void {
     } else if (e.altKey && e.key.toLowerCase() === 'z') {
       e.preventDefault();
       toggleZenMode();
-    } else if (e.altKey && e.key.toLowerCase() === 'e') {
-      e.preventDefault();
-      const drawer = document.getElementById('editor-diseno-drawer');
-      if (drawer) {
-        drawer.classList.toggle('is-open');
-      }
     }
   });
 }

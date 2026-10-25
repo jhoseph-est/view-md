@@ -7,6 +7,7 @@ import 'reveal.js/theme/black.css';
 import 'reveal.js/plugin/highlight/monokai.css';
 import '../../styles/mermaid.css';
 import '../../styles/slides.css';
+import estilosBase from '../../config/estilos-base.json';
 
 export async function getStaticPaths() {
   const allDocs = await getCollection('docs');
@@ -32,14 +33,40 @@ interface Props {
 
 const { doc } = Astro.props;
 const contentBody = doc.body || '';
+
+const temaId = doc.data.theme || 'default';
+const temaConfig = (estilosBase as any)[temaId] || (estilosBase as any)['default'];
+const bgDark = temaConfig?.oscuro?.superficies?.fondoPrincipal || '#0f172a';
+const bgLight = temaConfig?.claro?.superficies?.fondoPrincipal || '#f8fafc';
+const textDark = temaConfig?.oscuro?.textos?.principal || '#f8fafc';
+const textLight = temaConfig?.claro?.textos?.principal || '#0f172a';
 ---
 
 <!DOCTYPE html>
-<html lang="es" data-modo="oscuro" data-estilo={doc.data.theme || 'moderno'}>
+<html lang="es" data-modo="oscuro" data-estilo={temaId}>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Presentación: {doc.data.title}</title>
+  <script is:inline define:vars={{ temaId }}>
+    (function () {
+      const html = document.documentElement;
+      const modo = localStorage.getItem('pref-modo') || 'oscuro';
+      const estilo = temaId || localStorage.getItem('pref-estilo') || 'default';
+      html.setAttribute('data-modo', modo);
+      html.setAttribute('data-estilo', estilo);
+    })();
+  </script>
+  <style define:vars={{ bgDark, bgLight, textDark, textLight }}>
+    html[data-modo="oscuro"] body, html[data-modo="oscuro"] .reveal {
+      background-color: var(--bgDark) !important;
+      color: var(--textDark) !important;
+    }
+    html[data-modo="claro"] body, html[data-modo="claro"] .reveal {
+      background-color: var(--bgLight) !important;
+      color: var(--textLight) !important;
+    }
+  </style>
 </head>
 <body>
   <button onclick="window.close()" class="btn-exit" aria-label="Cerrar ventana">
@@ -79,13 +106,22 @@ const contentBody = doc.body || '';
     }
 
     async function initSlides() {
+      // Marcar los bloques para evitar que KaTeX los altere
       document.querySelectorAll('.reveal pre code').forEach((el) => {
         const txt = el.textContent || '';
         if (
           el.classList.contains('language-mermaid') || 
           el.classList.contains('mermaid') ||
-          txt.startsWith('graph') || 
-          txt.startsWith('flowchart') ||
+          txt.includes('flowchart') || 
+          txt.includes('graph') ||
+          txt.includes('sequenceDiagram') ||
+          txt.includes('classDiagram') ||
+          txt.includes('stateDiagram') ||
+          txt.includes('erDiagram') ||
+          txt.includes('gantt') ||
+          txt.includes('pie') ||
+          txt.includes('gitGraph') ||
+          txt.includes('mindmap') ||
           txt.startsWith('---')
         ) {
           el.classList.add('tex2jax_ignore');
@@ -118,20 +154,15 @@ const contentBody = doc.body || '';
       let mermaidInstance: any = null;
 
       async function renderSlidesMermaid() {
+        // Seleccionamos los bloques de código mermaid de las diapositivas
         const codeElements = Array.from(document.querySelectorAll('.reveal pre code'));
         
-        const mermaidKeywords = [
-          'graph ', 'graph\n', 'flowchart ', 'flowchart\n', 
-          'sequenceDiagram', 'classDiagram', 'stateDiagram', 
-          'erDiagram', 'gantt', 'pie', 'gitGraph', 'quadrantChart', 'mindmap', 'xychart'
-        ];
-
         const targets = codeElements.filter(el => {
-          if (el.classList.contains('language-mermaid') || el.classList.contains('mermaid')) {
-            return true;
-          }
+          const pre = el.closest('pre');
+          if (!pre || pre.dataset.mermaidDone === 'true') return false;
+          if (el.classList.contains('language-mermaid') || el.classList.contains('mermaid')) return true;
           const text = (el.textContent || '').trim();
-          return mermaidKeywords.some(kw => text.startsWith(kw) || text.includes('%%layout:') || text.includes('%%width:') || text.startsWith('---'));
+          return text.startsWith('graph') || text.startsWith('flowchart') || text.startsWith('sequenceDiagram') || text.startsWith('classDiagram') || text.startsWith('stateDiagram') || text.startsWith('erDiagram') || text.startsWith('gantt') || text.startsWith('pie') || text.startsWith('gitGraph') || text.startsWith('quadrantChart') || text.startsWith('mindmap') || text.startsWith('---') || text.includes('%%{init');
         });
 
         if (targets.length === 0) return;
@@ -158,6 +189,8 @@ const contentBody = doc.body || '';
           pre.dataset.mermaidDone = 'true';
 
           const code = (codeEl.textContent || '').trim();
+          if (!code) continue;
+
           const layoutMatch = code.match(/%%layout:\s*(fit|pan-x|pan-y)\s*%%/i);
           const widthMatch = code.match(/%%width:\s*(\d+(?:px|%)?)\s*%%/i);
           const heightMatch = code.match(/%%height:\s*(\d+(?:px|%)?)\s*%%/i);
@@ -173,23 +206,28 @@ const contentBody = doc.body || '';
 
           const hasCustomConfig = cleanCode.includes('%%{init') || cleanCode.startsWith('---');
           const isGantt = cleanCode.replace(/%%[\s\S]*?%%/g, '').trim().startsWith('gantt');
+          const diagramType = detectDiagramType(cleanCode);
 
           let codeToRender = cleanCode;
 
-          // Sincronización exacta con getThemeForDiagram para respetar el modo oscuro y colores web
-          if (isGantt) {
-            const numericWidth = widthMatch ? parseInt(widthMatch[1], 10) : 1200;
-            codeToRender = hasCustomConfig 
-              ? cleanCode 
-              : `%%{init: { 'gantt': { 'useWidth': ${numericWidth} } } }%%\n` + cleanCode;
-          } else if (!hasCustomConfig) {
-            const diagramType = detectDiagramType(cleanCode);
-            const initConfig = getThemeForDiagram(diagramType);
+          if (!hasCustomConfig) {
+            const baseConfig = getThemeForDiagram(diagramType);
+            let initConfig = { ...baseConfig };
+
+            if (isGantt) {
+              const numericWidth = widthMatch ? parseInt(widthMatch[1], 10) : 1200;
+              initConfig = {
+                ...baseConfig,
+                gantt: {
+                  ...(baseConfig.gantt || {}),
+                  useWidth: numericWidth
+                }
+              };
+            }
+
             const generatedInit = `%%{init: ${JSON.stringify(initConfig)} }%%\n`;
             codeToRender = generatedInit + cleanCode;
           }
-
-          if (!codeToRender) continue;
 
           const renderId = `slide-mermaid-${Date.now()}-${idx}`;
 
@@ -198,6 +236,8 @@ const contentBody = doc.body || '';
 
             const scrollBox = document.createElement('div');
             scrollBox.className = 'slide-mermaid-scroll-box';
+            
+            // Si el diagrama es grande o tiene dimensiones personalizadas, activamos el scroll interno controlado
             if (hasCustomDimensions || isGantt) {
               scrollBox.classList.add('has-scroll');
             }
@@ -234,17 +274,8 @@ const contentBody = doc.body || '';
               await (window as any).MathJax.typesetPromise([scrollBox]);
             }
           } catch (err) {
-            console.warn('Error renderizando Mermaid en slide, aplicando fallback limpio:', err);
-            try {
-              const { svg } = await mermaidInstance.render(renderId + '-fallback', cleanCode);
-              const fallbackBox = document.createElement('div');
-              fallbackBox.className = 'slide-mermaid-scroll-box has-scroll';
-              fallbackBox.innerHTML = svg;
-              pre.replaceWith(fallbackBox);
-            } catch (fallbackErr) {
-              console.error('Fallo crítico renderizando Mermaid en slide:', fallbackErr);
-              pre.dataset.mermaidDone = 'false';
-            }
+            console.warn('Error renderizando Mermaid en slide, aplicando fallback:', err);
+            pre.dataset.mermaidDone = 'false';
           }
         }
 
@@ -271,4 +302,4 @@ const contentBody = doc.body || '';
     initSlides();
   </script>
 </body>
-</html> 
+</html>

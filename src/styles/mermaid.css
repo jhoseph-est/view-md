@@ -430,3 +430,14 @@ html[data-estilo="moderno"][data-modo="claro"] {
 .mermaid-wrapper svg .nodeLabel span {
   text-align: center !important;
 }
+
+/* Bloquear selección de texto accidental en todos los diagramas Mermaid */
+.mermaid-wrapper,
+.mermaid-wrapper svg,
+.slide-mermaid-scroll-box,
+.slide-mermaid-scroll-box svg {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
