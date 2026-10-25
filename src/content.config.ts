@@ -15,31 +15,10 @@ const docs = defineCollection({
     tags: z.array(z.string()).optional(),
     date: z.union([z.coerce.date(), z.string()]).optional(),
     updated: z.union([z.coerce.date(), z.string()]).optional(),
-
-    // --- Control de Temas y Plantillas (Conectados a los JSON) ---
-    theme: z.string().optional(),       // ID del tema web (estilos-base.json)
-    plantilla: z.string().optional(),   // ID de la plantilla de impresión (plantillas-impresion.json)
-    caratula: z.string().optional(),    // ID del modelo de carátula (caratulas.json)
+    
+    // --- Control de Temas y Diapositivas ---
+    theme: z.string().optional(),       // ID del tema web
     slides: z.boolean().default(false), // Habilitar vista Reveal.js
-
-    // --- Datos Académicos / Técnicos para Carátulas e Informes ---
-    institucion: z.string().optional(),
-    facultad: z.string().optional(),
-    escuela: z.string().optional(),
-    docente: z.string().optional(),
-    ciudad: z.string().optional(),
-    anio: z.union([z.string(), z.number()]).optional(),
-    logo: z.string().optional(),
-    codigo: z.string().optional(),
-
-    // --- Equipo / Integrantes ---
-    integrantes: z.array(
-      z.object({
-        nombre: z.string(),
-        codigo: z.string().optional(),
-        rol: z.string().optional()
-      })
-    ).optional(),
 
     // --- Metadatos de Estudio / Apuntes ---
     curso: z.string().optional(),
@@ -48,14 +27,10 @@ const docs = defineCollection({
     tiempoLectura: z.string().optional(),
     referencia: z.string().optional(),
 
-    // --- Switches de Interfaz ---
-    // 'target' define si se muestra la tarjeta técnica en la web (DocReportHeader)
-    target: z.boolean().optional(),
-    // Fallback retrocompatible por si algún apunte viejo aún usa mostrarCabecera
-    mostrarCabecera: z.boolean().optional(),
+    // --- Switches de Interfaz Básicos ---
     mostrarIndice: z.boolean().default(true),
     mostrarNav: z.boolean().default(true)
-  }).passthrough() // Permite campos extras libres en el frontmatter sin romper el build
+  }).passthrough()
 });
 
 export const collections = { docs };

@@ -95,7 +95,7 @@ function buildWrapperStructure(innerContent: string): HTMLElement {
   return wrapper;
 }
 
-function attachMermaidControls(wrapper: HTMLElement, code: string) {
+function attachMermaidControls(wrapper: HTMLElement, _code: string) {
   const svg = wrapper.querySelector('svg') as SVGElement | null;
   const viewport = wrapper.querySelector('.mermaid-viewport') as HTMLElement | null;
 
@@ -234,7 +234,7 @@ export async function renderMermaid(forceReRender = false, targetSelector = '.ma
   mermaid.initialize(getMermaidConfig());
 
   const currentModo = document.documentElement.getAttribute('data-modo') || 'oscuro';
-  const currentEstilo = document.documentElement.getAttribute('data-estilo') || 'moderno';
+  const currentEstilo = document.documentElement.getAttribute('data-estilo') || 'default';
   const renderSignature = `${currentModo}-${currentEstilo}`;
 
   for (const [index, item] of containers.entries()) {
@@ -264,14 +264,12 @@ export async function renderMermaid(forceReRender = false, targetSelector = '.ma
       .replace(/%%height:.*?%%/gi, '')
       .trim();
 
-    // 1. Detección estricta de init manual o frontmatter propio de Mermaid
     const hasCustomConfig = cleanCode.includes('%%{init') || cleanCode.startsWith('---');
     const isGantt = cleanCode.replace(/%%[\s\S]*?%%/g, '').trim().startsWith('gantt');
     const diagramType = detectDiagramType(cleanCode);
 
     let codeToRender = cleanCode;
 
-    // 2. Jerarquía de precedencia: Custom init > Tema del sitio > Base
     if (isGantt) {
       const numericWidth = widthMatch ? parseInt(widthMatch[1], 10) : 1200;
       codeToRender = hasCustomConfig

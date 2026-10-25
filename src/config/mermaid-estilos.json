@@ -1,0 +1,32 @@
+{
+  "default": {
+    "claro": {
+      "theme": "default"
+    },
+    "oscuro": {
+      "theme": "dark"
+    }
+  },
+  "estudio": {
+    "claro": {
+      "theme": "base",
+      "themeVariables": {
+        "background": "transparent",
+        "primaryColor": "#bae6fd",
+        "primaryTextColor": "#0c4a6e",
+        "primaryBorderColor": "#0284c7",
+        "lineColor": "#0369a1"
+      }
+    },
+    "oscuro": {
+      "theme": "base",
+      "themeVariables": {
+        "background": "transparent",
+        "primaryColor": "#312e81",
+        "primaryTextColor": "#e0e7ff",
+        "primaryBorderColor": "#818cf8",
+        "lineColor": "#a5b4fc"
+      }
+    }
+  }
+}

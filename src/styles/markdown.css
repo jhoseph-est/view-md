@@ -1,14 +1,10 @@
 /* src/styles/markdown.css */
 
-/* ==========================================================
-   PROSA Y JERARQUÍA EDITORIAL MARKDOWN
-   ========================================================== */
 .main-content article {
   color: var(--text-color);
   font-family: var(--doc-font);
 }
 
-/* Scroll holgado en pantalla web */
 @media screen {
   .main-content::after,
   .sticky-panel::after {
@@ -27,7 +23,6 @@
   }
 }
 
-/* Párrafos de Prosa Editorial */
 .markdown-body p {
   text-indent: var(--para-indent);
   text-align: var(--para-align);
@@ -36,7 +31,6 @@
   margin-bottom: 0.85rem;
 }
 
-/* Aislamiento estricto: sin sangría interna en diagramas, avisos o tablas */
 .markdown-body .mermaid p,
 .markdown-body .slide-mermaid-scroll-box p,
 .markdown-body blockquote[data-callout] p,
@@ -46,7 +40,7 @@
 }
 
 /* ==========================================================
-   JERARQUÍA INDEPENDIENTE DE ENCABEZADOS (H1 - H6)
+   JERARQUÍA DE ENCABEZADOS (H1 - H6)
    ========================================================== */
 .markdown-body h1 {
   font-family: var(--font-h1);
@@ -120,7 +114,7 @@
 }
 
 /* ==========================================================
-   FÓRMULAS MATEMÁTICAS (KaTeX)
+   FÓRMULAS MATEMÁTICAS (KaTeX NATIVO)
    ========================================================== */
 .katex {
   color: var(--color-math) !important;
@@ -136,53 +130,10 @@
   overflow-y: hidden;
 }
 
-/* ==========================================================
-   HERENCIA LIMPIA DE COLOR Y FORMATO EN FÓRMULAS INLINE ($...$)
-   ========================================================== */
-
-/* 1. Color heredado en títulos y énfasis */
+/* Herencia limpia de color en fórmulas inline sin interferencia estructural */
 html body .markdown-body :where(h1, h2, h3, h4, h5, h6, strong, em, del, s, u) .katex:not(.katex-display .katex),
 html body .markdown-body :where(h1, h2, h3, h4, h5, h6, strong, em, del, s, u) .katex:not(.katex-display .katex) * {
   color: inherit !important;
-}
-
-/* 2. Negrita fina y natural (solo en glifos de texto/números, NUNCA en raíces ni símbolos de estructura) */
-html body .markdown-body strong .katex:not(.katex-display .katex) :where(.mord, .mbin, .mrel, .text) {
-  -webkit-text-stroke: 0.018em currentColor !important;
-}
-
-/* 3. Cursiva suave */
-html body .markdown-body em .katex:not(.katex-display .katex) :where(.mord, .text) {
-  font-style: italic !important;
-}
-
-/* 4. Tachado y subrayado continuo como bloque único (sin fragmentar raíces ni exponentes) */
-html body .markdown-body :where(del, s, u) .katex:not(.katex-display .katex) {
-  position: relative !important;
-}
-
-/* Línea continua para tachado */
-html body .markdown-body :where(del, s) .katex:not(.katex-display .katex)::after {
-  content: "" !important;
-  position: absolute !important;
-  left: 0 !important;
-  right: 0 !important;
-  top: 52% !important;
-  height: 1.5px !important;
-  background-color: currentColor !important;
-  pointer-events: none !important;
-}
-
-/* Línea continua para subrayado */
-html body .markdown-body u .katex:not(.katex-display .katex)::after {
-  content: "" !important;
-  position: absolute !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0px !important;
-  height: 1.5px !important;
-  background-color: currentColor !important;
-  pointer-events: none !important;
 }
 
 /* ==========================================================
@@ -214,7 +165,6 @@ html body .markdown-body u .katex:not(.katex-display .katex)::after {
   text-decoration-color: var(--color-subrayado);
 }
 
-/* Resaltado nativo (==mark==) */
 .markdown-body mark {
   background-color: var(--color-resaltado-bg);
   color: var(--color-resaltado-text);
@@ -222,7 +172,6 @@ html body .markdown-body u .katex:not(.katex-display .katex)::after {
   border-radius: 3px;
 }
 
-/* Código en línea */
 .markdown-body :not(pre) > code {
   color: var(--color-codigo-inline);
   background-color: var(--bg-codigo-inline);
@@ -233,9 +182,6 @@ html body .markdown-body u .katex:not(.katex-display .katex)::after {
   font-weight: 500;
 }
 
-/* ==========================================================
-   CITAS (BLOCKQUOTE ESTÁNDAR)
-   ========================================================== */
 .markdown-body blockquote:not([data-callout]) {
   border-left: 3.5px solid var(--quote-border-color);
   background-color: var(--quote-bg);
@@ -248,7 +194,7 @@ html body .markdown-body u .katex:not(.katex-display .katex)::after {
 }
 
 /* ==========================================================
-   TABLAS RESPONSIVAS EDITORIALES CON SCROLL AISLADO
+   TABLAS CENTRADAS Y RESPONSIVAS
    ========================================================== */
 .main-content table-container,
 .main-content table-wrapper {
@@ -256,21 +202,16 @@ html body .markdown-body u .katex:not(.katex-display .katex)::after {
   max-width: 100%;
   overflow-x: auto !important;
   margin: 1.5rem 0;
-  -webkit-overflow-scrolling: touch;
 }
 
-/* Para tablas estándar generadas directamente por Markdown */
 .markdown-body table {
-  display: block !important;
-  width: 100% !important;
+  display: table !important;
+  width: max-content !important;
   max-width: 100% !important;
-  overflow-x: auto !important;
-  -webkit-overflow-scrolling: touch;
+  margin: 1.5rem auto !important;
   border-collapse: collapse;
-  margin: 1.5rem 0;
   font-size: 0.92rem;
   border: 1px solid var(--table-border-color);
-  white-space: nowrap;
 }
 
 .markdown-body th,
@@ -291,7 +232,7 @@ html body .markdown-body u .katex:not(.katex-display .katex)::after {
 }
 
 /* ==========================================================
-   LISTAS ORDENADAS, DESORDENADAS Y TAREAS
+   LISTAS Y TAREAS
    ========================================================== */
 .markdown-body ul:not(.contains-task-list) {
   list-style-type: disc !important;
@@ -330,7 +271,6 @@ html body .markdown-body u .katex:not(.katex-display .katex)::after {
   font-weight: 700;
 }
 
-/* Checkboxes de Tareas (Task Lists) */
 .markdown-body ul.contains-task-list,
 .markdown-body .task-list-item {
   list-style: none !important;

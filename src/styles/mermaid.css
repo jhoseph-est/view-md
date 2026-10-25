@@ -413,3 +413,20 @@ html[data-estilo="moderno"][data-modo="claro"] {
   --mm-pie-2: #059669;
   --mm-pie-3: #d97706;
 }
+
+/* src/styles/mermaid.css - Forzar centrado de textos en nodos y etiquetas */
+.mermaid-wrapper svg foreignObject div,
+.mermaid-wrapper svg .nodeLabel,
+.mermaid-wrapper svg .edgeLabel,
+.mermaid-wrapper svg .cluster-label,
+.mermaid-viewport svg foreignObject p,
+.mermaid-viewport svg foreignObject span {
+  text-align: center !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.mermaid-wrapper svg .nodeLabel p,
+.mermaid-wrapper svg .nodeLabel span {
+  text-align: center !important;
+}

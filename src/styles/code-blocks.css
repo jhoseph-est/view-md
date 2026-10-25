@@ -1,13 +1,11 @@
 /* src/styles/code-blocks.css */
 
-/* 1. Marco exterior */
 .code-block-wrapper {
   position: relative !important;
   margin: 1.75rem 0;
   border-radius: var(--radius-md, 8px);
   border: 1px solid var(--code-border-color);
   overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
   background: transparent !important;
   transition: border-color 0.25s ease;
 }
@@ -16,64 +14,61 @@
   display: none !important;
 }
 
-/* 2. Píldora de controles */
+/* Píldora de controles minimalista ubicada en la esquina SUPERIOR IZQUIERDA */
 .code-block-wrapper > .code-toolbar,
 .code-block-wrapper > .code-block-header {
   position: absolute !important;
-  top: 0.5rem !important;
-  left: 0.6rem !important;
+  top: 0.4rem !important;
+  left: 0.4rem !important;
+  right: auto !important;
   display: inline-flex !important;
   align-items: center !important;
-  gap: 0.45rem !important;
+  gap: 0.35rem !important;
   z-index: 25 !important;
   opacity: 0 !important;
   pointer-events: none !important;
-  transform: translateY(-4px) !important;
-  transition: opacity 0.2s ease, transform 0.2s ease !important;
-  background: var(--code-toolbar-bg, rgba(15, 23, 42, 0.85)) !important;
-  backdrop-filter: blur(6px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
-  border-radius: var(--radius-sm, 6px) !important;
-  padding: 0.25rem 0.5rem !important;
+  transition: opacity 0.15s ease !important;
+  background: var(--header-bg) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 4px !important;
+  padding: 0.15rem 0.4rem !important;
   margin: 0 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
 }
 
 .code-block-wrapper:hover > .code-toolbar,
 .code-block-wrapper:hover > .code-block-header {
   opacity: 1 !important;
-  transform: translateY(0) !important;
   pointer-events: auto !important;
 }
 
 .code-lang-tag {
-  font-size: 0.7rem !important;
+  font-size: 0.68rem !important;
   font-family: var(--ui-font, system-ui) !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.05em !important;
-  color: var(--code-lang-color, #94a3b8) !important;
+  font-weight: 600 !important;
+  color: var(--text-muted) !important;
   user-select: none !important;
-  padding-right: 0.45rem !important;
-  border-right: 1px solid rgba(255, 255, 255, 0.15) !important;
+  padding-right: 0.35rem !important;
+  border-right: 1px solid var(--border-color) !important;
   margin: 0 !important;
   line-height: normal !important;
 }
 
 .copy-code-btn {
   background: transparent !important;
-  color: var(--code-btn-copy-color, #f8fafc) !important;
+  color: var(--text-color) !important;
   border: none !important;
-  padding: 0.2rem 0.45rem !important;
-  border-radius: 4px !important;
-  font-size: 0.72rem !important;
+  padding: 0.1rem 0.3rem !important;
+  border-radius: 3px !important;
+  font-size: 0.68rem !important;
   font-family: var(--ui-font, system-ui) !important;
   font-weight: 600 !important;
   cursor: pointer !important;
   line-height: normal !important;
-  transition: background-color 0.15s ease, color 0.15s ease !important;
+  transition: color 0.15s ease !important;
 }
 
 .copy-code-btn:hover {
-  background: var(--accent-subtle) !important;
   color: var(--accent-color) !important;
 }
 
@@ -82,7 +77,7 @@
   color: #ffffff !important;
 }
 
-/* 3. Área interna de código (Shiki) */
+/* Área interna de código (Shiki) */
 .main-content pre.astro-code {
   margin: 0 !important;
   padding: 1.25rem 1.4rem !important;
