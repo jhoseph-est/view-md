@@ -441,3 +441,29 @@ html[data-estilo="moderno"][data-modo="claro"] {
   -ms-user-select: none !important;
   user-select: none !important;
 }
+
+/* ==========================================================================
+   AISLAMIENTO Y CUARENTENA DE CONTENEDORES TEMPORALES DE MERMAID
+   (Evita el parpadeo y la precarga visible en la esquina inferior izquierda)
+   ========================================================================== */
+body > [id^="dmermaid"],
+body > [id^="mermaid-"],
+body > [id^="i-dmermaid"],
+body > iframe[id*="mermaid"],
+#dmermaid {
+  position: fixed !important;
+  top: -9999px !important;
+  left: -9999px !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+  z-index: -9999 !important;
+}
+
+/* Evitar que el contenedor nativo temporal afecte el flujo visual */
+.mermaid-native {
+  display: none !important;
+}

@@ -98,7 +98,6 @@ function buildWrapperStructure(innerContent: string): HTMLElement {
 function attachMermaidControls(wrapper: HTMLElement, _code: string) {
   const svg = wrapper.querySelector('svg') as SVGElement | null;
   const viewport = wrapper.querySelector('.mermaid-viewport') as HTMLElement | null;
-
   let currentScale = 1;
   const scaleStep = 0.15;
   let isDragging = false;
@@ -257,7 +256,7 @@ export async function renderMermaid(forceReRender = false, targetSelector = '.ma
     const parsedMaxWidth = parseUnit(maxWidthMatch ? maxWidthMatch[1] : null);
     const parsedHeight = parseUnit(heightMatch ? heightMatch[1] : null);
 
-    const cleanCode = code
+    let cleanCode = code
       .replace(/%%layout:.*?%%/gi, '')
       .replace(/%%width:.*?%%/gi, '')
       .replace(/%%max-width:.*?%%/gi, '')
@@ -269,14 +268,10 @@ export async function renderMermaid(forceReRender = false, targetSelector = '.ma
     const diagramType = detectDiagramType(cleanCode);
 
     let codeToRender = cleanCode;
-
-    // Obtenemos la configuración base del tema global (JSON)
     const baseConfig = getThemeForDiagram(diagramType);
 
     if (!hasCustomConfig) {
       let initConfig = { ...baseConfig };
-
-      // Si es Gantt, fusionamos el tema global con su propiedad de ancho
       if (isGantt) {
         const numericWidth = widthMatch ? parseInt(widthMatch[1], 10) : 1200;
         initConfig = {
@@ -287,7 +282,6 @@ export async function renderMermaid(forceReRender = false, targetSelector = '.ma
           }
         };
       }
-
       const generatedInit = `%%{init: ${JSON.stringify(initConfig)} }%%\n`;
       codeToRender = generatedInit + cleanCode;
     }
@@ -296,6 +290,10 @@ export async function renderMermaid(forceReRender = false, targetSelector = '.ma
 
     try {
       const { svg } = await mermaid.render(renderId, codeToRender);
+
+      // Limpiar de inmediato cualquier residuo inyectado en el body por Mermaid
+      document.querySelectorAll(`body > #${renderId}, body > #d${renderId}`).forEach(el => el.remove());
+
       const tempContainer = document.createElement('div');
       tempContainer.innerHTML = svg;
       const svgEl = tempContainer.querySelector('svg');
@@ -319,11 +317,9 @@ export async function renderMermaid(forceReRender = false, targetSelector = '.ma
       } else {
         wrapper.classList.add('use-site-theme');
       }
-
       if (isGantt) {
         wrapper.classList.add('is-gantt');
       }
-
       if (parsedWidth || parsedMaxWidth || parsedHeight) {
         wrapper.classList.add('has-custom-width');
       }
