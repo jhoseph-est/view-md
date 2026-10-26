@@ -306,13 +306,13 @@ function formatKeyLabel(key: string): string {
 </aside>
 
 <script>
-  let currentScrollCleanup: (() => void) | null = null;
+  let activeScrollCleanup: (() => void) | null = null;
 
   function setupRightSidebar() {
-    // Si había un escuchador previo de la página anterior, cancelarlo inmediatamente
-    if (currentScrollCleanup) {
-      currentScrollCleanup();
-      currentScrollCleanup = null;
+    // 1. Limpieza de cualquier instancia previa al cambiar de documento
+    if (activeScrollCleanup) {
+      activeScrollCleanup();
+      activeScrollCleanup = null;
     }
 
     const scrollContainer = document.getElementById('main-scroll-container');
@@ -332,11 +332,11 @@ function formatKeyLabel(key: string): string {
         let activeLink: HTMLAnchorElement | null = null;
         let isProgrammaticScroll = false;
         let scrollEndTimer: number | undefined;
-        let isDestroyed = false;
+        let isDisposed = false;
 
-        const setActive = (item: { link: HTMLAnchorElement; slug: string }, updateHash = true) => {
-          if (isDestroyed) return;
-          if (activeLink === item.link) return;
+        // Resalta el enlace en el TOC sin alterar el historial del navegador
+        const setActive = (item: { link: HTMLAnchorElement; slug: string }) => {
+          if (isDisposed || activeLink === item.link) return;
           if (activeLink) activeLink.classList.remove('active-heading');
           item.link.classList.add('active-heading');
           activeLink = item.link;
@@ -349,29 +349,21 @@ function formatKeyLabel(key: string): string {
               tocContainer.scrollTo({ top: linkTop - 50, behavior: 'smooth' });
             }
           }
-
-          // Solo actualizar el hash si no es scroll programático y seguimos en la misma ruta
-          if (updateHash && !isProgrammaticScroll && !isDestroyed) {
-            const newHash = `#${item.slug}`;
-            if (window.location.hash !== newHash) {
-              // Validar que el pathname actual corresponda antes de reemplazar el estado
-              history.replaceState(null, '', `${window.location.pathname}${newHash}`);
-            }
-          }
         };
 
         const calculateActiveHeading = () => {
-          if (!scrollContainer || isProgrammaticScroll || isDestroyed) return;
+          if (!scrollContainer || isProgrammaticScroll || isDisposed) return;
           const scrollTop = scrollContainer.scrollTop;
           const scrollHeight = scrollContainer.scrollHeight;
           const clientHeight = scrollContainer.clientHeight;
 
-          if (scrollTop + clientHeight >= scrollHeight - 15) {
-            setActive(headingPairs[headingPairs.length - 1], true);
+          // Si el usuario llega al final de la página, activa el último encabezado
+          if (scrollTop + clientHeight >= scrollHeight - 20) {
+            setActive(headingPairs[headingPairs.length - 1]);
             return;
           }
 
-          const FOCAL_OFFSET = 100;
+          const FOCAL_OFFSET = 120;
           let selected = headingPairs[0];
           for (let i = 0; i < headingPairs.length; i++) {
             const distance = headingPairs[i].target.offsetTop - scrollTop;
@@ -381,12 +373,12 @@ function formatKeyLabel(key: string): string {
               break;
             }
           }
-          setActive(selected, true);
+          setActive(selected);
         };
 
         let ticking = false;
         const onScroll = () => {
-          if (isDestroyed) return;
+          if (isDisposed) return;
           if (isProgrammaticScroll) {
             window.clearTimeout(scrollEndTimer);
             scrollEndTimer = window.setTimeout(() => {
@@ -405,13 +397,13 @@ function formatKeyLabel(key: string): string {
 
         scrollContainer.addEventListener('scroll', onScroll, { passive: true });
 
+        // Clic directo en un ítem del TOC: desplazamiento suave sin recargar
         headingPairs.forEach((item) => {
           item.link.addEventListener('click', (e) => {
             e.preventDefault();
             isProgrammaticScroll = true;
             window.clearTimeout(scrollEndTimer);
-            setActive(item, false);
-            history.replaceState(null, '', `${window.location.pathname}#${item.slug}`);
+            setActive(item);
 
             const targetTop = item.target.offsetTop - 30;
             scrollContainer.scrollTo({
@@ -421,22 +413,21 @@ function formatKeyLabel(key: string): string {
 
             scrollEndTimer = window.setTimeout(() => {
               isProgrammaticScroll = false;
-            }, 600);
+            }, 500);
           });
         });
 
         calculateActiveHeading();
 
-        // Función de limpieza para cuando salgamos de esta página
-        currentScrollCleanup = () => {
-          isDestroyed = true;
+        activeScrollCleanup = () => {
+          isDisposed = true;
           scrollContainer.removeEventListener('scroll', onScroll);
           window.clearTimeout(scrollEndTimer);
         };
       }
     }
 
-    // Modal Expandido de Metadatos
+    // 2. Modal Expandido de Metadatos
     const btnExpand = document.getElementById('btn-expand-meta');
     const metaContainer = document.getElementById('meta-container');
 
@@ -456,11 +447,11 @@ function formatKeyLabel(key: string): string {
     }
   }
 
-  // Cancelar tareas pendientes justo antes de que Astro intercambie el DOM
+  // Desactivar el observer antes de que Astro intercambie el documento
   document.addEventListener('astro:before-swap', () => {
-    if (currentScrollCleanup) {
-      currentScrollCleanup();
-      currentScrollCleanup = null;
+    if (activeScrollCleanup) {
+      activeScrollCleanup();
+      activeScrollCleanup = null;
     }
   });
 
