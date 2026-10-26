@@ -110,6 +110,58 @@ allDocs.forEach((otherDoc: CollectionEntry<'docs'>) => {
 });
 
 const allHeadings = headings.filter((h: Heading) => Boolean(h && h.slug && h.text && h.depth >= 1 && h.depth <= 6));
+
+// 3. Normalización y filtrado exhaustivo de todos los Metadatos
+const ignoredKeys = new Set(['theme', 'slides', 'mostrarIndice', 'mostrarNav', 'mostrarCabecera', 'draft', 'contributors']);
+
+const rawEntries = Object.entries(frontmatter).filter(([k, v]) => {
+  return !ignoredKeys.has(k) && v !== undefined && v !== null && v !== '';
+});
+
+const priorityOrder: Record<string, number> = {
+  title: 1,
+  subtitulo: 2,
+  institucion: 3,
+  facultad: 4,
+  escuela: 5,
+  docente: 6,
+  date: 7,
+  readingTime: 8,
+  integrantes: 99
+};
+
+const cleanEntries = rawEntries.sort(([a], [b]) => {
+  const pA = priorityOrder[a] ?? 50;
+  const pB = priorityOrder[b] ?? 50;
+  return pA - pB;
+});
+
+function formatMetaValue(val: any): string {
+  if (val instanceof Date) return val.toLocaleDateString('es-PE');
+  if (typeof val === 'boolean') return val ? 'Sí' : 'No';
+  return String(val);
+}
+
+function formatKeyLabel(key: string): string {
+  const customLabels: Record<string, string> = {
+    title: 'TÍTULO',
+    subtitulo: 'SUBTÍTULO',
+    institucion: 'INSTITUCIÓN',
+    facultad: 'FACULTAD',
+    escuela: 'ESCUELA',
+    docente: 'DOCENTE',
+    ciudad: 'CIUDAD',
+    anio: 'AÑO',
+    logo: 'LOGO',
+    readingTime: 'LECTURA',
+    date: 'FECHA',
+    updated: 'ACTUALIZADO',
+    orden: 'ORDEN',
+    tags: 'ETIQUETAS',
+    integrantes: 'INTEGRANTES'
+  };
+  return customLabels[key] || key.toUpperCase();
+}
 ---
 
 <!-- 1. ÍNDICE (TOP) -->
@@ -135,175 +187,282 @@ const allHeadings = headings.filter((h: Heading) => Boolean(h && h.slug && h.tex
 
 <!-- 2. METADATOS (BOTTOM) -->
 <aside class="independent-panel bottom-meta" id="sec-meta" aria-label="Metadatos">
-  <div class="panel-header">METADATOS</div>
-  <div class="panel-body meta-scroll-area">
-    <div class="meta-row">
-      <span class="meta-k">Fecha:</span>
-      <span class="meta-v">{frontmatter.date ? new Date(frontmatter.date).toLocaleDateString() : '—'}</span>
-    </div>
-    
-    {frontmatter.author && (
-      <div class="meta-row">
-        <span class="meta-k">Autor:</span>
-        <a href={`/docs/explorar?search=@${frontmatter.author}`} class="meta-v meta-link" title={`Ver más de ${frontmatter.author}`}>
-          {frontmatter.author}
-        </a>
-      </div>
-    )}
+  <div class="panel-header meta-panel-header">
+    <span>METADATOS</span>
+    <button type="button" id="btn-expand-meta" class="meta-expand-btn" title="Ampliar Metadatos (Vista Completa)">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 3h6v6"></path>
+        <path d="M9 21H3v-6"></path>
+        <path d="M21 3l-7 7"></path>
+        <path d="M3 21l7-7"></path>
+      </svg>
+    </button>
+  </div>
+  <div class="panel-body meta-scroll-area" id="meta-container">
+    {cleanEntries.length > 0 ? (
+      <div class="meta-list-wrapper">
+        {cleanEntries.map(([key, value]) => {
+          // Caso 1: Integrantes / Equipo
+          if (key === 'integrantes' && Array.isArray(value)) {
+            return (
+              <div class="meta-block">
+                <span class="meta-k">{formatKeyLabel(key)}:</span>
+                <ul class="meta-sublist">
+                  {value.map((integ: any) => (
+                    <li class="meta-subitem">
+                      <strong class="item-name">{integ.nombre || integ}</strong>
+                      {integ.codigo && <span class="meta-code">({integ.codigo})</span>}
+                      {integ.rol && <span class="meta-role">— {integ.rol}</span>}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          }
 
-    {frontmatter.readingTime && (
-      <div class="meta-row">
-        <span class="meta-k">Lectura:</span>
-        <span class="meta-v">{frontmatter.readingTime} min</span>
-      </div>
-    )}
+          // Caso 2: Tags
+          if (key === 'tags' && Array.isArray(value)) {
+            return (
+              <div class="meta-row tags-row">
+                <span class="meta-k">{formatKeyLabel(key)}:</span>
+                <div class="meta-tags">
+                  {value.map((t: string) => (
+                    <a href={`/docs/explorar?search=%23${encodeURIComponent(String(t))}`} class="tag-pill" title={`Filtrar por #${t}`}>
+                      #{t}
+                    </a>
+                  ))}
+                </div>
+              </div>
+            );
+          }
 
-    {frontmatter.tags && frontmatter.tags.length > 0 && (
-      <div class="meta-row tags-row">
-        <span class="meta-k">Tags:</span>
-        <div class="meta-tags">
-          {frontmatter.tags.map((t: string) => (
-            <a href={`/docs/explorar?search=%23${t}`} class="tag-pill" title={`Filtrar por #${t}`}>
-              #{t}
-            </a>
-          ))}
-        </div>
-      </div>
-    )}
+          // Caso 3: Autor con enlace
+          if (key === 'author') {
+            return (
+              <div class="meta-row">
+                <span class="meta-k">AUTOR:</span>
+                <a href={`/docs/explorar?search=%40${encodeURIComponent(String(value))}`} class="meta-v meta-link" title={`Ver más de ${value}`}>
+                  {value}
+                </a>
+              </div>
+            );
+          }
 
-    {outlinks.length > 0 && (
-      <div class="meta-block">
-        <span class="meta-k">Enlaces Salientes:</span>
-        <ul class="meta-link-list">
-          {outlinks.map(link => (
-            <li><a href={link.url} class="doc-link-item" title={link.title}>🔗 {link.title}</a></li>
-          ))}
-        </ul>
-      </div>
-    )}
+          // Caso 4: Tiempo de lectura
+          if (key === 'readingTime') {
+            return (
+              <div class="meta-row">
+                <span class="meta-k">LECTURA:</span>
+                <span class="meta-v">{value} min</span>
+              </div>
+            );
+          }
 
-    {backlinks.length > 0 && (
-      <div class="meta-block">
-        <span class="meta-k">Backlinks:</span>
-        <ul class="meta-link-list">
-          {backlinks.map(bl => (
-            <li><a href={bl.url} class="doc-link-item" title={bl.title}>🔗 {bl.title}</a></li>
-          ))}
-        </ul>
+          // Caso 5: Arreglos regulares
+          if (Array.isArray(value)) {
+            return (
+              <div class="meta-row">
+                <span class="meta-k">{formatKeyLabel(key)}:</span>
+                <span class="meta-v">{value.join(', ')}</span>
+              </div>
+            );
+          }
+
+          // Caso 6: Escalares estándar
+          return (
+            <div class="meta-row">
+              <span class="meta-k">{formatKeyLabel(key)}:</span>
+              <span class="meta-v">{formatMetaValue(value)}</span>
+            </div>
+          );
+        })}
+
+        {outlinks.length > 0 && (
+          <div class="meta-block">
+            <span class="meta-k">ENLACES SALIENTES:</span>
+            <ul class="meta-link-list">
+              {outlinks.map(link => (
+                <li><a href={link.url} class="doc-link-item" title={link.title}>🔗 {link.title}</a></li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {backlinks.length > 0 && (
+          <div class="meta-block">
+            <span class="meta-k">BACKLINKS:</span>
+            <ul class="meta-link-list">
+              {backlinks.map(bl => (
+                <li><a href={bl.url} class="doc-link-item" title={bl.title}>🔗 {bl.title}</a></li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
+    ) : (
+      <p class="empty-note">Sin metadatos registrados.</p>
     )}
   </div>
 </aside>
 
 <script>
-  function setupTocScrollspy() {
+  let currentScrollCleanup: (() => void) | null = null;
+
+  function setupRightSidebar() {
+    // Si había un escuchador previo de la página anterior, cancelarlo inmediatamente
+    if (currentScrollCleanup) {
+      currentScrollCleanup();
+      currentScrollCleanup = null;
+    }
+
     const scrollContainer = document.getElementById('main-scroll-container');
     const tocContainer = document.getElementById('toc-body');
     const tocLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>('.r-toc-item'));
 
-    if (!scrollContainer || !tocLinks.length) return;
+    if (scrollContainer && tocLinks.length) {
+      const headingPairs = tocLinks
+        .map((link) => {
+          const slug = link.getAttribute('data-slug');
+          const target = slug ? document.getElementById(slug) : null;
+          return { link, target, slug };
+        })
+        .filter((p): p is { link: HTMLAnchorElement; target: HTMLElement; slug: string } => p.target !== null);
 
-    const headingPairs = tocLinks
-      .map((link) => {
-        const slug = link.getAttribute('data-slug');
-        const target = slug ? document.getElementById(slug) : null;
-        return { link, target, slug };
-      })
-      .filter((p): p is { link: HTMLAnchorElement; target: HTMLElement; slug: string } => p.target !== null);
+      if (headingPairs.length) {
+        let activeLink: HTMLAnchorElement | null = null;
+        let isProgrammaticScroll = false;
+        let scrollEndTimer: number | undefined;
+        let isDestroyed = false;
 
-    if (!headingPairs.length) return;
+        const setActive = (item: { link: HTMLAnchorElement; slug: string }, updateHash = true) => {
+          if (isDestroyed) return;
+          if (activeLink === item.link) return;
+          if (activeLink) activeLink.classList.remove('active-heading');
+          item.link.classList.add('active-heading');
+          activeLink = item.link;
 
-    let activeLink: HTMLAnchorElement | null = null;
-    let isProgrammaticScroll = false;
-    let scrollEndTimer: number | undefined;
+          if (tocContainer) {
+            const linkTop = item.link.offsetTop;
+            const containerScroll = tocContainer.scrollTop;
+            const containerHeight = tocContainer.clientHeight;
+            if (linkTop < containerScroll + 30 || linkTop > containerScroll + containerHeight - 50) {
+              tocContainer.scrollTo({ top: linkTop - 50, behavior: 'smooth' });
+            }
+          }
 
-    function setActive(item: { link: HTMLAnchorElement; slug: string }, updateHash = true) {
-      if (activeLink === item.link) return;
-      if (activeLink) activeLink.classList.remove('active-heading');
-      item.link.classList.add('active-heading');
-      activeLink = item.link;
+          // Solo actualizar el hash si no es scroll programático y seguimos en la misma ruta
+          if (updateHash && !isProgrammaticScroll && !isDestroyed) {
+            const newHash = `#${item.slug}`;
+            if (window.location.hash !== newHash) {
+              // Validar que el pathname actual corresponda antes de reemplazar el estado
+              history.replaceState(null, '', `${window.location.pathname}${newHash}`);
+            }
+          }
+        };
 
-      if (tocContainer) {
-        const linkTop = item.link.offsetTop;
-        const containerScroll = tocContainer.scrollTop;
-        const containerHeight = tocContainer.clientHeight;
-        if (linkTop < containerScroll + 30 || linkTop > containerScroll + containerHeight - 50) {
-          tocContainer.scrollTo({ top: linkTop - 50, behavior: 'smooth' });
-        }
-      }
+        const calculateActiveHeading = () => {
+          if (!scrollContainer || isProgrammaticScroll || isDestroyed) return;
+          const scrollTop = scrollContainer.scrollTop;
+          const scrollHeight = scrollContainer.scrollHeight;
+          const clientHeight = scrollContainer.clientHeight;
 
-      if (updateHash && !isProgrammaticScroll) {
-        const newHash = `#${item.slug}`;
-        if (window.location.hash !== newHash) {
-          history.replaceState(null, '', newHash);
-        }
+          if (scrollTop + clientHeight >= scrollHeight - 15) {
+            setActive(headingPairs[headingPairs.length - 1], true);
+            return;
+          }
+
+          const FOCAL_OFFSET = 100;
+          let selected = headingPairs[0];
+          for (let i = 0; i < headingPairs.length; i++) {
+            const distance = headingPairs[i].target.offsetTop - scrollTop;
+            if (distance <= FOCAL_OFFSET) {
+              selected = headingPairs[i];
+            } else {
+              break;
+            }
+          }
+          setActive(selected, true);
+        };
+
+        let ticking = false;
+        const onScroll = () => {
+          if (isDestroyed) return;
+          if (isProgrammaticScroll) {
+            window.clearTimeout(scrollEndTimer);
+            scrollEndTimer = window.setTimeout(() => {
+              isProgrammaticScroll = false;
+            }, 120);
+            return;
+          }
+          if (!ticking) {
+            window.requestAnimationFrame(() => {
+              calculateActiveHeading();
+              ticking = false;
+            });
+            ticking = true;
+          }
+        };
+
+        scrollContainer.addEventListener('scroll', onScroll, { passive: true });
+
+        headingPairs.forEach((item) => {
+          item.link.addEventListener('click', (e) => {
+            e.preventDefault();
+            isProgrammaticScroll = true;
+            window.clearTimeout(scrollEndTimer);
+            setActive(item, false);
+            history.replaceState(null, '', `${window.location.pathname}#${item.slug}`);
+
+            const targetTop = item.target.offsetTop - 30;
+            scrollContainer.scrollTo({
+              top: targetTop,
+              behavior: 'smooth'
+            });
+
+            scrollEndTimer = window.setTimeout(() => {
+              isProgrammaticScroll = false;
+            }, 600);
+          });
+        });
+
+        calculateActiveHeading();
+
+        // Función de limpieza para cuando salgamos de esta página
+        currentScrollCleanup = () => {
+          isDestroyed = true;
+          scrollContainer.removeEventListener('scroll', onScroll);
+          window.clearTimeout(scrollEndTimer);
+        };
       }
     }
 
-    function calculateActiveHeading() {
-      if (!scrollContainer || isProgrammaticScroll) return;
-      const scrollTop = scrollContainer.scrollTop;
-      const scrollHeight = scrollContainer.scrollHeight;
-      const clientHeight = scrollContainer.clientHeight;
+    // Modal Expandido de Metadatos
+    const btnExpand = document.getElementById('btn-expand-meta');
+    const metaContainer = document.getElementById('meta-container');
 
-      if (scrollTop + clientHeight >= scrollHeight - 15) {
-        setActive(headingPairs[headingPairs.length - 1], true);
-        return;
-      }
+    if (btnExpand && metaContainer) {
+      btnExpand.onclick = () => {
+        const clonedContent = metaContainer.cloneNode(true) as HTMLElement;
+        clonedContent.classList.add('meta-modal-expanded');
 
-      const FOCAL_OFFSET = 100;
-      let selected = headingPairs[0];
-      for (let i = 0; i < headingPairs.length; i++) {
-        const distance = headingPairs[i].target.offsetTop - scrollTop;
-        if (distance <= FOCAL_OFFSET) {
-          selected = headingPairs[i];
-        } else {
-          break;
-        }
-      }
-      setActive(selected, true);
+        window.dispatchEvent(new CustomEvent('open-global-modal', {
+          detail: {
+            title: 'Metadatos del Documento',
+            subtitle: 'Propiedades, asignaciones y parámetros registrados',
+            contentHTML: clonedContent
+          }
+        }));
+      };
     }
-
-    let ticking = false;
-    scrollContainer.addEventListener('scroll', () => {
-      if (isProgrammaticScroll) {
-        window.clearTimeout(scrollEndTimer);
-        scrollEndTimer = window.setTimeout(() => {
-          isProgrammaticScroll = false;
-        }, 120);
-        return;
-      }
-      if (!ticking) {
-        window.requestAnimationFrame(() => {
-          calculateActiveHeading();
-          ticking = false;
-        });
-        ticking = true;
-      }
-    }, { passive: true });
-
-    headingPairs.forEach((item) => {
-      item.link.addEventListener('click', (e) => {
-        e.preventDefault();
-        isProgrammaticScroll = true;
-        window.clearTimeout(scrollEndTimer);
-        setActive(item, false);
-        history.replaceState(null, '', `#${item.slug}`);
-
-        const targetTop = item.target.offsetTop - 30;
-        scrollContainer.scrollTo({
-          top: targetTop,
-          behavior: 'smooth'
-        });
-
-        scrollEndTimer = window.setTimeout(() => {
-          isProgrammaticScroll = false;
-        }, 600);
-      });
-    });
-
-    calculateActiveHeading();
   }
 
-  document.addEventListener('astro:page-load', setupTocScrollspy);
+  // Cancelar tareas pendientes justo antes de que Astro intercambie el DOM
+  document.addEventListener('astro:before-swap', () => {
+    if (currentScrollCleanup) {
+      currentScrollCleanup();
+      currentScrollCleanup = null;
+    }
+  });
+
+  document.addEventListener('astro:page-load', setupRightSidebar);
 </script>

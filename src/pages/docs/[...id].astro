@@ -5,7 +5,6 @@ import Base from '../../layouts/Base.astro';
 import GraphModal from '../../components/GraphModal.astro';
 import FolderView from '../../components/FolderView.astro';
 import { formatName, generateDocPaths } from '../../utils/fileTree';
-import DocReportHeader from '../../components/DocReportHeader.astro';
 
 export async function getStaticPaths() {
   const allDocs = await getCollection('docs');
@@ -77,9 +76,6 @@ if (props.type === 'folder' && props.folderPath === 'explorar') {
       </div>
 
       <article class="markdown-body" data-pagefind-body>
-        {(props.doc.data.mostrarCabecera || props.doc.data.integrantes || props.doc.data.institucion) && (
-          <DocReportHeader data={props.doc.data} />
-        )}
         <Content />
       </article>
 
