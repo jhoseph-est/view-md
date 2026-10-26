@@ -2,6 +2,9 @@
 import type { MermaidConfig } from 'mermaid';
 import { getThemeForDiagram } from './mermaidThemes';
 
+// Memoria de sesión: guarda el SVG ya compilado (clave: hash de código + modo + estilo)
+const diagramRenderCache = new Map<string, string>();
+
 function detectDiagramType(code: string): string {
   let clean = code.replace(/%%[\s\S]*?%%/g, '').trim();
   if (clean.startsWith('---')) {
@@ -154,7 +157,6 @@ function attachMermaidControls(wrapper: HTMLElement, _code: string) {
     e.preventDefault();
     translateX = e.clientX - startX;
     translateY = e.clientY - startY;
-    updateTransform();
   };
 
   const onMouseUp = () => {
@@ -201,6 +203,117 @@ function attachMermaidControls(wrapper: HTMLElement, _code: string) {
   });
 }
 
+async function renderSingleDiagram(item: HTMLElement, index: number, forceReRender: boolean) {
+  const code = item.dataset.sourceCode;
+  if (!code) return;
+
+  const currentModo = document.documentElement.getAttribute('data-modo') || 'oscuro';
+  const currentEstilo = document.documentElement.getAttribute('data-estilo') || 'default';
+  const renderSignature = `${currentModo}-${currentEstilo}`;
+
+  if (item.dataset.renderedSignature === renderSignature && !forceReRender) return;
+
+  const layoutMatch = code.match(/%%layout:\s*(fit|pan-x|pan-y)\s*%%/i);
+  const widthMatch = code.match(/%%width:\s*(\d+(?:px|%)?)\s*%%/i);
+  const maxWidthMatch = code.match(/%%max-width:\s*(\d+(?:px|%)?)\s*%%/i);
+  const heightMatch = code.match(/%%height:\s*(\d+(?:px|%)?)\s*%%/i);
+
+  const parseUnit = (val: string | null) => {
+    if (!val) return null;
+    return val.endsWith('%') || val.endsWith('px') ? val : `${val}px`;
+  };
+
+  const parsedLayout = (layoutMatch ? layoutMatch[1].toLowerCase() : 'fit') as 'fit' | 'pan-x' | 'pan-y';
+  const parsedWidth = parseUnit(widthMatch ? widthMatch[1] : null);
+  const parsedMaxWidth = parseUnit(maxWidthMatch ? maxWidthMatch[1] : null);
+  const parsedHeight = parseUnit(heightMatch ? heightMatch[1] : null);
+
+  let cleanCode = code
+    .replace(/%%layout:.*?%%/gi, '')
+    .replace(/%%width:.*?%%/gi, '')
+    .replace(/%%max-width:.*?%%/gi, '')
+    .replace(/%%height:.*?%%/gi, '')
+    .trim();
+
+  const hasCustomConfig = cleanCode.includes('%%{init') || cleanCode.startsWith('---');
+  const isGantt = cleanCode.replace(/%%[\s\S]*?%%/g, '').trim().startsWith('gantt');
+  const diagramType = detectDiagramType(cleanCode);
+
+  let codeToRender = cleanCode;
+  const baseConfig = getThemeForDiagram(diagramType);
+
+  if (!hasCustomConfig) {
+    let initConfig = { ...baseConfig };
+    if (isGantt) {
+      const numericWidth = widthMatch ? parseInt(widthMatch[1], 10) : 1200;
+      initConfig = {
+        ...baseConfig,
+        gantt: {
+          ...(baseConfig.gantt || {}),
+          useWidth: numericWidth
+        }
+      };
+    }
+    const generatedInit = `%%{init: ${JSON.stringify(initConfig)} }%%\n`;
+    codeToRender = generatedInit + cleanCode;
+  }
+
+  const cacheKey = `${renderSignature}::${codeToRender}`;
+  let finalSvg = '';
+
+  if (!forceReRender && diagramRenderCache.has(cacheKey)) {
+    finalSvg = diagramRenderCache.get(cacheKey)!;
+  } else {
+    const { default: mermaid } = await import('mermaid');
+    mermaid.initialize(getMermaidConfig());
+
+    const renderId = `mermaid-render-${Date.now()}-${index}`;
+    try {
+      const { svg } = await mermaid.render(renderId, codeToRender);
+      document.querySelectorAll(`body > #${renderId}, body > #d${renderId}`).forEach(el => el.remove());
+      finalSvg = svg;
+      diagramRenderCache.set(cacheKey, finalSvg);
+    } catch (err) {
+      console.error(`Error renderizando diagrama #${index}:`, err);
+      return;
+    }
+  }
+
+  const tempContainer = document.createElement('div');
+  tempContainer.innerHTML = finalSvg;
+  const svgEl = tempContainer.querySelector('svg');
+
+  if (svgEl) {
+    fixDarkNodeTextContrast(svgEl);
+    if (parsedWidth) {
+      svgEl.style.setProperty('width', parsedWidth, 'important');
+      svgEl.style.setProperty('min-width', parsedWidth, 'important');
+    }
+    if (parsedMaxWidth) svgEl.style.setProperty('max-width', parsedMaxWidth, 'important');
+    if (parsedHeight) svgEl.style.setProperty('max-height', parsedHeight, 'important');
+  }
+
+  const wrapper = buildWrapperStructure(svgEl ? svgEl.outerHTML : finalSvg);
+  wrapper.dataset.sourceCode = code;
+  wrapper.dataset.layout = parsedLayout;
+
+  if (hasCustomConfig) {
+    wrapper.classList.add('has-custom-init');
+  } else {
+    wrapper.classList.add('use-site-theme');
+  }
+  if (isGantt) {
+    wrapper.classList.add('is-gantt');
+  }
+  if (parsedWidth || parsedMaxWidth || parsedHeight) {
+    wrapper.classList.add('has-custom-width');
+  }
+
+  item.replaceWith(wrapper);
+  attachMermaidControls(wrapper, code);
+  wrapper.dataset.renderedSignature = renderSignature;
+}
+
 export async function renderMermaid(forceReRender = false, targetSelector = '.main-content') {
   const codeBlocks = Array.from(
     document.querySelectorAll(`${targetSelector} pre[data-language="mermaid"], ${targetSelector} pre:has(code.language-mermaid), ${targetSelector} pre.mermaid`)
@@ -221,6 +334,11 @@ export async function renderMermaid(forceReRender = false, targetSelector = '.ma
     const container = document.createElement('div');
     container.className = 'mermaid-native';
     container.dataset.sourceCode = rawCode;
+    
+    // Tarjeta sutil mientras se renderiza (sin display: none)
+    container.style.cssText = 'min-height: 120px; margin: 1.5rem 0; border-radius: 8px; border: 1px dashed var(--border-color, #334155); display: flex; align-items: center; justify-content: center; color: var(--text-muted, #94a3b8); font-size: 0.8rem;';
+    container.textContent = 'Cargando diagrama...';
+
     pre.after(container);
     pre.style.display = 'none';
     pre.dataset.mermaidRegistered = 'true';
@@ -229,106 +347,35 @@ export async function renderMermaid(forceReRender = false, targetSelector = '.ma
   const containers = Array.from(document.querySelectorAll<HTMLElement>(`${targetSelector} .mermaid-native, ${targetSelector} .mermaid-wrapper`));
   if (containers.length === 0) return;
 
-  const { default: mermaid } = await import('mermaid');
-  mermaid.initialize(getMermaidConfig());
-
-  const currentModo = document.documentElement.getAttribute('data-modo') || 'oscuro';
-  const currentEstilo = document.documentElement.getAttribute('data-estilo') || 'default';
-  const renderSignature = `${currentModo}-${currentEstilo}`;
-
-  for (const [index, item] of containers.entries()) {
-    const code = item.dataset.sourceCode;
-    if (!code) continue;
-    if (item.dataset.renderedSignature === renderSignature && !forceReRender) continue;
-
-    const layoutMatch = code.match(/%%layout:\s*(fit|pan-x|pan-y)\s*%%/i);
-    const widthMatch = code.match(/%%width:\s*(\d+(?:px|%)?)\s*%%/i);
-    const maxWidthMatch = code.match(/%%max-width:\s*(\d+(?:px|%)?)\s*%%/i);
-    const heightMatch = code.match(/%%height:\s*(\d+(?:px|%)?)\s*%%/i);
-
-    const parseUnit = (val: string | null) => {
-      if (!val) return null;
-      return val.endsWith('%') || val.endsWith('px') ? val : `${val}px`;
-    };
-
-    const parsedLayout = (layoutMatch ? layoutMatch[1].toLowerCase() : 'fit') as 'fit' | 'pan-x' | 'pan-y';
-    const parsedWidth = parseUnit(widthMatch ? widthMatch[1] : null);
-    const parsedMaxWidth = parseUnit(maxWidthMatch ? maxWidthMatch[1] : null);
-    const parsedHeight = parseUnit(heightMatch ? heightMatch[1] : null);
-
-    let cleanCode = code
-      .replace(/%%layout:.*?%%/gi, '')
-      .replace(/%%width:.*?%%/gi, '')
-      .replace(/%%max-width:.*?%%/gi, '')
-      .replace(/%%height:.*?%%/gi, '')
-      .trim();
-
-    const hasCustomConfig = cleanCode.includes('%%{init') || cleanCode.startsWith('---');
-    const isGantt = cleanCode.replace(/%%[\s\S]*?%%/g, '').trim().startsWith('gantt');
-    const diagramType = detectDiagramType(cleanCode);
-
-    let codeToRender = cleanCode;
-    const baseConfig = getThemeForDiagram(diagramType);
-
-    if (!hasCustomConfig) {
-      let initConfig = { ...baseConfig };
-      if (isGantt) {
-        const numericWidth = widthMatch ? parseInt(widthMatch[1], 10) : 1200;
-        initConfig = {
-          ...baseConfig,
-          gantt: {
-            ...(baseConfig.gantt || {}),
-            useWidth: numericWidth
-          }
-        };
-      }
-      const generatedInit = `%%{init: ${JSON.stringify(initConfig)} }%%\n`;
-      codeToRender = generatedInit + cleanCode;
+  if (forceReRender) {
+    for (const [index, item] of containers.entries()) {
+      await renderSingleDiagram(item, index, true);
     }
-
-    const renderId = `mermaid-render-${Date.now()}-${index}`;
-
-    try {
-      const { svg } = await mermaid.render(renderId, codeToRender);
-
-      // Limpiar de inmediato cualquier residuo inyectado en el body por Mermaid
-      document.querySelectorAll(`body > #${renderId}, body > #d${renderId}`).forEach(el => el.remove());
-
-      const tempContainer = document.createElement('div');
-      tempContainer.innerHTML = svg;
-      const svgEl = tempContainer.querySelector('svg');
-
-      if (svgEl) {
-        fixDarkNodeTextContrast(svgEl);
-        if (parsedWidth) {
-          svgEl.style.setProperty('width', parsedWidth, 'important');
-          svgEl.style.setProperty('min-width', parsedWidth, 'important');
-        }
-        if (parsedMaxWidth) svgEl.style.setProperty('max-width', parsedMaxWidth, 'important');
-        if (parsedHeight) svgEl.style.setProperty('max-height', parsedHeight, 'important');
-      }
-
-      const wrapper = buildWrapperStructure(svgEl ? svgEl.outerHTML : svg);
-      wrapper.dataset.sourceCode = code;
-      wrapper.dataset.layout = parsedLayout;
-
-      if (hasCustomConfig) {
-        wrapper.classList.add('has-custom-init');
-      } else {
-        wrapper.classList.add('use-site-theme');
-      }
-      if (isGantt) {
-        wrapper.classList.add('is-gantt');
-      }
-      if (parsedWidth || parsedMaxWidth || parsedHeight) {
-        wrapper.classList.add('has-custom-width');
-      }
-
-      item.replaceWith(wrapper);
-      attachMermaidControls(wrapper, code);
-      wrapper.dataset.renderedSignature = renderSignature;
-    } catch (err) {
-      console.error(`Error renderizando diagrama #${index}:`, err);
-    }
+    return;
   }
+
+  // Contenedor real de scroll en tu layout (#main-scroll-container o .main-content)
+  const scrollRoot = document.getElementById('main-scroll-container') || document.querySelector('.main-content');
+
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const target = entry.target as HTMLElement;
+        const index = containers.indexOf(target);
+        obs.unobserve(target);
+        renderSingleDiagram(target, index >= 0 ? index : 0, false);
+      }
+    });
+  }, {
+    root: scrollRoot, // VINCULAR AL SCROLL REAL DEL LAYOUT
+    rootMargin: '300px 0px'
+  });
+
+  containers.forEach(container => {
+    const currentModo = document.documentElement.getAttribute('data-modo') || 'oscuro';
+    const currentEstilo = document.documentElement.getAttribute('data-estilo') || 'default';
+    if (container.dataset.renderedSignature === `${currentModo}-${currentEstilo}`) return;
+
+    observer.observe(container);
+  });
 }

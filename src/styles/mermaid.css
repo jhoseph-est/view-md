@@ -72,7 +72,7 @@
   display: block;
   max-width: 100%;
   height: auto !important;
-  overflow: visible !important; /* <--- Evita que el SVG ampute los nodos inferiores */
+  overflow: visible !important;
 }
 
 /* ==========================================================================
@@ -90,9 +90,21 @@ html[data-estilo="moderno"][data-modo="oscuro"] {
   --mm-text-color: #f8fafc;
   --mm-header-bg: #0f172a;
   --mm-label-bg: #0f172a;
+  --mm-cluster-bg: #0f172a;
+  --mm-cluster-border: #334155;
+
+  /* Sequence */
+  --mm-actor-bg: #1e293b;
+  --mm-actor-border: #38bdf8;
   --mm-note-bg: #4c1d95;
   --mm-note-border: #a855f7;
 
+  /* Gantt */
+  --mm-gantt-done: #10b981;
+  --mm-gantt-active: #38bdf8;
+  --mm-gantt-crit: #ef4444;
+
+  /* Quadrant */
   --mm-quad-border: #38bdf8;
   --mm-quad-line: #38bdf8;
   --mm-q1: rgba(56, 189, 248, 0.15);
@@ -100,11 +112,11 @@ html[data-estilo="moderno"][data-modo="oscuro"] {
   --mm-q3: rgba(244, 63, 94, 0.15);
   --mm-q4: rgba(234, 179, 8, 0.15);
 
+  /* Git & Pie */
   --mm-git-1: #38bdf8;
   --mm-git-2: #a855f7;
   --mm-git-3: #10b981;
   --mm-git-4: #f59e0b;
-
   --mm-pie-1: #38bdf8;
   --mm-pie-2: #10b981;
   --mm-pie-3: #f59e0b;
@@ -117,9 +129,21 @@ html[data-estilo="moderno"][data-modo="claro"] {
   --mm-text-color: #0f172a;
   --mm-header-bg: #e0f2fe;
   --mm-label-bg: #ffffff;
+  --mm-cluster-bg: #f1f5f9;
+  --mm-cluster-border: #cbd5e1;
+
+  /* Sequence */
+  --mm-actor-bg: #f8fafc;
+  --mm-actor-border: #0ea5e9;
   --mm-note-bg: #fdf4ff;
   --mm-note-border: #c084fc;
 
+  /* Gantt */
+  --mm-gantt-done: #059669;
+  --mm-gantt-active: #0284c7;
+  --mm-gantt-crit: #dc2626;
+
+  /* Quadrant */
   --mm-quad-border: #0ea5e9;
   --mm-quad-line: #0ea5e9;
   --mm-q1: rgba(14, 165, 233, 0.15);
@@ -127,11 +151,11 @@ html[data-estilo="moderno"][data-modo="claro"] {
   --mm-q3: rgba(239, 68, 68, 0.15);
   --mm-q4: rgba(245, 158, 11, 0.15);
 
+  /* Git & Pie */
   --mm-git-1: #0284c7;
   --mm-git-2: #7c3aed;
   --mm-git-3: #059669;
   --mm-git-4: #d97706;
-
   --mm-pie-1: #0284c7;
   --mm-pie-2: #059669;
   --mm-pie-3: #d97706;
@@ -252,169 +276,72 @@ html[data-estilo="minimalista"][data-modo="claro"] {
 }
 
 /* ==========================================================
-   1. CONTENEDOR PRINCIPAL DEL MODAL
+   3. MODAL DE AMPLIACIÓN
    ========================================================== */
 .global-modal-body {
-    display: flex !important;
-    overflow: auto !important;
-    padding: 2.5rem !important;
-    box-sizing: border-box !important;
-    width: 100% !important;
-    height: 100% !important;
+  display: flex !important;
+  overflow: auto !important;
+  padding: 2.5rem !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  height: 100% !important;
 }
 
-/* ==========================================================
-   2. ENVOLTORIO INTERMEDIO (LIBERA EL TAMAÑO)
-   ========================================================== */
 .mermaid-modal-body {
-    display: flex !important;
-    margin: auto !important;
-    flex-shrink: 0 !important;
+  display: flex !important;
+  margin: auto !important;
+  flex-shrink: 0 !important;
 }
 
-/* Asegurar que el SVG mantenga su relación de aspecto vectorial */
 .mermaid-modal-body svg {
-    flex-shrink: 0 !important;
+  flex-shrink: 0 !important;
 }
 
-/* ==========================================================
-   3. REGLAS DE LAYOUT SEGÚN LA DIRECTIVA
-   ========================================================== */
-
-/* LAYOUT FIT:
-   Entra completo en pantalla (sin desbordar ni en ancho ni en alto). */
+/* Layouts del modal */
 .modal-layout-fit {
-    width: 100% !important;
-    height: 100% !important;
-    align-items: center !important;
-    justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 .modal-layout-fit svg {
-    max-width: 100% !important;
-    max-height: 100% !important;
-    width: auto !important;
-    height: auto !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  width: auto !important;
+  height: auto !important;
 }
 
-/* LAYOUT PAN-Y:
-   Ocupa el alto disponible exacto (100% de la ventana visible del modal).
-   El ancho crece libremente según la proporción del diagrama.
-   Si desborda a lo ancho, activa el scroll horizontal iniciando a la izquierda. */
 .modal-layout-pan-y {
-    height: 100% !important;
-    width: auto !important;
-    align-items: center !important;
+  height: 100% !important;
+  width: auto !important;
+  align-items: center !important;
 }
 .modal-layout-pan-y svg {
-    height: 100% !important;
-    min-height: 100% !important;
-    max-height: 100% !important;
-    width: auto !important;
-    max-width: none !important;
-    min-width: auto !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: 100% !important;
+  width: auto !important;
+  max-width: none !important;
+  min-width: auto !important;
 }
 
-/* LAYOUT PAN-X:
-   Ocupa el ancho disponible exacto (100% del contenedor del modal).
-   El alto crece libremente según la proporción del diagrama.
-   Si desborda hacia abajo, activa el scroll vertical iniciando arriba. */
 .modal-layout-pan-x {
-    width: 100% !important;
-    height: auto !important;
-    justify-content: center !important;
+  width: 100% !important;
+  height: auto !important;
+  justify-content: center !important;
 }
 .modal-layout-pan-x svg {
-    width: 100% !important;
-    min-width: 100% !important;
-    max-width: 100% !important;
-    height: auto !important;
-    max-height: none !important;
-    min-height: auto !important;
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: auto !important;
 }
 
-/* src/styles/mermaid.css - Sección 2: MATRIZ DE VARIABLES */
-
-/* --- TEMA MODERNO (OSCURO) --- */
-html[data-estilo="moderno"][data-modo="oscuro"] {
-  --mm-node-bg: #1e293b;
-  --mm-node-border: #38bdf8;
-  --mm-line-color: #38bdf8;
-  --mm-text-color: #f8fafc;
-  --mm-header-bg: #0f172a;
-  --mm-label-bg: #0f172a;
-  --mm-cluster-bg: #0f172a;
-  --mm-cluster-border: #334155;
-
-  /* Sequence */
-  --mm-actor-bg: #1e293b;
-  --mm-actor-border: #38bdf8;
-  --mm-note-bg: #4c1d95;
-  --mm-note-border: #a855f7;
-
-  /* Gantt */
-  --mm-gantt-done: #10b981;
-  --mm-gantt-active: #38bdf8;
-  --mm-gantt-crit: #ef4444;
-
-  /* Quadrant */
-  --mm-quad-border: #38bdf8;
-  --mm-quad-line: #38bdf8;
-  --mm-q1: rgba(56, 189, 248, 0.15);
-  --mm-q2: rgba(16, 185, 129, 0.15);
-  --mm-q3: rgba(244, 63, 94, 0.15);
-  --mm-q4: rgba(234, 179, 8, 0.15);
-
-  /* Git & Pie */
-  --mm-git-1: #38bdf8;
-  --mm-git-2: #a855f7;
-  --mm-git-3: #10b981;
-  --mm-git-4: #f59e0b;
-  --mm-pie-1: #38bdf8;
-  --mm-pie-2: #10b981;
-  --mm-pie-3: #f59e0b;
-}
-
-/* --- TEMA MODERNO (CLARO) --- */
-html[data-estilo="moderno"][data-modo="claro"] {
-  --mm-node-bg: #f8fafc;
-  --mm-node-border: #0ea5e9;
-  --mm-line-color: #0284c7;
-  --mm-text-color: #0f172a;
-  --mm-header-bg: #e0f2fe;
-  --mm-label-bg: #ffffff;
-  --mm-cluster-bg: #f1f5f9;
-  --mm-cluster-border: #cbd5e1;
-
-  /* Sequence */
-  --mm-actor-bg: #f8fafc;
-  --mm-actor-border: #0ea5e9;
-  --mm-note-bg: #fdf4ff;
-  --mm-note-border: #c084fc;
-
-  /* Gantt */
-  --mm-gantt-done: #059669;
-  --mm-gantt-active: #0284c7;
-  --mm-gantt-crit: #dc2626;
-
-  /* Quadrant */
-  --mm-quad-border: #0ea5e9;
-  --mm-quad-line: #0ea5e9;
-  --mm-q1: rgba(14, 165, 233, 0.15);
-  --mm-q2: rgba(34, 197, 94, 0.15);
-  --mm-q3: rgba(239, 68, 68, 0.15);
-  --mm-q4: rgba(245, 158, 11, 0.15);
-
-  /* Git & Pie */
-  --mm-git-1: #0284c7;
-  --mm-git-2: #7c3aed;
-  --mm-git-3: #059669;
-  --mm-git-4: #d97706;
-  --mm-pie-1: #0284c7;
-  --mm-pie-2: #059669;
-  --mm-pie-3: #d97706;
-}
-
-/* src/styles/mermaid.css - Forzar centrado de textos en nodos y etiquetas */
+/* ==========================================================
+   4. TIPOGRAFÍA, CENTRADO Y SELECCIÓN
+   ========================================================== */
 .mermaid-wrapper svg foreignObject div,
 .mermaid-wrapper svg .nodeLabel,
 .mermaid-wrapper svg .edgeLabel,
@@ -443,7 +370,7 @@ html[data-estilo="moderno"][data-modo="claro"] {
 }
 
 /* ==========================================================================
-   AISLAMIENTO Y CUARENTENA DE CONTENEDORES TEMPORALES DE MERMAID
+   5. AISLAMIENTO Y CUARENTENA DE CONTENEDORES TEMPORALES DE MERMAID
    (Evita el parpadeo y la precarga visible en la esquina inferior izquierda)
    ========================================================================== */
 body > [id^="dmermaid"],
@@ -461,9 +388,4 @@ body > iframe[id*="mermaid"],
   pointer-events: none !important;
   overflow: hidden !important;
   z-index: -9999 !important;
-}
-
-/* Evitar que el contenedor nativo temporal afecte el flujo visual */
-.mermaid-native {
-  display: none !important;
 }
