@@ -55,47 +55,37 @@ Para determinar las fuerzas internas que mantienen unidas las partes de un cuerp
     <!-- Cara Izquierda (Cara Positiva x) -->
     <rect x="50" y="55" width="200" height="110" rx="4" fill="#f8fafc" stroke="#334155" stroke-width="2"/>
     <text x="140" y="40" fill="#0f172a" font-size="12" font-family="sans-serif" font-weight="bold">Cara Positiva (Normal exterior +x)</text>
-    
     <!-- Centroide C -->
     <circle cx="250" cy="110" r="4" fill="#0f172a"/>
     <text x="230" y="105" fill="#0f172a" font-size="11" font-family="sans-serif">C</text>
-
     <!-- Vector Normal N hacia la derecha -->
     <line x1="250" y1="110" x2="310" y2="110" stroke="#2563eb" stroke-width="2.5"/>
     <polygon points="305,106 315,110 305,114" fill="#2563eb"/>
     <text x="285" y="100" fill="#2563eb" font-size="12" font-family="sans-serif" font-weight="bold">+N (Tracción)</text>
-
     <!-- Vector Cortante V hacia abajo -->
     <line x1="250" y1="110" x2="250" y2="185" stroke="#dc2626" stroke-width="2.5"/>
     <polygon points="246,180 250,190 254,180" fill="#dc2626"/>
     <text x="258" y="180" fill="#dc2626" font-size="12" font-family="sans-serif" font-weight="bold">+V (Hacia abajo)</text>
-
     <!-- Momento Flector M antihorario -->
     <path d="M 235,135 A 25 25 0 1 1 240,80" fill="none" stroke="#7c3aed" stroke-width="2.5"/>
     <polygon points="234,80 244,75 240,86" fill="#7c3aed"/>
     <text x="195" y="75" fill="#7c3aed" font-size="12" font-family="sans-serif" font-weight="bold">+M (Antihorario)</text>
-
     <!-- Separación del corte -->
     <line x1="265" y1="35" x2="265" y2="200" stroke="#94a3b8" stroke-dasharray="4,4" stroke-width="1.5"/>
-
     <!-- Cara Derecha (Cara Negativa -x) -->
     <rect x="350" y="55" width="200" height="110" rx="4" fill="#f8fafc" stroke="#334155" stroke-width="2"/>
     <text x="440" y="40" fill="#0f172a" font-size="12" font-family="sans-serif" font-weight="bold">Cara Negativa (Normal exterior -x)</text>
-
     <!-- Centroide C -->
     <circle cx="350" cy="110" r="4" fill="#0f172a"/>
     <text x="360" y="105" fill="#0f172a" font-size="11" font-family="sans-serif">C</text>
-
     <!-- Vector Normal N hacia la izquierda -->
     <line x1="350" y1="110" x2="290" y2="110" stroke="#2563eb" stroke-width="2.5"/>
     <polygon points="295,106 285,110 295,114" fill="#2563eb"/>
     <text x="295" y="125" fill="#2563eb" font-size="12" font-family="sans-serif" font-weight="bold">+N</text>
-
     <!-- Vector Cortante V hacia arriba -->
     <line x1="350" y1="110" x2="350" y2="35" stroke="#dc2626" stroke-width="2.5"/>
     <polygon points="346,40 350,30 354,40" fill="#dc2626"/>
     <text x="358" y="45" fill="#dc2626" font-size="12" font-family="sans-serif" font-weight="bold">+V (Hacia arriba)</text>
-
     <!-- Momento Flector M horario -->
     <path d="M 365,85 A 25 25 0 1 1 360,140" fill="none" stroke="#7c3aed" stroke-width="2.5"/>
     <polygon points="366,140 356,145 360,134" fill="#7c3aed"/>
@@ -137,7 +127,6 @@ Analizando el equilibrio estático de un elemento diferencial de viga de longitu
     <rect x="130" y="45" width="160" height="100" fill="#f1f5f9" stroke="#475569" stroke-width="2"/>
     <text x="210" y="165" fill="#0f172a" font-size="12" font-family="sans-serif" text-anchor="middle">dx</text>
     <line x1="130" y1="150" x2="290" y2="150" stroke="#475569" stroke-width="1.5" marker-start="url(#dot)" marker-end="url(#dot)"/>
-
     <!-- Carga w(x) hacia abajo -->
     <line x1="170" y1="15" x2="170" y2="40" stroke="#0284c7" stroke-width="2"/>
     <polygon points="167,36 170,44 173,36" fill="#0284c7"/>
@@ -146,7 +135,6 @@ Analizando el equilibrio estático de un elemento diferencial de viga de longitu
     <line x1="250" y1="15" x2="250" y2="40" stroke="#0284c7" stroke-width="2"/>
     <polygon points="247,36 250,44 253,36" fill="#0284c7"/>
     <text x="210" y="12" fill="#0284c7" font-size="12" font-family="sans-serif" text-anchor="middle">w(x)</text>
-
     <!-- Cara izquierda: V hacia arriba, M antihorario -->
     <line x1="130" y1="95" x2="130" y2="35" stroke="#dc2626" stroke-width="2"/>
     <polygon points="127,40 130,30 133,40" fill="#dc2626"/>
@@ -154,7 +142,6 @@ Analizando el equilibrio estático de un elemento diferencial de viga de longitu
     <path d="M 115,80 A 18 18 0 0 1 115,115" fill="none" stroke="#7c3aed" stroke-width="2"/>
     <polygon points="112,85 117,76 119,87" fill="#7c3aed"/>
     <text x="95" y="105" fill="#7c3aed" font-size="11" font-family="sans-serif" font-weight="bold">M</text>
-
     <!-- Cara derecha: V + dV hacia abajo, M + dM horario -->
     <line x1="290" y1="95" x2="290" y2="155" stroke="#dc2626" stroke-width="2"/>
     <polygon points="287,150 290,160 293,150" fill="#dc2626"/>
@@ -259,27 +246,22 @@ En elementos donde el eje centroidal presenta curvatura inicial (arcos, ganchos 
     <!-- Directriz Curva -->
     <path d="M 60,180 A 160 160 0 0 1 360,180" fill="none" stroke="#64748b" stroke-width="4" stroke-dasharray="6,4"/>
     <text x="210" y="195" fill="#64748b" font-size="12" font-family="sans-serif">Directriz curva (R = radio)</text>
-
     <!-- Centro de Curvatura O -->
     <circle cx="210" cy="180" r="4" fill="#0f172a"/>
     <text x="205" y="170" fill="#0f172a" font-size="12" font-family="sans-serif" font-weight="bold">O</text>
     <line x1="210" y1="180" x2="130" y2="67" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="2,2"/>
     <text x="160" y="130" fill="#64748b" font-size="11" font-family="sans-serif">R</text>
-
     <!-- Sección de Corte Inclinada en ángulo theta -->
     <line x1="105" y1="45" x2="155" y2="90" stroke="#334155" stroke-width="3"/>
-
     <!-- Ejes locales en la sección (t, n) -->
     <!-- Tangente Nt -->
     <line x1="130" y1="67" x2="85" y2="35" stroke="#2563eb" stroke-width="2.5"/>
     <polygon points="85,39 77,30 89,33" fill="#2563eb"/>
     <text x="50" y="30" fill="#2563eb" font-size="12" font-family="sans-serif" font-weight="bold">N(θ) [Tangencial]</text>
-
     <!-- Normal Vn -->
     <line x1="130" y1="67" x2="175" y2="99" stroke="#dc2626" stroke-width="2.5"/>
     <polygon points="171,94 183,105 176,101" fill="#dc2626"/>
     <text x="175" y="120" fill="#dc2626" font-size="12" font-family="sans-serif" font-weight="bold">V(θ) [Radial]</text>
-
     <!-- Momento M(theta) -->
     <path d="M 115,50 A 20 20 0 1 1 145,55" fill="none" stroke="#7c3aed" stroke-width="2.5"/>
     <polygon points="113,52 113,42 121,48" fill="#7c3aed"/>

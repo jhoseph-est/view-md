@@ -39,21 +39,17 @@ Un **desplazamiento virtual** $\delta \vec{r}$ es un cambio diferencial arbitrar
     <!-- Trayectoria o restricción -->
     <path d="M 40,160 C 140,140 240,60 420,80" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4,4"/>
     <text x="360" y="65" fill="#64748b" font-size="11" font-family="sans-serif">Restricción geométrica</text>
-
     <!-- Posición real P -->
     <circle cx="180" cy="115" r="5" fill="#0f172a"/>
     <text x="165" y="135" fill="#0f172a" font-size="12" font-family="sans-serif" font-weight="bold">P (r)</text>
-
     <!-- Fuerza Activa F -->
     <line x1="180" y1="115" x2="270" y2="45" stroke="#2563eb" stroke-width="2.5"/>
     <polygon points="266,41 277,41 272,50" fill="#2563eb"/>
     <text x="270" y="35" fill="#2563eb" font-size="13" font-family="sans-serif" font-weight="bold">F</text>
-
     <!-- Desplazamiento virtual delta r compatible -->
     <line x1="180" y1="115" x2="250" y2="92" stroke="#dc2626" stroke-width="2.5"/>
     <polygon points="244,87 257,90 248,98" fill="#dc2626"/>
     <text x="220" y="115" fill="#dc2626" font-size="13" font-family="sans-serif" font-weight="bold">δr</text>
-
     <!-- Ángulo theta -->
     <path d="M 215,88 A 40 40 0 0 1 218,103" fill="none" stroke="#0f172a" stroke-width="1.5"/>
     <text x="228" y="96" fill="#0f172a" font-size="11" font-family="sans-serif">θ</text>
@@ -209,7 +205,6 @@ Como en el equilibrio $\left.\frac{dV}{dq}\right|_{q_0} = 0$, el signo de la var
     <circle cx="110" cy="127" r="8" fill="#16a34a"/>
     <text x="110" y="160" fill="#16a34a" font-size="11" font-family="sans-serif" font-weight="bold" text-anchor="middle">d²V/dq² &gt; 0</text>
     <text x="110" y="176" fill="#475569" font-size="10" font-family="sans-serif" text-anchor="middle">Mínimo de Energía</text>
-
     <!-- Caso Inestable: Cima hacia abajo -->
     <rect x="215" y="20" width="170" height="165" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
     <text x="300" y="42" fill="#0f172a" font-size="12" font-family="sans-serif" font-weight="bold" text-anchor="middle">Equilibrio Inestable</text>
@@ -217,7 +212,6 @@ Como en el equilibrio $\left.\frac{dV}{dq}\right|_{q_0} = 0$, el signo de la var
     <circle cx="300" cy="103" r="8" fill="#dc2626"/>
     <text x="300" y="160" fill="#dc2626" font-size="11" font-family="sans-serif" font-weight="bold" text-anchor="middle">d²V/dq² &lt; 0</text>
     <text x="300" y="176" fill="#475569" font-size="10" font-family="sans-serif" text-anchor="middle">Máximo de Energía</text>
-
     <!-- Caso Indiferente: Superficie Plana -->
     <rect x="405" y="20" width="170" height="165" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
     <text x="490" y="42" fill="#0f172a" font-size="12" font-family="sans-serif" font-weight="bold" text-anchor="middle">Equilibrio Indiferente</text>

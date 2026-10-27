@@ -89,7 +89,6 @@ sequenceDiagram
     <!-- Viga Aislada -->
     <rect x="70" y="80" width="360" height="20" rx="3" fill="#e2e8f0" stroke="#334155" stroke-width="2.5"/>
     <text x="250" y="95" fill="#334155" font-size="12" font-family="sans-serif" font-weight="bold" text-anchor="middle">Sólido Rígido Aislado</text>
-
     <!-- Punto A (Pasador cortado) -->
     <circle cx="70" cy="90" r="4" fill="#0f172a"/>
     <text x="50" y="95" fill="#0f172a" font-size="13" font-family="sans-serif" font-weight="bold">A</text>
@@ -101,13 +100,11 @@ sequenceDiagram
     <line x1="10" y1="90" x2="65" y2="90" stroke="#2563eb" stroke-width="3"/>
     <polygon points="55,86 65,90 55,94" fill="#2563eb"/>
     <text x="25" y="80" fill="#2563eb" font-size="12" font-family="sans-serif" font-weight="bold">A_x</text>
-
     <!-- Carga Activa P en C -->
     <circle cx="250" cy="90" r="3" fill="#dc2626"/>
     <line x1="250" y1="20" x2="250" y2="78" stroke="#dc2626" stroke-width="3"/>
     <polygon points="246,70 250,80 254,70" fill="#dc2626"/>
     <text x="258" y="45" fill="#dc2626" font-size="13" font-family="sans-serif" font-weight="bold">P (Carga Activa)</text>
-
     <!-- Punto B (Rodillo cortado) -->
     <circle cx="430" cy="90" r="4" fill="#0f172a"/>
     <text x="445" y="95" fill="#0f172a" font-size="13" font-family="sans-serif" font-weight="bold">B</text>
@@ -115,13 +112,11 @@ sequenceDiagram
     <line x1="430" y1="160" x2="430" y2="95" stroke="#16a34a" stroke-width="3"/>
     <polygon points="426,105 430,95 434,105" fill="#16a34a"/>
     <text x="438" y="145" fill="#16a34a" font-size="12" font-family="sans-serif" font-weight="bold">B_y</text>
-
     <!-- Cotas de longitud -->
     <line x1="70" y1="175" x2="250" y2="175" stroke="#64748b" stroke-width="1.5"/>
     <line x1="70" y1="170" x2="70" y2="180" stroke="#64748b" stroke-width="1.5"/>
     <line x1="250" y1="170" x2="250" y2="180" stroke="#64748b" stroke-width="1.5"/>
     <text x="160" y="190" fill="#64748b" font-size="11" font-family="sans-serif" text-anchor="middle">L_1</text>
-
     <line x1="250" y1="175" x2="430" y2="175" stroke="#64748b" stroke-width="1.5"/>
     <line x1="430" y1="170" x2="430" y2="180" stroke="#64748b" stroke-width="1.5"/>
     <text x="340" y="190" fill="#64748b" font-size="11" font-family="sans-serif" text-anchor="middle">L_2</text>

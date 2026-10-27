@@ -89,7 +89,6 @@ El **Centroide** ($C$) representa el centro geométrico medio de una región for
     <circle cx="102" cy="85" r="4" fill="#dc2626"/>
     <text x="102" y="103" fill="#dc2626" font-size="11" font-family="sans-serif" font-weight="bold" text-anchor="middle">C (x̄, ȳ, z̄)</text>
     <text x="102" y="140" fill="#64748b" font-size="10" font-family="sans-serif" text-anchor="middle">dL = √(dx²+dy²+dz²)</text>
-
     <!-- Área / Superficie -->
     <rect x="215" y="20" width="165" height="135" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
     <text x="297" y="42" fill="#0f172a" font-size="12" font-family="sans-serif" font-weight="bold" text-anchor="middle">Superficie (2D)</text>
@@ -97,7 +96,6 @@ El **Centroide** ($C$) representa el centro geométrico medio de una región for
     <circle cx="295" cy="98" r="4" fill="#dc2626"/>
     <text x="295" y="116" fill="#dc2626" font-size="11" font-family="sans-serif" font-weight="bold" text-anchor="middle">C (x̄, ȳ, z̄)</text>
     <text x="297" y="140" fill="#64748b" font-size="10" font-family="sans-serif" text-anchor="middle">dA = dx dy  o  dA = r dr dθ</text>
-
     <!-- Volumen -->
     <rect x="410" y="20" width="170" height="135" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
     <text x="495" y="42" fill="#0f172a" font-size="12" font-family="sans-serif" font-weight="bold" text-anchor="middle">Volumen (3D)</text>
@@ -212,19 +210,15 @@ donde $\bar{r}$ es la distancia perpendicular medida desde el eje de rotación h
     <!-- Eje de revolución -->
     <line x1="60" y1="15" x2="60" y2="165" stroke="#0f172a" stroke-width="2.5" stroke-dasharray="6,4"/>
     <text x="45" y="25" fill="#0f172a" font-size="12" font-family="sans-serif" font-weight="bold">Eje</text>
-    
     <!-- Curva generatriz -->
     <path d="M 220,40 Q 280,85 240,135" fill="none" stroke="#2563eb" stroke-width="3"/>
     <text x="265" y="75" fill="#2563eb" font-size="12" font-family="sans-serif" font-weight="bold">Curva (L)</text>
-    
     <!-- Centroide de la línea -->
     <circle cx="243" cy="85" r="4" fill="#dc2626"/>
     <text x="253" y="90" fill="#dc2626" font-size="11" font-family="sans-serif" font-weight="bold">C_L</text>
-    
     <!-- Radio r_bar -->
     <line x1="60" y1="85" x2="243" y2="85" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="3,3"/>
     <text x="145" y="78" fill="#dc2626" font-size="12" font-family="sans-serif" font-weight="bold">r̄</text>
-
     <!-- Arco de revolución -->
     <path d="M 243,85 A 183 25 0 0 1 100,107" fill="none" stroke="#7c3aed" stroke-width="2"/>
     <polygon points="98,103 92,109 100,111" fill="#7c3aed"/>

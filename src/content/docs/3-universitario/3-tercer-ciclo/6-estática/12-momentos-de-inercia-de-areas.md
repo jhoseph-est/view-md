@@ -49,29 +49,23 @@ $$
     <line x1="40" y1="190" x2="400" y2="190" stroke="#334155" stroke-width="2"/>
     <polygon points="398,186 408,190 398,194" fill="#334155"/>
     <text x="405" y="205" fill="#334155" font-size="13" font-family="sans-serif">x</text>
-
     <line x1="70" y1="210" x2="70" y2="25" stroke="#334155" stroke-width="2"/>
     <polygon points="66,27 70,17 74,27" fill="#334155"/>
     <text x="50" y="30" fill="#334155" font-size="13" font-family="sans-serif">y</text>
-
     <!-- Origen -->
     <circle cx="70" cy="190" r="3.5" fill="#0f172a"/>
     <text x="55" y="205" fill="#0f172a" font-size="12" font-family="sans-serif">O</text>
-
     <!-- Superficie arbitraria A -->
     <path d="M 140,160 C 130,90 190,50 280,60 C 360,70 380,130 330,170 C 270,200 180,185 140,160 Z" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
     <text x="320" y="85" fill="#0369a1" font-size="13" font-family="sans-serif" font-weight="bold">Área A</text>
-
     <!-- Diferencial de área dA -->
     <rect x="230" y="95" width="22" height="18" fill="#2563eb" rx="2"/>
     <text x="233" y="108" fill="#ffffff" font-size="9" font-family="sans-serif" font-weight="bold">dA</text>
-
     <!-- Cotas x e y -->
     <line x1="70" y1="104" x2="230" y2="104" stroke="#64748b" stroke-width="1.5" stroke-dasharray="3,3"/>
     <line x1="241" y1="113" x2="241" y2="190" stroke="#64748b" stroke-width="1.5" stroke-dasharray="3,3"/>
     <text x="145" y="98" fill="#475569" font-size="12" font-family="sans-serif">x</text>
     <text x="247" y="155" fill="#475569" font-size="12" font-family="sans-serif">y</text>
-
     <!-- Vector r desde O -->
     <line x1="70" y1="190" x2="230" y2="104" stroke="#7c3aed" stroke-width="2"/>
     <polygon points="225,103 234,101 228,110" fill="#7c3aed"/>
@@ -236,19 +230,15 @@ $$
     <text x="375" y="110" fill="#475569" font-size="12" font-family="sans-serif">x</text>
     <line x1="200" y1="195" x2="200" y2="15" stroke="#475569" stroke-width="2"/>
     <text x="195" y="12" fill="#475569" font-size="12" font-family="sans-serif">y</text>
-
     <!-- Cuadrante I -->
     <rect x="230" y="35" width="100" height="50" rx="4" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
     <text x="280" y="65" fill="#15803d" font-size="11" font-family="sans-serif" text-anchor="middle">Cuadrante I: xy &gt; 0</text>
-
     <!-- Cuadrante II -->
     <rect x="70" y="35" width="100" height="50" rx="4" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
     <text x="120" y="65" fill="#b91c1c" font-size="11" font-family="sans-serif" text-anchor="middle">Cuadrante II: xy &lt; 0</text>
-
     <!-- Cuadrante III -->
     <rect x="70" y="125" width="100" height="50" rx="4" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
     <text x="120" y="155" fill="#15803d" font-size="11" font-family="sans-serif" text-anchor="middle">Cuadrante III: xy &gt; 0</text>
-
     <!-- Cuadrante IV -->
     <rect x="230" y="125" width="100" height="50" rx="4" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
     <text x="280" y="155" fill="#b91c1c" font-size="11" font-family="sans-serif" text-anchor="middle">Cuadrante IV: xy &lt; 0</text>

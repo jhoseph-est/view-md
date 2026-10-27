@@ -69,7 +69,6 @@ $$
     <polygon points="60,130 200,40 340,130" fill="none" stroke="#334155" stroke-width="4"/>
     <line x1="60" y1="130" x2="340" y2="130" stroke="#334155" stroke-width="4"/>
     <line x1="200" y1="40" x2="200" y2="130" stroke="#334155" stroke-width="3"/>
-    
     <!-- Nudos -->
     <circle cx="60" cy="130" r="5" fill="#0f172a"/>
     <text x="45" y="145" fill="#0f172a" font-size="12" font-family="sans-serif" font-weight="bold">A</text>
@@ -79,12 +78,10 @@ $$
     <text x="350" y="145" fill="#0f172a" font-size="12" font-family="sans-serif" font-weight="bold">C</text>
     <circle cx="200" cy="130" r="4" fill="#0f172a"/>
     <text x="195" y="150" fill="#0f172a" font-size="11" font-family="sans-serif">D</text>
-
     <!-- Carga en B -->
     <line x1="200" y1="5" x2="200" y2="35" stroke="#dc2626" stroke-width="3"/>
     <polygon points="196,30 200,38 204,30" fill="#dc2626"/>
     <text x="210" y="20" fill="#dc2626" font-size="12" font-family="sans-serif" font-weight="bold">P</text>
-
     <!-- Apoyo A (Pasador fijo) -->
     <line x1="60" y1="165" x2="60" y2="135" stroke="#2563eb" stroke-width="2.5"/>
     <polygon points="57,140 60,132 63,140" fill="#2563eb"/>
@@ -92,7 +89,6 @@ $$
     <line x1="20" y1="130" x2="55" y2="130" stroke="#2563eb" stroke-width="2.5"/>
     <polygon points="50,127 58,130 50,133" fill="#2563eb"/>
     <text x="15" y="122" fill="#2563eb" font-size="11" font-family="sans-serif" font-weight="bold">A_x</text>
-
     <!-- Apoyo C (Rodillo móvil) -->
     <line x1="340" y1="165" x2="340" y2="135" stroke="#2563eb" stroke-width="2.5"/>
     <polygon points="337,140 340,132 343,140" fill="#2563eb"/>
@@ -169,7 +165,6 @@ La identificación visual preliminar de estos elementos antes de operar matemát
     <line x1="80" y1="100" x2="160" y2="100" stroke="#dc2626" stroke-width="3" stroke-dasharray="4,4"/>
     <line x1="80" y1="100" x2="130" y2="50" stroke="#dc2626" stroke-width="3" stroke-dasharray="4,4"/>
     <text x="110" y="125" fill="#dc2626" font-size="11" font-family="sans-serif" font-weight="bold">F_1 = 0,  F_2 = 0</text>
-
     <!-- Caso 2: Tres barras (dos colineales) -->
     <rect x="240" y="15" width="190" height="120" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
     <text x="335" y="35" fill="#0f172a" font-size="12" font-family="sans-serif" font-weight="bold" text-anchor="middle">Caso 2: Tres Barras</text>
@@ -221,27 +216,22 @@ graph LR
     <!-- Armadura seccionada izquierda -->
     <polygon points="50,130 150,50 150,130" fill="none" stroke="#334155" stroke-width="3"/>
     <line x1="50" y1="130" x2="150" y2="130" stroke="#334155" stroke-width="3"/>
-    
     <!-- Línea de corte -->
     <line x1="180" y1="20" x2="170" y2="160" stroke="#dc2626" stroke-width="2" stroke-dasharray="6,4"/>
     <text x="185" y="30" fill="#dc2626" font-size="12" font-family="sans-serif" font-weight="bold">a - a' (Corte)</text>
-
     <!-- Fuerzas axiales expuestas en la sección -->
     <!-- Barra superior -->
     <line x1="150" y1="50" x2="230" y2="50" stroke="#2563eb" stroke-width="3"/>
     <polygon points="225,46 235,50 225,54" fill="#2563eb"/>
     <text x="240" y="55" fill="#2563eb" font-size="12" font-family="sans-serif" font-weight="bold">F_sup</text>
-    
     <!-- Diagonal cortada -->
     <line x1="150" y1="50" x2="220" y2="120" stroke="#2563eb" stroke-width="3"/>
     <polygon points="214,122 225,125 220,115" fill="#2563eb"/>
     <text x="230" y="125" fill="#2563eb" font-size="12" font-family="sans-serif" font-weight="bold">F_diag</text>
-
     <!-- Barra inferior cortada -->
     <line x1="150" y1="130" x2="230" y2="130" stroke="#2563eb" stroke-width="3"/>
     <polygon points="225,126 235,130 225,134" fill="#2563eb"/>
     <text x="240" y="145" fill="#2563eb" font-size="12" font-family="sans-serif" font-weight="bold">F_inf</text>
-
     <!-- Cargas exteriores -->
     <circle cx="50" cy="130" r="4" fill="#0f172a"/>
     <line x1="50" y1="160" x2="50" y2="136" stroke="#16a34a" stroke-width="2"/>

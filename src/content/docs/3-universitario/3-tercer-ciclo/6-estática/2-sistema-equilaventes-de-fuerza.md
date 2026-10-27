@@ -57,22 +57,18 @@ Cualquier sistema espacial arbitrario de fuerzas y momentos puede reducirse, en 
   <svg width="440" height="180" viewBox="0 0 440 180" xmlns="http://www.w3.org/2000/svg">
     <!-- Contorno de cuerpo rígido -->
     <path d="M 40,40 Q 140,10 260,30 Q 400,50 410,120 Q 300,165 170,150 Q 30,155 40,40 Z" fill="#f8fafc" stroke="#64748b" stroke-width="2"/>
-    
     <!-- Centro O -->
     <circle cx="150" cy="95" r="5" fill="#0f172a"/>
     <text x="135" y="115" fill="#0f172a" font-size="13" font-family="sans-serif" font-weight="bold">O</text>
-    
     <!-- Vector R -->
     <line x1="150" y1="95" x2="250" y2="35" stroke="#2563eb" stroke-width="3.5"/>
     <polygon points="245,30 258,30 252,42" fill="#2563eb"/>
     <text x="260" y="30" fill="#2563eb" font-size="14" font-family="sans-serif" font-weight="bold">R = ∑F</text>
-    
     <!-- Vector M_RO (Doble flecha de momento) -->
     <line x1="150" y1="95" x2="150" y2="20" stroke="#7c3aed" stroke-width="3"/>
     <polygon points="146,26 150,15 154,26" fill="#7c3aed"/>
     <polygon points="146,36 150,25 154,36" fill="#7c3aed"/>
     <text x="160" y="25" fill="#7c3aed" font-size="14" font-family="sans-serif" font-weight="bold">M_RO = ∑M_O</text>
-    
     <!-- Flechas primitivas atenuadas -->
     <line x1="70" y1="130" x2="110" y2="80" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,3"/>
     <line x1="320" y1="120" x2="270" y2="85" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,3"/>

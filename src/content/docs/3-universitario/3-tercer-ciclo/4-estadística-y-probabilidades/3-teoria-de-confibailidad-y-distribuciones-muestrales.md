@@ -149,23 +149,18 @@ Donde $\Gamma(z) = \int_{0}^{\infty} u^{z-1} e^{-u} du$ es la función Gamma de 
     <line x1="60" y1="180" x2="60" y2="20" stroke="#64748b" stroke-width="2" />
     <text x="560" y="200" fill="#64748b" font-size="12" font-family="sans-serif">Tiempo (t)</text>
     <text x="20" y="30" fill="#64748b" font-size="12" font-family="sans-serif" transform="rotate(-90 20,30)">Tasa de falla λ(t)</text>
-
     <!-- Zonas delimitadas por líneas punteadas -->
     <line x1="200" y1="20" x2="200" y2="180" stroke="#94a3b8" stroke-dasharray="4" />
     <line x1="420" y1="20" x2="420" y2="180" stroke="#94a3b8" stroke-dasharray="4" />
-
     <!-- Curva de la bañera -->
     <path d="M 70 40 Q 150 140 200 140 L 420 140 Q 480 140 540 30" fill="none" stroke="#2563eb" stroke-width="3.5" />
-
     <!-- Etiquetas de regiones -->
     <rect x="75" y="45" width="115" height="30" rx="4" fill="#fee2e2" />
     <text x="132" y="65" fill="#991b1b" font-size="11" font-weight="bold" text-anchor="middle" font-family="sans-serif">Fase I: β &lt; 1</text>
     <text x="132" y="115" fill="#475569" font-size="10" text-anchor="middle" font-family="sans-serif">Mortalidad Infantil</text>
-
     <rect x="250" y="45" width="120" height="30" rx="4" fill="#dcfce7" />
     <text x="310" y="65" fill="#166534" font-size="11" font-weight="bold" text-anchor="middle" font-family="sans-serif">Fase II: β = 1</text>
     <text x="310" y="115" fill="#475569" font-size="10" text-anchor="middle" font-family="sans-serif">Vida Útil (Exponencial)</text>
-
     <rect x="435" y="45" width="115" height="30" rx="4" fill="#fef3c7" />
     <text x="492" y="65" fill="#92400e" font-size="11" font-weight="bold" text-anchor="middle" font-family="sans-serif">Fase III: β &gt; 1</text>
     <text x="492" y="115" fill="#475569" font-size="10" text-anchor="middle" font-family="sans-serif">Envejecimiento</text>

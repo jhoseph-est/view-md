@@ -30,30 +30,23 @@ graph TD
   <svg width="420" height="260" viewBox="0 0 420 260" xmlns="http://www.w3.org/2000/svg">
     <!-- Nudos de la base del tetraedro -->
     <!-- Base: A(100, 210), B(320, 210), C(240, 150), Apice D(210, 40) -->
-    
     <!-- Barras de la base (oculta en punteado) -->
     <line x1="100" y1="210" x2="240" y2="150" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4,4"/>
     <line x1="320" y1="210" x2="240" y2="150" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4,4"/>
     <line x1="100" y1="210" x2="320" y2="210" stroke="#334155" stroke-width="2.5"/>
-    
     <!-- Barras hacia el ápice D -->
     <line x1="100" y1="210" x2="210" y2="40" stroke="#2563eb" stroke-width="2.5"/>
     <line x1="320" y1="210" x2="210" y2="40" stroke="#2563eb" stroke-width="2.5"/>
     <line x1="240" y1="150" x2="210" y2="40" stroke="#2563eb" stroke-width="2" stroke-dasharray="4,4"/>
-    
     <!-- Nudos -->
     <circle cx="100" cy="210" r="5" fill="#0f172a"/>
     <text x="80" y="225" fill="#0f172a" font-size="12" font-family="sans-serif" font-weight="bold">A</text>
-    
     <circle cx="320" cy="210" r="5" fill="#0f172a"/>
     <text x="330" y="225" fill="#0f172a" font-size="12" font-family="sans-serif" font-weight="bold">B</text>
-    
     <circle cx="240" cy="150" r="4" fill="#64748b"/>
     <text x="250" y="150" fill="#64748b" font-size="12" font-family="sans-serif" font-weight="bold">C</text>
-    
     <circle cx="210" cy="40" r="5" fill="#dc2626"/>
     <text x="205" y="25" fill="#dc2626" font-size="13" font-family="sans-serif" font-weight="bold">D (Ápice)</text>
-    
     <text x="210" y="245" fill="#475569" font-size="11" font-family="sans-serif" text-anchor="middle">Tetraedro básico: n = 4, b = 6 (b = 3n - 6)</text>
   </svg>
 </div>

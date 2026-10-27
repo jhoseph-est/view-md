@@ -42,38 +42,31 @@ Sea una fuerza $\vec{F}$ aplicada en el punto $A$. Se desea transferir su punto 
       <line x1="60" y1="120" x2="60" y2="40" stroke="#2563eb" stroke-width="3"/>
       <polygon points="56,45 60,32 64,45" fill="#2563eb"/>
       <text x="70" y="50" fill="#2563eb" font-size="13" font-family="sans-serif" font-weight="bold">F</text>
-      
       <circle cx="160" cy="120" r="4" fill="#64748b"/>
       <text x="155" y="140" fill="#64748b" font-size="12" font-family="sans-serif">B</text>
       <text x="100" y="155" fill="#475569" font-size="11" font-family="sans-serif" text-anchor="middle">(1) Fuerza original</text>
     </g>
-
     <!-- Flecha de equivalencia 1 -->
     <text x="195" y="90" fill="#0f172a" font-size="18" font-family="sans-serif" font-weight="bold">≡</text>
-
     <!-- Estado 2: neutro -->
     <g>
       <circle cx="230" cy="120" r="4" fill="#0f172a"/>
       <text x="225" y="140" fill="#0f172a" font-size="12" font-family="sans-serif" font-weight="bold">A</text>
       <line x1="230" y1="120" x2="230" y2="40" stroke="#2563eb" stroke-width="3"/>
       <polygon points="226,45 230,32 234,45" fill="#2563eb"/>
-      
       <circle cx="310" cy="120" r="4" fill="#0f172a"/>
       <text x="315" y="140" fill="#0f172a" font-size="12" font-family="sans-serif" font-weight="bold">B</text>
       <!-- Par nulo en B -->
       <line x1="310" y1="120" x2="310" y2="40" stroke="#16a34a" stroke-width="2.5"/>
       <polygon points="307,45 310,35 313,45" fill="#16a34a"/>
       <text x="318" y="45" fill="#16a34a" font-size="11" font-family="sans-serif">+F</text>
-      
       <line x1="310" y1="120" x2="310" y2="165" stroke="#dc2626" stroke-width="2" stroke-dasharray="3,3"/>
       <polygon points="307,160 310,168 313,160" fill="#dc2626"/>
       <text x="318" y="165" fill="#dc2626" font-size="11" font-family="sans-serif">-F</text>
       <text x="270" y="155" fill="#475569" font-size="11" font-family="sans-serif" text-anchor="middle">(2) Sistema neutro</text>
     </g>
-
     <!-- Flecha de equivalencia 2 -->
     <text x="355" y="90" fill="#0f172a" font-size="18" font-family="sans-serif" font-weight="bold">≡</text>
-
     <!-- Estado 3: resultado -->
     <g>
       <circle cx="430" cy="120" r="4" fill="#0f172a"/>
@@ -81,7 +74,6 @@ Sea una fuerza $\vec{F}$ aplicada en el punto $A$. Se desea transferir su punto 
       <line x1="430" y1="120" x2="430" y2="40" stroke="#16a34a" stroke-width="3"/>
       <polygon points="426,45 430,32 434,45" fill="#16a34a"/>
       <text x="440" y="50" fill="#16a34a" font-size="13" font-family="sans-serif" font-weight="bold">F</text>
-      
       <!-- Par de traslado curvo -->
       <path d="M 405,100 A 22 22 0 1 1 430,75" fill="none" stroke="#7c3aed" stroke-width="2.5"/>
       <polygon points="428,70 436,74 430,81" fill="#7c3aed"/>
@@ -192,26 +184,21 @@ En el caso general tridimensional, la fuerza resultante $\vec{R}$ y el momento r
     <!-- Eje Central Delta -->
     <line x1="60" y1="160" x2="380" y2="40" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6,4"/>
     <text x="390" y="45" fill="#475569" font-size="13" font-family="sans-serif" font-style="italic">Eje Central (Δ)</text>
-
     <!-- Punto P sobre el eje -->
     <circle cx="200" cy="107" r="5" fill="#0f172a"/>
     <text x="205" y="125" fill="#0f172a" font-size="12" font-family="sans-serif" font-weight="bold">P</text>
-
     <!-- Fuerza Resultante R -->
     <line x1="200" y1="107" x2="290" y2="73" stroke="#2563eb" stroke-width="4"/>
     <polygon points="285,67 298,70 291,82" fill="#2563eb"/>
     <text x="250" y="60" fill="#2563eb" font-size="14" font-family="sans-serif" font-weight="bold">R</text>
-
     <!-- Momento Mínimo M_1 colineal (Doble flecha) -->
     <line x1="200" y1="107" x2="320" y2="62" stroke="#dc2626" stroke-width="2.5"/>
     <polygon points="314,57 326,60 320,70" fill="#dc2626"/>
     <polygon points="305,60 317,63 311,73" fill="#dc2626"/>
     <text x="330" y="80" fill="#dc2626" font-size="13" font-family="sans-serif" font-weight="bold">M_min = p R</text>
-
     <!-- Arco de torsión alrededor del eje -->
     <path d="M 230,110 A 15 15 0 1 1 245,85" fill="none" stroke="#dc2626" stroke-width="2"/>
     <polygon points="248,85 246,76 240,82" fill="#dc2626"/>
-
     <!-- Vector r_p desde el origen -->
     <circle cx="90" cy="160" r="4" fill="#0f172a"/>
     <text x="75" y="175" fill="#0f172a" font-size="12" font-family="sans-serif" font-weight="bold">O</text>

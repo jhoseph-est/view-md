@@ -59,34 +59,27 @@ Cuando un cable anclado entre dos soportes rígidos $A$ y $B$ soporta $n$ fuerza
     <text x="65" y="30" fill="#dc2626" font-size="11" font-family="sans-serif">A_y</text>
     <line x1="60" y1="50" x2="20" y2="50" stroke="#2563eb" stroke-width="2"/>
     <text x="15" y="65" fill="#2563eb" font-size="11" font-family="sans-serif">T_H</text>
-
     <!-- Nudos C y D -->
     <circle cx="210" cy="150" r="4.5" fill="#0f172a"/>
     <text x="200" y="140" fill="#0f172a" font-size="11" font-family="sans-serif" font-weight="bold">C</text>
-    
     <circle cx="410" cy="120" r="4.5" fill="#0f172a"/>
     <text x="400" y="110" fill="#0f172a" font-size="11" font-family="sans-serif" font-weight="bold">D</text>
-
     <!-- Apoyo B -->
     <circle cx="540" cy="70" r="5" fill="#0f172a"/>
     <text x="550" y="70" fill="#0f172a" font-size="12" font-family="sans-serif" font-weight="bold">B</text>
     <line x1="540" y1="70" x2="540" y2="35" stroke="#dc2626" stroke-width="2"/>
     <text x="545" y="45" fill="#dc2626" font-size="11" font-family="sans-serif">B_y</text>
-
     <!-- Tramos de Cable -->
     <line x1="60" y1="50" x2="210" y2="150" stroke="#334155" stroke-width="3"/>
     <line x1="210" y1="150" x2="410" y2="120" stroke="#334155" stroke-width="3"/>
     <line x1="410" y1="120" x2="540" y2="70" stroke="#334155" stroke-width="3"/>
-
     <!-- Fuerzas Concentradas -->
     <line x1="210" y1="150" x2="210" y2="215" stroke="#dc2626" stroke-width="2.5"/>
     <polygon points="206,208 210,218 214,208" fill="#dc2626"/>
     <text x="218" y="210" fill="#dc2626" font-size="12" font-family="sans-serif" font-weight="bold">P1</text>
-
     <line x1="410" y1="120" x2="410" y2="190" stroke="#dc2626" stroke-width="2.5"/>
     <polygon points="406,183 410,193 414,183" fill="#dc2626"/>
     <text x="418" y="185" fill="#dc2626" font-size="12" font-family="sans-serif" font-weight="bold">P2</text>
-
     <!-- Flechas (Cotas y_C) -->
     <line x1="210" y1="50" x2="210" y2="148" stroke="#94a3b8" stroke-dasharray="3,3" stroke-width="1.5"/>
     <text x="215" y="100" fill="#64748b" font-size="11" font-family="sans-serif">y_C</text>

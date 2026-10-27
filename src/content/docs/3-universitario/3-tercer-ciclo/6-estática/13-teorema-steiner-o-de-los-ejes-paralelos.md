@@ -38,34 +38,27 @@ $$
     <line x1="40" y1="210" x2="440" y2="210" stroke="#334155" stroke-width="2"/>
     <polygon points="438,206 448,210 438,214" fill="#334155"/>
     <text x="445" y="225" fill="#334155" font-size="13" font-family="sans-serif">x</text>
-
     <line x1="70" y1="230" x2="70" y2="25" stroke="#334155" stroke-width="2"/>
     <polygon points="66,27 70,17 74,27" fill="#334155"/>
     <text x="50" y="30" fill="#334155" font-size="13" font-family="sans-serif">y</text>
-
     <!-- Origen global O -->
     <circle cx="70" cy="210" r="3.5" fill="#0f172a"/>
     <text x="55" y="225" fill="#0f172a" font-size="12" font-family="sans-serif">O</text>
-
     <!-- Superficie A -->
     <path d="M 180,180 C 160,110 220,60 310,70 C 390,80 410,140 370,185 C 310,210 220,195 180,180 Z" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
-
     <!-- Centroide C -->
     <circle cx="280" cy="130" r="4.5" fill="#dc2626"/>
     <text x="290" y="125" fill="#dc2626" font-size="12" font-family="sans-serif" font-weight="bold">C (x̄, ȳ)</text>
-
     <!-- Ejes centroidales paralelos -->
     <line x1="160" y1="130" x2="400" y2="130" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,4"/>
     <text x="405" y="135" fill="#dc2626" font-size="11" font-family="sans-serif">x̄'</text>
     <line x1="280" y1="200" x2="280" y2="45" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,4"/>
     <text x="285" y="45" fill="#dc2626" font-size="11" font-family="sans-serif">ȳ'</text>
-
     <!-- Cotas de traslación dx y dy -->
     <line x1="70" y1="210" x2="280" y2="210" stroke="#64748b" stroke-width="2"/>
     <text x="170" y="228" fill="#475569" font-size="12" font-family="sans-serif" font-weight="bold">dx</text>
     <line x1="70" y1="210" x2="70" y2="130" stroke="#64748b" stroke-width="2"/>
     <text x="50" y="175" fill="#475569" font-size="12" font-family="sans-serif" font-weight="bold">dy</text>
-
     <!-- Elemento diferencial dA -->
     <rect x="330" y="85" width="16" height="14" fill="#2563eb" rx="2"/>
     <text x="332" y="96" fill="#ffffff" font-size="8" font-family="sans-serif" font-weight="bold">dA</text>
@@ -160,20 +153,16 @@ Consideremos un sistema de coordenadas ortogonales $x'y'$ rotado un ángulo cont
     <text x="385" y="185" fill="#64748b" font-size="12" font-family="sans-serif">x</text>
     <line x1="120" y1="210" x2="120" y2="20" stroke="#64748b" stroke-width="2"/>
     <text x="110" y="25" fill="#64748b" font-size="12" font-family="sans-serif">y</text>
-
     <!-- Origen -->
     <circle cx="120" cy="180" r="4" fill="#0f172a"/>
     <text x="105" y="195" fill="#0f172a" font-size="12" font-family="sans-serif">O</text>
-
     <!-- Ejes rotados x'y' (rotados 30 grados) -->
     <line x1="60" y1="214" x2="360" y2="42" stroke="#2563eb" stroke-width="2.5"/>
     <polygon points="356,38 368,37 362,49" fill="#2563eb"/>
     <text x="375" y="45" fill="#2563eb" font-size="13" font-family="sans-serif" font-weight="bold">x'</text>
-
     <line x1="180" y1="214" x2="55" y2="40" stroke="#2563eb" stroke-width="2.5"/>
     <polygon points="50,44 52,32 62,37" fill="#2563eb"/>
     <text x="45" y="30" fill="#2563eb" font-size="13" font-family="sans-serif" font-weight="bold">y'</text>
-
     <!-- Arco de rotación theta -->
     <path d="M 220,180 A 100 100 0 0 0 206,130" fill="none" stroke="#dc2626" stroke-width="2"/>
     <polygon points="208,128 202,136 211,137" fill="#dc2626"/>
@@ -269,38 +258,28 @@ $$
     <line x1="30" y1="140" x2="490" y2="140" stroke="#334155" stroke-width="2"/>
     <polygon points="488,136 498,140 488,144" fill="#334155"/>
     <text x="470" y="160" fill="#334155" font-size="13" font-family="sans-serif" font-weight="bold">I</text>
-
     <line x1="260" y1="260" x2="260" y2="20" stroke="#334155" stroke-width="2"/>
     <polygon points="256,24 260,14 264,24" fill="#334155"/>
     <text x="240" y="28" fill="#334155" font-size="13" font-family="sans-serif" font-weight="bold">I_xy</text>
-
     <!-- Círculo de Mohr -->
     <circle cx="260" cy="140" r="100" fill="#f8fafc" stroke="#2563eb" stroke-width="2.5"/>
-
     <!-- Centro C -->
     <circle cx="260" cy="140" r="4.5" fill="#dc2626"/>
     <text x="265" y="132" fill="#dc2626" font-size="12" font-family="sans-serif" font-weight="bold">C (I_prom, 0)</text>
-
     <!-- Punto X (Ix, Ixy) y Punto Y (Iy, -Ixy) -->
     <line x1="330" y1="69" x2="190" y2="211" stroke="#64748b" stroke-width="2" stroke-dasharray="3,3"/>
-    
     <circle cx="330" cy="69" r="4" fill="#0f172a"/>
     <text x="340" y="65" fill="#0f172a" font-size="12" font-family="sans-serif" font-weight="bold">X (I_x, I_xy)</text>
-
     <circle cx="190" cy="211" r="4" fill="#0f172a"/>
     <text x="135" y="225" fill="#0f172a" font-size="12" font-family="sans-serif" font-weight="bold">Y (I_y, -I_xy)</text>
-
     <!-- Puntos de corte principales: I_min e I_max -->
     <circle cx="360" cy="140" r="4.5" fill="#16a34a"/>
     <text x="365" y="160" fill="#16a34a" font-size="12" font-family="sans-serif" font-weight="bold">I_max</text>
-
     <circle cx="160" cy="140" r="4.5" fill="#16a34a"/>
     <text x="120" y="160" fill="#16a34a" font-size="12" font-family="sans-serif" font-weight="bold">I_min</text>
-
     <!-- Radio R -->
     <line x1="260" y1="140" x2="330" y2="69" stroke="#7c3aed" stroke-width="2"/>
     <text x="300" y="110" fill="#7c3aed" font-size="12" font-family="sans-serif" font-weight="bold">R</text>
-
     <!-- Ángulo 2θp -->
     <path d="M 290,140 A 30 30 0 0 1 281,118" fill="none" stroke="#dc2626" stroke-width="2"/>
     <text x="295" y="130" fill="#dc2626" font-size="11" font-family="sans-serif" font-weight="bold">2θ_p</text>

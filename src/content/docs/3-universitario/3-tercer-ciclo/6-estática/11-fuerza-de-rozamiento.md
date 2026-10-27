@@ -50,30 +50,24 @@ Cuando un cilindro o rueda de radio $r$ rueda sobre una superficie real deformab
     <!-- Superficie deformada -->
     <line x1="40" y1="160" x2="380" y2="160" stroke="#64748b" stroke-width="2"/>
     <path d="M 170,160 Q 210,168 250,160" fill="none" stroke="#64748b" stroke-width="2"/>
-
     <!-- Rueda -->
     <circle cx="210" cy="85" r="75" fill="#f8fafc" stroke="#334155" stroke-width="3"/>
-    
     <!-- Centro O y Carga Vertical W -->
     <circle cx="210" cy="85" r="4" fill="#0f172a"/>
     <text x="195" y="80" fill="#0f172a" font-size="12" font-family="sans-serif" font-weight="bold">O</text>
     <line x1="210" y1="85" x2="210" y2="15" stroke="#2563eb" stroke-width="2.5"/>
     <polygon points="206,20 210,10 214,20" fill="#2563eb"/>
     <text x="218" y="30" fill="#2563eb" font-size="12" font-family="sans-serif" font-weight="bold">W (o N)</text>
-
     <!-- Fuerza Tractora P -->
     <line x1="210" y1="85" x2="285" y2="85" stroke="#16a34a" stroke-width="2.5"/>
     <polygon points="280,81 290,85 280,89" fill="#16a34a"/>
     <text x="270" y="75" fill="#16a34a" font-size="12" font-family="sans-serif" font-weight="bold">P</text>
-
     <!-- Línea central vertical punteada -->
     <line x1="210" y1="85" x2="210" y2="175" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,3"/>
-
     <!-- Reacción de Contacto R inclinada, desfasada una distancia b -->
     <line x1="235" y1="180" x2="210" y2="85" stroke="#dc2626" stroke-width="2.5"/>
     <polygon points="214,95 210,85 219,89" fill="#dc2626"/>
     <text x="235" y="145" fill="#dc2626" font-size="12" font-family="sans-serif" font-weight="bold">R</text>
-
     <!-- Distancia b -->
     <line x1="210" y1="180" x2="235" y2="180" stroke="#7c3aed" stroke-width="2"/>
     <text x="220" y="195" fill="#7c3aed" font-size="12" font-family="sans-serif" font-weight="bold">b</text>
@@ -109,23 +103,18 @@ Formuladas experimentalmente por Guillaume Amontons (1699) y confirmadas por Cha
     <line x1="50" y1="170" x2="440" y2="170" stroke="#334155" stroke-width="2"/>
     <polygon points="435,167 443,170 435,173" fill="#334155"/>
     <text x="350" y="190" fill="#334155" font-size="12" font-family="sans-serif">Fuerza aplicada P</text>
-
     <line x1="60" y1="180" x2="60" y2="25" stroke="#334155" stroke-width="2"/>
     <polygon points="57,28 60,20 63,28" fill="#334155"/>
     <text x="20" y="30" fill="#334155" font-size="12" font-family="sans-serif">F_r</text>
-
     <!-- Región Estática (Rampa a 45 grados) -->
     <line x1="60" y1="170" x2="220" y2="50" stroke="#2563eb" stroke-width="3"/>
     <text x="110" y="90" fill="#2563eb" font-size="11" font-family="sans-serif" font-weight="bold">F_r = P (Equilibrio estático)</text>
-
     <!-- Punto Crítico de Deslizamiento Inminente -->
     <circle cx="220" cy="50" r="4.5" fill="#dc2626"/>
     <text x="210" y="40" fill="#dc2626" font-size="11" font-family="sans-serif" font-weight="bold">F_max = μ_s N</text>
-
     <!-- Caída y Meseta Cinética -->
     <path d="M 220,50 L 235,75 L 420,75" stroke="#16a34a" stroke-width="3"/>
     <text x="280" y="65" fill="#16a34a" font-size="11" font-family="sans-serif" font-weight="bold">F_k = μ_k N (Cinético)</text>
-
     <!-- Líneas divisorias -->
     <line x1="220" y1="170" x2="220" y2="45" stroke="#94a3b8" stroke-dasharray="3,3" stroke-width="1.5"/>
     <text x="120" y="185" fill="#64748b" font-size="11" font-family="sans-serif">Región Estática</text>
@@ -201,23 +190,19 @@ Las cuñas son máquinas simples utilizadas para levantar cargas pesadas o efect
   <svg width="420" height="190" viewBox="0 0 420 190" xmlns="http://www.w3.org/2000/svg">
     <!-- Pared Vertical -->
     <line x1="60" y1="20" x2="60" y2="170" stroke="#334155" stroke-width="4"/>
-    
     <!-- Bloque A (Carga W) -->
     <polygon points="62,30 180,30 180,110 62,110" fill="#f1f5f9" stroke="#334155" stroke-width="2"/>
     <text x="110" y="75" fill="#0f172a" font-size="13" font-family="sans-serif" font-weight="bold">Bloque A (W)</text>
     <line x1="120" y1="30" x2="120" y2="70" stroke="#dc2626" stroke-width="2.5"/>
     <polygon points="116,65 120,75 124,65" fill="#dc2626"/>
-
     <!-- Cuña B (Ángulo alpha) -->
     <polygon points="62,150 260,150 180,110 62,110" fill="#e2e8f0" stroke="#334155" stroke-width="2"/>
     <text x="130" y="135" fill="#0f172a" font-size="12" font-family="sans-serif" font-weight="bold">Cuña B</text>
     <text x="210" y="145" fill="#64748b" font-size="11" font-family="sans-serif">α</text>
-
     <!-- Fuerza de Empuje P -->
     <line x1="330" y1="130" x2="262" y2="130" stroke="#2563eb" stroke-width="3"/>
     <polygon points="268,126 258,130 268,134" fill="#2563eb"/>
     <text x="310" y="120" fill="#2563eb" font-size="13" font-family="sans-serif" font-weight="bold">P</text>
-
     <!-- Suelo horizontal -->
     <line x1="50" y1="150" x2="350" y2="150" stroke="#334155" stroke-width="3"/>
   </svg>
@@ -289,28 +274,22 @@ En un cojinete de contacto liso que soporta una carga radial $L$ sobre un eje gi
   <svg width="340" height="230" viewBox="0 0 340 230" xmlns="http://www.w3.org/2000/svg">
     <!-- Buje exterior -->
     <circle cx="170" cy="115" r="95" fill="#f8fafc" stroke="#64748b" stroke-width="4"/>
-    
     <!-- Muñón / Eje interior (con holgura exagerada) -->
     <circle cx="180" cy="115" r="80" fill="#ffffff" stroke="#334155" stroke-width="3"/>
-    
     <!-- Centro del eje O -->
     <circle cx="180" cy="115" r="4" fill="#0f172a"/>
     <text x="185" y="110" fill="#0f172a" font-size="12" font-family="sans-serif">O</text>
-
     <!-- Sentido de giro horario -->
     <path d="M 155,80 A 35 35 0 0 1 205,80" fill="none" stroke="#7c3aed" stroke-width="2.5"/>
     <polygon points="203,74 211,83 200,84" fill="#7c3aed"/>
     <text x="180" y="70" fill="#7c3aed" font-size="12" font-family="sans-serif" font-weight="bold">ω</text>
-
     <!-- Carga Radial L hacia abajo -->
     <line x1="180" y1="115" x2="180" y2="185" stroke="#2563eb" stroke-width="3"/>
     <polygon points="176,180 180,190 184,180" fill="#2563eb"/>
     <text x="188" y="180" fill="#2563eb" font-size="13" font-family="sans-serif" font-weight="bold">L</text>
-
     <!-- Círculo de Fricción rf = r * sin(phi_k) -->
     <circle cx="180" cy="115" r="28" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="3,3"/>
     <text x="212" y="125" fill="#dc2626" font-size="10" font-family="sans-serif">r_f</text>
-
     <!-- Reacción de Contacto R tangente al círculo de fricción -->
     <line x1="152" y1="180" x2="152" y2="50" stroke="#dc2626" stroke-width="2.5"/>
     <polygon points="148,55 152,45 156,55" fill="#dc2626"/>
@@ -385,18 +364,15 @@ Modela la amplificación y retención de tensiones cuando una correa flexible ro
     <!-- Polea Circular -->
     <circle cx="180" cy="110" r="70" fill="#f1f5f9" stroke="#334155" stroke-width="3"/>
     <circle cx="180" cy="110" r="4" fill="#0f172a"/>
-
     <!-- Arco de Contacto Beta -->
     <path d="M 180,40 A 70 70 0 0 1 250,110" fill="none" stroke="#7c3aed" stroke-width="4"/>
     <line x1="180" y1="110" x2="180" y2="40" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="3,3"/>
     <line x1="180" y1="110" x2="250" y2="110" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="3,3"/>
     <text x="200" y="85" fill="#7c3aed" font-size="13" font-family="sans-serif" font-weight="bold">β</text>
-
     <!-- Banda T2 (Tensión Alta) -->
     <line x1="250" y1="110" x2="250" y2="200" stroke="#dc2626" stroke-width="3.5"/>
     <polygon points="246,190 250,202 254,190" fill="#dc2626"/>
     <text x="260" y="180" fill="#dc2626" font-size="14" font-family="sans-serif" font-weight="bold">T_2 (Mayor)</text>
-
     <!-- Banda T1 (Tensión Baja) -->
     <line x1="180" y1="40" x2="60" y2="40" stroke="#2563eb" stroke-width="2.5"/>
     <polygon points="70,36 58,40 70,44" fill="#2563eb"/>

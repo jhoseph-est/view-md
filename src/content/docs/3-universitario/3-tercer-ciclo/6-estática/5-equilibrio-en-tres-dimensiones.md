@@ -48,7 +48,6 @@ La regla física fundamental para modelar vínculos en el espacio establece que:
     <polygon points="146,155 158,158 152,148" fill="#dc2626"/>
     <text x="160" y="160" fill="#dc2626" font-size="11" font-family="sans-serif" font-weight="bold">R_y</text>
     <text x="110" y="195" fill="#475569" font-size="10" font-family="sans-serif" text-anchor="middle">2 incógnitas de fuerza</text>
-
     <!-- Rótula Esférica (Ball and Socket) -->
     <rect x="230" y="25" width="160" height="185" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
     <text x="310" y="48" fill="#0f172a" font-size="12" font-family="sans-serif" font-weight="bold" text-anchor="middle">Rótula Esférica</text>
@@ -65,7 +64,6 @@ La regla física fundamental para modelar vínculos en el espacio establece que:
     <polygon points="274,148 266,158 278,154" fill="#2563eb"/>
     <text x="255" y="165" fill="#2563eb" font-size="11" font-family="sans-serif" font-weight="bold">R_y</text>
     <text x="310" y="195" fill="#475569" font-size="10" font-family="sans-serif" text-anchor="middle">3 incógnitas de fuerza</text>
-
     <!-- Empotramiento Espacial Completo -->
     <rect x="430" y="25" width="160" height="185" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
     <text x="510" y="48" fill="#0f172a" font-size="12" font-family="sans-serif" font-weight="bold" text-anchor="middle">Empotramiento Fijo</text>

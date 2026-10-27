@@ -44,22 +44,17 @@ Sea un diferencial de masa $dm = \rho \, dV$ localizado en la posición tridimen
     <line x1="80" y1="180" x2="400" y2="180" stroke="#334155" stroke-width="2"/>
     <polygon points="398,176 408,180 398,184" fill="#334155"/>
     <text x="405" y="195" fill="#334155" font-size="13" font-family="sans-serif">y</text>
-
     <line x1="80" y1="180" x2="80" y2="25" stroke="#334155" stroke-width="2"/>
     <polygon points="76,27 80,17 84,27" fill="#334155"/>
     <text x="70" y="25" fill="#334155" font-size="13" font-family="sans-serif">z</text>
-
     <line x1="80" y1="180" x2="25" y2="225" stroke="#334155" stroke-width="2"/>
     <polygon points="23,220 20,230 30,227" fill="#334155"/>
     <text x="15" y="225" fill="#334155" font-size="13" font-family="sans-serif">x</text>
-
     <!-- Sólido 3D -->
     <path d="M 160,140 C 130,80 200,40 290,50 C 370,60 390,120 340,160 C 280,185 190,170 160,140 Z" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
-
     <!-- Diferencial dm -->
     <rect x="250" y="90" width="18" height="18" fill="#dc2626" rx="3"/>
     <text x="252" y="103" fill="#ffffff" font-size="9" font-family="sans-serif" font-weight="bold">dm</text>
-
     <!-- Distancia al eje z: r_z = sqrt(x^2 + y^2) -->
     <line x1="80" y1="99" x2="250" y2="99" stroke="#7c3aed" stroke-width="2" stroke-dasharray="3,3"/>
     <text x="140" y="90" fill="#7c3aed" font-size="11" font-family="sans-serif" font-weight="bold">r_z = √(x² + y²)</text>

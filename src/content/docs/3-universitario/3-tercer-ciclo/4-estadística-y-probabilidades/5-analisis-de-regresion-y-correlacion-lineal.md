@@ -52,24 +52,19 @@ Para que los estimadores obtenidos por **Mínimos Cuadrados Ordinarios (MCO)** s
     <line x1="40" y1="170" x2="40" y2="20" stroke="#64748b" stroke-width="2" />
     <text x="495" y="175" fill="#64748b" font-size="12" font-family="sans-serif">X</text>
     <text x="35" y="15" fill="#64748b" font-size="12" font-family="sans-serif">Y</text>
-    
     <!-- Recta de regresión -->
     <line x1="60" y1="150" x2="460" y2="40" stroke="#2563eb" stroke-width="3" />
     <text x="400" y="30" fill="#2563eb" font-size="12" font-weight="bold" font-family="sans-serif">E[Y|X] = β₀ + β₁X</text>
-
     <!-- Curvas de densidad normal en 3 puntos X (Homocedasticidad) -->
     <!-- X1 = 140, Y_hat = 128 -->
     <path d="M 140 128 C 115 128, 115 105, 140 90 C 165 75, 165 128, 140 128" fill="#93c5fd" opacity="0.4" stroke="#1d4ed8" stroke-width="1.5"/>
     <circle cx="140" cy="128" r="3" fill="#1e40af" />
-    
     <!-- X2 = 260, Y_hat = 95 -->
     <path d="M 260 95 C 235 95, 235 72, 260 57 C 285 42, 285 95, 260 95" fill="#93c5fd" opacity="0.4" stroke="#1d4ed8" stroke-width="1.5"/>
     <circle cx="260" cy="95" r="3" fill="#1e40af" />
-
     <!-- X3 = 380, Y_hat = 62 -->
     <path d="M 380 62 C 355 62, 355 39, 380 24 C 405 9, 405 62, 380 62" fill="#93c5fd" opacity="0.4" stroke="#1d4ed8" stroke-width="1.5"/>
     <circle cx="380" cy="62" r="3" fill="#1e40af" />
-
     <text x="210" y="190" fill="#334155" font-size="11" font-family="sans-serif">Varianzas idénticas: σ² constante en todo el dominio</text>
   </svg>
 </div>
