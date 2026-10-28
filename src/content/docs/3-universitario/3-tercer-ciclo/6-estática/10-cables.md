@@ -135,7 +135,7 @@ Este modelo describe con precisión analítica puentes colgantes donde la plataf
 flowchart LR
     w0[Carga Uniforme en Proyección Horizontal w0 N/m] --> DifEquil[Ecuación Diferencial dy/dx = w0 x / TH]
     DifEquil --> Int1[Perfil Geométrico: Parábola de 2do Grado]
-    Int1 --> Tension[Tensión Total Variable: T = √(TH² + w0² x²)]
+    Int1 --> Tension["Tensión Total Variable: T = √(TH² + w0² x²)"]
     Tension --> Longitud[Desarrollo en Serie de la Longitud del Cable S]
 ```
 
@@ -147,7 +147,6 @@ Tomando un elemento diferencial de cable de longitud horizontal proyectada $dx$:
   <svg width="420" height="190" viewBox="0 0 420 190" xmlns="http://www.w3.org/2000/svg">
     <!-- Tramo curvo diferencial -->
     <path d="M 120,130 Q 210,100 300,50" fill="none" stroke="#334155" stroke-width="3"/>
-    
     <!-- Carga w0 distribuida -->
     <line x1="160" y1="20" x2="160" y2="85" stroke="#0284c7" stroke-width="1.5"/>
     <polygon points="157,80 160,88 163,80" fill="#0284c7"/>
@@ -156,17 +155,14 @@ Tomando un elemento diferencial de cable de longitud horizontal proyectada $dx$:
     <line x1="260" y1="20" x2="260" y2="45" stroke="#0284c7" stroke-width="1.5"/>
     <polygon points="257,40 260,48 263,40" fill="#0284c7"/>
     <text x="210" y="15" fill="#0284c7" font-size="12" font-family="sans-serif" text-anchor="middle">w_0 dx</text>
-
     <!-- Tensión izquierda T -->
     <line x1="120" y1="130" x2="60" y2="155" stroke="#dc2626" stroke-width="2.5"/>
     <polygon points="66,156 54,158 61,148" fill="#dc2626"/>
     <text x="50" y="145" fill="#dc2626" font-size="12" font-family="sans-serif" font-weight="bold">T</text>
-
     <!-- Tensión derecha T + dT -->
     <line x1="300" y1="50" x2="370" y2="15" stroke="#dc2626" stroke-width="2.5"/>
     <polygon points="364,22 376,12 370,26" fill="#dc2626"/>
     <text x="360" y="38" fill="#dc2626" font-size="12" font-family="sans-serif" font-weight="bold">T + dT</text>
-
     <!-- Triángulo diferencial dx, dy -->
     <line x1="120" y1="130" x2="300" y2="130" stroke="#94a3b8" stroke-width="1" stroke-dasharray="2,2"/>
     <line x1="300" y1="130" x2="300" y2="50" stroke="#94a3b8" stroke-width="1" stroke-dasharray="2,2"/>
