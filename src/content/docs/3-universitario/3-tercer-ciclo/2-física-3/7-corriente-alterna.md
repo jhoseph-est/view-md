@@ -437,10 +437,10 @@ Para corregir el factor de potencia de una carga inductiva inicial desde $\cos\p
 
 ```mermaid
 flowchart LR
-    A[Red de Alimentación V] --> B[Nodo de Conexión]
-    B -->|Corriente Total Optimizada I_2| C[Carga Inductiva: P + jQ_1]
-    B -->|Corriente Capacitiva I_C| D[Banco de Condensadores: -jQ_c]
-    Note over B: La potencia activa P permanece invariante
+    A[Red de Alimentación V] --> B[Nodo de Conexión]
+    B -->|Corriente Total Optimizada I_2| C[Carga Inductiva: P + jQ_1]
+    B -->|Corriente Capacitiva I_C| D[Banco de Condensadores: -jQ_c]
+    %% La potencia activa P permanece invariante
 ```
 
 #### Deducción Analítica del Banco de Condensadores:

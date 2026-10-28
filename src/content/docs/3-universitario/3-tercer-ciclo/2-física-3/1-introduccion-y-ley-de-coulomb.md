@@ -33,13 +33,13 @@ La **carga eléctrica ($q, Q$)** es una propiedad intrínseca fundamental de la 
 
 ```mermaid
 flowchart LR
-    subgraph Repulsión
-        A((+q1)) <-- F12 --- B((+q2))
-        C((-q1)) <-- F12 --- D((-q2))
-    end
-    subgraph Atracción
-        E((+q1)) --- F12 --> G((-q2))
-    end
+    subgraph Repulsión
+        B((+q2)) -->|F12| A((+q1))
+        D(("-q2")) -->|F12| C(("-q1"))
+    end
+    subgraph Atracción
+        E((+q1)) --|F12|--> G(("-q2"))
+    end
 ```
 
 ---
