@@ -4,7 +4,7 @@
   position: relative !important;
   margin: 1.75rem 0;
   border-radius: var(--radius-md, 8px);
-  border: 1px solid var(--code-border-color);
+  border: 1px solid var(--code-border-color, var(--border-color));
   overflow: hidden;
   background: transparent !important;
   transition: border-color 0.25s ease;
@@ -77,7 +77,7 @@
   color: #ffffff !important;
 }
 
-/* Área interna de código (Shiki) */
+/* Área interna de código (Shiki toma fondo y tipografía nativa de las variables del tema) */
 .main-content pre.astro-code {
   margin: 0 !important;
   padding: 1.25rem 1.4rem !important;
@@ -85,22 +85,7 @@
   border-radius: 0 !important;
   overflow-x: auto !important;
   tab-size: 4 !important;
-}
-
-html[data-modo="claro"] pre.astro-code {
-  background-color: var(--shiki-light-bg) !important;
-  color: var(--shiki-light) !important;
-}
-html[data-modo="claro"] pre.astro-code code span {
-  color: var(--shiki-light) !important;
-}
-
-html[data-modo="oscuro"] pre.astro-code {
-  background-color: var(--shiki-dark-bg) !important;
-  color: var(--shiki-dark) !important;
-}
-html[data-modo="oscuro"] pre.astro-code code span {
-  color: var(--shiki-dark) !important;
+  background-color: var(--code-bg, var(--bg-codigo-inline, #1e1e1e)) !important;
 }
 
 .code-block-wrapper pre code,
