@@ -11,6 +11,8 @@ orden: 7
 
 Una estructura es un ensamblaje físico de elementos mecánicos interconectados, diseñado para soportar cargas exteriores aplicadas y transmitirlas con seguridad a los cimientos o apoyos.
 
+---
+
 ```mermaid
 graph TD
     SE[Sistemas Estructurales Planos] --> ARM[Armaduras Articuladas / Cerchas]
@@ -125,6 +127,8 @@ $$
 
 Dado que cada nudo proporciona exactamente 2 ecuaciones de equilibrio lineal independiente, el proceso de cálculo secuencial exige iniciar en un nudo que contenga **como máximo dos incógnitas desconocidas** (y al menos una fuerza externa o reacción conocida).
 
+---
+
 ```mermaid
 flowchart TD
     Inicio[1. Resolver Reacciones Externas Globales Ax, Ay, By] --> SelecNudo[2. Localizar Nudo con <= 2 incógnitas de barra]
@@ -136,6 +140,8 @@ flowchart TD
     Restantes -- Sí --> SelecNudo
     Restantes -- No --> Fin[7. Armadura Completamente Determinada]
 ```
+
+---
 
 #### Protocolo de Ejecución:
 1. **DCL del Nudo:** Dibujar el nudo como un punto aislado. Representar todas las fuerzas externas activas o reactivas que inciden en él.

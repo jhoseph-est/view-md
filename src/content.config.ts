@@ -18,7 +18,7 @@ const docs = defineCollection({
     
     // --- Control de Temas y Diapositivas ---
     theme: z.string().optional(),       // ID del tema web
-    slides: z.boolean().default(false), // Habilitar vista Reveal.js
+    slides: z.boolean().default(true), // Habilitar vista Reveal.js
 
     // --- Metadatos de Estudio / Apuntes ---
     curso: z.string().optional(),

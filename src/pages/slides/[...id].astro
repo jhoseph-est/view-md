@@ -106,7 +106,6 @@ const textLight = temaConfig?.claro?.textos?.principal || '#0f172a';
     }
 
     async function initSlides() {
-      // Marcar los bloques para evitar que KaTeX los altere
       document.querySelectorAll('.reveal pre code').forEach((el) => {
         const txt = el.textContent || '';
         if (
@@ -154,7 +153,6 @@ const textLight = temaConfig?.claro?.textos?.principal || '#0f172a';
       let mermaidInstance: any = null;
 
       async function renderSlidesMermaid() {
-        // Seleccionamos los bloques de código mermaid de las diapositivas
         const codeElements = Array.from(document.querySelectorAll('.reveal pre code'));
         
         const targets = codeElements.filter(el => {
@@ -174,7 +172,13 @@ const textLight = temaConfig?.claro?.textos?.principal || '#0f172a';
             startOnLoad: false,
             look: 'classic',
             theme: 'base',
-            htmlLabels: true,
+            flowchart: {
+              htmlLabels: true,
+              padding: 14,
+              nodeSpacing: 45,
+              rankSpacing: 45,
+              curve: 'basis'
+            },
             themeVariables: { 
               background: 'transparent',
               fontFamily: 'system-ui, -apple-system, sans-serif',
@@ -182,6 +186,15 @@ const textLight = temaConfig?.claro?.textos?.principal || '#0f172a';
             }
           });
         }
+
+        // Validación numérica estricta: descarta pan-x, pan-y o cadenas no dimensionales
+        const parseSlideDimension = (val: string | null | undefined): string | null => {
+          if (!val) return null;
+          const clean = val.trim();
+          const match = clean.match(/^(\d+(?:\.\d+)?)(px|%|vh|vw)?$/i);
+          if (!match) return null;
+          return `${match[1]}${match[2] || 'px'}`;
+        };
 
         for (const [idx, codeEl] of targets.entries()) {
           const pre = codeEl.closest('pre');
@@ -191,17 +204,25 @@ const textLight = temaConfig?.claro?.textos?.principal || '#0f172a';
           const code = (codeEl.textContent || '').trim();
           if (!code) continue;
 
-          const layoutMatch = code.match(/%%layout:\s*(fit|pan-x|pan-y)\s*%%/i);
-          const widthMatch = code.match(/%%width:\s*(\d+(?:px|%)?)\s*%%/i);
-          const heightMatch = code.match(/%%height:\s*(\d+(?:px|%)?)\s*%%/i);
+          const widthSMatch = code.match(/%%width-s:\s*([^\s%]+)\s*%%/i);
+          const heightSMatch = code.match(/%%height-s:\s*([^\s%]+)\s*%%/i);
 
-          const hasCustomDimensions = Boolean(widthMatch || heightMatch || (layoutMatch && layoutMatch[1].toLowerCase() !== 'fit'));
+          const generalWidthMatch = code.match(/%%width:\s*([^\s%]+)\s*%%/i);
+          const generalHeightMatch = code.match(/%%height:\s*([^\s%]+)\s*%%/i);
+
+          const rawWidthS = widthSMatch ? widthSMatch[1] : (generalWidthMatch ? generalWidthMatch[1] : null);
+          const rawHeightS = heightSMatch ? heightSMatch[1] : (generalHeightMatch ? generalHeightMatch[1] : null);
+
+          const parsedWidthS = parseSlideDimension(rawWidthS);
+          const parsedHeightS = parseSlideDimension(rawHeightS);
+
+          const hasCustomDimensions = Boolean(parsedWidthS || parsedHeightS);
 
           let cleanCode = code
             .replace(/%%layout:.*?%%/gi, '')
-            .replace(/%%width:.*?%%/gi, '')
+            .replace(/%%width(-[nsa])?:.*?%%/gi, '')
+            .replace(/%%height(-[nsa])?:.*?%%/gi, '')
             .replace(/%%max-width:.*?%%/gi, '')
-            .replace(/%%height:.*?%%/gi, '')
             .trim();
 
           const hasCustomConfig = cleanCode.includes('%%{init') || cleanCode.startsWith('---');
@@ -215,7 +236,7 @@ const textLight = temaConfig?.claro?.textos?.principal || '#0f172a';
             let initConfig = { ...baseConfig };
 
             if (isGantt) {
-              const numericWidth = widthMatch ? parseInt(widthMatch[1], 10) : 1200;
+              const numericWidth = parsedWidthS && !parsedWidthS.includes('%') && !parsedWidthS.includes('vw') ? parseInt(parsedWidthS, 10) : 1200;
               initConfig = {
                 ...baseConfig,
                 gantt: {
@@ -236,12 +257,34 @@ const textLight = temaConfig?.claro?.textos?.principal || '#0f172a';
 
             const scrollBox = document.createElement('div');
             scrollBox.className = 'slide-mermaid-scroll-box';
-            
-            // Si el diagrama es grande o tiene dimensiones personalizadas, activamos el scroll interno controlado
+
+            scrollBox.innerHTML = svg;
+
+            const svgEl = scrollBox.querySelector('svg');
+            if (svgEl) {
+              svgEl.setAttribute('preserveAspectRatio', 'xMidYMin meet');
+              svgEl.removeAttribute('height');
+              svgEl.style.removeProperty('height');
+
+              if (parsedWidthS) {
+                svgEl.style.setProperty('width', parsedWidthS, 'important');
+                svgEl.style.setProperty('min-width', parsedWidthS, 'important');
+                svgEl.style.setProperty('max-width', 'none', 'important');
+              }
+              if (parsedHeightS) {
+                svgEl.style.setProperty('height', parsedHeightS, 'important');
+                svgEl.style.setProperty('min-height', parsedHeightS, 'important');
+                svgEl.style.setProperty('max-height', 'none', 'important');
+                if (!parsedWidthS) {
+                  svgEl.style.setProperty('max-width', 'none', 'important');
+                  svgEl.style.setProperty('width', 'auto', 'important');
+                }
+              }
+            }
+
             if (hasCustomDimensions || isGantt) {
               scrollBox.classList.add('has-scroll');
             }
-            scrollBox.innerHTML = svg;
 
             scrollBox.addEventListener('wheel', (e: WheelEvent) => {
               if (scrollBox.classList.contains('has-scroll')) {
@@ -254,19 +297,6 @@ const textLight = temaConfig?.claro?.textos?.principal || '#0f172a';
                 e.stopPropagation();
               }
             }, { passive: true });
-
-            const svgEl = scrollBox.querySelector('svg');
-            if (svgEl) {
-              if (widthMatch) {
-                const w = widthMatch[1].endsWith('%') || widthMatch[1].endsWith('px') ? widthMatch[1] : `${widthMatch[1]}px`;
-                svgEl.style.width = w;
-                svgEl.style.minWidth = w;
-              }
-              if (heightMatch) {
-                const h = heightMatch[1].endsWith('%') || heightMatch[1].endsWith('px') ? heightMatch[1] : `${heightMatch[1]}px`;
-                svgEl.style.height = h;
-              }
-            }
 
             pre.replaceWith(scrollBox);
 

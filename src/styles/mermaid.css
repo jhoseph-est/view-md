@@ -1,6 +1,7 @@
 /* src/styles/mermaid.css */
 /* ==========================================================================
-   ESTRUCTURA DEL VISOR Y TOKENS PARA MERMAID
+   ESTRUCTURA DEL VISOR Y CONTENCIÓN DE MERMAID
+   (Centrado integral y control dimensional)
    ========================================================================== */
 
 /* --- 1. ESTRUCTURA Y TOOLBAR FLOTANTE --- */
@@ -25,7 +26,6 @@
   top: 0.5rem;
   right: 0.5rem;
   display: flex;
-  gap: 0.35rem;
   z-index: 10;
   opacity: 0;
   transform: translateY(-4px);
@@ -34,7 +34,7 @@
   backdrop-filter: blur(6px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
-  padding: 0.25rem;
+  padding: 0.2rem;
 }
 
 .mermaid-wrapper:hover .mermaid-toolbar {
@@ -47,11 +47,14 @@
   border: none;
   color: #f8fafc;
   cursor: pointer;
-  padding: 0.25rem 0.45rem;
+  padding: 0.25rem 0.5rem;
   border-radius: 4px;
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   font-family: inherit;
-  transition: background-color 0.15s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s, color 0.15s;
 }
 
 .mermaid-tool-btn:hover {
@@ -59,306 +62,137 @@
   color: #c4b5fd;
 }
 
+/* Viewport en vista normal con centrado completo */
 .mermaid-viewport {
   width: 100%;
-  padding: 1.5rem 1rem;
+  padding: 1.25rem 1rem;
   box-sizing: border-box;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #8b5cf6 rgba(255, 255, 255, 0.08);
 }
 
+/* Comportamiento base del SVG en docs */
 .mermaid-viewport svg {
   display: block;
   max-width: 100%;
-  height: auto !important;
-  overflow: visible !important;
+  height: auto;
+  margin: auto;
 }
 
-/* ==========================================================================
-   2. MATRIZ DE VARIABLES PARA MERMAID (Leídas por getComputedStyle)
-   Sincronizado con data-estilo y data-modo de variables.css
-   ========================================================================== */
-
-/* --------------------------------------------------------------------------
-   ESTILO 1: MODERNO
-   -------------------------------------------------------------------------- */
-html[data-estilo="moderno"][data-modo="oscuro"] {
-  --mm-node-bg: #1e293b;
-  --mm-node-border: #38bdf8;
-  --mm-line-color: #38bdf8;
-  --mm-text-color: #f8fafc;
-  --mm-header-bg: #0f172a;
-  --mm-label-bg: #0f172a;
-  --mm-cluster-bg: #0f172a;
-  --mm-cluster-border: #334155;
-
-  /* Sequence */
-  --mm-actor-bg: #1e293b;
-  --mm-actor-border: #38bdf8;
-  --mm-note-bg: #4c1d95;
-  --mm-note-border: #a855f7;
-
-  /* Gantt */
-  --mm-gantt-done: #10b981;
-  --mm-gantt-active: #38bdf8;
-  --mm-gantt-crit: #ef4444;
-
-  /* Quadrant */
-  --mm-quad-border: #38bdf8;
-  --mm-quad-line: #38bdf8;
-  --mm-q1: rgba(56, 189, 248, 0.15);
-  --mm-q2: rgba(16, 185, 129, 0.15);
-  --mm-q3: rgba(244, 63, 94, 0.15);
-  --mm-q4: rgba(234, 179, 8, 0.15);
-
-  /* Git & Pie */
-  --mm-git-1: #38bdf8;
-  --mm-git-2: #a855f7;
-  --mm-git-3: #10b981;
-  --mm-git-4: #f59e0b;
-  --mm-pie-1: #38bdf8;
-  --mm-pie-2: #10b981;
-  --mm-pie-3: #f59e0b;
-}
-
-html[data-estilo="moderno"][data-modo="claro"] {
-  --mm-node-bg: #f8fafc;
-  --mm-node-border: #0ea5e9;
-  --mm-line-color: #0284c7;
-  --mm-text-color: #0f172a;
-  --mm-header-bg: #e0f2fe;
-  --mm-label-bg: #ffffff;
-  --mm-cluster-bg: #f1f5f9;
-  --mm-cluster-border: #cbd5e1;
-
-  /* Sequence */
-  --mm-actor-bg: #f8fafc;
-  --mm-actor-border: #0ea5e9;
-  --mm-note-bg: #fdf4ff;
-  --mm-note-border: #c084fc;
-
-  /* Gantt */
-  --mm-gantt-done: #059669;
-  --mm-gantt-active: #0284c7;
-  --mm-gantt-crit: #dc2626;
-
-  /* Quadrant */
-  --mm-quad-border: #0ea5e9;
-  --mm-quad-line: #0ea5e9;
-  --mm-q1: rgba(14, 165, 233, 0.15);
-  --mm-q2: rgba(34, 197, 94, 0.15);
-  --mm-q3: rgba(239, 68, 68, 0.15);
-  --mm-q4: rgba(245, 158, 11, 0.15);
-
-  /* Git & Pie */
-  --mm-git-1: #0284c7;
-  --mm-git-2: #7c3aed;
-  --mm-git-3: #059669;
-  --mm-git-4: #d97706;
-  --mm-pie-1: #0284c7;
-  --mm-pie-2: #059669;
-  --mm-pie-3: #d97706;
-}
-
-/* --------------------------------------------------------------------------
-   ESTILO 2: ACADÉMICO
-   -------------------------------------------------------------------------- */
-html[data-estilo="academico"][data-modo="oscuro"] {
-  --mm-node-bg: #292524;
-  --mm-node-border: #57534e;
-  --mm-line-color: #a8a29e;
-  --mm-text-color: #f3efe6;
-  --mm-header-bg: #1c1815;
-  --mm-label-bg: #1c1815;
-  --mm-note-bg: #451a03;
-  --mm-note-border: #b45309;
-
-  --mm-quad-border: #78716c;
-  --mm-quad-line: #57534e;
-  --mm-q1: rgba(254, 243, 199, 0.08);
-  --mm-q2: rgba(253, 230, 138, 0.08);
-  --mm-q3: rgba(251, 191, 36, 0.08);
-  --mm-q4: rgba(245, 158, 11, 0.08);
-
-  --mm-git-1: #f59e0b;
-  --mm-git-2: #818cf8;
-  --mm-git-3: #bef264;
-  --mm-git-4: #fdba74;
-
-  --mm-pie-1: #b45309;
-  --mm-pie-2: #4d7c0f;
-  --mm-pie-3: #d97706;
-}
-
-html[data-estilo="academico"][data-modo="claro"] {
-  --mm-node-bg: #f5f5f4;
-  --mm-node-border: #d6d3d1;
-  --mm-line-color: #78350f;
-  --mm-text-color: #2c221e;
-  --mm-header-bg: #f4efdf;
-  --mm-label-bg: #ffffff;
-  --mm-note-bg: #fef3c7;
-  --mm-note-border: #d97706;
-
-  --mm-quad-border: #a8a29e;
-  --mm-quad-line: #d6d3d1;
-  --mm-q1: rgba(120, 53, 15, 0.06);
-  --mm-q2: rgba(146, 64, 14, 0.06);
-  --mm-q3: rgba(180, 83, 9, 0.06);
-  --mm-q4: rgba(217, 119, 6, 0.06);
-
-  --mm-git-1: #78350f;
-  --mm-git-2: #4338ca;
-  --mm-git-3: #4d7c0f;
-  --mm-git-4: #9a3412;
-
-  --mm-pie-1: #92400e;
-  --mm-pie-2: #4d7c0f;
-  --mm-pie-3: #b45309;
-}
-
-/* --------------------------------------------------------------------------
-   ESTILO 3: MINIMALISTA
-   -------------------------------------------------------------------------- */
-html[data-estilo="minimalista"][data-modo="oscuro"] {
-  --mm-node-bg: #000000;
-  --mm-node-border: #525252;
-  --mm-line-color: #a3a3a3;
-  --mm-text-color: #ffffff;
-  --mm-header-bg: #0a0a0a;
-  --mm-label-bg: #000000;
-  --mm-note-bg: #171717;
-  --mm-note-border: #404040;
-
-  --mm-quad-border: #525252;
-  --mm-quad-line: #262626;
-  --mm-q1: rgba(255, 255, 255, 0.03);
-  --mm-q2: rgba(255, 255, 255, 0.06);
-  --mm-q3: rgba(255, 255, 255, 0.01);
-  --mm-q4: rgba(255, 255, 255, 0.04);
-
-  --mm-git-1: #ffffff;
-  --mm-git-2: #a3a3a3;
-  --mm-git-3: #737373;
-  --mm-git-4: #525252;
-
-  --mm-pie-1: #ffffff;
-  --mm-pie-2: #a3a3a3;
-  --mm-pie-3: #525252;
-}
-
-html[data-estilo="minimalista"][data-modo="claro"] {
-  --mm-node-bg: #ffffff;
-  --mm-node-border: #a3a3a3;
-  --mm-line-color: #000000;
-  --mm-text-color: #000000;
-  --mm-header-bg: #fafafa;
-  --mm-label-bg: #ffffff;
-  --mm-note-bg: #f5f5f5;
-  --mm-note-border: #a3a3a3;
-
-  --mm-quad-border: #a3a3a3;
-  --mm-quad-line: #d4d4d4;
-  --mm-q1: rgba(0, 0, 0, 0.03);
-  --mm-q2: rgba(0, 0, 0, 0.06);
-  --mm-q3: rgba(0, 0, 0, 0.01);
-  --mm-q4: rgba(0, 0, 0, 0.04);
-
-  --mm-git-1: #000000;
-  --mm-git-2: #525252;
-  --mm-git-3: #737373;
-  --mm-git-4: #a3a3a3;
-
-  --mm-pie-1: #18181b;
-  --mm-pie-2: #71717a;
-  --mm-pie-3: #d4d4d8;
-}
-
-/* ==========================================================
-   3. MODAL DE AMPLIACIÓN
-   ========================================================== */
-.global-modal-body {
+/* Cuando tiene dimensiones explícitas (width-n o height-n) */
+.mermaid-wrapper.has-custom-dims .mermaid-viewport {
   display: flex !important;
-  overflow: auto !important;
-  padding: 2.5rem !important;
-  box-sizing: border-box !important;
-  width: 100% !important;
-  height: 100% !important;
+  align-items: safe center !important;
+  justify-content: safe center !important;
+  max-height: 78vh;
 }
 
-.mermaid-modal-body {
-  display: flex !important;
+.mermaid-wrapper.has-custom-dims .mermaid-viewport svg {
+  max-width: none !important;
+  max-height: none !important;
+  display: block !important;
   margin: auto !important;
   flex-shrink: 0 !important;
 }
 
-.mermaid-modal-body svg {
-  flex-shrink: 0 !important;
+/* Aislamiento tipográfico */
+.mermaid-viewport svg foreignObject,
+.mermaid-viewport svg foreignObject div,
+.mermaid-viewport svg .nodeLabel,
+.mermaid-viewport svg .edgeLabel,
+.mermaid-viewport svg .cluster-label {
+  line-height: 1.25 !important;
+  font-family: system-ui, -apple-system, sans-serif !important;
 }
 
-/* Layouts del modal */
-.modal-layout-fit {
-  width: 100% !important;
-  height: 100% !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-.modal-layout-fit svg {
-  max-width: 100% !important;
-  max-height: 100% !important;
-  width: auto !important;
-  height: auto !important;
+.mermaid-viewport svg foreignObject p,
+.mermaid-viewport svg foreignObject span,
+.mermaid-viewport svg .nodeLabel p,
+.mermaid-viewport svg .nodeLabel span {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.25 !important;
 }
 
-.modal-layout-pan-y {
-  height: 100% !important;
-  width: auto !important;
-  align-items: center !important;
-}
-.modal-layout-pan-y svg {
-  height: 100% !important;
-  min-height: 100% !important;
-  max-height: 100% !important;
-  width: auto !important;
-  max-width: none !important;
-  min-width: auto !important;
+.mermaid-viewport::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
 }
 
-.modal-layout-pan-x {
-  width: 100% !important;
-  height: auto !important;
-  justify-content: center !important;
-}
-.modal-layout-pan-x svg {
-  width: 100% !important;
-  min-width: 100% !important;
-  max-width: 100% !important;
-  height: auto !important;
-  max-height: none !important;
-  min-height: auto !important;
+.mermaid-viewport::-webkit-scrollbar-thumb {
+  background: #8b5cf6;
+  border-radius: 4px;
 }
 
 /* ==========================================================
-   4. TIPOGRAFÍA, CENTRADO Y SELECCIÓN
+   2. MODAL DE AMPLIACIÓN (GLOBAL MODAL)
    ========================================================== */
-.mermaid-wrapper svg foreignObject div,
-.mermaid-wrapper svg .nodeLabel,
-.mermaid-wrapper svg .edgeLabel,
-.mermaid-wrapper svg .cluster-label,
-.mermaid-viewport svg foreignObject p,
-.mermaid-viewport svg foreignObject span {
-  text-align: center !important;
-  justify-content: center !important;
+.global-modal-body {
+  display: flex !important;
+  overflow: auto !important;
+  padding: 1.5rem !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  height: 100% !important;
+  scrollbar-width: thin;
+  scrollbar-color: #8b5cf6 rgba(255, 255, 255, 0.08);
+}
+
+.mermaid-modal-body {
+  margin: auto !important;
+  display: flex !important;
   align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
 }
 
-.mermaid-wrapper svg .nodeLabel p,
-.mermaid-wrapper svg .nodeLabel span {
-  text-align: center !important;
+/* Modal estándar: adaptado al 100% y centrado en ambos ejes */
+.mermaid-modal-body:not(.has-custom-modal-dims) {
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
 }
 
-/* Bloquear selección de texto accidental en todos los diagramas Mermaid */
+.mermaid-modal-body:not(.has-custom-modal-dims) svg {
+  max-width: 95% !important;
+  max-height: 76vh !important;
+  width: auto !important;
+  height: auto !important;
+  display: block !important;
+  margin: auto !important;
+}
+
+/* Modal con dimensiones forzadas (width-a o height-a) */
+.mermaid-modal-body.has-custom-modal-dims {
+  margin: auto !important;
+  display: flex !important;
+  align-items: safe center !important;
+  justify-content: safe center !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
+}
+
+.mermaid-modal-body.has-custom-modal-dims svg {
+  max-width: none !important;
+  max-height: none !important;
+  display: block !important;
+  margin: auto !important;
+  flex-shrink: 0 !important;
+}
+
+/* ==========================================================
+   3. SELECCIÓN Y AISLAMIENTO
+   ========================================================== */
 .mermaid-wrapper,
 .mermaid-wrapper svg,
 .slide-mermaid-scroll-box,
@@ -369,10 +203,6 @@ html[data-estilo="minimalista"][data-modo="claro"] {
   user-select: none !important;
 }
 
-/* ==========================================================================
-   5. AISLAMIENTO Y CUARENTENA DE CONTENEDORES TEMPORALES DE MERMAID
-   (Evita el parpadeo y la precarga visible en la esquina inferior izquierda)
-   ========================================================================== */
 body > [id^="dmermaid"],
 body > [id^="mermaid-"],
 body > [id^="i-dmermaid"],

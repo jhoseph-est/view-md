@@ -3,7 +3,7 @@ title: "Fuerzas y Momentos Internos de un Cuerpo Rígido"
 orden: 9
 ---
 
-# Compendio de Repaso: Fuerzas y Momentos Internos en Vigas
+# Fuerzas y Momentos Internos de un Cuerpo Rígido
 
 ---
 

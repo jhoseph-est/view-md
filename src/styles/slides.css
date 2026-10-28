@@ -7,20 +7,24 @@ html, body {
   overflow: hidden;
   background-color: var(--bg-color, #191919);
 }
+
 .reveal {
   width: 100vw !important;
   height: 100vh !important;
 }
+
 .reveal h1, .reveal h2, .reveal h3 { 
   text-transform: none; 
   color: #a78bfa; 
   font-weight: bold; 
   text-align: center;
 }
+
 .reveal p, .reveal li { 
   font-size: 1.15em; 
   line-height: 1.6; 
 }
+
 .reveal pre { 
   width: 100%; 
   max-height: 65vh; 
@@ -28,124 +32,108 @@ html, body {
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); 
   border-radius: 8px; 
 }
+
 .reveal pre code { 
   max-height: 65vh !important; 
   overflow-y: auto !important; 
   padding: 20px; 
 }
 
-/* Contenedor de Mermaid en Slides */
+/* ==========================================================
+   CONTENEDOR DE MERMAID EN SLIDES
+   ========================================================== */
 .reveal .slide-mermaid-scroll-box {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 100% !important;
-  max-width: 880px !important;
-  max-height: 52vh !important;
-  margin: 1.5rem auto !important;
-  padding: 1.25rem !important;
+  width: 90% !important;
+  max-width: 940px !important;
+  height: 64vh !important;
+  max-height: 64vh !important;
+  margin: 1.25rem auto !important;
+  padding: 1.25rem 1.5rem !important;
   background: var(--card-bg, rgba(255, 255, 255, 0.03)) !important;
   border: 1px solid var(--border-color, rgba(255, 255, 255, 0.15)) !important;
   border-radius: 12px !important;
   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4) !important;
-  overflow: auto !important;
   box-sizing: border-box !important;
-  text-align: center !important;
-  scrollbar-width: thin !important;
-  scrollbar-color: #8b5cf6 rgba(255, 255, 255, 0.08) !important;
+  overflow: hidden !important;
   pointer-events: auto !important;
+  /* Centrado vertical y horizontal total */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
-/* Forzar que el SVG del diagrama se ajuste siempre al recuadro por defecto */
+/* Diagramas estándar sin directivas que requieran scroll */
 .reveal .slide-mermaid-scroll-box:not(.has-scroll) svg {
+  display: block !important;
   max-width: 100% !important;
-  max-height: 46vh !important;
+  max-height: 56vh !important;
   width: auto !important;
   height: auto !important;
-  display: block !important;
-  margin: 0 auto !important;
+  margin: auto !important;
+  overflow: visible !important;
+}
+
+/* Diagramas con dimensiones explícitas o scroll: 
+   safe center centra cuando cabe y arranca en 0,0 cuando desborda */
+.reveal .slide-mermaid-scroll-box.has-scroll {
+  display: flex !important;
+  align-items: safe center !important;
+  justify-content: safe center !important;
+  overflow-y: auto !important;
+  overflow-x: auto !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: #8b5cf6 rgba(255, 255, 255, 0.08) !important;
 }
 
 .reveal .slide-mermaid-scroll-box.has-scroll svg {
-  max-width: none !important;
-  height: auto !important;
-  margin: 0 auto !important;
-}
-
-.reveal .slide-mermaid-scroll-box.has-scroll {
-  overflow-x: auto !important;
-  overflow-y: auto !important;
-  display: block !important;
-}
-
-.reveal .slide-mermaid-scroll-box::-webkit-scrollbar {
-  width: 8px !important;
-  height: 8px !important;
-}
-
-.reveal .slide-mermaid-scroll-box::-webkit-scrollbar-thumb {
-  background: #8b5cf6 !important;
-  border-radius: 4px !important;
-}
-
-/* Adaptación del SVG sin desbordar */
-.reveal .slide-mermaid-scroll-box svg {
-  max-width: 100% !important;
-  height: auto !important;
   display: block !important;
   margin: auto !important;
+  max-width: none !important;
+  max-height: none !important;
   overflow: visible !important;
+  flex-shrink: 0 !important;
 }
 
 .reveal .slide-mermaid-scroll-box foreignObject {
   overflow: visible !important;
 }
 
+/* Tipografía de nodos en Reveal */
 .reveal .slide-mermaid-scroll-box foreignObject > div {
   display: flex !important;
+  flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
   width: 100% !important;
-  height: 100% !important;
+  height: auto !important;
+  min-height: 100% !important;
   margin: 0 !important;
   padding: 0 !important;
-}
-
-/* Centrado perfecto de elementos internos, fórmulas y KaTeX en Slides */
-.reveal .slide-mermaid-scroll-box mjx-container,
-.reveal .slide-mermaid-scroll-box .katex,
-.reveal .slide-mermaid-scroll-box foreignObject div {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  text-align: center !important;
-  margin: 0 auto !important;
-}
-
-.reveal .slide-mermaid-scroll-box .nodeLabel {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  width: 100% !important;
-  height: 100% !important;
-  text-align: center !important;
-}
-
-.reveal .slide-mermaid-scroll-box text,
-.reveal .slide-mermaid-scroll-box .label,
-.reveal .slide-mermaid-scroll-box .edgeLabel {
+  line-height: 1.25 !important;
   font-family: system-ui, -apple-system, sans-serif !important;
   font-size: 13px !important;
-  line-height: normal !important;
-  text-anchor: middle !important;
+  box-sizing: border-box !important;
 }
 
-/* Centrado de etiquetas de ramas en GitGraph */
-.reveal .slide-mermaid-scroll-box .branch-label,
-.reveal .slide-mermaid-scroll-box g.branchGroup text,
-.reveal .slide-mermaid-scroll-box text.branch-label {
-  text-anchor: middle !important;
-  dominant-baseline: central !important;
+.reveal .slide-mermaid-scroll-box foreignObject p,
+.reveal .slide-mermaid-scroll-box foreignObject span,
+.reveal .slide-mermaid-scroll-box .nodeLabel p,
+.reveal .slide-mermaid-scroll-box .nodeLabel span {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.25 !important;
+  font-size: 13px !important;
+  display: block !important;
+}
+
+.reveal .slide-mermaid-scroll-box::-webkit-scrollbar {
+  width: 6px !important;
+  height: 6px !important;
+}
+
+.reveal .slide-mermaid-scroll-box::-webkit-scrollbar-thumb {
+  background: #8b5cf6 !important;
+  border-radius: 4px !important;
 }
 
 .btn-exit {
@@ -168,6 +156,7 @@ html, body {
   align-items: center;
   gap: 6px;
 }
+
 .btn-exit:hover { 
   background: #ef4444; 
   border-color: #ef4444; 
