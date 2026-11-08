@@ -13,13 +13,19 @@ orden: 3
 
 La fuerza electrostática coulombiana es estrictamente conservativa ($\vec{\nabla} \times \vec{E} = \vec{0}$), lo que permite definir una función escalar de energía potencial $U$. El potencial eléctrico $V$ en un punto del espacio $\vec{r}$ se define formalmente como la energía potencial electrostática por unidad de carga de prueba positiva $q_0$:
 
-$$V(\vec{r}) = \frac{U(\vec{r})}{q_0} = -\int_{\vec{r}_{\text{ref}}}^{\vec{r}} \vec{E} \cdot d\vec{\ell}$$
+$$
+V(\vec{r}) = \frac{U(\vec{r})}{q_0} = -\int_{\vec{r}_{\text{ref}}}^{\vec{r}} \vec{E} \cdot d\vec{\ell}
+$$
 
 Para una carga puntual estacionaria $q$ localizada en el origen con la condición de frontera estándar en el infinito ($V(r \to \infty) = 0$):
 
-$$V(r) = -\int_{\infty}^{r} \left(\frac{1}{4\pi\varepsilon_0}\frac{q}{r'^2}\,\hat{u}_r\right) \cdot (dr'\,\hat{u}_r) = -\frac{q}{4\pi\varepsilon_0} \int_{\infty}^{r} \frac{dr'}{r'^2} = \left[ \frac{q}{4\pi\varepsilon_0 r'} \right]_{\infty}^{r}$$
+$$
+V(r) = -\int_{\infty}^{r} \left(\frac{1}{4\pi\varepsilon_0}\frac{q}{r'^2}\,\hat{u}_r\right) \cdot (dr'\,\hat{u}_r) = -\frac{q}{4\pi\varepsilon_0} \int_{\infty}^{r} \frac{dr'}{r'^2} = \left[ \frac{q}{4\pi\varepsilon_0 r'} \right]_{\infty}^{r}
+$$
 
-$$V(r) = \frac{1}{4\pi\varepsilon_0}\frac{q}{r}$$
+$$
+V(r) = \frac{1}{4\pi\varepsilon_0}\frac{q}{r}
+$$
 
 * **Escalar con signo:** A diferencia del vector $\vec{E}$, $V$ es un escalar algebraico. Si $q > 0 \implies V > 0$; si $q < 0 \implies V < 0$.
 * **Significado físico:** Representa el trabajo externo requerido por unidad de carga para trasladar una carga de prueba con velocidad constante desde el infinito hasta la distancia $r$.
@@ -30,13 +36,19 @@ $$V(r) = \frac{1}{4\pi\varepsilon_0}\frac{q}{r}$$
 
 La diferencia de potencial $\Delta V$ entre un punto inicial $A$ y un punto final $B$ es independiente de la trayectoria elegida:
 
-$$\Delta V = V_B - V_A = -\int_{A}^{B} \vec{E} \cdot d\vec{\ell} = \frac{W_{A \to B}^{\text{campo}}}{-q_0} = \frac{W_{A \to B}^{\text{externo}}}{q_0}$$
+$$
+\Delta V = V_B - V_A = -\int_{A}^{B} \vec{E} \cdot d\vec{\ell} = \frac{W_{A \to B}^{\text{campo}}}{-q_0} = \frac{W_{A \to B}^{\text{externo}}}{q_0}
+$$
 
 * **Unidad en el S.I. (Voltio, $\text{V}$):**
-  $$[\Delta V] = \frac{[\text{Energía}]}{[\text{Carga}]} = \frac{\text{J}}{\text{C}} = \text{V} = \text{kg} \cdot \text{m}^2 \cdot \text{s}^{-3} \cdot \text{A}^{-1}$$
+  $$
+  [\Delta V] = \frac{[\text{Energía}]}{[\text{Carga}]} = \frac{\text{J}}{\text{C}} = \text{V} = \text{kg} \cdot \text{m}^2 \cdot \text{s}^{-3} \cdot \text{A}^{-1}
+  $$
 
 * **Electrón-voltio ($\text{eV}$):** Unidad de energía habitual en regímenes atómicos y de estado sólido:
-  $$1\ \text{eV} = e \cdot (1\ \text{V}) = (1.602176634 \times 10^{-19}\ \text{C})(1\ \text{J/C}) = 1.602176634 \times 10^{-19}\ \text{J}$$
+  $$
+  1\ \text{eV} = e \cdot (1\ \text{V}) = (1.602176634 \times 10^{-19}\ \text{C})(1\ \text{J/C}) = 1.602176634 \times 10^{-19}\ \text{J}
+  $$
 
 > [!NOTE]
 > Las líneas de campo eléctrico apuntan inexorablemente en la dirección de **máxima disminución** del potencial eléctrico. Al desplazarse a favor de $\vec{E}$, el potencial decrece ($\Delta V < 0$).
@@ -47,11 +59,15 @@ $$\Delta V = V_B - V_A = -\int_{A}^{B} \vec{E} \cdot d\vec{\ell} = \frac{W_{A \t
 
 La superposición para el potencial eléctrico no involucra descomposición de componentes vectoriales, sino la suma algebraica de magnitudes escalares:
 
-$$V(\vec{r}) = \sum_{i=1}^{N} V_i(\vec{r}) = \frac{1}{4\pi\varepsilon_0} \sum_{i=1}^{N} \frac{q_i}{|\vec{r} - \vec{r}_i|}$$
+$$
+V(\vec{r}) = \sum_{i=1}^{N} V_i(\vec{r}) = \frac{1}{4\pi\varepsilon_0} \sum_{i=1}^{N} \frac{q_i}{|\vec{r} - \vec{r}_i|}
+$$
 
 Para distribuciones continuas de carga:
 
-$$V(\vec{r}) = \frac{1}{4\pi\varepsilon_0} \int \frac{dq'}{|\vec{r} - \vec{r}'|}$$
+$$
+V(\vec{r}) = \frac{1}{4\pi\varepsilon_0} \int \frac{dq'}{|\vec{r} - \vec{r}'|}
+$$
 
 ```mermaid
 flowchart TD
@@ -71,7 +87,9 @@ Una **superficie equipotencial** es el lugar geométrico tridimensional donde el
 
 1. **Trabajo nulo en desplazamientos internos:** Al mover una carga sobre una superficie equipotencial, $dW = -q_0\,dV = 0$.
 2. **Ortogonalidad estricta:** Dado que $dV = -\vec{E} \cdot d\vec{\ell} = 0$, para cualquier desplazamiento tangencial $d\vec{\ell}$, el producto escalar exige que:
-   $$\vec{E} \perp d\vec{\ell} \implies \vec{E} \perp \text{Superficie Equipotencial}$$
+   $$
+   \vec{E} \perp d\vec{\ell} \implies \vec{E} \perp \text{Superficie Equipotencial}
+   $$
    Las líneas de campo eléctrico intersecan siempre a las superficies equipotenciales en ángulos ortogonales de $90^\circ$.
 3. **Densidad geométrica:** Las superficies equipotenciales se aproximan entre sí en regiones donde la magnitud del campo $|\vec{E}|$ es más intensa, pues $|\Delta \ell| = \frac{|\Delta V|}{|\vec{E}|}$.
 
@@ -101,27 +119,39 @@ Una **superficie equipotencial** es el lugar geométrico tridimensional donde el
 #### A. Formulación Integral de Camino
 El potencial se obtiene integrando el campo a lo largo de cualquier curva orientada $\mathcal{C}$:
 
-$$V(B) - V(A) = -\int_{A}^{B} \vec{E} \cdot d\vec{\ell}$$
+$$
+V(B) - V(A) = -\int_{A}^{B} \vec{E} \cdot d\vec{\ell}
+$$
 
 Dado que el campo es conservativo, la integral sobre cualquier trayectoria cerrada $\partial S$ es nula:
 
-$$\oint_{\partial S} \vec{E} \cdot d\vec{\ell} = 0 \iff \vec{\nabla} \times \vec{E} = \vec{0}$$
+$$
+\oint_{\partial S} \vec{E} \cdot d\vec{\ell} = 0 \iff \vec{\nabla} \times \vec{E} = \vec{0}
+$$
 
 #### B. Relación Diferencial: Gradiente del Potencial
 El diferencial total exacto del potencial escalar en el espacio es:
 
-$$dV = \frac{\partial V}{\partial x} dx + \frac{\partial V}{\partial y} dy + \frac{\partial V}{\partial z} dz = (\vec{\nabla} V) \cdot d\vec{\ell}$$
+$$
+dV = \frac{\partial V}{\partial x} dx + \frac{\partial V}{\partial y} dy + \frac{\partial V}{\partial z} dz = (\vec{\nabla} V) \cdot d\vec{\ell}
+$$
 
 Contrastando con la definición electrostática $dV = -\vec{E} \cdot d\vec{\ell}$:
 
-$$\vec{E} = -\vec{\nabla} V = -\left( \frac{\partial V}{\partial x}\hat{\imath} + \frac{\partial V}{\partial y}\hat{\jmath} + \frac{\partial V}{\partial z}\hat{k} \right)$$
+$$
+\vec{E} = -\vec{\nabla} V = -\left( \frac{\partial V}{\partial x}\hat{\imath} + \frac{\partial V}{\partial y}\hat{\jmath} + \frac{\partial V}{\partial z}\hat{k} \right)
+$$
 
 En sistemas de coordenadas no cartesianas:
 
 * **Cilíndricas $(r, \phi, z)$:**
-  $$\vec{E} = -\left( \frac{\partial V}{\partial r}\hat{u}_r + \frac{1}{r}\frac{\partial V}{\partial \phi}\hat{u}_\phi + \frac{\partial V}{\partial z}\hat{u}_z \right)$$
+  $$
+  \vec{E} = -\left( \frac{\partial V}{\partial r}\hat{u}_r + \frac{1}{r}\frac{\partial V}{\partial \phi}\hat{u}_\phi + \frac{\partial V}{\partial z}\hat{u}_z \right)
+  $$
 * **Esféricas $(r, \theta, \phi)$:**
-  $$\vec{E} = -\left( \frac{\partial V}{\partial r}\hat{u}_r + \frac{1}{r}\frac{\partial V}{\partial \theta}\hat{u}_\theta + \frac{1}{r\sin\theta}\frac{\partial V}{\partial \phi}\hat{u}_\phi \right)$$
+  $$
+  \vec{E} = -\left( \frac{\partial V}{\partial r}\hat{u}_r + \frac{1}{r}\frac{\partial V}{\partial \theta}\hat{u}_\theta + \frac{1}{r\sin\theta}\frac{\partial V}{\partial \phi}\hat{u}_\phi \right)
+  $$
 
 ---
 
@@ -130,7 +160,9 @@ En sistemas de coordenadas no cartesianas:
 ### 3.1 Distribuciones Discretas
 Para un ensamble de $N$ cargas puntuales, el potencial en el punto $\vec{r} = (x, y, z)$ se calcula directamente por:
 
-$$V(x, y, z) = \frac{1}{4\pi\varepsilon_0} \sum_{i=1}^N \frac{q_i}{\sqrt{(x - x_i)^2 + (y - y_i)^2 + (z - z_i)^2}}$$
+$$
+V(x, y, z) = \frac{1}{4\pi\varepsilon_0} \sum_{i=1}^N \frac{q_i}{\sqrt{(x - x_i)^2 + (y - y_i)^2 + (z - z_i)^2}}
+$$
 
 ---
 
@@ -139,32 +171,48 @@ $$V(x, y, z) = \frac{1}{4\pi\varepsilon_0} \sum_{i=1}^N \frac{q_i}{\sqrt{(x - x_
 #### 1. Alambre Recto Infinito con Densidad Uniforme $\lambda$
 Debido a la extensión infinita de la fuente, el potencial diverge si se fija el cero en el infinito. Se debe elegir una referencia finita arbitraria $r_0$ tal que $V(r_0) = 0$:
 
-$$V(r) - V(r_0) = -\int_{r_0}^r \vec{E} \cdot dr'\,\hat{u}_r = -\int_{r_0}^r \frac{\lambda}{2\pi\varepsilon_0 r'} dr'$$
+$$
+V(r) - V(r_0) = -\int_{r_0}^r \vec{E} \cdot dr'\,\hat{u}_r = -\int_{r_0}^r \frac{\lambda}{2\pi\varepsilon_0 r'} dr'
+$$
 
-$$V(r) = -\frac{\lambda}{2\pi\varepsilon_0}\ln\left(\frac{r}{r_0}\right) = \frac{\lambda}{2\pi\varepsilon_0}\ln\left(\frac{r_0}{r}\right)$$
+$$
+V(r) = -\frac{\lambda}{2\pi\varepsilon_0}\ln\left(\frac{r}{r_0}\right) = \frac{\lambda}{2\pi\varepsilon_0}\ln\left(\frac{r_0}{r}\right)
+$$
 
 #### 2. Anillo Cargado sobre su Eje de Simetría
 Radio $R$, carga uniforme total $Q$. Para un punto situado a distancia axial $z$ sobre su eje perpendicular:
 
 Todos los elementos $dq$ equidistan del punto de observación a una distancia $r' = \sqrt{z^2 + R^2}$:
 
-$$V(z) = \frac{1}{4\pi\varepsilon_0} \int \frac{dq}{\sqrt{z^2 + R^2}} = \frac{1}{4\pi\varepsilon_0 \sqrt{z^2 + R^2}} \int dq$$
+$$
+V(z) = \frac{1}{4\pi\varepsilon_0} \int \frac{dq}{\sqrt{z^2 + R^2}} = \frac{1}{4\pi\varepsilon_0 \sqrt{z^2 + R^2}} \int dq
+$$
 
-$$V(z) = \frac{1}{4\pi\varepsilon_0} \frac{Q}{\sqrt{z^2 + R^2}}$$
+$$
+V(z) = \frac{1}{4\pi\varepsilon_0} \frac{Q}{\sqrt{z^2 + R^2}}
+$$
 
 * **Obtención del campo axial mediante derivación:**
-  $$E_z = -\frac{\partial V}{\partial z} = -\frac{\partial}{\partial z}\left[\frac{Q}{4\pi\varepsilon_0}(z^2+R^2)^{-1/2}\right] = \frac{Q z}{4\pi\varepsilon_0 (z^2 + R^2)^{3/2}}$$
+  $$
+  E_z = -\frac{\partial V}{\partial z} = -\frac{\partial}{\partial z}\left[\frac{Q}{4\pi\varepsilon_0}(z^2+R^2)^{-1/2}\right] = \frac{Q z}{4\pi\varepsilon_0 (z^2 + R^2)^{3/2}}
+  $$
   Coincide de manera unívoca con el cálculo vectorial obtenido por Ley de Coulomb.
 
 #### 3. Disco Uniformemente Cargado
 Radio $R$, densidad superficial uniforme $\sigma = \frac{Q}{\pi R^2}$. Dividiendo el disco en anillos concéntricos diferenciales de radio $r'$ y espesor $dr'$, con $dq = \sigma (2\pi r' dr')$:
 
-$$V(z) = \frac{1}{4\pi\varepsilon_0} \int_0^R \frac{\sigma (2\pi r' dr')}{\sqrt{z^2 + r'^2}} = \frac{\sigma}{2\varepsilon_0} \left[ \sqrt{z^2 + r'^2} \right]_0^R$$
+$$
+V(z) = \frac{1}{4\pi\varepsilon_0} \int_0^R \frac{\sigma (2\pi r' dr')}{\sqrt{z^2 + r'^2}} = \frac{\sigma}{2\varepsilon_0} \left[ \sqrt{z^2 + r'^2} \right]_0^R
+$$
 
-$$V(z) = \frac{\sigma}{2\varepsilon_0} \left( \sqrt{z^2 + R^2} - |z| \right)$$
+$$
+V(z) = \frac{\sigma}{2\varepsilon_0} \left( \sqrt{z^2 + R^2} - |z| \right)
+$$
 
 * **Aproximación para distancias grandes ($z \gg R$):** Expandiendo la raíz mediante binomio de Newton:
-  $$\sqrt{z^2 + R^2} = z \left(1 + \frac{R^2}{z^2}\right)^{1/2} \approx z \left(1 + \frac{R^2}{2z^2}\right) \implies V(z) \approx \frac{\sigma}{2\varepsilon_0}\left( \frac{R^2}{2z} \right) = \frac{\sigma \pi R^2}{4\pi\varepsilon_0 z} = \frac{Q}{4\pi\varepsilon_0 z}$$
+  $$
+  \sqrt{z^2 + R^2} = z \left(1 + \frac{R^2}{z^2}\right)^{1/2} \approx z \left(1 + \frac{R^2}{2z^2}\right) \implies V(z) \approx \frac{\sigma}{2\varepsilon_0}\left( \frac{R^2}{2z} \right) = \frac{\sigma \pi R^2}{4\pi\varepsilon_0 z} = \frac{Q}{4\pi\varepsilon_0 z}
+  $$
   Recupera asintóticamente el potencial de una carga puntual.
 
 #### 4. Esfera Sólida y Conductora
@@ -176,9 +224,13 @@ $$V(z) = \frac{\sigma}{2\varepsilon_0} \left( \sqrt{z^2 + R^2} - |z| \right)$$
 
 Deducción para la **esfera dieléctrica homogénea en su interior**:
 
-$$V_{\text{int}}(r) - V(R) = -\int_R^r E_{\text{int}}(r') dr' = -\int_R^r \frac{Q r'}{4\pi\varepsilon_0 R^3} dr' = -\frac{Q}{4\pi\varepsilon_0 R^3} \left[ \frac{r^2 - R^2}{2} \right]$$
+$$
+V_{\text{int}}(r) - V(R) = -\int_R^r E_{\text{int}}(r') dr' = -\int_R^r \frac{Q r'}{4\pi\varepsilon_0 R^3} dr' = -\frac{Q}{4\pi\varepsilon_0 R^3} \left[ \frac{r^2 - R^2}{2} \right]
+$$
 
-$$V_{\text{int}}(r) = \frac{Q}{4\pi\varepsilon_0 R} + \frac{Q(R^2 - r^2)}{8\pi\varepsilon_0 R^3} = \frac{Q}{8\pi\varepsilon_0 R}\left(3 - \frac{r^2}{R^2}\right)$$
+$$
+V_{\text{int}}(r) = \frac{Q}{4\pi\varepsilon_0 R} + \frac{Q(R^2 - r^2)}{8\pi\varepsilon_0 R^3} = \frac{Q}{8\pi\varepsilon_0 R}\left(3 - \frac{r^2}{R^2}\right)
+$$
 
 * **En el centro ($r = 0$):** $V_{\text{centro}} = \frac{3}{2} V_{\text{superficie}}$.
 
@@ -212,9 +264,13 @@ potenciales = potencial_esfera_dielectrica(r_eval, Q=1e-9, R=0.05)
 La energía electrostática $U_e$ representa el trabajo neto suministrado por agentes externos para ensamblar una configuración de cargas desde una separación infinita mutua:
 
 * **Par de cargas:**
-  $$U_{12} = \frac{1}{4\pi\varepsilon_0} \frac{q_1 q_2}{r_{12}}$$
+  $$
+  U_{12} = \frac{1}{4\pi\varepsilon_0} \frac{q_1 q_2}{r_{12}}
+  $$
 * **Ensamble discreto de $N$ partículas:**
-  $$U_e = \sum_{i=1}^{N} \sum_{j < i}^{N} \frac{1}{4\pi\varepsilon_0} \frac{q_i q_j}{r_{ij}} = \frac{1}{2} \sum_{i=1}^{N} q_i V(\vec{r}_i)$$
+  $$
+  U_e = \sum_{i=1}^{N} \sum_{j < i}^{N} \frac{1}{4\pi\varepsilon_0} \frac{q_i q_j}{r_{ij}} = \frac{1}{2} \sum_{i=1}^{N} q_i V(\vec{r}_i)
+  $$
   Donde $V(\vec{r}_i)$ es el potencial en la posición de $q_i$ debido a todas las demás cargas excepto $q_i$, y el factor $1/2$ evita el doble conteo de pares.
 
 ---
@@ -223,14 +279,20 @@ La energía electrostática $U_e$ representa el trabajo neto suministrado por ag
 
 Al pasar al límite continuo ($q_i \to \rho\,dV$):
 
-$$U_e = \frac{1}{2} \iiint_{\text{todo el espacio}} \rho(\vec{r})\,V(\vec{r})\,dV$$
+$$
+U_e = \frac{1}{2} \iiint_{\text{todo el espacio}} \rho(\vec{r})\,V(\vec{r})\,dV
+$$
 
 Sustituyendo $\rho = \varepsilon_0 (\vec{\nabla} \cdot \vec{E})$ a través de la Ley de Gauss e integrando por partes en todo el volumen donde los términos de frontera decaen a cero en el infinito:
 
-$$U_e = \frac{\varepsilon_0}{2} \iiint_{\text{espacio}} |\vec{E}|^2 dV$$
+$$
+U_e = \frac{\varepsilon_0}{2} \iiint_{\text{espacio}} |\vec{E}|^2 dV
+$$
 
 * **Densidad de Energía Electroestática ($u_e$):** La energía reside distribuida espacialmente en el propio campo eléctrico con una densidad volumétrica local:
-  $$u_e = \frac{dU_e}{dV} = \frac{1}{2}\varepsilon_0 |\vec{E}|^2 \quad \left[\frac{\text{J}}{\text{m}^3}\right]$$
+  $$
+  u_e = \frac{dU_e}{dV} = \frac{1}{2}\varepsilon_0 |\vec{E}|^2 \quad \left[\frac{\text{J}}{\text{m}^3}\right]
+  $$
 
 ---
 
@@ -240,18 +302,28 @@ Un conductor alcanza el equilibrio electrostático cuando cesa todo movimiento m
 
 1. **Campo Interno Estrictamente Nulo ($\vec{E}_{\text{int}} = \vec{0}$):** Si existiera campo tangencial o radial en el seno del conductor, la fuerza $\vec{F} = q\vec{E}$ aceleraría las cargas libres de conducción ($\tau \approx 10^{-14}\ \text{s}$ en metales), violando el estado estacionario.
 2. **Equipotencialidad Volumétrica ($V = \text{constante}$):**
-   $$V_B - V_A = -\int_A^B \vec{E}_{\text{int}} \cdot d\vec{\ell} = 0 \implies V_A = V_B \quad \forall A,B \in \text{Conductor}$$
+   $$
+   V_B - V_A = -\int_A^B \vec{E}_{\text{int}} \cdot d\vec{\ell} = 0 \implies V_A = V_B \quad \forall A,B \in \text{Conductor}
+   $$
 3. **Localización Superficial de la Carga Neta en Exceso:**
    Por la forma diferencial de Gauss, como $\vec{E}_{\text{int}} = \vec{0}$:
-   $$\vec{\nabla} \cdot \vec{E} = \frac{\rho}{\varepsilon_0} = 0 \implies \rho_{\text{int}} = 0$$
+   $$
+   \vec{\nabla} \cdot \vec{E} = \frac{\rho}{\varepsilon_0} = 0 \implies \rho_{\text{int}} = 0
+   $$
    Cualquier exceso de carga se redistribuye forzosamente sobre la superficie externa con densidad $\sigma$.
 4. **Campo Eléctrico Inmediatamente Exterior Normal:**
-   $$E_\perp = \frac{\sigma}{\varepsilon_0}, \quad E_\parallel = 0$$
+   $$
+   E_\perp = \frac{\sigma}{\varepsilon_0}, \quad E_\parallel = 0
+   $$
 5. **Efecto de Puntas (Poder de las Puntas):**
    Para dos esferas conductoras conectadas en equilibrio ($V_1 = V_2$):
-   $$\frac{q_1}{R_1} = \frac{q_2}{R_2} \implies \frac{\sigma_1 R_1}{\varepsilon_0} = \frac{\sigma_2 R_2}{\varepsilon_0} \implies \frac{\sigma_1}{\sigma_2} = \frac{R_2}{R_1}$$
+   $$
+   \frac{q_1}{R_1} = \frac{q_2}{R_2} \implies \frac{\sigma_1 R_1}{\varepsilon_0} = \frac{\sigma_2 R_2}{\varepsilon_0} \implies \frac{\sigma_1}{\sigma_2} = \frac{R_2}{R_1}
+   $$
    La densidad superficial de carga $\sigma$ y el campo $\vec{E}$ superficial son inversamente proporcionales al radio de curvatura local:
-   $$\sigma \propto \frac{1}{R_c}, \quad |\vec{E}| \propto \frac{1}{R_c}$$
+   $$
+   \sigma \propto \frac{1}{R_c}, \quad |\vec{E}| \propto \frac{1}{R_c}
+   $$
    En zonas puntiagudas ($R_c \to 0$), el campo alcanza intensidades extremas capaces de superar la rigidez dieléctrica del aire ($E_{\text{aire}} \approx 3 \times 10^6\ \text{V/m}$), generando ionización por avalancha (efecto corona).
 6. **Blindaje Electroestático (Jaula de Faraday):**
    En una cavidad hueca vacía dentro de un conductor en equilibrio, $\vec{E} = \vec{0}$ con independencia de los campos estáticos intensos externos aplicados. La polarización superficial neutraliza cualquier flujo entrante.
@@ -328,11 +400,17 @@ En sistemas de inyección continua (*Continuous Inkjet*), las gotas de tinta son
 1. Una gota de masa $m$ adquiere una carga $q$ inducida por el electrodo.
 2. Ingresa a velocidad horizontal constante $v_x$ a una región entre placas deflectoras de longitud $L$ con campo eléctrico vertical uniforme $E_y = \frac{V_{\text{placas}}}{d}$.
 3. **Aceleración transversal:**
-   $$a_y = \frac{q E_y}{m}$$
+   $$
+   a_y = \frac{q E_y}{m}
+   $$
 4. **Tiempo de tránsito:** $t = \frac{L}{v_x}$
 5. **Deflexión angular y posición al salir:**
-   $$v_y = a_y t = \frac{q E_y L}{m v_x}$$
-   $$y_1 = \frac{1}{2} a_y t^2 = \frac{q E_y L^2}{2 m v_x^2}$$
+   $$
+   v_y = a_y t = \frac{q E_y L}{m v_x}
+   $$
+   $$
+   y_1 = \frac{1}{2} a_y t^2 = \frac{q E_y L^2}{2 m v_x^2}
+   $$
 6. Las gotas no cargadas siguen trayectoria recta sin desvío hacia un canalón recolector para su recirculación; las cargadas impactan en el sustrato en la coordenada vertical requerida.
 
 ---
@@ -345,6 +423,8 @@ Sistemas críticos en plantas de energía térmica, fundiciones y cementeras par
   1. **Ionización por Descarga Corona:** En el centro del flujo se instalan alambres emisores delgados sometidos a alto potencial negativo ($-40\ \text{kV}$ a $-100\ \text{kV}$). El campo superficial extremo ioniza los gases circundantes, creando una nube constante de electrones e iones negativos ($O_2^-$, $CO_2^-$).
   2. **Carga de Partículas por Bombardeo e Inducción:** El polvo en suspensión choca con los iones libres y adquiere carga neta negativa por saturación de campo.
   3. **Migración Electroforética:** Las partículas cargadas son repelidas por el electrodo central y forzadas lateralmente hacia las placas colectoras aterrizadas a potencial cero ($V = 0$), bajo la velocidad de deriva:
-     $$w = \frac{q E_{\text{colector}}}{6\pi\eta r_p}$$
+     $$
+     w = \frac{q E_{\text{colector}}}{6\pi\eta r_p}
+     $$
      Donde $\eta$ es la viscosidad del gas y $r_p$ el radio hidrodinámico de la partícula (resistencia hidrodinámica de Stokes).
   4. **Retención Mecánica y Limpieza:** El material particulado se adhiere a las placas colectoras formando una torta sólida, que se desprende periódicamente mediante sacudidores mecánicos de impacto (*rappers*) hacia tolvas inferiores.

@@ -321,16 +321,22 @@ $$
 #### Forma Integral
 El flujo electrostático neto a través de cualquier superficie gaussiana cerrada es estrictamente proporcional a la carga eléctrica neta $Q_{\text{enc}}$ contenida en su volumen interior, independiente de la distribución geométrica de las cargas internas o de la presencia de cargas exteriores:
 
-$$\oint_{\partial\mathcal{V}} \vec{E} \cdot d\vec{A} = \frac{Q_{\text{enc}}}{\varepsilon_0} = \frac{1}{\varepsilon_0}\iiint_{\mathcal{V}} \rho(\vec{r})\,dV$$
+$$
+\oint_{\partial\mathcal{V}} \vec{E} \cdot d\vec{A} = \frac{Q_{\text{enc}}}{\varepsilon_0} = \frac{1}{\varepsilon_0}\iiint_{\mathcal{V}} \rho(\vec{r})\,dV
+$$
 
 #### Deducción del Teorema de la Divergencia (Forma Diferencial)
 Aplicando el Teorema de Gauss-Ostrogradsky a la superficie cerrada:
 
-$$\oint_{\partial\mathcal{V}} \vec{E} \cdot d\vec{A} = \iiint_{\mathcal{V}} (\nabla \cdot \vec{E})\,dV = \frac{1}{\varepsilon_0}\iiint_{\mathcal{V}} \rho\,dV$$
+$$
+\oint_{\partial\mathcal{V}} \vec{E} \cdot d\vec{A} = \iiint_{\mathcal{V}} (\nabla \cdot \vec{E})\,dV = \frac{1}{\varepsilon_0}\iiint_{\mathcal{V}} \rho\,dV
+$$
 
 Dado que el volumen de integración $\mathcal{V}$ es estrictamente arbitrario:
 
-$$\nabla \cdot \vec{E} = \frac{\rho}{\varepsilon_0}$$
+$$
+\nabla \cdot \vec{E} = \frac{\rho}{\varepsilon_0}
+$$
 
 Esta es la primera de las ecuaciones fundamentales de Maxwell en el vacío.
 
@@ -357,32 +363,46 @@ Para despejar analíticamente $|\vec{E}|$ de la integral de Gauss, la superficie
 #### 1. Alambre Rectilíneo Infinito
 * **Superficie Gaussiana:** Cilindro coaxial de radio $r$ y longitud longitudinal $L$.
 * **Evaluación del Flujo:**
-  $$\oint \vec{E} \cdot d\vec{A} = \int_{\text{tapa 1}} 0 + \int_{\text{tapa 2}} 0 + \int_{\text{manto}} |\vec{E}|\,dA = E(2\pi r L)$$
+  $$
+  \oint \vec{E} \cdot d\vec{A} = \int_{\text{tapa 1}} 0 + \int_{\text{tapa 2}} 0 + \int_{\text{manto}} |\vec{E}|\,dA = E(2\pi r L)
+  $$
 * **Carga encerrada:** $Q_{\text{enc}} = \lambda L$
 * **Campo resultante:**
-  $$E(2\pi r L) = \frac{\lambda L}{\varepsilon_0} \implies \vec{E}(r) = \frac{\lambda}{2\pi\varepsilon_0 r}\hat{u}_r$$
+  $$
+  E(2\pi r L) = \frac{\lambda L}{\varepsilon_0} \implies \vec{E}(r) = \frac{\lambda}{2\pi\varepsilon_0 r}\hat{u}_r
+  $$
 
 ---
 
 #### 2. Lámina Infinita No Conductora
 * **Superficie Gaussiana:** Cilindro recto ("caja de pastillas") transversal al plano con tapas de área $A$ a ambos lados simétricos a distancia $z$.
 * **Evaluación del Flujo:** $\vec{E}$ es normal al plano; el manto cilíndrico tiene flujo nulo:
-  $$\oint \vec{E} \cdot d\vec{A} = E A + E A = 2EA$$
+  $$
+  \oint \vec{E} \cdot d\vec{A} = E A + E A = 2EA
+  $$
 * **Carga encerrada:** $Q_{\text{enc}} = \sigma A$
 * **Campo resultante:**
-  $$2EA = \frac{\sigma A}{\varepsilon_0} \implies E = \frac{\sigma}{2\varepsilon_0} \implies \vec{E} = \frac{\sigma}{2\varepsilon_0}\,\operatorname{sgn}(z)\,\hat{u}_n$$
+  $$
+  2EA = \frac{\sigma A}{\varepsilon_0} \implies E = \frac{\sigma}{2\varepsilon_0} \implies \vec{E} = \frac{\sigma}{2\varepsilon_0}\,\operatorname{sgn}(z)\,\hat{u}_n
+  $$
 
 > [!TIP]
 > Para una **lámina conductora** en equilibrio electrostático, el campo interior es nulo ($\vec{E}_{\text{int}} = \vec{0}$). La superficie gaussiana solo tiene flujo saliente en una tapa exterior, lo que produce:
-> $$EA = \frac{\sigma_{\text{cond}} A}{\varepsilon_0} \implies E_{\text{conductor}} = \frac{\sigma_{\text{cond}}}{\varepsilon_0}$$
+> $$
+> EA = \frac{\sigma_{\text{cond}} A}{\varepsilon_0} \implies E_{\text{conductor}} = \frac{\sigma_{\text{cond}}}{\varepsilon_0}
+> $$
 
 ---
 
 #### 3. Cascarón Esférico de Radio $R$ con Carga $Q$
 * **Interior ($r < R$):**
-  $$Q_{\text{enc}} = 0 \implies \oint \vec{E} \cdot d\vec{A} = E(4\pi r^2) = 0 \implies \vec{E} = \vec{0}$$
+  $$
+  Q_{\text{enc}} = 0 \implies \oint \vec{E} \cdot d\vec{A} = E(4\pi r^2) = 0 \implies \vec{E} = \vec{0}
+  $$
 * **Exterior ($r > R$):**
-  $$Q_{\text{enc}} = Q \implies E(4\pi r^2) = \frac{Q}{\varepsilon_0} \implies \vec{E} = \frac{Q}{4\pi\varepsilon_0 r^2}\hat{u}_r$$
+  $$
+  Q_{\text{enc}} = Q \implies E(4\pi r^2) = \frac{Q}{\varepsilon_0} \implies \vec{E} = \frac{Q}{4\pi\varepsilon_0 r^2}\hat{u}_r
+  $$
 
 ---
 
@@ -390,16 +410,26 @@ Para despejar analíticamente $|\vec{E}|$ de la integral de Gauss, la superficie
 
 ##### A. Distribución Volumétrica Uniforme ($\rho_0 = \frac{Q}{\frac{4}{3}\pi R^3}$)
 * **Zona Interna ($r \le R$):**
-  $$Q_{\text{enc}} = \rho_0 \left(\frac{4}{3}\pi r^3\right) = Q \frac{r^3}{R^3}$$
-  $$E(4\pi r^2) = \frac{Q r^3}{\varepsilon_0 R^3} \implies \vec{E}_{\text{int}}(r) = \frac{Q r}{4\pi\varepsilon_0 R^3}\hat{u}_r = \frac{\rho_0 r}{3\varepsilon_0}\hat{u}_r$$
+  $$
+  Q_{\text{enc}} = \rho_0 \left(\frac{4}{3}\pi r^3\right) = Q \frac{r^3}{R^3}
+  $$
+  $$
+  E(4\pi r^2) = \frac{Q r^3}{\varepsilon_0 R^3} \implies \vec{E}_{\text{int}}(r) = \frac{Q r}{4\pi\varepsilon_0 R^3}\hat{u}_r = \frac{\rho_0 r}{3\varepsilon_0}\hat{u}_r
+  $$
 * **Zona Externa ($r > R$):**
-  $$Q_{\text{enc}} = Q \implies \vec{E}_{\text{ext}}(r) = \frac{Q}{4\pi\varepsilon_0 r^2}\hat{u}_r$$
+  $$
+  Q_{\text{enc}} = Q \implies \vec{E}_{\text{ext}}(r) = \frac{Q}{4\pi\varepsilon_0 r^2}\hat{u}_r
+  $$
 
 ##### B. Distribución Radial No Uniforme (ejemplo: $\rho(r) = k r^n$)
 * **Carga Encerrada:**
-  $$Q_{\text{enc}}(r) = \int_0^r \rho(r') 4\pi r'^2 dr' = 4\pi k \int_0^r r'^{n+2} dr' = \frac{4\pi k}{n+3} r^{n+3}$$
+  $$
+  Q_{\text{enc}}(r) = \int_0^r \rho(r') 4\pi r'^2 dr' = 4\pi k \int_0^r r'^{n+2} dr' = \frac{4\pi k}{n+3} r^{n+3}
+  $$
 * **Campo interior:**
-  $$E(4\pi r^2) = \frac{1}{\varepsilon_0} \left[ \frac{4\pi k}{n+3} r^{n+3} \right] \implies \vec{E}(r) = \frac{k}{(n+3)\varepsilon_0} r^{n+1}\hat{u}_r$$
+  $$
+  E(4\pi r^2) = \frac{1}{\varepsilon_0} \left[ \frac{4\pi k}{n+3} r^{n+3} \right] \implies \vec{E}(r) = \frac{k}{(n+3)\varepsilon_0} r^{n+1}\hat{u}_r
+  $$
 
 ---
 
@@ -408,7 +438,9 @@ Considere un conductor interno de radio $a$ con carga por unidad de longitud $+\
 
 * **Región I ($r < a$):** Conductor en equilibrio $\implies \vec{E} = \vec{0}$.
 * **Región II ($a < r < b$):** Espacio intermedio:
-  $$E(2\pi r L) = \frac{\lambda L}{\varepsilon_0} \implies \vec{E}(r) = \frac{\lambda}{2\pi\varepsilon_0 r}\hat{u}_r$$
+  $$
+  E(2\pi r L) = \frac{\lambda L}{\varepsilon_0} \implies \vec{E}(r) = \frac{\lambda}{2\pi\varepsilon_0 r}\hat{u}_r
+  $$
 * **Región III ($b \le r \le c$):** Cuerpo conductor $\implies \vec{E} = \vec{0}$. Por inducción electrostática, la superficie interna en $r = b$ acumula $-\lambda$, dejando carga nula en la superficie externa $r = c$.
 * **Región IV ($r > c$):** $Q_{\text{enc}} = +\lambda - \lambda = 0 \implies \vec{E} = \vec{0}$.
 
@@ -453,13 +485,19 @@ El desarrollo de la estructura nuclear a principios del siglo XX se basó en el 
 En el experimento de Geiger-Marsden, partículas alfa de energía cinética $K_\alpha \approx 5\ \text{MeV}$ bombardeaban láminas de oro ($Z = 79$):
 
 1. **Bajo el modelo de Thomson:** La energía potencial electrostática máxima que una partícula alfa de carga $2e$ podía experimentar al penetrar la nube atómica era:
-   $$U_{\text{máx}}^{\text{Thomson}} = \frac{1}{4\pi\varepsilon_0} \frac{2 Z e^2}{R_{\text{átomo}}} \approx \frac{(9 \times 10^9)(2)(79)(1.6 \times 10^{-19})^2}{10^{-10}} \approx 3.6 \times 10^{-16}\ \text{J} \approx 2.2 \times 10^3\ \text{eV} \ll 5\ \text{MeV}$$
+   $$
+   U_{\text{máx}}^{\text{Thomson}} = \frac{1}{4\pi\varepsilon_0} \frac{2 Z e^2}{R_{\text{átomo}}} \approx \frac{(9 \times 10^9)(2)(79)(1.6 \times 10^{-19})^2}{10^{-10}} \approx 3.6 \times 10^{-16}\ \text{J} \approx 2.2 \times 10^3\ \text{eV} \ll 5\ \text{MeV}
+   $$
    Las partículas alfa atravesarían el átomo prácticamente sin deflexión angular.
 
 2. **Bajo la hipótesis del Núcleo de Rutherford:** La conservación de la energía mecánica total en una colisión frontal ($\theta = 180^\circ$) define la distancia de máximo acercamiento $d_{\text{min}}$:
-   $$K_\alpha = U_{\text{coulomb}} = \frac{1}{4\pi\varepsilon_0} \frac{(2e)(Ze)}{d_{\text{min}}} \implies d_{\text{min}} = \frac{2 Z e^2}{4\pi\varepsilon_0 K_\alpha}$$
+   $$
+   K_\alpha = U_{\text{coulomb}} = \frac{1}{4\pi\varepsilon_0} \frac{(2e)(Ze)}{d_{\text{min}}} \implies d_{\text{min}} = \frac{2 Z e^2}{4\pi\varepsilon_0 K_\alpha}
+   $$
 
    Sustituyendo para lámina de oro con $K_\alpha = 5\ \text{MeV}$:
-   $$d_{\text{min}} \approx \frac{(2)(79)(1.6 \times 10^{-19})^2 (9 \times 10^9)}{(5 \times 10^6)(1.6 \times 10^{-19})} \approx 4.5 \times 10^{-14}\ \text{m}$$
+   $$
+   d_{\text{min}} \approx \frac{(2)(79)(1.6 \times 10^{-19})^2 (9 \times 10^9)}{(5 \times 10^6)(1.6 \times 10^{-19})} \approx 4.5 \times 10^{-14}\ \text{m}
+   $$
 
 Como $d_{\text{min}} \ll R_{\text{átomo}}$, la carga positiva del átomo debía encontrarse concentrada en un volumen al menos $10^{12}$ veces menor que el volumen atómico total. Esto confirmó experimentalmente el núcleo atómico y descartó el modelo electrostático continuo de Thomson.
