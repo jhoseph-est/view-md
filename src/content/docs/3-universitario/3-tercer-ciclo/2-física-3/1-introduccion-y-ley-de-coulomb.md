@@ -27,9 +27,13 @@ La **carga eléctrica ($q, Q$)** es una propiedad intrínseca fundamental de la 
 
 - **Principio cualitativo de interacción:**
   - Cargas de igual signo algebraico experimentan fuerzas mutuamente **repulsivas**:
-    $$\text{sgn}(q_1 \cdot q_2) > 0 \implies \vec{F}_{12} \parallel \hat{r}_{12} \quad (\text{repulsión})$$
+    $$
+    \text{sgn}(q_1 \cdot q_2) > 0 \implies \vec{F}_{12} \parallel \hat{r}_{12} \quad (\text{repulsión})
+    $$
   - Cargas de signos opuestos experimentan fuerzas mutuamente **atractivas**:
-    $$\text{sgn}(q_1 \cdot q_2) < 0 \implies \vec{F}_{12} \parallel -\hat{r}_{12} \quad (\text{atracción})$$
+    $$
+    \text{sgn}(q_1 \cdot q_2) < 0 \implies \vec{F}_{12} \parallel -\hat{r}_{12} \quad (\text{atracción})
+    $$
 
 ```mermaid
 flowchart LR
@@ -56,10 +60,14 @@ En procesos subatómicos (como la aniquilación o creación de pares $e^- + e^+ 
 #### Principio de Cuantización de la Carga
 La carga neta observable de cualquier objeto macroscópico o microscópico libre siempre es un múltiplo entero exacto del quanto elemental de carga ($e$):
 
-$$Q = \pm n \cdot e, \quad n \in \mathbb{N} = \{0, 1, 2, 3, \dots\}$$
+$$
+Q = \pm n \cdot e, \quad n \in \mathbb{N} = \{0, 1, 2, 3, \dots\}
+$$
 
 Donde el cuanto elemental de carga posee el valor exacto fijado por el CODATA (redefinición SI 2019):
-$$e = 1.602\,176\,634 \times 10^{-19}\text{ C}$$
+$$
+e = 1.602\,176\,634 \times 10^{-19}\text{ C}
+$$
 
 > [!NOTE]
 > Aunque los quarks poseen cargas fraccionarias ($\pm \frac{1}{3}e, \pm \frac{2}{3}e$), el principio de **confinamiento de color** prohíbe quarks aislados a energías ordinarias. Por tanto, las partículas observables libres siempre exhiben estados múltiplos enteros de $e$.
@@ -79,13 +87,17 @@ $$e = 1.602\,176\,634 \times 10^{-19}\text{ C}$$
 
 #### A. Electrización por Frotamiento (Efecto Triboeléctrico)
 Dos materiales neutros con distinta función de trabajo y afinidad electrónica entran en contacto mecánico. El material con menor energía de ionización superficial cede electrones al de mayor afinidad, quedando ambos cargados con igual magnitud pero signo opuesto:
-$$|Q_1| = |Q_2|, \quad Q_1 = -Q_2$$
+$$
+|Q_1| = |Q_2|, \quad Q_1 = -Q_2
+$$
 
 #### B. Electrización por Contacto (Conducción)
 Un cuerpo conductor previamente cargado toca a un conductor neutro o de diferente potencial. El campo electrostático resultante impulsa el flujo transitorio de electrones hasta alcanzar el **equilibrio electrostático** (mismo potencial electrostático $V_1 = V_2$).
 
 Para dos esferas conductoras idénticas de radios $R_1 = R_2 = R$:
-$$Q_1' = Q_2' = \frac{Q_1 + Q_2}{2}$$
+$$
+Q_1' = Q_2' = \frac{Q_1 + Q_2}{2}
+$$
 
 #### C. Electrización por Inducción
 Mecanismo que permite cargar un conductor sin cederle carga directa desde el inductor:
@@ -159,7 +171,9 @@ El **electroscopio de láminas de oro** es un instrumento electrostático para d
 ```
 
 - **Mecanismo de acción:** Al comunicar carga al terminal superior (esfera colectora), esta fluye por conducción a través del vástago hacia las dos láminas delgadas de baja inercia. Ambas láminas adquieren carga del **mismo signo algebraico**, experimentando una fuerza de repulsión electrostática:
-  $$F_e = f(\theta) = 2\,mg \tan\theta$$
+  $$
+  F_e = f(\theta) = 2\,mg \tan\theta
+  $$
 - **Detección de polaridad:** Si el electroscopio se calibra previamente con carga conocida (ej. negativa):
   - El acercamiento de un cuerpo negativo aumentará el ángulo $\theta$ (mayor repulsión en láminas).
   - El acercamiento de un cuerpo positivo disminuirá $\theta$ (atracción de electrones hacia la esfera colectora, descargando parcialmente las láminas).
@@ -169,10 +183,14 @@ El **electroscopio de láminas de oro** es un instrumento electrostático para d
 ### 2.3 Concepto de puesta a tierra y transferencia de carga
 La **tierra física** se modela matemáticamente como un reservorio conductor infinito de carga a potencial nulo de referencia:
 
-$$V_{\text{tierra}} = \lim_{R_{\text{tierra}} \to \infty} \frac{1}{4\pi\varepsilon_0}\frac{Q_{\text{tierra}}}{R_{\text{tierra}}} \equiv 0\text{ V}, \quad C_{\text{tierra}} \to \infty$$
+$$
+V_{\text{tierra}} = \lim_{R_{\text{tierra}} \to \infty} \frac{1}{4\pi\varepsilon_0}\frac{Q_{\text{tierra}}}{R_{\text{tierra}}} \equiv 0\text{ V}, \quad C_{\text{tierra}} \to \infty
+$$
 
 - **Dinámica de transferencia:** Al conectar un cuerpo conductor cargado $Q$ con capacidad $C_{\text{cuerpo}}$ a tierra:
-  $$Q_{\text{final, cuerpo}} = Q \cdot \left(\frac{C_{\text{cuerpo}}}{C_{\text{cuerpo}} + C_{\text{tierra}}}\right) \xrightarrow{C_{\text{tierra}} \to \infty} 0$$
+  $$
+  Q_{\text{final, cuerpo}} = Q \cdot \left(\frac{C_{\text{cuerpo}}}{C_{\text{cuerpo}} + C_{\text{tierra}}}\right) \xrightarrow{C_{\text{tierra}} \to \infty} 0
+  $$
 - Si el cuerpo tiene **exceso de electrones** ($Q < 0$), los electrones drenan hacia la tierra.
 - Si el cuerpo tiene **déficit de electrones** ($Q > 0$), los electrones fluyen desde la tierra al cuerpo hasta neutralizarlo.
 
@@ -194,9 +212,11 @@ Donde:
 - $\vec{r}_1, \vec{r}_2$: Vectores de posición de las cargas respecto a un sistema de coordenadas inercial.
 - $\hat{r}_{12} = \frac{\vec{r}_2 - \vec{r}_1}{|\vec{r}_2 - \vec{r}_1|}$: Vector unitario dirigido desde $1$ hacia $2$.
 
-> [!NOTE]
+> [!NOTE] NOTA
 > Cumple la **Tercera Ley de Newton (Acción y Reacción)** en su forma fuerte:
-> $$\vec{F}_{21} = -\vec{F}_{12}, \quad \vec{F}_{12} \times (\vec{r}_2 - \vec{r}_1) = \vec{0}$$
+> $$
+> \vec{F}_{21} = -\vec{F}_{12}, \quad \vec{F}_{12} \times (\vec{r}_2 - \vec{r}_1) = \vec{0}
+> $$
 
 #### Límites de Validez y Alcance
 1. **Puntualidad:** Válida estrictamente para cargas cuyas dimensiones lineales $d$ son despreciables frente a la distancia mutua $r$ ($d \ll r$).
@@ -223,11 +243,19 @@ Charles-Augustin de Coulomb (1785) adaptó el diseño de la **balanza de torsió
 
 - **Principio físico del dispositivo:**
   Un hilo de torsión delgado de plata o seda sostiene una aguja aislante horizontal con una esfera conductora en su extremo (carga $q_1$). Al acercar una segunda esfera idéntica con carga $q_2$, la fuerza coulómbica genera un torque electrostático $\tau_e$:
-  $$\tau_e = F_e \cdot L \cdot \cos\left(\frac{\theta}{2}\right) \approx F_e \cdot L$$
+  $$
+  \tau_e = F_e \cdot L \cdot \cos\left(\frac{\theta}{2}\right) \approx F_e \cdot L
+  $$
 - **Condición de equilibrio estático:**
   El torque electrostático se equilibra con el torque elástico de restitución angular del hilo:
-  $$\tau_{\text{elástico}} = \kappa \cdot \theta$$
-  $$\kappa \cdot \theta = F_e \cdot L \implies F_e = \frac{\kappa \cdot \theta}{L}$$
+  $$
+  \tau_{\text{elástico}} = \kappa \cdot \theta
+  $$
+  
+  $$
+  \kappa \cdot \theta = F_e \cdot L \implies F_e = \frac{\kappa \cdot \theta}{L}
+  $$
+  
   Donde:
   - $\kappa$: Constante elástica torsional del alambre.
   - $\theta$: Ángulo de torsión medido en una escala graduada circular.
@@ -245,7 +273,7 @@ $$
 \vec{F}_{\text{neta}} = \sum_{i=1}^{N} \vec{F}_{i \to 0} = \frac{q_0}{4\pi\varepsilon_0} \sum_{i=1}^{N} \frac{q_i}{|\vec{r}_0 - \vec{r}_i|^3} (\vec{r}_0 - \vec{r}_i)
 $$
 
-> [!TIP]
+> [!TIP] TIP
 > El principio de superposición garantiza que la presencia de una carga $q_k$ **no altera ni apantalla** la fuerza intrínseca entre las cargas $q_i$ y $q_0$ en el vacío.
 
 ---
@@ -269,7 +297,9 @@ Cuando la escala de observación macroscópica es mucho mayor que las distancias
 
 **Formulación Integral General de Fuerza sobre una Carga Puntual $q_0$:**
 El diferencial de fuerza electrostática ejercido por un elemento continuo $dq$ ubicado en $\vec{r}'$ sobre la carga $q_0$ en $\vec{r}$ es:
-$$d\vec{F} = \frac{q_0}{4\pi\varepsilon_0} \frac{dq}{|\vec{r} - \vec{r}'|^3}(\vec{r} - \vec{r}')$$
+$$
+d\vec{F} = \frac{q_0}{4\pi\varepsilon_0} \frac{dq}{|\vec{r} - \vec{r}'|^3}(\vec{r} - \vec{r}')
+$$
 
 Integrando sobre todo el soporte geométrico de la fuente:
 - **Volumen continuo ($\mathcal{V}$):**
@@ -331,10 +361,12 @@ flowchart TD
 4. **Resultado analítico final:**
    $$\vec{F} = \frac{1}{4\pi\varepsilon_0}\frac{q_0 Q}{d(L + d)}\hat{i}$$
 
-> [!TIP]
+> [!TIP] TIP
 > **Comprobación de límites asintóticos:**
 > Si $d \gg L$, entonces $d(L + d) \approx d^2$, y se recupera la ley de Coulomb puntual:
-> $$\lim_{d/L \to \infty} \vec{F} = \frac{1}{4\pi\varepsilon_0}\frac{q_0 Q}{d^2}\hat{i}$$
+> $$
+> \lim_{d/L \to \infty} \vec{F} = \frac{1}{4\pi\varepsilon_0}\frac{q_0 Q}{d^2}\hat{i}
+> $$
 
 ---
 
@@ -343,19 +375,31 @@ flowchart TD
 
 1. **Simetría y descomposición vectorial:**
    Por cada elemento $dq$ en un punto del anillo, existe un elemento diametralmente opuesto $dq'$ cuyas componentes ortogonales al eje $z$ ($dF_x, dF_y$) se cancelan exactamente:
-   $$F_x = 0, \quad F_y = 0 \implies \vec{F}_{\text{total}} = F_z \hat{k}$$
+   $$
+   F_x = 0, \quad F_y = 0 \implies \vec{F}_{\text{total}} = F_z \hat{k}
+   $$
 
 2. **Geometría de la componente axial:**
    - Distancia de cualquier $dq$ a $q_0$: $r = \sqrt{R^2 + z^2}$
    - Factor de proyección: $\cos\theta = \frac{z}{r} = \frac{z}{\sqrt{R^2 + z^2}}$
 
 3. **Integración formal:**
-   $$dF_z = dF \cos\theta = \left(\frac{1}{4\pi\varepsilon_0} \frac{q_0\,dq}{R^2 + z^2}\right) \left(\frac{z}{\sqrt{R^2 + z^2}}\right) = \frac{q_0 z}{4\pi\varepsilon_0 (R^2 + z^2)^{3/2}} dq$$
+   
+   $$
+   dF_z = dF \cos\theta = \left(\frac{1}{4\pi\varepsilon_0} \frac{q_0\,dq}{R^2 + z^2}\right) \left(\frac{z}{\sqrt{R^2 + z^2}}\right) = \frac{q_0 z}{4\pi\varepsilon_0 (R^2 + z^2)^{3/2}} dq
+   $$
+   
    Dado que $z$ y $R$ son constantes para todos los puntos del anillo:
-   $$F_z = \frac{q_0 z}{4\pi\varepsilon_0 (R^2 + z^2)^{3/2}} \oint_{\text{anillo}} dq = \frac{1}{4\pi\varepsilon_0}\frac{q_0 Q z}{(R^2 + z^2)^{3/2}}$$
+   
+   $$
+   F_z = \frac{q_0 z}{4\pi\varepsilon_0 (R^2 + z^2)^{3/2}} \oint_{\text{anillo}} dq = \frac{1}{4\pi\varepsilon_0}\frac{q_0 Q z}{(R^2 + z^2)^{3/2}}
+   $$
 
 4. **Vector fuerza total:**
-   $$\vec{F} = \frac{1}{4\pi\varepsilon_0}\frac{q_0 Q z}{(R^2 + z^2)^{3/2}}\hat{k}$$
+   
+   $$
+   \vec{F} = \frac{1}{4\pi\varepsilon_0}\frac{q_0 Q z}{(R^2 + z^2)^{3/2}}\hat{k}
+   $$
 
 ---
 

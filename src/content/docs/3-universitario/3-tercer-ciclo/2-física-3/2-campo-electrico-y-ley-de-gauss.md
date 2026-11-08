@@ -15,7 +15,9 @@ El campo eléctrico $\vec{E}$ es una perturbación vectorial del espacio circund
 
 Matemáticamente, se define operacionalmente a través de una partícula de prueba $q_0 > 0$:
 
-$$\vec{E}(\vec{r}) = \lim_{q_0 \to 0} \frac{\vec{F}_e(\vec{r})}{q_0}$$
+$$
+\vec{E}(\vec{r}) = \lim_{q_0 \to 0} \frac{\vec{F}_e(\vec{r})}{q_0}
+$$
 
 * **Condición de límite ($q_0 \to 0$):** Garantiza que la carga de prueba sea diferencialmente pequeña para no perturbar espacialmente la distribución de las cargas fuente ni inducir polarización en conductores o dieléctricos adyacentes.
 * **Naturaleza física:** $\vec{E}$ es intrínseco a las cargas fuente. Existe en cada punto del espacio independientemente de si hay o no una carga de prueba detectándolo.
@@ -31,9 +33,13 @@ flowchart LR
 ### 1.2 Unidades en el Sistema Internacional (S.I.)
 
 * **Unidad primaria (dinámica):**
-  $$[\vec{E}] = \frac{[\vec{F}]}{[q]} = \frac{\text{N}}{\text{C}} = \text{kg} \cdot \text{m} \cdot \text{s}^{-3} \cdot \text{A}^{-1}$$
+  $$
+  [\vec{E}] = \frac{[\vec{F}]}{[q]} = \frac{\text{N}}{\text{C}} = \text{kg} \cdot \text{m} \cdot \text{s}^{-3} \cdot \text{A}^{-1}
+  $$
 * **Unidad electrocinética/gradiente de potencial:**
-  $$1\,\frac{\text{N}}{\text{C}} = 1\,\frac{\text{N}\cdot\text{m}}{\text{C}\cdot\text{m}} = 1\,\frac{\text{J}}{\text{C}\cdot\text{m}} = 1\,\frac{\text{V}}{\text{m}}$$
+  $$
+  1\,\frac{\text{N}}{\text{C}} = 1\,\frac{\text{N}\cdot\text{m}}{\text{C}\cdot\text{m}} = 1\,\frac{\text{J}}{\text{C}\cdot\text{m}} = 1\,\frac{\text{V}}{\text{m}}
+  $$
 
 > [!NOTE]
 > Ambas unidades ($\text{N/C}$ y $\text{V/m}$) son idénticas dimensionalmente. La formulación en $\text{V/m}$ evidencia de manera directa que el campo eléctrico representa la razón de cambio espacial del potencial eléctrico: $\vec{E} = -\nabla V$.
@@ -44,7 +50,9 @@ flowchart LR
 
 Dado que las ecuaciones fundamentales de Maxwell en régimen estático son linealmente diferenciales respecto a las densidades de carga, el campo eléctrico total resultante en cualquier punto $\vec{r}$ es la suma vectorial directa de los campos originados por cada entidad cargada de forma aislada:
 
-$$\vec{E}_{\text{total}}(\vec{r}) = \sum_{i=1}^{N} \vec{E}_i(\vec{r}) = \frac{1}{4\pi\varepsilon_0}\sum_{i=1}^{N} \frac{q_i}{|\vec{r} - \vec{r}_i|^3}(\vec{r} - \vec{r}_i)$$
+$$
+\vec{E}_{\text{total}}(\vec{r}) = \sum_{i=1}^{N} \vec{E}_i(\vec{r}) = \frac{1}{4\pi\varepsilon_0}\sum_{i=1}^{N} \frac{q_i}{|\vec{r} - \vec{r}_i|^3}(\vec{r} - \vec{r}_i)
+$$
 
 * **Validez física:** El vacío es un medio perfectamente lineal para campos de magnitudes subcríticas (límite de Schwinger: $E_{\text{crit}} \approx 1.3 \times 10^{18}\ \text{V/m}$).
 
@@ -56,11 +64,17 @@ $$\vec{E}_{\text{total}}(\vec{r}) = \sum_{i=1}^{N} \vec{E}_i(\vec{r}) = \frac{1}
 
 Para $N$ partículas con cargas $q_i$ localizadas en posiciones $\vec{r}_i = (x_i, y_i, z_i)$, el campo en el punto de observación $P(\vec{r})$ se descompone en componentes cartesianas:
 
-$$E_x = \frac{1}{4\pi\varepsilon_0}\sum_{i=1}^{N}\frac{q_i (x - x_i)}{\left[(x - x_i)^2 + (y - y_i)^2 + (z - z_i)^2\right]^{3/2}}$$
+$$
+E_x = \frac{1}{4\pi\varepsilon_0}\sum_{i=1}^{N}\frac{q_i (x - x_i)}{\left[(x - x_i)^2 + (y - y_i)^2 + (z - z_i)^2\right]^{3/2}}
+$$
 
-$$E_y = \frac{1}{4\pi\varepsilon_0}\sum_{i=1}^{N}\frac{q_i (y - y_i)}{\left[(x - x_i)^2 + (y - y_i)^2 + (z - z_i)^2\right]^{3/2}}$$
+$$
+E_y = \frac{1}{4\pi\varepsilon_0}\sum_{i=1}^{N}\frac{q_i (y - y_i)}{\left[(x - x_i)^2 + (y - y_i)^2 + (z - z_i)^2\right]^{3/2}}
+$$
 
-$$E_z = \frac{1}{4\pi\varepsilon_0}\sum_{i=1}^{N}\frac{q_i (z - z_i)}{\left[(x - x_i)^2 + (y - y_i)^2 + (z - z_i)^2\right]^{3/2}}$$
+$$
+E_z = \frac{1}{4\pi\varepsilon_0}\sum_{i=1}^{N}\frac{q_i (z - z_i)}{\left[(x - x_i)^2 + (y - y_i)^2 + (z - z_i)^2\right]^{3/2}}
+$$
 
 ---
 
@@ -68,30 +82,42 @@ $$E_z = \frac{1}{4\pi\varepsilon_0}\sum_{i=1}^{N}\frac{q_i (z - z_i)}{\left[(x -
 
 Para un elemento infinitesimal de carga $dq$:
 
-$$d\vec{E} = \frac{1}{4\pi\varepsilon_0} \frac{dq}{|\vec{r} - \vec{r}'|^3} (\vec{r} - \vec{r}') \implies \vec{E}(\vec{r}) = \frac{1}{4\pi\varepsilon_0} \int_{\mathcal{V}'} \frac{\vec{r} - \vec{r}'}{|\vec{r} - \vec{r}'|^3} dq$$
+$$
+d\vec{E} = \frac{1}{4\pi\varepsilon_0} \frac{dq}{|\vec{r} - \vec{r}'|^3} (\vec{r} - \vec{r}') \implies \vec{E}(\vec{r}) = \frac{1}{4\pi\varepsilon_0} \int_{\mathcal{V}'} \frac{\vec{r} - \vec{r}'}{|\vec{r} - \vec{r}'|^3} dq
+$$
 
 ##### 1. Alambre Rectilíneo Finito
 Considere un hilo lineal con densidad uniforme $\lambda$ a lo largo del eje $z$, extendido desde $z_1$ hasta $z_2$. Punto de observación a distancia perpendicular $r$ sobre el plano $xy$:
 
-$$\vec{E} = \frac{\lambda}{4\pi\varepsilon_0 r} \left[ (\sin\theta_2 - \sin\theta_1)\,\hat{u}_r - (\cos\theta_2 - \cos\theta_1)\,\hat{u}_z \right]$$
+$$
+\vec{E} = \frac{\lambda}{4\pi\varepsilon_0 r} \left[ (\sin\theta_2 - \sin\theta_1)\,\hat{u}_r - (\cos\theta_2 - \cos\theta_1)\,\hat{u}_z \right]
+$$
 
 Donde $\theta_1, \theta_2$ son los ángulos subtendidos desde los extremos hacia el punto de observación.
 
 ##### 2. Alambre Rectilíneo Infinito ($z_1 \to -\infty, z_2 \to +\infty$)
 Por paridad angular ($\theta_1 = -\pi/2$, $\theta_2 = \pi/2$), las componentes axiales se anulan idénticamente:
 
-$$\vec{E} = \frac{\lambda}{2\pi\varepsilon_0 r} \hat{u}_r$$
+$$
+\vec{E} = \frac{\lambda}{2\pi\varepsilon_0 r} \hat{u}_r
+$$
 
 ##### 3. Anillo Circular Cargado
 Radio $R$, carga total $Q$ distribuida uniformemente en el plano $xy$. Punto de campo sobre el eje de simetría $z$:
 
-$$dq = \lambda R\,d\phi = \frac{Q}{2\pi}d\phi$$
+$$
+dq = \lambda R\,d\phi = \frac{Q}{2\pi}d\phi
+$$
 
 Por simetría azimutal, las componentes ortogonales al eje $z$ se cancelan por pares opuestos diametralmente ($dE_\perp = 0$):
 
-$$E_z = \int_0^{2\pi} \frac{1}{4\pi\varepsilon_0} \frac{dq}{(z^2 + R^2)} \cos\alpha, \quad \text{con } \cos\alpha = \frac{z}{\sqrt{z^2 + R^2}}$$
+$$
+E_z = \int_0^{2\pi} \frac{1}{4\pi\varepsilon_0} \frac{dq}{(z^2 + R^2)} \cos\alpha, \quad \text{con } \cos\alpha = \frac{z}{\sqrt{z^2 + R^2}}
+$$
 
-$$\vec{E}(z) = \frac{1}{4\pi\varepsilon_0} \frac{Q z}{(z^2 + R^2)^{3/2}} \hat{u}_z$$
+$$
+\vec{E}(z) = \frac{1}{4\pi\varepsilon_0} \frac{Q z}{(z^2 + R^2)^{3/2}} \hat{u}_z
+$$
 
 * **Comportamiento en el centro ($z = 0$):** $\vec{E} = \vec{0}$.
 * **Máximo absoluto:** Derivando $\frac{dE_z}{dz} = 0 \implies z_{\text{máx}} = \pm \frac{R}{\sqrt{2}}$.
@@ -99,16 +125,24 @@ $$\vec{E}(z) = \frac{1}{4\pi\varepsilon_0} \frac{Q z}{(z^2 + R^2)^{3/2}} \hat{u}
 ##### 4. Disco Circular Uniforme
 Radio $R$, densidad superficial $\sigma = \frac{Q}{\pi R^2}$. Se descompone en anillos concéntricos de radio $r'$ y ancho diferencial $dr'$:
 
-$$dq = \sigma\,dA' = \sigma (2\pi r' dr')$$
+$$
+dq = \sigma\,dA' = \sigma (2\pi r' dr')
+$$
 
-$$\vec{E}(z) = \hat{u}_z \int_0^R \frac{z\,\sigma (2\pi r' dr')}{4\pi\varepsilon_0 (z^2 + r'^2)^{3/2}} = \frac{\sigma z}{2\varepsilon_0} \left[ -\frac{1}{\sqrt{z^2 + r'^2}} \right]_0^R$$
+$$
+\vec{E}(z) = \hat{u}_z \int_0^R \frac{z\,\sigma (2\pi r' dr')}{4\pi\varepsilon_0 (z^2 + r'^2)^{3/2}} = \frac{\sigma z}{2\varepsilon_0} \left[ -\frac{1}{\sqrt{z^2 + r'^2}} \right]_0^R
+$$
 
-$$\vec{E}(z) = \frac{\sigma}{2\varepsilon_0} \left( \frac{z}{|z|} - \frac{z}{\sqrt{z^2 + R^2}} \right) \hat{u}_z = \frac{\sigma}{2\varepsilon_0}\operatorname{sgn}(z)\left(1 - \frac{|z|}{\sqrt{z^2 + R^2}}\right)\hat{u}_z$$
+$$
+\vec{E}(z) = \frac{\sigma}{2\varepsilon_0} \left( \frac{z}{|z|} - \frac{z}{\sqrt{z^2 + R^2}} \right) \hat{u}_z = \frac{\sigma}{2\varepsilon_0}\operatorname{sgn}(z)\left(1 - \frac{|z|}{\sqrt{z^2 + R^2}}\right)\hat{u}_z
+$$
 
 ##### 5. Lámina Plana Infinita
 Tomando el límite asintótico del disco cuando $R \to \infty$:
 
-$$\vec{E} = \frac{\sigma}{2\varepsilon_0} \operatorname{sgn}(z)\,\hat{u}_n$$
+$$
+\vec{E} = \frac{\sigma}{2\varepsilon_0} \operatorname{sgn}(z)\,\hat{u}_n
+$$
 
 El campo es estrictamente **uniforme** e independiente de la distancia al plano.
 
@@ -136,7 +170,9 @@ Propuestas por Michael Faraday, constituyen una representación tangencial de la
 2. **Direccionalidad:** Emergen de cargas netas positivas (fuentes/manantiales) y convergen en cargas netas negativas (sumideros), o se proyectan al infinito.
 3. **Impenetrabilidad:** Dos líneas de campo nunca se cruzan. Si lo hicieran, el vector campo eléctrico perdería unicidad en el punto de intersección.
 4. **Densidad geométrica proporcional:** El número de líneas $dN$ que atraviesan ortogonalmente un elemento de área $dA_\perp$ es proporcional a la magnitud local del campo:
-   $$\frac{dN}{dA_\perp} \propto |\vec{E}|$$
+   $$
+   \frac{dN}{dA_\perp} \propto |\vec{E}|
+   $$
 
 <div align="center">
   <svg width="340" height="150" viewBox="0 0 340 150" xmlns="http://www.w3.org/2000/svg">
@@ -162,15 +198,23 @@ Propuestas por Michael Faraday, constituyen una representación tangencial de la
 Un dipolo eléctrico elemental consta de dos cargas de igual magnitud y signo opuesto $+q$ y $-q$, separadas por un vector de desplazamiento relativo $\vec{d}$ orientado desde la carga negativa hacia la positiva.
 
 #### A. Momento Dipolar Eléctrico ($\vec{p}$)
-$$\vec{p} = q\,\vec{d} \quad [\,\text{C}\cdot\text{m}\,]$$
+$$
+\vec{p} = q\,\vec{d} \quad [\,\text{C}\cdot\text{m}\,]
+$$
 
 En el límite dipolar puntual ($d \to 0$, $q \to \infty$ con $p = qd$ finito):
 * **Campo en el eje axial (punto sobre el eje del dipolo, $r \gg d$):**
-  $$\vec{E}_{\text{axial}} \approx \frac{1}{4\pi\varepsilon_0} \frac{2\vec{p}}{r^3}$$
+  $$
+  \vec{E}_{\text{axial}} \approx \frac{1}{4\pi\varepsilon_0} \frac{2\vec{p}}{r^3}
+  $$
 * **Campo en el plano ecuatorial (mediatriz, $r \gg d$):**
-  $$\vec{E}_{\text{ecuatorial}} \approx -\frac{1}{4\pi\varepsilon_0} \frac{\vec{p}}{r^3}$$
+  $$
+  \vec{E}_{\text{ecuatorial}} \approx -\frac{1}{4\pi\varepsilon_0} \frac{\vec{p}}{r^3}
+  $$
 * **Formulación tensorial/vectorial general en coordenadas esféricas:**
-  $$\vec{E}(\vec{r}) = \frac{1}{4\pi\varepsilon_0 r^3} \left[ 3(\vec{p} \cdot \hat{u}_r)\hat{u}_r - \vec{p} \right]$$
+  $$
+  \vec{E}(\vec{r}) = \frac{1}{4\pi\varepsilon_0 r^3} \left[ 3(\vec{p} \cdot \hat{u}_r)\hat{u}_r - \vec{p} \right]
+  $$
 
 > [!NOTE]
 > El campo electrostático del dipolo decae como $r^{-3}$, de forma marcadamente más acelerada que el campo monopolítico ($r^{-2}$), debido a la cancelación asintótica de cargas opuestas a distancias dominantes.
@@ -181,21 +225,31 @@ En el límite dipolar puntual ($d \to 0$, $q \to \infty$ con $p = qd$ finito):
 
 ##### 1. Campo Eléctrico Uniforme ($\vec{E} = \text{constante}$)
 * **Fuerza neta:**
-  $$\vec{F}_{\text{neta}} = \vec{F}_+ + \vec{F}_- = (+q)\vec{E} + (-q)\vec{E} = \vec{0}$$
+  $$
+  \vec{F}_{\text{neta}} = \vec{F}_+ + \vec{F}_- = (+q)\vec{E} + (-q)\vec{E} = \vec{0}
+  $$
 * **Torque neto ($\vec{\tau}$):**
   Calculado respecto al centro geométrico o a cualquier referencia inercial:
-  $$\vec{\tau} = \left(\frac{\vec{d}}{2} \times q\vec{E}\right) + \left(-\frac{\vec{d}}{2} \times (-q)\vec{E}\right) = q\vec{d} \times \vec{E}$$
-  $$\vec{\tau} = \vec{p} \times \vec{E}$$
+  $$
+  \vec{\tau} = \left(\frac{\vec{d}}{2} \times q\vec{E}\right) + \left(-\frac{\vec{d}}{2} \times (-q)\vec{E}\right) = q\vec{d} \times \vec{E}
+  $$
+  $$
+  \vec{\tau} = \vec{p} \times \vec{E}
+  $$
   El torque actúa siempre para alinear el vector momento dipolar $\vec{p}$ paralelamente al campo externo $\vec{E}$.
 
 ##### 2. Campo Eléctrico No Uniforme ($\vec{E} = \vec{E}(\vec{r})$)
 La fuerza sobre cada carga no se anula. Expandiendo mediante aproximación de gradiente de primer orden en serie de Taylor:
 
-$$\vec{F}_{\text{neta}} = q\left[\vec{E}(\vec{r} + \vec{d}) - \vec{E}(\vec{r})\right] \approx q (\vec{d} \cdot \nabla)\vec{E} = (\vec{p} \cdot \nabla)\vec{E}$$
+$$
+\vec{F}_{\text{neta}} = q\left[\vec{E}(\vec{r} + \vec{d}) - \vec{E}(\vec{r})\right] \approx q (\vec{d} \cdot \nabla)\vec{E} = (\vec{p} \cdot \nabla)\vec{E}
+$$
 
 Usando identidades vectoriales de cálculo multivariable ($\nabla \times \vec{E} = \vec{0}$ en electrostática):
 
-$$\vec{F}_{\text{neta}} = \nabla(\vec{p} \cdot \vec{E})$$
+$$
+\vec{F}_{\text{neta}} = \nabla(\vec{p} \cdot \vec{E})
+$$
 
 > [!WARNING]
 > Un dipolo neutro dentro de un campo electrostático no homogéneo experimentará traslación hacia regiones de mayor o menor intensidad de campo dependiendo de su orientación relativa.
@@ -206,11 +260,15 @@ $$\vec{F}_{\text{neta}} = \nabla(\vec{p} \cdot \vec{E})$$
 
 El trabajo infinitesimal realizado por el agente externo contra el torque electrostático para rotar el dipolo es $dW_{\text{ext}} = \tau_{\text{ext}} d\theta = - \tau_e d\theta$:
 
-$$U = -\int \tau_e \, d\theta = -\int (-p E \sin\theta) d\theta = -p E \cos\theta + U_0$$
+$$
+U = -\int \tau_e \, d\theta = -\int (-p E \sin\theta) d\theta = -p E \cos\theta + U_0
+$$
 
 Estableciendo el nivel de referencia nulo en la orientación ortogonal $\theta = \frac{\pi}{2}$ ($U(\pi/2) = 0$):
 
-$$U = -\vec{p} \cdot \vec{E}$$
+$$
+U = -\vec{p} \cdot \vec{E}
+$$
 
 * **Equilibrio Estable:** $\theta = 0 \implies \vec{p} \parallel \vec{E} \implies U_{\text{mín}} = -pE$, con torque restaurador ante perturbaciones.
 * **Equilibrio Inestable:** $\theta = \pi \implies \vec{p} \ anti\parallel \vec{E} \implies U_{\text{máx}} = +pE$, donde cualquier torque desestabiliza el alineamiento.
@@ -223,12 +281,18 @@ $$U = -\vec{p} \cdot \vec{E}$$
 
 El ángulo sólido $\Omega$ es la generalización tridimensional del ángulo plano, definido sobre una superficie esférica de radio $r$:
 
-$$d\Omega = \frac{dA_\perp}{r^2} = \frac{\vec{r} \cdot d\vec{A}}{r^3} \quad [\,\text{sr (estereorradianes)}\,]$$
+$$
+d\Omega = \frac{dA_\perp}{r^2} = \frac{\vec{r} \cdot d\vec{A}}{r^3} \quad [\,\text{sr (estereorradianes)}\,]
+$$
 
 * **Superficie cerrada circundante:**
-  $$\Omega_{\text{cerrada}} = \oint \frac{dA_\perp}{r^2} = \frac{4\pi r^2}{r^2} = 4\pi\ \text{sr}$$
+  $$
+  \Omega_{\text{cerrada}} = \oint \frac{dA_\perp}{r^2} = \frac{4\pi r^2}{r^2} = 4\pi\ \text{sr}
+  $$
 * **Punto externo a la superficie cerrada:** Si el vértice del ángulo sólido yace fuera del volumen acotado, todo cono infinitesimal entra y sale un número par de veces con proyecciones normales opuestas, resultando en:
-  $$\Omega_{\text{externo}} = 0\ \text{sr}$$
+  $$
+  \Omega_{\text{externo}} = 0\ \text{sr}
+  $$
 
 ---
 
@@ -236,11 +300,15 @@ $$d\Omega = \frac{dA_\perp}{r^2} = \frac{\vec{r} \cdot d\vec{A}}{r^3} \quad [\,\
 
 Dada una superficie arbitraria $S$ particionada en diferenciales vectoriales de área $d\vec{A} = \hat{n}\,dA$, donde $\hat{n}$ es el vector unitario normal:
 
-$$\Phi_E = \iint_S \vec{E} \cdot d\vec{A} \quad \left[\,\text{N}\cdot\text{m}^2/\text{C}\text{ ó }\text{V}\cdot\text{m}\,\right]$$
+$$
+\Phi_E = \iint_S \vec{E} \cdot d\vec{A} \quad \left[\,\text{N}\cdot\text{m}^2/\text{C}\text{ ó }\text{V}\cdot\text{m}\,\right]
+$$
 
 Para una **superficie orientada cerrada** $\partial\mathcal{V}$ que encierra un volumen $\mathcal{V}$, se adopta la convención topológica estándar de que $\hat{n}$ apunta estrictamente hacia el **exterior**:
 
-$$\Phi_E = \oint_{\partial\mathcal{V}} \vec{E} \cdot d\vec{A}$$
+$$
+\Phi_E = \oint_{\partial\mathcal{V}} \vec{E} \cdot d\vec{A}
+$$
 
 * **$\Phi_E > 0$:** Predominio de divergencia o presencia de fuentes netas positivas en el interior.
 * **$\Phi_E < 0$:** Predominio de convergencia o sumideros de carga neta negativos.
