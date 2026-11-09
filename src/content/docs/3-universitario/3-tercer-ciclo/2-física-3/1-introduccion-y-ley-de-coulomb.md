@@ -325,10 +325,10 @@ flowchart TD
     M1[1. Definir Sistema de Coordenadas Inercial] --> M2["2. Identificar y Vectorizar Posiciones: $r_{fuente}$ y $r_{campo}$"]
     M2 --> M3["3. Construir Vector Relativo: R = r - r' y su norma |R|"]
     M3 --> M4{¿Distribución?}
-    M4 -- Discreta --> M5["Aplicar Sumatoria Vectorial: Σ Fi"]
+    M4 -- Discreta --> M5["Aplicar Sumatoria Vectorial: $\sum \vec{F}_i$"]
     M4 -- Continua --> M6["Identificar Simetrías y Descomponer dq en dl', da' o dv'"]
     M6 --> M7["Configurar Integrales de Componentes Cartesianas"]
-    M5 --> M8[Evaluar Fuerza Neta y Aplicar Equilibrio ΣF = 0 o F = ma]
+    M5 --> M8["Evaluar Fuerza Neta y Aplicar Equilibrio: $\sum \vec{F} = \vec{0}$ o $\vec{F} = m\vec{a}$"]
     M7 --> M8
 ```
 
