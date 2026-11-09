@@ -236,25 +236,25 @@ html body .markdown-body :where(h1, h2, h3, h4, h5, h6, strong, em, del, s, u) .
    ========================================================== */
 .markdown-body ul:not(.contains-task-list) {
   list-style-type: disc !important;
-  padding-left: 1.75rem !important;
+  padding-left: 1.2rem !important;
   margin: 0.85rem 0 !important;
 }
 
 .markdown-body ol {
   list-style-type: decimal !important;
-  padding-left: 1.85rem !important;
+  padding-left: 1.3rem !important;
   margin: 0.85rem 0 !important;
 }
 
 .markdown-body ol ol {
   list-style-type: lower-alpha !important;
-  padding-left: 1.5rem !important;
+  padding-left: 1.2rem !important;
 }
 
 .markdown-body ul ul,
 .markdown-body ol ul {
   list-style-type: circle !important;
-  padding-left: 1.5rem !important;
+  padding-left: 1.2rem !important;
 }
 
 .markdown-body li {

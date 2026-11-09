@@ -118,6 +118,57 @@ const dynamicThemeCss = generateThemeCss();
     <GlobalModal />
     <GraphModal />
 
+    <!-- BARRA DE NAVEGACIÓN INFERIOR (MÓVIL < 768px) -->
+    <nav class="mobile-bottom-bar" aria-label="Navegación Móvil">
+      <button class="m-btn" data-drawer="m-drawer-explorer" id="m-act-explorer" title="Explorador">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/></svg>
+        <span>Archivos</span>
+      </button>
+      <button class="m-btn" data-drawer="m-drawer-search" id="m-act-search" title="Buscar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <span>Buscar</span>
+      </button>
+      <button class="m-btn" data-drawer="m-drawer-toc" id="m-act-toc" title="Índice">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="21" x2="3" y1="6" y2="6"/><line x1="15" x2="3" y1="12" y2="12"/><line x1="17" x2="3" y1="18" y2="18"/></svg>
+        <span>Índice</span>
+      </button>
+      <button class="m-btn" data-drawer="m-drawer-meta" id="m-act-meta" title="Metadatos">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        <span>Info</span>
+      </button>
+      <button class="m-btn" id="m-act-zen" title="Modo Zen">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" x2="14" y1="3" y2="10"/><line x1="3" x2="10" y1="21" y2="14"/></svg>
+        <span>Zen</span>
+      </button>
+    </nav>
+
+    <!-- CAJONES MÓVILES (DRAWERS) -->
+    <div class="mobile-drawer-backdrop" id="mobile-backdrop"></div>
+
+    <div class="mobile-drawer" id="m-drawer-explorer">
+      <div class="drawer-handle"></div>
+      <div class="drawer-header"><h3>Explorador de Archivos</h3></div>
+      <div class="drawer-body" id="mobile-explorer-content"></div>
+    </div>
+
+    <div class="mobile-drawer" id="m-drawer-search">
+      <div class="drawer-handle"></div>
+      <div class="drawer-header"><h3>Buscar en Documentos</h3></div>
+      <div class="drawer-body" id="mobile-search-content"></div>
+    </div>
+
+    <div class="mobile-drawer" id="m-drawer-toc">
+      <div class="drawer-handle"></div>
+      <div class="drawer-header"><h3>Índice del Documento</h3></div>
+      <div class="drawer-body" id="mobile-toc-content"></div>
+    </div>
+
+    <div class="mobile-drawer" id="m-drawer-meta">
+      <div class="drawer-handle"></div>
+      <div class="drawer-header"><h3>Metadatos y Notas</h3></div>
+      <div class="drawer-body" id="mobile-meta-content"></div>
+    </div>
+
     <script>
       import { bootstrapApp } from '../scripts/app';
       document.addEventListener('astro:page-load', () => {
