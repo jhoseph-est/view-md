@@ -323,7 +323,7 @@ Integrando sobre todo el soporte geométrico de la fuente:
 ```mermaid
 flowchart TD
     M1[1. Definir Sistema de Coordenadas Inercial] --> M2[2. Identificar y Vectorizar Posiciones: r_fuente y r_campo]
-    M2 --> M3[3. Construir Vector Relativo: R = r - r' y su norma |R|]
+    M2 --> M3["3. Construir Vector Relativo: R = r - r' y su norma |R|"]
     M3 --> M4{¿Distribución?}
     M4 -- Discreta --> M5["Aplicar Sumatoria Vectorial: Σ Fi"]
     M4 -- Continua --> M6["Identificar Simetrías y Descomponer dq en dl', da' o dv'"]
