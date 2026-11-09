@@ -8,7 +8,6 @@ import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { ClientRouter } from 'astro:transitions';
 import GlobalModal from '../components/GlobalModal.astro';
 import GraphModal from '../components/GraphModal.astro';
-import ModalImpresion from '../components/ModalImpresion.astro';
 import { generateThemeCss } from '../utils/themeInjector';
 
 const {
@@ -118,11 +117,7 @@ const dynamicThemeCss = generateThemeCss();
 
     <GlobalModal />
     <GraphModal />
-    <ModalImpresion />
 
-    <!-- BARRA DE NAVEGACIÓN INFERIOR (MÓVIL < 768px) -->
-    <!-- (Se mantienen los cajones móviles de exploración, búsqueda, índice, meta y ajustes) -->
-    
     <script>
       import { bootstrapApp } from '../scripts/app';
       document.addEventListener('astro:page-load', () => {

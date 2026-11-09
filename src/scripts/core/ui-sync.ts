@@ -12,6 +12,14 @@ export function toggleZenMode(): void {
   }
 }
 
+// NUEVO: Control dinámico para mostrar u ocultar el botón global de descarga Markdown
+export function updateDownloadButtonVisibility(): void {
+  const downloadBtn = document.getElementById('act-download-md');
+  if (!downloadBtn) return;
+  const isDocView = window.location.pathname.includes('/docs/') && document.getElementById('document-view');
+  downloadBtn.style.display = isDocView ? 'flex' : 'none';
+}
+
 export function initUiSync(): void {
   const root = document.documentElement;
   const mainGrid = document.getElementById('main-grid');
@@ -33,12 +41,10 @@ export function initUiSync(): void {
   const actExplorer = document.getElementById('act-explorer');
   const actSearch = document.getElementById('act-search');
   const actSettings = document.getElementById('act-settings');
-  const actPrint = document.getElementById('act-print');
   const leftTitle = document.getElementById('left-panel-title');
   const actSlides = document.getElementById('act-slides') as HTMLAnchorElement | null;
 
-
-  // NUEVO: Función para actualizar dinámicamente el enlace de diapositivas según la ruta actual
+  // Función para actualizar dinámicamente el enlace de diapositivas según la ruta actual
   function updateSlidesLink(): void {
     if (!actSlides) return;
     const currentPath = window.location.pathname;
@@ -55,7 +61,8 @@ export function initUiSync(): void {
   }
 
   function syncUI(save = true): void {
-    updateSlidesLink(); // Actualizar slides cada vez que sincronice la UI
+    updateSlidesLink(); 
+    updateDownloadButtonVisibility(); // Actualizar visibilidad del botón MD al sincronizar UI
 
     root.classList.toggle('no-left-panel', !isLeftOpen);
     root.classList.toggle('no-toc', !showToc);
@@ -162,12 +169,6 @@ export function initUiSync(): void {
 
   if (actToc) actToc.onclick = () => { showToc = !showToc; syncUI(); };
   if (actMeta) actMeta.onclick = () => { showMeta = !showMeta; syncUI(); };
-
-  if (actPrint) {
-    actPrint.onclick = () => {
-      window.dispatchEvent(new CustomEvent('open-print-modal'));
-    };
-  }
 
   updateProfileLink: {
     updateSlidesLink();
