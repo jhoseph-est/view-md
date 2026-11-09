@@ -34,6 +34,11 @@ const dynamicThemeCss = generateThemeCss();
        crossorigin="anonymous"
       data-astro-rerun
     />
+    <script 
+      is:inline
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"
+      crossorigin="anonymous"
+    ></script>
     <style is:global set:html={dynamicThemeCss}></style>
     <script type="application/json" id="doc-frontmatter-data" set:html={JSON.stringify(frontmatter)}></script>
     <script is:inline>

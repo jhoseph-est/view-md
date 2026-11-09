@@ -31,8 +31,18 @@
   margin-bottom: 0.85rem;
 }
 
-.markdown-body .mermaid p,
-.markdown-body .slide-mermaid-scroll-box p,
+/* Excluir párrafos dentro de bloques de código y contenedores Mermaid */
+.markdown-body .mermaid-wrapper p,
+.markdown-body .mermaid-native p,
+.markdown-body .code-block-wrapper p,
+.markdown-body foreignObject p,
+.markdown-body .nodeLabel p,
+.markdown-body .slide-mermaid-scroll-box p {
+  text-indent: 0 !important;
+  text-align: center !important;
+  margin: 0 !important;
+}
+
 .markdown-body blockquote[data-callout] p,
 .markdown-body table p {
   text-indent: 0 !important;

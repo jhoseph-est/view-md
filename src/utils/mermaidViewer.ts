@@ -281,6 +281,38 @@ async function renderSingleDiagram(item: HTMLElement, index: number, forceReRend
   item.replaceWith(wrapper);
   attachMermaidControls(wrapper, code);
   wrapper.dataset.renderedSignature = renderSignature;
+  // Renderizar fórmulas LaTeX (inline $...$ y bloque $$...$$) dentro de los nodos Mermaid
+  if (typeof (window as any).katex !== 'undefined') {
+    const textNodes = wrapper.querySelectorAll('.nodeLabel, foreignObject p, foreignObject span');
+    textNodes.forEach((node) => {
+      let content = node.innerHTML;
+      if (content.includes('$')) {
+        // 1. Ecuaciones en bloque ($$...$$)
+        content = content.replace(/\$\$([\s\S]+?)\$\$/g, (_, tex) => {
+          try {
+            return (window as any).katex.renderToString(tex.replace(/<br\s*\/?>/gi, '').trim(), {
+              displayMode: true,
+              throwOnError: false
+            });
+          } catch {
+            return `$$${tex}$$`;
+          }
+        });
+        // 2. Ecuaciones inline ($...$)
+        content = content.replace(/\$([^\$]+?)\$/g, (_, tex) => {
+          try {
+            return (window as any).katex.renderToString(tex.replace(/<br\s*\/?>/gi, '').trim(), {
+              displayMode: false,
+              throwOnError: false
+            });
+          } catch {
+            return `$${tex}$`;
+          }
+        });
+        node.innerHTML = content;
+      }
+    });
+  }
 }
 
 export async function renderMermaid(forceReRender = false, targetSelector = '.main-content') {
