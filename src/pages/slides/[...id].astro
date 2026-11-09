@@ -8,6 +8,7 @@ import 'reveal.js/plugin/highlight/monokai.css';
 import '../../styles/mermaid.css';
 import '../../styles/slides.css';
 import estilosBase from '../../config/estilos-base.json';
+import { compileThemeToCss } from '../../utils/themePresetsManager';
 
 export async function getStaticPaths() {
   const allDocs = await getCollection('docs');
@@ -35,38 +36,35 @@ const { doc } = Astro.props;
 const contentBody = doc.body || '';
 
 const temaId = doc.data.theme || 'default';
-const temaConfig = (estilosBase as any)[temaId] || (estilosBase as any)['default'];
-const bgDark = temaConfig?.oscuro?.superficies?.fondoPrincipal || '#0f172a';
-const bgLight = temaConfig?.claro?.superficies?.fondoPrincipal || '#f8fafc';
-const textDark = temaConfig?.oscuro?.textos?.principal || '#f8fafc';
-const textLight = temaConfig?.claro?.textos?.principal || '#0f172a';
+// Inyección dinámica de los estilos compilados mediante el gestor centralizado JSON
+const dynamicThemeCss = generateAllThemesCss();
+
+function generateAllThemesCss(): string {
+  let css = '';
+  for (const [id, config] of Object.entries(estilosBase as Record<string, any>)) {
+    css += compileThemeToCss(id, config);
+  }
+  return css;
+}
 ---
 
 <!DOCTYPE html>
-<html lang="es" data-modo="oscuro" data-estilo={temaId}>
+<html lang="es" data-tema-doc={temaId}>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Presentación: {doc.data.title}</title>
+  <style is:global set:html={dynamicThemeCss}></style>
   <script is:inline define:vars={{ temaId }}>
     (function () {
       const html = document.documentElement;
       const modo = localStorage.getItem('pref-modo') || 'oscuro';
-      const estilo = temaId || localStorage.getItem('pref-estilo') || 'default';
+      const temaForzado = html.getAttribute('data-tema-doc');
+      const estilo = temaForzado || localStorage.getItem('pref-estilo') || 'default';
       html.setAttribute('data-modo', modo);
       html.setAttribute('data-estilo', estilo);
     })();
   </script>
-  <style define:vars={{ bgDark, bgLight, textDark, textLight }}>
-    html[data-modo="oscuro"] body, html[data-modo="oscuro"] .reveal {
-      background-color: var(--bgDark) !important;
-      color: var(--textDark) !important;
-    }
-    html[data-modo="claro"] body, html[data-modo="claro"] .reveal {
-      background-color: var(--bgLight) !important;
-      color: var(--textLight) !important;
-    }
-  </style>
 </head>
 <body>
   <button onclick="window.close()" class="btn-exit" aria-label="Cerrar ventana">
@@ -187,7 +185,6 @@ const textLight = temaConfig?.claro?.textos?.principal || '#0f172a';
           });
         }
 
-        // Validación numérica estricta: descarta pan-x, pan-y o cadenas no dimensionales
         const parseSlideDimension = (val: string | null | undefined): string | null => {
           if (!val) return null;
           const clean = val.trim();
@@ -257,7 +254,6 @@ const textLight = temaConfig?.claro?.textos?.principal || '#0f172a';
 
             const scrollBox = document.createElement('div');
             scrollBox.className = 'slide-mermaid-scroll-box';
-
             scrollBox.innerHTML = svg;
 
             const svgEl = scrollBox.querySelector('svg');

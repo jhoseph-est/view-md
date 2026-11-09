@@ -36,7 +36,7 @@ if (props.type === 'file') {
   normalizedDocId = props.folderPath;
   breadcrumbs = props.folderPath === 'explorar' ? [] : normalizedDocId.split('/').slice(0, -1);
   title = props.folderPath === 'explorar' ? 'Directorio Principal' : `Carpeta: ${formatName(props.folderName)}`;
-  frontmatterConExtra = { title, theme: 'moderno' };
+  frontmatterConExtra = { title, theme: 'default' };
 }
 
 let linkVolver = "/";
