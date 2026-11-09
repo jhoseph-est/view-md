@@ -30,8 +30,8 @@ export default defineConfig({
     syntaxHighlight: 'shiki',
     shikiConfig: {
       themes: {
-        light: 'red',
-        dark: 'solarized-dark',
+        light: 'catppuccin-latte',
+        dark: 'catppuccin-mocha',
       },
       defaultColor: false,
       wrap: true,

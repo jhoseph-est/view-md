@@ -1,5 +1,4 @@
 /* src/styles/code-blocks.css */
-
 .code-block-wrapper {
   position: relative !important;
   margin: 1.75rem 0;
@@ -14,8 +13,7 @@
   display: none !important;
 }
 
-/* Píldora de controles minimalista ubicada en la esquina SUPERIOR IZQUIERDA */
-.code-block-wrapper > .code-toolbar,
+.code-block-wrapper > .code-toolbar, 
 .code-block-wrapper > .code-block-header {
   position: absolute !important;
   top: 0.4rem !important;
@@ -36,7 +34,7 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
 }
 
-.code-block-wrapper:hover > .code-toolbar,
+.code-block-wrapper:hover > .code-toolbar, 
 .code-block-wrapper:hover > .code-block-header {
   opacity: 1 !important;
   pointer-events: auto !important;
@@ -77,7 +75,7 @@
   color: #ffffff !important;
 }
 
-/* Área interna de código (Shiki toma fondo y tipografía nativa de las variables del tema) */
+/* Área interna de código con fondo dinámico nativo de Shiki */
 .main-content pre.astro-code {
   margin: 0 !important;
   padding: 1.25rem 1.4rem !important;
@@ -85,7 +83,20 @@
   border-radius: 0 !important;
   overflow-x: auto !important;
   tab-size: 4 !important;
-  background-color: var(--code-bg, var(--bg-codigo-inline, #1e1e1e)) !important;
+  background-color: var(--shiki-dark-bg) !important;
+}
+
+html[data-modo="claro"] .main-content pre.astro-code {
+  background-color: var(--shiki-light-bg) !important;
+}
+
+/* Permitir que Shiki pinte directamente los spans con sus colores exactos y nativos */
+.main-content pre.astro-code code span {
+  color: var(--shiki-dark) !important;
+}
+
+html[data-modo="claro"] .main-content pre.astro-code code span {
+  color: var(--shiki-light) !important;
 }
 
 .code-block-wrapper pre code,

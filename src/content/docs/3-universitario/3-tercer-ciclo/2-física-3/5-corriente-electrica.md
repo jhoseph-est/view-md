@@ -14,10 +14,14 @@ orden: 5
 La **corriente eléctrica** es el transporte ordenado y colectivo de portadores de carga eléctrica a través de una región del espacio o sección transversal de un medio conductor.
 
 * **Intensidad de Corriente Media ($I_{\text{med}}$):** Cociente entre la carga neta $\Delta Q$ que atraviesa una sección transversal de referencia y el intervalo finito de tiempo transcurrido $\Delta t$:
-  $$I_{\text{med}} = \frac{\Delta Q}{\Delta t}$$
+  $$
+  I_{\text{med}} = \frac{\Delta Q}{\Delta t}
+  $$
 
 * **Intensidad de Corriente Instantánea ($I$):** Límite infinitesimal cuando el intervalo de tiempo tiende a cero:
-  $$I(t) = \lim_{\Delta t \to 0} \frac{\Delta Q}{\Delta t} = \frac{dQ}{dt}$$
+  $$
+  I(t) = \lim_{\Delta t \to 0} \frac{\Delta Q}{\Delta t} = \frac{dQ}{dt}
+  $$
 
 * **Convención de Signos de Franklin:** La dirección asignada al sentido técnico de la corriente coincide con la trayectoria de avance de portadores de carga **positiva**. En conductores metálicos estándar, los portadores reales son electrones de valencia ($q = -e$), por lo que su flujo físico de desplazamiento neto es opuesto al sentido convencional de $I$.
 
@@ -26,7 +30,9 @@ La **corriente eléctrica** es el transporte ordenado y colectivo de portadores 
 ### 1.2 Unidades en el Sistema Internacional (S.I.)
 
 * **Unidad base fundamental:** **Amperio** ($\text{A}$), redefinido en el SI (2019) fijando el valor numérico exacto de la carga elemental $e = 1.602176634 \times 10^{-19}\ \text{C}$:
-  $$1\ \text{A} = 1\ \frac{\text{C}}{\text{s}} = \frac{1}{1.602176634 \times 10^{-19}}\ \text{electrones/s} \approx 6.2415 \times 10^{18}\ \text{electrones/s}$$
+  $$
+  1\ \text{A} = 1\ \frac{\text{C}}{\text{s}} = \frac{1}{1.602176634 \times 10^{-19}}\ \text{electrones/s} \approx 6.2415 \times 10^{18}\ \text{electrones/s}
+  $$
 
 ---
 
@@ -46,10 +52,14 @@ La **corriente eléctrica** es el transporte ordenado y colectivo de portadores 
 #### A. Vector Densidad de Corriente ($\vec{J}$)
 Magnitud vectorial local que cuantifica el flujo de corriente eléctrica por unidad de área normal:
 
-$$I = \iint_S \vec{J} \cdot d\vec{A}$$
+$$
+I = \iint_S \vec{J} \cdot d\vec{A}
+$$
 
 * Si la distribución de corriente es homogénea y ortogonal sobre un área plana transversal $A$:
-  $$J = \frac{I}{A} \quad \left[\frac{\text{A}}{\text{m}^2}\right]$$
+  $$
+  J = \frac{I}{A} \quad \left[\frac{\text{A}}{\text{m}^2}\right]
+  $$
 
 ---
 
@@ -84,12 +94,18 @@ Al aplicar un campo eléctrico macroscópico $\vec{E}$, se superpone una velocid
 
 Considere un elemento de volumen diferencial $dV = A\,dx = A (v_d\,dt)$ que encierra $n$ portadores libres por unidad de volumen, cada uno con carga $q$:
 
-$$dQ = q \cdot (n\,dV) = q n A v_d\,dt$$
+$$
+dQ = q \cdot (n\,dV) = q n A v_d\,dt
+$$
 
-$$I = \frac{dQ}{dt} = n q v_d A \implies \vec{J} = n q \vec{v}_d$$
+$$
+I = \frac{dQ}{dt} = n q v_d A \implies \vec{J} = n q \vec{v}_d
+$$
 
 Para electrones libres en metales ($q = -e$):
-$$\vec{J} = -n e \vec{v}_d \implies \vec{v}_d \text{ es antiparalela a } \vec{J} \text{ y } \vec{E}$$
+$$
+\vec{J} = -n e \vec{v}_d \implies \vec{v}_d \text{ es antiparalela a } \vec{J} \text{ y } \vec{E}
+$$
 
 > [!TIP]
 > **Magnitud típica:** Para un alambre de cobre ($n \approx 8.5 \times 10^{28}\ \text{electrones/m}^3$) de calibre común conduciendo $10\ \text{A}$, la velocidad de deriva es de apenas $v_d \sim 10^{-4}\ \text{m/s}$ ($\sim 0.1\ \text{mm/s}$). La propagación casi instantánea de la señal energética ocurre porque la perturbación del campo electromagnético viaja por la línea a una velocidad cercana a la luz en el dieléctrico circundante ($v \sim \frac{c}{\sqrt{\kappa}} \sim 2 \times 10^8\ \text{m/s}$).
@@ -102,18 +118,26 @@ La carga eléctrica total es una magnitud invariante de Lorentz y estrictamente 
 
 El flujo saliente del vector densidad de corriente debe ser exactamente igual a la tasa de decremento temporal de la carga libre neta encerrada $Q_{\text{enc}}$:
 
-$$\oint_{\partial\mathcal{V}} \vec{J} \cdot d\vec{A} = -\frac{dQ_{\text{enc}}}{dt} = -\frac{d}{dt}\iiint_{\mathcal{V}} \rho\,dV = -\iiint_{\mathcal{V}} \frac{\partial \rho}{\partial t}\,dV$$
+$$
+\oint_{\partial\mathcal{V}} \vec{J} \cdot d\vec{A} = -\frac{dQ_{\text{enc}}}{dt} = -\frac{d}{dt}\iiint_{\mathcal{V}} \rho\,dV = -\iiint_{\mathcal{V}} \frac{\partial \rho}{\partial t}\,dV
+$$
 
 Aplicando el Teorema de Gauss-Ostrogradsky a la integral de superficie:
 
-$$\iiint_{\mathcal{V}} (\vec{\nabla} \cdot \vec{J})\,dV = -\iiint_{\mathcal{V}} \frac{\partial \rho}{\partial t}\,dV$$
+$$
+\iiint_{\mathcal{V}} (\vec{\nabla} \cdot \vec{J})\,dV = -\iiint_{\mathcal{V}} \frac{\partial \rho}{\partial t}\,dV
+$$
 
 Dado que el volumen $\mathcal{V}$ es estrictamente arbitrario, se deduce la **Ecuación de Continuidad (Forma Diferencial)**:
 
-$$\vec{\nabla} \cdot \vec{J} + \frac{\partial \rho}{\partial t} = 0$$
+$$
+\vec{\nabla} \cdot \vec{J} + \frac{\partial \rho}{\partial t} = 0
+$$
 
 * **Régimen Estacionario / Continuo (DC):** No existe acumulación volumétrica neta de carga en ningún punto con el paso del tiempo ($\frac{\partial \rho}{\partial t} = 0$):
-  $$\vec{\nabla} \cdot \vec{J} = 0 \iff \oint_{\partial\mathcal{V}} \vec{J} \cdot d\vec{A} = 0$$
+  $$
+  \vec{\nabla} \cdot \vec{J} = 0 \iff \oint_{\partial\mathcal{V}} \vec{J} \cdot d\vec{A} = 0
+  $$
   El flujo neto a través de cualquier superficie cerrada es nulo. Éste es el fundamento matemático de la Ley de Nodos de Kirchhoff.
 
 ---
@@ -124,15 +148,21 @@ $$\vec{\nabla} \cdot \vec{J} + \frac{\partial \rho}{\partial t} = 0$$
 
 En el modelo clásico de conducción de Drude, los electrones acelerados por la fuerza electrostática $\vec{F} = -e\vec{E}$ experimentan colisiones inelásticas sucesivas con los iones de la red cristalina a un ritmo caracterizado por un **tiempo medio entre colisiones** (tiempo de relajación, $\tau$):
 
-$$m_e \frac{d\vec{v}_d}{dt} = -e\vec{E} - \frac{m_e \vec{v}_d}{\tau} = \vec{0} \implies \vec{v}_d = -\frac{e\tau}{m_e}\vec{E}$$
+$$
+m_e \frac{d\vec{v}_d}{dt} = -e\vec{E} - \frac{m_e \vec{v}_d}{\tau} = \vec{0} \implies \vec{v}_d = -\frac{e\tau}{m_e}\vec{E}
+$$
 
 Sustituyendo $\vec{v}_d$ en la densidad de corriente $\vec{J} = -n e \vec{v}_d$:
 
-$$\vec{J} = \left(\frac{n e^2 \tau}{m_e}\right)\vec{E}$$
+$$
+\vec{J} = \left(\frac{n e^2 \tau}{m_e}\right)\vec{E}
+$$
 
 Definiendo la **conductividad eléctrica** ($\sigma$):
 
-$$\vec{J} = \sigma \vec{E}$$
+$$
+\vec{J} = \sigma \vec{E}
+$$
 
 Esta ecuación constituye la **forma microscópica (local) de la Ley de Ohm**.
 
@@ -141,10 +171,14 @@ Esta ecuación constituye la **forma microscópica (local) de la Ley de Ohm**.
 ### 2.2 Conceptos de Conductividad ($\sigma$) y Resistividad Eléctrica ($\rho$)
 
 * **Conductividad ($\sigma$):** Facilidad intrínseca que presenta un medio material al paso de los portadores de carga:
-  $$\sigma = \frac{n e^2 \tau}{m_e} \quad \left[\Omega^{-1}\cdot\text{m}^{-1}\text{ ó }\text{S/m}\right]$$
+  $$
+  \sigma = \frac{n e^2 \tau}{m_e} \quad \left[\Omega^{-1}\cdot\text{m}^{-1}\text{ ó }\text{S/m}\right]
+  $$
 
 * **Resistividad ($\rho$):** Oposición constitutiva intrínseca que exhibe el medio al paso de corriente eléctrica:
-  $$\rho = \frac{1}{\sigma} = \frac{m_e}{n e^2 \tau} \quad [\Omega\cdot\text{m}]$$
+  $$
+  \rho = \frac{1}{\sigma} = \frac{m_e}{n e^2 \tau} \quad [\Omega\cdot\text{m}]
+  $$
 
 ```mermaid
 flowchart LR
@@ -165,7 +199,9 @@ flowchart LR
 #### A. Metales y Conductores Óhmicos
 Al elevar la temperatura, los fonones (vibraciones reticulares térmicas) incrementan la sección eficaz de colisión de los iones de la red, disminuyendo el tiempo medio libre entre choques $\tau$. En rangos de temperatura moderados ($\Delta T < 100^\circ\text{C}$), la resistividad varía de forma lineal:
 
-$$\rho(T) = \rho_0 \left[1 + \alpha (T - T_0)\right]$$
+$$
+\rho(T) = \rho_0 \left[1 + \alpha (T - T_0)\right]
+$$
 
 * $\rho_0$: Resistividad a la temperatura de referencia $T_0$ (típicamente $20^\circ\text{C} = 293.15\ \text{K}$).
 * $\alpha$: **Coeficiente térmico de resistividad** $[\text{K}^{-1}\text{ ó }^\circ\text{C}^{-1}]$. Para conductores metálicos, $\alpha > 0$.
@@ -173,7 +209,9 @@ $$\rho(T) = \rho_0 \left[1 + \alpha (T - T_0)\right]$$
 #### B. Semiconductores Intrínsecos (Silicio, Germanio)
 El factor dominante no es el tiempo $\tau$, sino la excitación térmica de portadores a través de la banda prohibida (*bandgap* $E_g$). La densidad $n(T)$ se eleva exponencialmente:
 
-$$\rho(T) = A e^{E_g / (2 k_B T)} \implies \alpha < 0$$
+$$
+\rho(T) = A e^{E_g / (2 k_B T)} \implies \alpha < 0
+$$
 La resistividad decae fuertemente al incrementar la temperatura (coeficiente térmico negativo, NTC).
 
 ---
@@ -182,15 +220,21 @@ La resistividad decae fuertemente al incrementar la temperatura (coeficiente té
 
 Considere un conductor cilíndrico de longitud $L$ y sección transversal uniforme $A$, bajo una diferencia de potencial $\Delta V = V_a - V_b$:
 
-$$E = \frac{\Delta V}{L}, \quad J = \frac{I}{A}$$
+$$
+E = \frac{\Delta V}{L}, \quad J = \frac{I}{A}
+$$
 
 Sustituyendo en la ley microscópica $J = \frac{E}{\rho}$:
 
-$$\frac{I}{A} = \frac{1}{\rho}\left(\frac{\Delta V}{L}\right) \implies \Delta V = I \left(\frac{\rho L}{A}\right)$$
+$$
+\frac{I}{A} = \frac{1}{\rho}\left(\frac{\Delta V}{L}\right) \implies \Delta V = I \left(\frac{\rho L}{A}\right)
+$$
 
 Definiendo la **resistencia eléctrica** ($R$):
 
-$$\Delta V = I R$$
+$$
+\Delta V = I R
+$$
 
 * **Límite de Validez:** La relación es estrictamente válida para **materiales óhmicos** donde $\rho$ es independiente de la magnitud del campo eléctrico aplicado $|\vec{E}|$. Componentes como diodos semiconductores, tiristores, varistores y tubos de descarga de gas son **no óhmicos** y exhiben curvas $I-V$ no lineales.
 
@@ -199,17 +243,25 @@ $$\Delta V = I R$$
 ### 2.5 Resistencia Eléctrica: Geometría, Materiales y Unidades
 
 * **Resistencia en geometría uniforme:**
-  $$R = \rho \frac{L}{A} \quad [\Omega\ (\text{Ohmio})]$$
+  $$
+  R = \rho \frac{L}{A} \quad [\Omega\ (\text{Ohmio})]
+  $$
 * **Unidad en el S.I. (Ohmio, $\Omega$):**
-  $$1\ \Omega = \frac{1\ \text{V}}{1\ \text{A}} = \text{kg} \cdot \text{m}^2 \cdot \text{s}^{-3} \cdot \text{A}^{-2}$$
+  $$
+  1\ \Omega = \frac{1\ \text{V}}{1\ \text{A}} = \text{kg} \cdot \text{m}^2 \cdot \text{s}^{-3} \cdot \text{A}^{-2}
+  $$
 
 * **Cálculo General para Geometrías No Uniformes:**
   Integrando secciones diferenciales normales al flujo de las líneas de corriente:
-  $$R = \int \rho \frac{d\ell}{A(\ell)}$$
+  $$
+  R = \int \rho \frac{d\ell}{A(\ell)}
+  $$
 
 * **Ejemplo: Resistencia de un Cascarón Esférico:**
   Radio interior $a$, exterior $b$, material con resistividad $\rho$, flujo de corriente puramente radial:
-  $$dR = \rho \frac{dr}{4\pi r^2} \implies R = \frac{\rho}{4\pi}\int_a^b \frac{dr}{r^2} = \frac{\rho}{4\pi}\left(\frac{1}{a} - \frac{1}{b}\right)$$
+  $$
+  dR = \rho \frac{dr}{4\pi r^2} \implies R = \frac{\rho}{4\pi}\int_a^b \frac{dr}{r^2} = \frac{\rho}{4\pi}\left(\frac{1}{a} - \frac{1}{b}\right)
+  $$
 
 ---
 
@@ -219,13 +271,19 @@ $$\Delta V = I R$$
 
 Un campo electrostático puro $\vec{E}_c$ es conservativo ($\oint \vec{E}_c \cdot d\vec{\ell} = 0$) y no puede mantener una corriente circulante continua en un lazo cerrado. Se requiere un elemento activo provisto de un campo de origen no electrostático $\vec{E}_{\text{ne}}$ (químico, magnético o fotovoltaico) que impulse las cargas positivas contra el gradiente electrostático:
 
-$$\mathcal{E} = \oint (\vec{E}_c + \vec{E}_{\text{ne}}) \cdot d\vec{\ell} = \oint \vec{E}_{\text{ne}} \cdot d\vec{\ell} = \frac{W_{\text{ne}}}{q} \quad [\text{V}]$$
+$$
+\mathcal{E} = \oint (\vec{E}_c + \vec{E}_{\text{ne}}) \cdot d\vec{\ell} = \oint \vec{E}_{\text{ne}} \cdot d\vec{\ell} = \frac{W_{\text{ne}}}{q} \quad [\text{V}]
+$$
 
 * **Fuentes Reales con Resistencia Interna ($r$):**
   La tensión entre bornes $V_{ab}$ de una fuente real que entrega una corriente $I$ disminuye por la caída óhmica en sus electrolitos y contactos:
-  $$V_{ab} = \mathcal{E} - I r$$
+  $$
+  V_{ab} = \mathcal{E} - I r
+  $$
   Si la fuente es forzada a cargarse inyectándole corriente en terminal positivo ($I$ invertida):
-  $$V_{ab} = \mathcal{E} + I r$$
+  $$
+  V_{ab} = \mathcal{E} + I r
+  $$
 
 ---
 
@@ -233,7 +291,9 @@ $$\mathcal{E} = \oint (\vec{E}_c + \vec{E}_{\text{ne}}) \cdot d\vec{\ell} = \oin
 
 La tasa instantánea a la que se transforma o transfiere energía electromagnética en un bipolo con tensión en bornes $V$ e intensidad $I$ es:
 
-$$P = \frac{dW}{dt} = \frac{V dq}{dt} = V I \quad [\text{W (Vatio)}]$$
+$$
+P = \frac{dW}{dt} = \frac{V dq}{dt} = V I \quad [\text{W (Vatio)}]
+$$
 
 * **Elemento Pasivo (Consumidor):** La corriente entra por la terminal a mayor potencial. Absorbe potencia del circuito: $P_{\text{absorbida}} = V I > 0$.
 * **Elemento Activo (Generador/Fuente):** La corriente sale por la terminal a mayor potencial. Entrega potencia a la red: $P_{\text{entregada}} = \mathcal{E} I - I^2 r$.
@@ -244,10 +304,14 @@ $$P = \frac{dW}{dt} = \frac{V dq}{dt} = V I \quad [\text{W (Vatio)}]$$
 
 En un resistor óhmico ideal ($V = IR$), toda la energía eléctrica transferida por colisiones atómicas de los portadores se degrada irreversiblemente en energía térmica (calor):
 
-$$P = V I = I^2 R = \frac{V^2}{R} \quad [\text{W}]$$
+$$
+P = V I = I^2 R = \frac{V^2}{R} \quad [\text{W}]
+$$
 
 * **Formulación Microscópica de la Ley de Joule:**
-  $$p = \frac{dP}{dV} = \vec{J} \cdot \vec{E} = \sigma |\vec{E}|^2 = \rho |\vec{J}|^2 \quad \left[\frac{\text{W}}{\text{m}^3}\right]$$
+  $$
+  p = \frac{dP}{dV} = \vec{J} \cdot \vec{E} = \sigma |\vec{E}|^2 = \rho |\vec{J}|^2 \quad \left[\frac{\text{W}}{\text{m}^3}\right]
+  $$
 
 ---
 
@@ -269,12 +333,16 @@ sequenceDiagram
 #### A. Primera Regla: Ley de Nodos o Corrientes (LCK)
 Consecuencia unívoca de la conservación de la carga en régimen estacionario ($\vec{\nabla}\cdot\vec{J} = 0$): la suma algebraica de corrientes que inciden en cualquier nodo de la red es idénticamente nula:
 
-$$\sum_{k=1}^M I_k = 0 \iff \sum I_{\text{entrantes}} = \sum I_{\text{salientes}}$$
+$$
+\sum_{k=1}^M I_k = 0 \iff \sum I_{\text{entrantes}} = \sum I_{\text{salientes}}
+$$
 
 #### B. Segunda Regla: Ley de Mallas o Tensiones (LVK)
 Consecuencia del carácter conservativo del campo electrostático ($\oint \vec{E}\cdot d\vec{\ell} = 0$): la suma algebraica de las diferencias de potencial electrostático y fuerzas electromotrices evaluadas a lo largo de cualquier lazo cerrado (malla) es nula:
 
-$$\sum_{k=1}^N \Delta V_k = 0 \iff \sum \mathcal{E}_k = \sum I_j R_j$$
+$$
+\sum_{k=1}^N \Delta V_k = 0 \iff \sum \mathcal{E}_k = \sum I_j R_j
+$$
 
 * **Convención de Signos al Recorrer la Malla:**
   * Al atravesar una fuente de $-$ a $+$: $+\mathcal{E}$. De $+$ a $-$: $-\mathcal{E}$.
@@ -287,17 +355,25 @@ $$\sum_{k=1}^N \Delta V_k = 0 \iff \sum \mathcal{E}_k = \sum I_j R_j$$
 ### 4.1 Asociación de Resistores y Transformaciones Topológicas
 
 * **Resistores en Serie:** Corriente idéntica $I$, caída de tensión aditiva:
-  $$R_{\text{eq, serie}} = \sum_{i=1}^N R_i$$
+  $$
+  R_{\text{eq, serie}} = \sum_{i=1}^N R_i
+  $$
 
 * **Resistores en Paralelo:** Tensión compartida $V$, bifurcación aditiva de corriente:
-  $$\frac{1}{R_{\text{eq, paralelo}}} = \sum_{i=1}^N \frac{1}{R_i} \implies R_{\text{eq}} = \frac{R_1 R_2}{R_1 + R_2} \text{ (para dos ramas)}$$
+  $$
+  \frac{1}{R_{\text{eq, paralelo}}} = \sum_{i=1}^N \frac{1}{R_i} \implies R_{\text{eq}} = \frac{R_1 R_2}{R_1 + R_2} \text{ (para dos ramas)}
+  $$
 
 * **Transformación Estrella-Triángulo ($Y-\Delta$):**
   A diferencia de las redes capacitivas, los resistores se transforman directamente en el dominio del valor resistivo:
 
-$$\Delta \to Y: \quad R_1 = \frac{R_b R_c}{R_a + R_b + R_c}, \quad R_2 = \frac{R_a R_c}{R_a + R_b + R_c}, \quad R_3 = \frac{R_a R_b}{R_a + R_b + R_c}$$
+$$
+\Delta \to Y: \quad R_1 = \frac{R_b R_c}{R_a + R_b + R_c}, \quad R_2 = \frac{R_a R_c}{R_a + R_b + R_c}, \quad R_3 = \frac{R_a R_b}{R_a + R_b + R_c}
+$$
 
-$$Y \to \Delta: \quad R_a = \frac{R_1 R_2 + R_2 R_3 + R_3 R_1}{R_1}, \quad R_b = \frac{R_{\Sigma}}{R_2}, \quad R_c = \frac{R_{\Sigma}}{R_3}$$
+$$
+Y \to \Delta: \quad R_a = \frac{R_1 R_2 + R_2 R_3 + R_3 R_1}{R_1}, \quad R_b = \frac{R_{\Sigma}}{R_2}, \quad R_c = \frac{R_{\Sigma}}{R_3}
+$$
 
 ---
 
@@ -329,9 +405,13 @@ Red de cuatro ramas resistivas utilizada para medir resistencias desconocidas co
 </div>
 
 * **Condición de Equilibrio (Balance):** Corriente del galvanómetro nula ($I_G = 0 \implies V_C = V_D$):
-  $$I_1 R_1 = I_2 R_2 \quad \text{y} \quad I_1 R_3 = I_2 R_x$$
+  $$
+  I_1 R_1 = I_2 R_2 \quad \text{y} \quad I_1 R_3 = I_2 R_x
+  $$
   Dividiendo término a término:
-  $$\frac{R_1}{R_3} = \frac{R_2}{R_x} \implies R_x = R_2 \left(\frac{R_3}{R_1}\right)$$
+  $$
+  \frac{R_1}{R_3} = \frac{R_2}{R_x} \implies R_x = R_2 \left(\frac{R_3}{R_1}\right)
+  $$
   La medición es independiente de la tensión de alimentación de la fuente y de la calibración interna del medidor.
 
 ---
@@ -343,26 +423,40 @@ El núcleo operativo electromecánico clásico es el **galvanómetro de d'Arsonv
 #### A. Amperímetro (Medición en Serie)
 Para medir intensidades $I \gg I_{\text{fs}}$ sin destruir la bobina, se intercala un resistor en paralelo denominado **Shunt** ($R_{\text{sh}}$):
 
-$$I_{\text{sh}} = I - I_{\text{fs}}$$
+$$
+I_{\text{sh}} = I - I_{\text{fs}}
+$$
 
-$$V_{\text{sh}} = V_g \implies (I - I_{\text{fs}}) R_{\text{sh}} = I_{\text{fs}} R_g$$
+$$
+V_{\text{sh}} = V_g \implies (I - I_{\text{fs}}) R_{\text{sh}} = I_{\text{fs}} R_g
+$$
 
-$$R_{\text{sh}} = \frac{I_{\text{fs}} R_g}{I - I_{\text{fs}}} = \frac{R_g}{m - 1}, \quad \text{con } m = \frac{I}{I_{\text{fs}}} \text{ (factor multiplicador)}$$
+$$
+R_{\text{sh}} = \frac{I_{\text{fs}} R_g}{I - I_{\text{fs}}} = \frac{R_g}{m - 1}, \quad \text{con } m = \frac{I}{I_{\text{fs}}} \text{ (factor multiplicador)}
+$$
 
 * **Resistencia Interna Total del Amperímetro:**
-  $$R_A = \frac{R_g R_{\text{sh}}}{R_g + R_{\text{sh}}} \to 0 \quad (\text{Amperímetro ideal: } R_A = 0)$$
+  $$
+  R_A = \frac{R_g R_{\text{sh}}}{R_g + R_{\text{sh}}} \to 0 \quad (\text{Amperímetro ideal: } R_A = 0)
+  $$
 
 ---
 
 #### B. Voltímetro (Medición en Paralelo)
 Para medir tensiones elevadas $V \gg I_{\text{fs}} R_g$, se acopla un resistor en serie denominado **Multiplicador** ($R_s$):
 
-$$V = I_{\text{fs}}(R_g + R_s)$$
+$$
+V = I_{\text{fs}}(R_g + R_s)
+$$
 
-$$R_s = \frac{V}{I_{\text{fs}}} - R_g = R_g (n - 1), \quad \text{con } n = \frac{V}{V_{\text{fs}}}$$
+$$
+R_s = \frac{V}{I_{\text{fs}}} - R_g = R_g (n - 1), \quad \text{con } n = \frac{V}{V_{\text{fs}}}
+$$
 
 * **Resistencia Interna Total del Voltímetro:**
-  $$R_V = R_g + R_s \to \infty \quad (\text{Voltímetro ideal: } R_V = \infty)$$
+  $$
+  R_V = R_g + R_s \to \infty \quad (\text{Voltímetro ideal: } R_V = \infty)
+  $$
 
 ---
 
@@ -370,9 +464,12 @@ $$R_s = \frac{V}{I_{\text{fs}}} - R_g = R_g (n - 1), \quad \text{con } n = \frac
 
 Para una red plana con $M$ mallas independientes sin fuentes de corriente no ideales acopladas, la formulación matricial compacta es:
 
-$$\mathbf{R} \mathbf{I}_{\text{malla}} = \mathbf{V}_{\text{fuentes}}$$
+$$
+\mathbf{R} \mathbf{I}_{\text{malla}} = \mathbf{V}_{\text{fuentes}}
+$$
 
-$$\begin{bmatrix} 
+$$
+\begin{bmatrix} 
 R_{11} & R_{12} & \dots & R_{1M} \\
 R_{21} & R_{22} & \dots & R_{2M} \\
 \vdots & \vdots & \ddots & \vdots \\
@@ -384,7 +481,8 @@ I_1 \\ I_2 \\ \vdots \\ I_M
 =
 \begin{bmatrix} 
 \mathcal{E}_1 \\ \mathcal{E}_2 \\ \vdots \\ \mathcal{E}_M 
-\end{bmatrix}$$
+\end{bmatrix}
+$$
 
 * **Términos de la diagonal principal ($R_{kk}$):** Suma directa de todas las resistencias que componen la malla $k$ (autoresistencia de malla, estrictamente positiva).
 * **Términos cruzados fuera de la diagonal ($R_{kj} = R_{jk}$):** Negativo de la suma de resistencias compartidas exclusivamente entre las mallas $k$ y $j$ si las corrientes de malla circulan en igual sentido por la rama común (típicamente negativo bajo convención horaria uniforme).
@@ -417,22 +515,34 @@ Considere una fuente continua ideal $\mathcal{E}$, un resistor $R$ y un condensa
 
 Aplicando la Segunda Regla de Kirchhoff (LVK) para $t \ge 0$:
 
-$$\mathcal{E} - v_R(t) - v_C(t) = 0 \implies \mathcal{E} - R I(t) - \frac{q(t)}{C} = 0$$
+$$
+\mathcal{E} - v_R(t) - v_C(t) = 0 \implies \mathcal{E} - R I(t) - \frac{q(t)}{C} = 0
+$$
 
 Como $I(t) = \frac{dq}{dt}$:
 
-$$R \frac{dq}{dt} + \frac{1}{C} q(t) = \mathcal{E} \implies \frac{dq}{dt} + \frac{q}{RC} = \frac{\mathcal{E}}{R}$$
+$$
+R \frac{dq}{dt} + \frac{1}{C} q(t) = \mathcal{E} \implies \frac{dq}{dt} + \frac{q}{RC} = \frac{\mathcal{E}}{R}
+$$
 
 Ecuación diferencial ordinaria lineal de primer orden no homogénea. Resolviendo con condición de contorno $q(0) = 0$:
 
-$$q(t) = C\mathcal{E}\left(1 - e^{-t / (RC)}\right) = Q_{\text{máx}}\left(1 - e^{-t / \tau}\right)$$
+$$
+q(t) = C\mathcal{E}\left(1 - e^{-t / (RC)}\right) = Q_{\text{máx}}\left(1 - e^{-t / \tau}\right)
+$$
 
 * **Tensión en bornes del condensador:**
-  $$v_C(t) = \frac{q(t)}{C} = \mathcal{E}\left(1 - e^{-t / \tau}\right)$$
+  $$
+  v_C(t) = \frac{q(t)}{C} = \mathcal{E}\left(1 - e^{-t / \tau}\right)
+  $$
 * **Corriente transitoria de carga:**
-  $$I(t) = \frac{dq}{dt} = \frac{\mathcal{E}}{R} e^{-t / \tau} = I_0 e^{-t / \tau}$$
+  $$
+  I(t) = \frac{dq}{dt} = \frac{\mathcal{E}}{R} e^{-t / \tau} = I_0 e^{-t / \tau}
+  $$
 * **Tensión en el resistor:**
-  $$v_R(t) = R I(t) = \mathcal{E} e^{-t / \tau}$$
+  $$
+  v_R(t) = R I(t) = \mathcal{E} e^{-t / \tau}
+  $$
 
 ---
 
@@ -440,15 +550,23 @@ $$q(t) = C\mathcal{E}\left(1 - e^{-t / (RC)}\right) = Q_{\text{máx}}\left(1 - e
 
 Condensador cargado a una tensión inicial $V_0$ ($Q_0 = C V_0$), que se desconecta de la fuente y se cierra sobre un resistor $R$ en $t = 0$:
 
-$$-R I(t) - \frac{q(t)}{C} = 0 \implies R \frac{dq}{dt} + \frac{q}{C} = 0$$
+$$
+-R I(t) - \frac{q(t)}{C} = 0 \implies R \frac{dq}{dt} + \frac{q}{C} = 0
+$$
 
 Resolviendo bajo la condición $q(0) = Q_0$:
 
-$$q(t) = Q_0 e^{-t / \tau}$$
+$$
+q(t) = Q_0 e^{-t / \tau}
+$$
 
-$$v_C(t) = V_0 e^{-t / \tau}$$
+$$
+v_C(t) = V_0 e^{-t / \tau}
+$$
 
-$$I(t) = -\frac{dq}{dt} = \frac{V_0}{R} e^{-t / \tau} = I_0 e^{-t / \tau}$$
+$$
+I(t) = -\frac{dq}{dt} = \frac{V_0}{R} e^{-t / \tau} = I_0 e^{-t / \tau}
+$$
 
 ---
 
@@ -456,7 +574,9 @@ $$I(t) = -\frac{dq}{dt} = \frac{V_0}{R} e^{-t / \tau} = I_0 e^{-t / \tau}$$
 
 El producto $\tau = RC$ posee dimensiones rigurosas de tiempo:
 
-$$[\tau] = [\Omega] \cdot [\text{F}] = \left(\frac{\text{V}}{\text{A}}\right)\left(\frac{\text{C}}{\text{V}}\right) = \frac{\text{C}}{\text{A}} = \frac{\text{C}}{\text{C/s}} = \text{s}$$
+$$
+[\tau] = [\Omega] \cdot [\text{F}] = \left(\frac{\text{V}}{\text{A}}\right)\left(\frac{\text{C}}{\text{V}}\right) = \frac{\text{C}}{\text{A}} = \frac{\text{C}}{\text{C/s}} = \text{s}
+$$
 
 * **Interpretación Dinámica en la Carga:**
   * En $t = \tau$: $q(\tau) = Q_{\text{máx}}(1 - e^{-1}) \approx 0.6321\, Q_{\text{máx}}$ ($63.2\%$ de la carga final).
@@ -495,14 +615,22 @@ t, vc, ic, vd, id_ = simular_transitorio_rc(E=12.0, R=10000.0, C=100e-6)
 Calcule la energía suministrada por la fuente, la disipada en el resistor y la confinada en el condensador tras cargarlo por completo ($t \to \infty$ desde $q=0$).
 
 1. **Energía total suministrada por la fuente ideal de fem ($\mathcal{E}$):**
-   $$W_{\text{fuente}} = \int_0^\infty \mathcal{E} I(t)\,dt = \mathcal{E} \int_0^\infty dq = \mathcal{E} Q_{\text{máx}} = C \mathcal{E}^2$$
+   $$
+   W_{\text{fuente}} = \int_0^\infty \mathcal{E} I(t)\,dt = \mathcal{E} \int_0^\infty dq = \mathcal{E} Q_{\text{máx}} = C \mathcal{E}^2
+   $$
 
 2. **Energía electrostática final almacenada en el campo del condensador:**
-   $$U_C = \frac{1}{2} C \mathcal{E}^2$$
+   $$
+   U_C = \frac{1}{2} C \mathcal{E}^2
+   $$
 
 3. **Energía total disipada en forma de calor en el resistor ($E_{\text{Joule}}$):**
-   $$E_{\text{Joule}} = \int_0^\infty I^2(t) R\,dt = R \int_0^\infty \left(\frac{\mathcal{E}}{R} e^{-t / \tau}\right)^2 dt = \frac{\mathcal{E}^2}{R} \int_0^\infty e^{-2t / \tau} dt$$
-   $$E_{\text{Joule}} = \frac{\mathcal{E}^2}{R} \left[ -\frac{\tau}{2} e^{-2t/\tau} \right]_0^\infty = \frac{\mathcal{E}^2}{R}\left(\frac{RC}{2}\right) = \frac{1}{2} C \mathcal{E}^2$$
+   $$
+   E_{\text{Joule}} = \int_0^\infty I^2(t) R\,dt = R \int_0^\infty \left(\frac{\mathcal{E}}{R} e^{-t / \tau}\right)^2 dt = \frac{\mathcal{E}^2}{R} \int_0^\infty e^{-2t / \tau} dt
+   $$
+   $$
+   E_{\text{Joule}} = \frac{\mathcal{E}^2}{R} \left[ -\frac{\tau}{2} e^{-2t/\tau} \right]_0^\infty = \frac{\mathcal{E}^2}{R}\left(\frac{RC}{2}\right) = \frac{1}{2} C \mathcal{E}^2
+   $$
 
 > [!NOTE]
 > **Teorema del Rendimiento del 50%:** Exactamente el $50\%$ de la energía suministrada por la fuente se almacena en el capacitor, y el restante $50\%$ se disipa irremediablemente como calor en el resistor. Este resultado es **estrictamente independiente del valor de $R$** (incluso si $R \to 0$, la energía se irradia en forma de ondas electromagnéticas durante el transitorio).

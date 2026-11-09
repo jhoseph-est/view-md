@@ -15,14 +15,18 @@ Un **condensador** o **capacitor** es un dispositivo pasivo constituido por dos 
 
 La **capacidad eléctrica** ($C$) mide la aptitud geométrica del sistema para confinar carga y almacenar energía electrostática por unidad de diferencia de potencial:
 
-$$C = \frac{Q}{|\Delta V|} = \frac{Q}{V_+ - V_-}$$
+$$
+C = \frac{Q}{|\Delta V|} = \frac{Q}{V_+ - V_-}
+$$
 
 * **Propiedad Intrínseca:** $C$ es un escalar estrictamente positivo que depende exclusivamente de la geometría del arreglo (área, forma, separación) y de las propiedades constitutivas del medio intermedio; es independiente de la carga instantánea $Q$ y de la tensión aplicada $\Delta V$.
 * **Cálculo Sistemático de Capacitancia:**
   1. Suponer una carga arbitraria $\pm Q$ distribuida sobre los conductores.
   2. Determinar el campo eléctrico $\vec{E}$ entre las placas mediante la Ley de Gauss o integración directa de Coulomb.
   3. Evaluar la diferencia de potencial electrostático:
-     $$\Delta V = -\int_{-}^{+} \vec{E} \cdot d\vec{\ell}$$
+    $$
+    \Delta V = -\int_{-}^{+} \vec{E} \cdot d\vec{\ell}
+    $$
   4. Obtener $C$ mediante el cociente escalar $C = \frac{Q}{|\Delta V|}$.
 
 ---
@@ -30,7 +34,9 @@ $$C = \frac{Q}{|\Delta V|} = \frac{Q}{V_+ - V_-}$$
 ### 1.2 Unidades en el Sistema Internacional (S.I.)
 
 * **Unidad base (Faradio, $\text{F}$):**
-  $$[C] = \frac{[Q]}{[\Delta V]} = \frac{\text{C}}{\text{V}} = \frac{\text{C}^2}{\text{J}} = \text{kg}^{-1} \cdot \text{m}^{-2} \cdot \text{s}^4 \cdot \text{A}^2$$
+  $$
+  [C] = \frac{[Q]}{[\Delta V]} = \frac{\text{C}}{\text{V}} = \frac{\text{C}^2}{\text{J}} = \text{kg}^{-1} \cdot \text{m}^{-2} \cdot \text{s}^4 \cdot \text{A}^2
+  $$
 * **Escalas Prácticas:** El Faradio representa una unidad colosal para condensadores discretos en el vacío:
   * Microfaradio: $1\ \mu\text{F} = 10^{-6}\ \text{F}$
   * Nanofaradio: $1\ \text{nF} = 10^{-9}\ \text{F}$
@@ -54,11 +60,17 @@ flowchart LR
 Dos placas conductoras paralelas de área $A$, separadas por una distancia $d$, donde $d \ll \sqrt{A}$ (aproximación de placas infinitas para despreciar efectos de borde o líneas de dispersión periféricas):
 
 1. **Campo Eléctrico Intermedio:** Superposición de campos inducidos por dos densidades $\sigma = \pm \frac{Q}{A}$:
-   $$\vec{E} = \left(\frac{\sigma}{2\varepsilon_0} + \frac{\sigma}{2\varepsilon_0}\right) \hat{u}_n = \frac{\sigma}{\varepsilon_0}\hat{u}_n = \frac{Q}{\varepsilon_0 A}\hat{u}_n$$
+   $$
+   \vec{E} = \left(\frac{\sigma}{2\varepsilon_0} + \frac{\sigma}{2\varepsilon_0}\right) \hat{u}_n = \frac{\sigma}{\varepsilon_0}\hat{u}_n = \frac{Q}{\varepsilon_0 A}\hat{u}_n
+   $$
 2. **Diferencia de Potencial:**
-   $$|\Delta V| = \int_0^d E\,dz = E d = \frac{Q d}{\varepsilon_0 A}$$
+   $$
+   |\Delta V| = \int_0^d E\,dz = E d = \frac{Q d}{\varepsilon_0 A}
+   $$
 3. **Capacitancia:**
-   $$C = \frac{\varepsilon_0 A}{d}$$
+   $$
+   C = \frac{\varepsilon_0 A}{d}
+   $$
 
 ---
 
@@ -66,11 +78,17 @@ Dos placas conductoras paralelas de área $A$, separadas por una distancia $d$, 
 Conductor cilíndrico interno de radio $a$ y cascarón coaxial externo de radio interno $b$, con longitud $L \gg b$ y densidad de carga lineal $\lambda = \frac{Q}{L}$:
 
 1. **Campo por Ley de Gauss ($a < r < b$):**
-   $$E(r) = \frac{\lambda}{2\pi\varepsilon_0 r} = \frac{Q}{2\pi\varepsilon_0 L r}$$
+   $$
+   E(r) = \frac{\lambda}{2\pi\varepsilon_0 r} = \frac{Q}{2\pi\varepsilon_0 L r}
+   $$
 2. **Diferencia de Potencial:**
-   $$|\Delta V| = \int_a^b E(r)\,dr = \frac{Q}{2\pi\varepsilon_0 L} \int_a^b \frac{dr}{r} = \frac{Q}{2\pi\varepsilon_0 L}\ln\left(\frac{b}{a}\right)$$
+   $$
+   |\Delta V| = \int_a^b E(r)\,dr = \frac{Q}{2\pi\varepsilon_0 L} \int_a^b \frac{dr}{r} = \frac{Q}{2\pi\varepsilon_0 L}\ln\left(\frac{b}{a}\right)
+   $$
 3. **Capacitancia Total y por Unidad de Longitud:**
-   $$C = \frac{2\pi\varepsilon_0 L}{\ln(b/a)} \implies \frac{C}{L} = \frac{2\pi\varepsilon_0}{\ln(b/a)}$$
+   $$
+   C = \frac{2\pi\varepsilon_0 L}{\ln(b/a)} \implies \frac{C}{L} = \frac{2\pi\varepsilon_0}{\ln(b/a)}
+   $$
 
 ---
 
@@ -78,13 +96,21 @@ Conductor cilíndrico interno de radio $a$ y cascarón coaxial externo de radio 
 Esfera conductora interna de radio $a$ con carga $+Q$ y cascarón concéntrico externo de radio interior $b$ con carga $-Q$:
 
 1. **Campo Eléctrico Radial ($a < r < b$):**
-   $$E(r) = \frac{Q}{4\pi\varepsilon_0 r^2}$$
+   $$
+   E(r) = \frac{Q}{4\pi\varepsilon_0 r^2}
+   $$
 2. **Diferencia de Potencial:**
-   $$|\Delta V| = \int_a^b \frac{Q}{4\pi\varepsilon_0 r^2} dr = \frac{Q}{4\pi\varepsilon_0}\left(\frac{1}{a} - \frac{1}{b}\right) = \frac{Q}{4\pi\varepsilon_0}\left(\frac{b - a}{a b}\right)$$
+   $$
+   |\Delta V| = \int_a^b \frac{Q}{4\pi\varepsilon_0 r^2} dr = \frac{Q}{4\pi\varepsilon_0}\left(\frac{1}{a} - \frac{1}{b}\right) = \frac{Q}{4\pi\varepsilon_0}\left(\frac{b - a}{a b}\right)
+   $$
 3. **Capacitancia:**
-   $$C = 4\pi\varepsilon_0 \left(\frac{a b}{b - a}\right)$$
+   $$
+   C = 4\pi\varepsilon_0 \left(\frac{a b}{b - a}\right)
+   $$
 * **Límite de Conductor Esférico Aislado ($b \to \infty$):**
-  $$C_{\text{aislada}} = \lim_{b \to \infty} 4\pi\varepsilon_0 \left(\frac{a}{1 - a/b}\right) = 4\pi\varepsilon_0 a$$
+  $$
+  C_{\text{aislada}} = \lim_{b \to \infty} 4\pi\varepsilon_0 \left(\frac{a}{1 - a/b}\right) = 4\pi\varepsilon_0 a
+  $$
 
 | Geometría | Expresión Analítica de $C$ | Límite Asintótico Relevante |
 | :--- | :--- | :--- |
@@ -102,25 +128,39 @@ Esfera conductora interna de radio $a$ con carga $+Q$ y cascarón concéntrico e
 #### A. Agrupamiento en Paralelo
 Los condensadores comparten los mismos nodos de potencial; por tanto, la tensión es idéntica en cada elemento y la carga total suministrada por la fuente se bifurca aditivamente:
 
-$$\Delta V = \Delta V_1 = \Delta V_2 = \dots = \Delta V_N$$
+$$
+\Delta V = \Delta V_1 = \Delta V_2 = \dots = \Delta V_N
+$$
 
-$$Q_{\text{total}} = \sum_{i=1}^{N} Q_i = C_1\Delta V + C_2\Delta V + \dots + C_N\Delta V = \left(\sum_{i=1}^{N} C_i\right) \Delta V$$
+$$
+Q_{\text{total}} = \sum_{i=1}^{N} Q_i = C_1\Delta V + C_2\Delta V + \dots + C_N\Delta V = \left(\sum_{i=1}^{N} C_i\right) \Delta V
+$$
 
-$$C_{\text{eq, paralelo}} = \sum_{i=1}^{N} C_i$$
+$$
+C_{\text{eq, paralelo}} = \sum_{i=1}^{N} C_i
+$$
 
 ---
 
 #### B. Agrupamiento en Serie
 La armadura negativa de un condensador se enlaza directamente a la armadura positiva del siguiente mediante un segmento conductor aislado. Por inducción electrostática y conservación de carga en la isla flotante, todas las unidades retienen la misma carga neta $Q$:
 
-$$Q = Q_1 = Q_2 = \dots = Q_N$$
+$$
+Q = Q_1 = Q_2 = \dots = Q_N
+$$
 
-$$\Delta V_{\text{total}} = \sum_{i=1}^{N} \Delta V_i = \frac{Q}{C_1} + \frac{Q}{C_2} + \dots + \frac{Q}{C_N} = Q \sum_{i=1}^{N} \frac{1}{C_i}$$
+$$
+\Delta V_{\text{total}} = \sum_{i=1}^{N} \Delta V_i = \frac{Q}{C_1} + \frac{Q}{C_2} + \dots + \frac{Q}{C_N} = Q \sum_{i=1}^{N} \frac{1}{C_i}
+$$
 
-$$\frac{1}{C_{\text{eq, serie}}} = \sum_{i=1}^{N} \frac{1}{C_i} \implies C_{\text{eq}} = \left( \sum_{i=1}^{N} \frac{1}{C_i} \right)^{-1}$$
+$$
+\frac{1}{C_{\text{eq, serie}}} = \sum_{i=1}^{N} \frac{1}{C_i} \implies C_{\text{eq}} = \left( \sum_{i=1}^{N} \frac{1}{C_i} \right)^{-1}
+$$
 
 * **Caso Particular de 2 Condensadores en Serie:**
-  $$C_{\text{eq}} = \frac{C_1 C_2}{C_1 + C_2}$$
+  $$
+  C_{\text{eq}} = \frac{C_1 C_2}{C_1 + C_2}
+  $$
 
 > [!WARNING]
 > En agrupamientos en serie, la capacitancia equivalente $C_{\text{eq}}$ es **siempre menor** que la capacitancia más pequeña de la red ($C_{\text{eq}} < \min\{C_i\}$), mientras que en paralelo $C_{\text{eq}} > \max\{C_i\}$.
@@ -170,14 +210,24 @@ Cuando la topología de interconexión contiene celdas tipo puente (e.g., Puente
 Para formular de forma compacta la transformación, se emplea la **elastancia** $S = \frac{1}{C}$ (expresada en Daraf, $\text{F}^{-1}$), dado que se comporta formalmente idéntica a la resistencia eléctrica en circuitos lineales:
 
 * **Transformación Delta a Estrella ($\Delta \to Y$):**
-  $$S_A = \frac{S_b S_c}{S_a + S_b + S_c}, \quad S_B = \frac{S_a S_c}{S_a + S_b + S_c}, \quad S_C = \frac{S_a S_b}{S_a + S_b + S_c}$$
+  $$
+  S_A = \frac{S_b S_c}{S_a + S_b + S_c}, \quad S_B = \frac{S_a S_c}{S_a + S_b + S_c}, \quad S_C = \frac{S_a S_b}{S_a + S_b + S_c}
+  $$
   En términos directos de capacitancias:
-  $$C_A = \frac{C_a C_b + C_b C_c + C_c C_a}{C_a}$$
-  $$C_B = \frac{C_a C_b + C_b C_c + C_c C_a}{C_b}$$
-  $$C_C = \frac{C_a C_b + C_b C_c + C_c C_a}{C_c}$$
+  $$
+  C_A = \frac{C_a C_b + C_b C_c + C_c C_a}{C_a}
+  $$
+  $$
+  C_C = \frac{C_a C_b + C_b C_c + C_c C_a}{C_c}
+  $$
+  $$
+  C_B = \frac{C_a C_b + C_b C_c + C_c C_a}{C_b}
+  $$
 
 * **Transformación Estrella a Delta ($Y \to \Delta$):**
-  $$C_a = \frac{C_B C_C}{C_A + C_B + C_C}, \quad C_b = \frac{C_A C_C}{C_A + C_B + C_C}, \quad C_c = \frac{C_A C_B}{C_A + C_B + C_C}$$
+  $$
+  C_a = \frac{C_B C_C}{C_A + C_B + C_C}, \quad C_b = \frac{C_A C_C}{C_A + C_B + C_C}, \quad C_c = \frac{C_A C_B}{C_A + C_B + C_C}
+  $$
 
 ```python
 def delta_a_estrella(ca: float, cb: float, cc: float) -> tuple[float, float, float]:
@@ -205,11 +255,15 @@ def estrella_a_delta(cA: float, cB: float, cC: float) -> tuple[float, float, flo
 
 El proceso de carga consiste en extraer diferencialmente incrementos de carga positiva $dq'$ desde la placa a menor potencial hacia la de mayor potencial. El trabajo externo acumulado es:
 
-$$U_e = \int dW_{\text{ext}} = \int_0^Q V(q')\,dq' = \int_0^Q \frac{q'}{C}\,dq' = \frac{1}{2}\frac{Q^2}{C}$$
+$$
+U_e = \int dW_{\text{ext}} = \int_0^Q V(q')\,dq' = \int_0^Q \frac{q'}{C}\,dq' = \frac{1}{2}\frac{Q^2}{C}
+$$
 
 Empleando la relación constitutiva $Q = C\Delta V$:
 
-$$U_e = \frac{1}{2}\frac{Q^2}{C} = \frac{1}{2} C (\Delta V)^2 = \frac{1}{2} Q \Delta V$$
+$$
+U_e = \frac{1}{2}\frac{Q^2}{C} = \frac{1}{2} C (\Delta V)^2 = \frac{1}{2} Q \Delta V
+$$
 
 ---
 
@@ -217,11 +271,15 @@ $$U_e = \frac{1}{2}\frac{Q^2}{C} = \frac{1}{2} C (\Delta V)^2 = \frac{1}{2} Q \D
 
 Evaluando un condensador plano-paralelo ideal sin efectos de borde ($C = \frac{\varepsilon_0 A}{d}$ y $\Delta V = E d$):
 
-$$U_e = \frac{1}{2} \left(\frac{\varepsilon_0 A}{d}\right) (E d)^2 = \frac{1}{2} \varepsilon_0 E^2 (A d)$$
+$$
+U_e = \frac{1}{2} \left(\frac{\varepsilon_0 A}{d}\right) (E d)^2 = \frac{1}{2} \varepsilon_0 E^2 (A d)
+$$
 
 Dado que el volumen del espacio confinado entre placas es $\text{Vol} = A d$, la **densidad volumétrica local** de energía $u_e$ resulta:
 
-$$u_e = \frac{dU_e}{d\text{Vol}} = \frac{1}{2}\varepsilon_0 |\vec{E}|^2 \quad \left[\frac{\text{J}}{\text{m}^3}\right]$$
+$$
+u_e = \frac{dU_e}{d\text{Vol}} = \frac{1}{2}\varepsilon_0 |\vec{E}|^2 \quad \left[\frac{\text{J}}{\text{m}^3}\right]
+$$
 
 Esta relación posee validez universal en el vacío para cualquier campo electrostático arbitrario.
 
@@ -243,19 +301,29 @@ flowchart TD
 #### A. Condición de Carga Constante ($Q = \text{cte}$, Sistema Térmica y Eléctricamente Aislado)
 Al no haber intercambio de carga con el exterior ($dW_{\text{fuente}} = 0$), el principio de conservación de la energía impone:
 
-$$d W_{\text{mec}} + d U_e = 0 \implies F_x dx + d U_e = 0$$
+$$
+d W_{\text{mec}} + d U_e = 0 \implies F_x dx + d U_e = 0
+$$
 
-$$F_x = -\left(\frac{\partial U_e}{\partial x}\right)_Q$$
+$$
+F_x = -\left(\frac{\partial U_e}{\partial x}\right)_Q
+$$
 
 Dado que $U_e = \frac{Q^2}{2 C(x)}$:
 
-$$F_x = -\frac{Q^2}{2} \frac{\partial}{\partial x}\left(\frac{1}{C(x)}\right) = \frac{Q^2}{2 C^2}\frac{\partial C}{\partial x}$$
+$$
+F_x = -\frac{Q^2}{2} \frac{\partial}{\partial x}\left(\frac{1}{C(x)}\right) = \frac{Q^2}{2 C^2}\frac{\partial C}{\partial x}
+$$
 
 Para placas planas donde $C(x) = \frac{\varepsilon_0 A}{x}$:
 
-$$\frac{\partial C}{\partial x} = -\frac{\varepsilon_0 A}{x^2} = -\frac{C}{x}$$
+$$
+\frac{\partial C}{\partial x} = -\frac{\varepsilon_0 A}{x^2} = -\frac{C}{x}
+$$
 
-$$F_x = -\frac{Q^2}{2 \left(\frac{\varepsilon_0 A}{x}\right)^2} \left(\frac{\varepsilon_0 A}{x^2}\right) = -\frac{Q^2}{2\varepsilon_0 A}$$
+$$
+F_x = -\frac{Q^2}{2 \left(\frac{\varepsilon_0 A}{x}\right)^2} \left(\frac{\varepsilon_0 A}{x^2}\right) = -\frac{Q^2}{2\varepsilon_0 A}
+$$
 
 El signo negativo denota una **fuerza estrictamente atractiva** que busca disminuir la separación $x$.
 
@@ -264,23 +332,35 @@ El signo negativo denota una **fuerza estrictamente atractiva** que busca dismin
 #### B. Condición de Tensión Constante ($\Delta V = \text{cte}$, Conectado Permanentemente a Fuente)
 Si la separación varía mientras el capacitor sigue acoplado a la batería, la capacitancia cambia, forzando un flujo de carga diferencial $dQ = d(C V) = V dC$ provisto por la fuente. El trabajo entregado por la batería es:
 
-$$d W_{\text{fuente}} = V\,dQ = V^2\,dC$$
+$$
+d W_{\text{fuente}} = V\,dQ = V^2\,dC
+$$
 
 El balance termodinámico del sistema es:
 
-$$d W_{\text{fuente}} = d W_{\text{mec}} + d U_e \implies V^2 dC = F_x dx + d\left(\frac{1}{2} C V^2\right)$$
+$$
+d W_{\text{fuente}} = d W_{\text{mec}} + d U_e \implies V^2 dC = F_x dx + d\left(\frac{1}{2} C V^2\right)
+$$
 
-$$V^2 dC = F_x dx + \frac{1}{2} V^2 dC \implies F_x dx = \frac{1}{2} V^2 dC$$
+$$
+V^2 dC = F_x dx + \frac{1}{2} V^2 dC \implies F_x dx = \frac{1}{2} V^2 dC
+$$
 
-$$F_x = +\left(\frac{\partial U_e}{\partial x}\right)_V = \frac{1}{2} V^2 \frac{\partial C}{\partial x}$$
+$$
+F_x = +\left(\frac{\partial U_e}{\partial x}\right)_V = \frac{1}{2} V^2 \frac{\partial C}{\partial x}
+$$
 
 Sustituyendo $\frac{\partial C}{\partial x} = -\frac{\varepsilon_0 A}{x^2}$:
 
-$$F_x = -\frac{1}{2} V^2 \frac{\varepsilon_0 A}{x^2} = -\frac{1}{2}\varepsilon_0 \left(\frac{V}{x}\right)^2 A = -\frac{1}{2}\varepsilon_0 E^2 A$$
+$$
+F_x = -\frac{1}{2} V^2 \frac{\varepsilon_0 A}{x^2} = -\frac{1}{2}\varepsilon_0 \left(\frac{V}{x}\right)^2 A = -\frac{1}{2}\varepsilon_0 E^2 A
+$$
 
 Sustituyendo $V = \frac{Q x}{\varepsilon_0 A}$, la fuerza recupera el valor idéntico:
 
-$$|F_x| = \frac{Q^2}{2\varepsilon_0 A}$$
+$$
+|F_x| = \frac{Q^2}{2\varepsilon_0 A}
+$$
 
 > [!WARNING]
 > Un error conceptual recurrente es aplicar directamente $F = Q E_{\text{total}} = \frac{Q^2}{\varepsilon_0 A}$. El factor $\frac{1}{2}$ surge de que una placa no experimenta su propio campo eléctrico, sino únicamente el campo originado por la armadura opuesta: $E_{\text{placa opuesta}} = \frac{\sigma}{2\varepsilon_0} = \frac{Q}{2\varepsilon_0 A}$. Por ende: $F = Q \cdot E_{\text{placa opuesta}} = \frac{Q^2}{2\varepsilon_0 A}$.
@@ -308,7 +388,9 @@ Los dieléctricos son materiales con alta resistividad eléctrica ($> 10^{10}\ \
 
 Al intercalar un medio dieléctrico lineal, homogéneo e isótropo (LHI) rellenando por completo el espacio entre armaduras:
 
-$$C = \kappa\,C_0 = \varepsilon_r\,C_0$$
+$$
+C = \kappa\,C_0 = \varepsilon_r\,C_0
+$$
 
 * $\kappa = \varepsilon_r = \frac{\varepsilon}{\varepsilon_0} \ge 1$: **Constante dieléctrica** o permitividad relativa adimensional del medio.
 * **Permitividad del medio ($\varepsilon$):** $\varepsilon = \kappa\,\varepsilon_0 = \varepsilon_r\,\varepsilon_0 \quad [\text{F/m}]$.
@@ -337,7 +419,9 @@ La polarización dieléctrica microscópica agrupa tres componentes:
 
 El **Vector de Polarización** ($\vec{P}$) se define como la densidad volumétrica macroscópica de momentos dipolares eléctricos inducidos o alineados:
 
-$$\vec{P} = \lim_{\Delta\mathcal{V} \to 0} \frac{1}{\Delta\mathcal{V}} \sum_{i \in \Delta\mathcal{V}} \vec{p}_i \quad \left[\frac{\text{C}}{\text{m}^2}\right]$$
+$$
+\vec{P} = \lim_{\Delta\mathcal{V} \to 0} \frac{1}{\Delta\mathcal{V}} \sum_{i \in \Delta\mathcal{V}} \vec{p}_i \quad \left[\frac{\text{C}}{\text{m}^2}\right]
+$$
 
 ---
 
@@ -370,10 +454,14 @@ El alineamiento de dipolos crea segregaciones locales de carga no compensadas en
 </div>
 
 * **Densidad Volumétrica de Carga Ligada ($\rho_b$):**
-  $$\rho_b = -\vec{\nabla} \cdot \vec{P}$$
+  $$
+  \rho_b = -\vec{\nabla} \cdot \vec{P}
+  $$
   *Si la polarización es uniforme ($\vec{\nabla} \cdot \vec{P} = 0$), no surge carga ligada neta en el interior del material.*
 * **Densidad Superficial de Carga Ligada ($\sigma_b$):**
-  $$\sigma_b = \vec{P} \cdot \hat{n}$$
+  $$
+  \sigma_b = \vec{P} \cdot \hat{n}
+  $$
   Donde $\hat{n}$ es el vector unitario normal exterior a la superficie del dieléctrico.
 
 ---
@@ -382,24 +470,34 @@ El alineamiento de dipolos crea segregaciones locales de carga no compensadas en
 
 En medios polarizables coexisten **cargas libres** ($\rho_f$, controladas experimentalmente por fuentes o conductores) y **cargas ligadas** ($\rho_b$). La Ley de Gauss microscópica en el vacío es:
 
-$$\vec{\nabla} \cdot \vec{E} = \frac{\rho_{\text{total}}}{\varepsilon_0} = \frac{\rho_f + \rho_b}{\varepsilon_0} = \frac{\rho_f - \vec{\nabla} \cdot \vec{P}}{\varepsilon_0}$$
+$$
+\vec{\nabla} \cdot \vec{E} = \frac{\rho_{\text{total}}}{\varepsilon_0} = \frac{\rho_f + \rho_b}{\varepsilon_0} = \frac{\rho_f - \vec{\nabla} \cdot \vec{P}}{\varepsilon_0}
+$$
 
 Reagrupando términos dentro del operador diferencial:
 
-$$\vec{\nabla} \cdot (\varepsilon_0 \vec{E} + \vec{P}) = \rho_f$$
+$$
+\vec{\nabla} \cdot (\varepsilon_0 \vec{E} + \vec{P}) = \rho_f
+$$
 
 Definiendo el **Vector Desplazamiento Eléctrico** ($\vec{D}$):
 
-$$\vec{D} \equiv \varepsilon_0 \vec{E} + \vec{P} \quad \left[\frac{\text{C}}{\text{m}^2}\right]$$
+$$
+\vec{D} \equiv \varepsilon_0 \vec{E} + \vec{P} \quad \left[\frac{\text{C}}{\text{m}^2}\right]
+$$
 
 Se obtiene la **Ley de Gauss Generalizada (Forma Diferencial)**:
 
-$$\vec{\nabla} \cdot \vec{D} = \rho_f$$
+$$
+\vec{\nabla} \cdot \vec{D} = \rho_f
+$$
 
 **Forma Integral:**
 Integrando sobre un volumen cerrado $\mathcal{V}$ acotado por $\partial\mathcal{V}$:
 
-$$\oint_{\partial\mathcal{V}} \vec{D} \cdot d\vec{A} = Q_{f,\text{enc}} = \iiint_{\mathcal{V}} \rho_f \, dV$$
+$$
+\oint_{\partial\mathcal{V}} \vec{D} \cdot d\vec{A} = Q_{f,\text{enc}} = \iiint_{\mathcal{V}} \rho_f \, dV
+$$
 
 > [!TIP]
 > El flujo del vector $\vec{D}$ depende **únicamente de las cargas libres** $Q_f$. Esto permite resolver analíticamente el problema electrostático en medios materiales desacoplándose de la complejidad de las cargas ligadas de polarización.
@@ -410,26 +508,38 @@ $$\oint_{\partial\mathcal{V}} \vec{D} \cdot d\vec{A} = Q_{f,\text{enc}} = \iiint
 
 Para medios dieléctricos **lineales, homogéneos e isótropos (LHI)**, el vector polarización responde linealmente al campo eléctrico neto macroscópico existente en el interior:
 
-$$\vec{P} = \varepsilon_0 \chi_e \vec{E}$$
+$$
+\vec{P} = \varepsilon_0 \chi_e \vec{E}
+$$
 
 * $\chi_e$: **Susceptibilidad eléctrica** adimensional del medio ($\chi_e \ge 0$). Mide la reactividad o facilidad del material para polarizarse.
 
 Sustituyendo $\vec{P}$ en la definición de $\vec{D}$:
 
-$$\vec{D} = \varepsilon_0 \vec{E} + \varepsilon_0 \chi_e \vec{E} = \varepsilon_0 (1 + \chi_e)\vec{E}$$
+$$
+\vec{D} = \varepsilon_0 \vec{E} + \varepsilon_0 \chi_e \vec{E} = \varepsilon_0 (1 + \chi_e)\vec{E}
+$$
 
 Definiendo la **permitividad relativa** ($\kappa = \varepsilon_r$) y la **permitividad absoluta** ($\varepsilon$):
 
-$$\varepsilon_r = 1 + \chi_e \implies \varepsilon = \varepsilon_0 \varepsilon_r = \varepsilon_0 (1 + \chi_e)$$
+$$
+\varepsilon_r = 1 + \chi_e \implies \varepsilon = \varepsilon_0 \varepsilon_r = \varepsilon_0 (1 + \chi_e)
+$$
 
-$$\vec{D} = \varepsilon \vec{E}$$
+$$
+\vec{D} = \varepsilon \vec{E}
+$$
 
 #### Reducción del Campo y Cargas Ligadas en Placas Paralelas:
 * Campo eléctrico en el vacío: $E_0 = \frac{\sigma_f}{\varepsilon_0}$
 * Campo interno con dieléctrico:
-  $$E = \frac{E_0}{\kappa} = \frac{\sigma_f}{\kappa \varepsilon_0} = \frac{\sigma_f}{\varepsilon}$$
+  $$
+  E = \frac{E_0}{\kappa} = \frac{\sigma_f}{\kappa \varepsilon_0} = \frac{\sigma_f}{\varepsilon}
+  $$
 * Como $E = \frac{\sigma_f - \sigma_b}{\varepsilon_0}$, se deduce la relación directa para la carga ligada:
-  $$\sigma_b = \sigma_f \left(1 - \frac{1}{\kappa}\right) = \sigma_f \left(\frac{\kappa - 1}{\kappa}\right) = \sigma_f \left(\frac{\chi_e}{1 + \chi_e}\right)$$
+  $$
+  \sigma_b = \sigma_f \left(1 - \frac{1}{\kappa}\right) = \sigma_f \left(\frac{\kappa - 1}{\kappa}\right) = \sigma_f \left(\frac{\chi_e}{1 + \chi_e}\right)
+  $$
 
 ---
 
@@ -437,22 +547,32 @@ $$\vec{D} = \varepsilon \vec{E}$$
 
 Para ensamblar una distribución de carga libre en presencia de un medio material, el trabajo elemental externo contra el potencial electrostático es:
 
-$$\delta W = \iiint V(\vec{r})\,\delta\rho_f(\vec{r})\,dV = \iiint V\,\vec{\nabla}\cdot(\delta\vec{D})\,dV$$
+$$
+\delta W = \iiint V(\vec{r})\,\delta\rho_f(\vec{r})\,dV = \iiint V\,\vec{\nabla}\cdot(\delta\vec{D})\,dV
+$$
 
 Integrando por partes bajo la identidad $\vec{\nabla}\cdot(V\delta\vec{D}) = \vec{\nabla} V \cdot \delta\vec{D} + V\vec{\nabla}\cdot\delta\vec{D}$:
 
-$$\delta W = \oint_{\text{frontera}} (V\delta\vec{D})\cdot d\vec{A} - \iiint (\vec{\nabla} V)\cdot\delta\vec{D}\,dV$$
+$$
+\delta W = \oint_{\text{frontera}} (V\delta\vec{D})\cdot d\vec{A} - \iiint (\vec{\nabla} V)\cdot\delta\vec{D}\,dV
+$$
 
 La integral de superficie decae a cero en el infinito. Como $\vec{E} = -\vec{\nabla} V$:
 
-$$\delta W = \iiint \vec{E} \cdot \delta\vec{D} \, dV$$
+$$
+\delta W = \iiint \vec{E} \cdot \delta\vec{D} \, dV
+$$
 
 Para dieléctricos LHI donde $\vec{D} = \varepsilon\vec{E}$, $\vec{E}\cdot\delta\vec{D} = \varepsilon\vec{E}\cdot\delta\vec{E} = \frac{1}{2}\delta(\varepsilon |\vec{E}|^2) = \frac{1}{2}\delta(\vec{D}\cdot\vec{E})$:
 
-$$U_e = \frac{1}{2} \iiint \vec{D} \cdot \vec{E} \, dV = \frac{1}{2} \iiint \varepsilon |\vec{E}|^2 dV$$
+$$
+U_e = \frac{1}{2} \iiint \vec{D} \cdot \vec{E} \, dV = \frac{1}{2} \iiint \varepsilon |\vec{E}|^2 dV
+$$
 
 * **Densidad Volumétrica de Energía con Dieléctrico:**
-  $$u_e = \frac{1}{2}\vec{D} \cdot \vec{E} = \frac{1}{2}\varepsilon |\vec{E}|^2 = \frac{1}{2}\kappa\varepsilon_0 |\vec{E}|^2 \quad \left[\frac{\text{J}}{\text{m}^3}\right]$$
+  $$
+  u_e = \frac{1}{2}\vec{D} \cdot \vec{E} = \frac{1}{2}\varepsilon |\vec{E}|^2 = \frac{1}{2}\kappa\varepsilon_0 |\vec{E}|^2 \quad \left[\frac{\text{J}}{\text{m}^3}\right]
+  $$
 
 #### Comparativa de Inserción de Dieléctrico: Sistema Aislado vs. Sistema Conectado a Fuente
 
