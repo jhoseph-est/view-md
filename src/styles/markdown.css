@@ -40,7 +40,7 @@
 .markdown-body .slide-mermaid-scroll-box p {
   text-indent: 0 !important;
   text-align: center !important;
-  margin: 0 !important;
+  margin: auto !important;
 }
 
 .markdown-body blockquote[data-callout] p,
